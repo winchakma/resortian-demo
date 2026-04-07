@@ -66,6 +66,8 @@
         @endif
     @endif
 
+    <!-- Mobile Bottom Navigation CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/front/css/mobile-bottom-nav.css') }}">
     <!-- Left to Right CSS -->
     @if ($currentLanguageInfo->direction == 1)
         <link rel="stylesheet" href="{{ asset('assets/css/rtl.css') }}">

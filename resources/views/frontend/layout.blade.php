@@ -127,6 +127,9 @@ theme_5 @endif">
         @includeIf('frontend.partials.footers.footer_v2')
     @endif
 
+    {{-- mobile sticky bottom navigation --}}
+    @includeIf('frontend.partials.mobile_bottom_nav')
+
     {{-- Popups start --}}
     @includeIf('frontend.partials.popups')
     {{-- Popups end --}}

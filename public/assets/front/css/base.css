@@ -14,11 +14,11 @@
     --font-medium: 500;
     --font-semi-bold: 600;
     --font-bold: 700;
-    --color-primary: #fea116;
+    --color-primary: #4285F4;
     --color-secondary: #ee9ae5;
-    --color-red: #eb4c4c;
-    --color-green: #00b67a;
-    --color-blue: #0061df;
+    --color-red: #EA4335;
+    --color-green: #34A853;
+    --color-blue: #4285F4;
     --color-cyan: #21c4df;
     --color-pink: #ff7294;
     --color-purple: #6231f0;
@@ -29,11 +29,11 @@
     --color-dark: #0f172b;
     --color-medium: #686868;
     --color-light: #dcdcdc;
-    --color-primary-rgb: 254, 161, 22;
+    --color-primary-rgb: 66, 133, 244;
     --color-secondary-rgb: 238, 154, 229;
-    --color-red-rgb: 235, 76, 76;
-    --color-green-rgb: 0, 182, 122;
-    --color-blue-rgb: 0, 97, 223;
+    --color-red-rgb: 234, 67, 53;
+    --color-green-rgb: 52, 168, 83;
+    --color-blue-rgb: 66, 133, 244;
     --color-cyan-rgb: 33, 196, 223;
     --color-pink-rgb: 255, 114, 148;
     --color-purple-rgb: 98, 49, 240;
@@ -718,6 +718,7 @@ body {
     font-size: var(--font-base);
     font-weight: var(--font-normal);
     color: var(--color-medium);
+    background-color: #E1F4FF;
     overflow-x: hidden;
 }
 
@@ -766,27 +767,27 @@ a:hover {
 }
 
 h1 {
-    font-size: 62px;
+    font-size: 48px;
 }
 
 h2,
 .h2 {
-    font-size: 48px;
+    font-size: 36px;
 }
 
 h3,
 .h3 {
-    font-size: 32px;
+    font-size: 26px;
 }
 
 h4,
 .h4 {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 h5,
 .h5 {
-    font-size: 20px;
+    font-size: 18px;
 }
 
 h6,
@@ -881,8 +882,8 @@ td {
 ----------------------------------------- */
 /* Theme Color CSS */
 .theme-color-1 {
-    --color-primary: #fea116;
-    --color-primary-rgb: 254, 161, 22;
+    --color-primary: #4285F4;
+    --color-primary-rgb: 66, 133, 244;
 }
 
 .theme-color-2 {
