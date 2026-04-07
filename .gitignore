@@ -1,0 +1,58 @@
+# Laravel specific
+/vendor/
+/node_modules/
+/public/storage
+/storage/*.key
+/storage/app/public
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+
+# Environment files
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+
+# Composer
+composer.lock
+
+# NPM
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# IDE / Editor
+/.idea
+/.vscode
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.phpunit.cache/
+
+# Logs
+*.log
+
+# Misc
+npm-debug.log
+yarn-error.log
+
+# Laravel Mix / Vite
+/public/hot
+/public/build
+
+# Docker
+docker-compose.override.yml
+
+# PHPUnit
+.phpunit.cache
+
+# Redis
+dump.rdb
