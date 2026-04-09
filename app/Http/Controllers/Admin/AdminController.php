@@ -4,456 +4,79 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
-use App\Models\Earning;
-use App\Models\PackageManagement\Package;
-use App\Models\PackageManagement\PackageBooking;
-use App\Models\RoomManagement\Room;
-use App\Models\RoomManagement\RoomBooking;
-use App\Models\RoomManagement\RoomNumber;
-use App\Models\Transaction;
-use App\Rules\MatchEmailRule;
-use App\Rules\MatchOldPasswordRule;
-use App\Traits\MiscellaneousTrait;
-use DateTime;
+use App\Models\Hotel;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
+use Illuminate\View\View;
 
 class AdminController extends Controller
 {
-  public function login()
-  {
-    return view('admin.admin.login');
-  }
-
-  public function authentication(Request $request)
-  {
-    $rules = [
-      'username' => 'required',
-      'password' => 'required'
-    ];
-
-    $validator = Validator::make($request->all(), $rules);
-
-    if ($validator->fails()) {
-      return redirect()->back()->withErrors($validator->errors());
-    }
-
-    if (Auth::guard('admin')->attempt([
-      'username' => $request->username,
-      'password' => $request->password
-    ])) {
-      return redirect()->route('admin.dashboard');
-    } else {
-      return redirect()->back()->with('alert', 'Username or Password does not match!');
-    }
-  }
-
-  public function forgetPassword()
-  {
-    return view('admin.admin.forget_password');
-  }
-
-  public function sendMail(Request $request)
-  {
-    $rules = [
-      'email' => [
-        'required',
-        'email:rfc,dns',
-        new MatchEmailRule('admin')
-      ]
-    ];
-
-    $validator = Validator::make($request->all(), $rules);
-
-    if ($validator->fails()) {
-      return redirect()->back()->withErrors($validator->errors())->withInput();
-    }
-
-    // create a new password and store it in db
-    $newPassword = uniqid();
-
-    $admin = Admin::where('email', $request->email)->firstOrFail();
-
-    $admin->update([
-      'password' => Hash::make($newPassword)
-    ]);
-
-    // send newly created password to admin via email
-    $info = DB::table('basic_settings')->select('smtp_status', 'smtp_host', 'smtp_port', 'encryption', 'smtp_username', 'smtp_password', 'from_mail', 'from_name')
-      ->where('uniqid', 12345)
-      ->first();
-
-    // initialize a new mail
-    $mail = new PHPMailer(true);
-
-    // if smtp status == 1, then set some value for PHPMailer
-    if ($info->smtp_status == 1) {
-      $mail->isSMTP();
-      $mail->Host       = $info->smtp_host;
-      $mail->SMTPAuth   = true;
-      $mail->Username   = $info->smtp_username;
-      $mail->Password   = $info->smtp_password;
-
-      if ($info->encryption == 'TLS') {
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-      }
-
-      $mail->Port       = $info->smtp_port;
-    }
-
-    // finally add other informations and send the mail
-    try {
-      $mail->setFrom($info->from_mail, $info->from_name);
-      $mail->addAddress($request->email);
-
-      $mail->isHTML(true);
-      $mail->Subject = 'Reset Password';
-      $mail->Body = 'Hello ' . $admin->first_name . ',<br/><br/>Your password has been reset. Your new password is: <strong>' . $newPassword . '</strong><br/>Now, you can login with your new password. You can change your password from your Dashboard.<br/><br/>Thank you.';
-
-      $mail->send();
-
-      session()->flash('success', 'A mail has been sent to your email address with new password.');
-    } catch (Exception $e) {
-      session()->flash('warning', 'Mail could not be sent. Mailer Error: ' . $mail->ErrorInfo);
-    }
-
-    return redirect()->back();
-  }
-
-  public function redirectToDashboard()
-  {
-    $data['pbookings'] = PackageBooking::orderBy('id', 'desc')->limit(10)->get();
-    $data['rbookings'] = RoomBooking::orderBy('id', 'desc')->limit(10)->get();
-    $data['currencyInfo'] = MiscellaneousTrait::getCurrencyInfo();
-
-    $data['roomsCount'] = RoomNumber::count();
-    $data['allRbCount'] = RoomBooking::count();
-    $data['allRbPaidCount'] = RoomBooking::where('booking_status', 1)->count();
-    $data['paidRbCount'] = RoomBooking::where('payment_status', 1)->count();
-    $data['packagesCount'] = Package::count();
-    $data['allPbCount'] = PackageBooking::count();
-    $data['paidPbCount'] = PackageBooking::where('payment_status', 1)->count();
-
-
-    $data['earning'] = Earning::first();
-
-    $data['transcation_count'] = Transaction::get()->count();
-
-    $monthWiseTotalBookings = DB::table('room_bookings')
-      ->select(DB::raw('month(created_at) as month'), DB::raw('count(id) as total_booking'))
-      ->where('payment_status', 1)
-      ->groupBy('month')
-      ->whereYear('created_at', '=', date('Y'))
-      ->get();
-
-    $monthWiseTotalIncomes = DB::table('room_bookings')
-      ->select(DB::raw('month(created_at) as month'), DB::raw('sum(grand_total) as total'))
-      ->where('payment_status', 1)
-      ->groupBy('month')
-      ->whereYear('created_at', '=', date('Y'))
-      ->get();
-
-    $months = [];
-    $bookings = [];
-    $incomes = [];
-
-    for ($i = 1; $i <= 12; $i++) {
-      // get all 12 months name
-      $monthNum = $i;
-      $dateObj = DateTime::createFromFormat('!m', $monthNum);
-      $monthName = $dateObj->format('M');
-      array_push($months, $monthName);
-
-      // get all 12 months's equipment booking
-      $bookingFound = false;
-
-      foreach ($monthWiseTotalBookings as $bookingInfo) {
-        if ($bookingInfo->month == $i) {
-          $bookingFound = true;
-          array_push($bookings, $bookingInfo->total_booking);
-          break;
+    public function showLogin(): View|RedirectResponse
+    {
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.dashboard');
         }
-      }
 
-      if ($bookingFound == false) {
-        array_push($bookings, 0);
-      }
+        return view('admin.auth.login');
+    }
 
-      // get all 12 months's income of equipment booking
-      $incomeFound = false;
+    public function login(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
+        ]);
 
-      foreach ($monthWiseTotalIncomes as $incomeInfo) {
-        if ($incomeInfo->month == $i) {
-          $incomeFound = true;
-          array_push($incomes, $incomeInfo->total);
-          break;
+        if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+
+            return redirect()->intended(route('admin.dashboard'));
         }
-      }
 
-      if ($incomeFound == false) {
-        array_push($incomes, 0);
-      }
+        return back()->withErrors([
+            'email' => 'Invalid email or password.',
+        ])->onlyInput('email');
     }
 
-    $data['months'] = $months;
-    $data['bookings'] = $bookings;
-    $data['incomes'] = $incomes;
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::guard('admin')->logout();
 
-    return view('admin.admin.dashboard', $data);
-  }
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-  public function editProfile()
-  {
-    $adminInfo = Auth::guard('admin')->user();
-
-    return view('admin.admin.edit-profile', compact('adminInfo'));
-  }
-
-  public function updateProfile(Request $request)
-  {
-    $authAdminId = Auth::guard('admin')->user()->id;
-
-    $rules = [
-      'username' => [
-        'required',
-        Rule::unique('admins')->ignore($authAdminId)
-      ],
-      'email' => [
-        'required',
-        'email:rfc,dns',
-        Rule::unique('admins')->ignore($authAdminId)
-      ],
-      'first_name' => 'required',
-      'last_name' => 'required'
-    ];
-
-    $imgURL = $request->image;
-
-    if ($request->hasFile('image')) {
-      $allowedExtensions = array('jpg', 'jpeg', 'png', 'svg');
-      $fileExtension = $request->file('image')->getClientOriginalExtension();
-
-      $rules['image'] = function ($attribute, $value, $fail) use ($allowedExtensions, $fileExtension) {
-        if (!in_array($fileExtension, $allowedExtensions)) {
-          $fail('Only .jpg, .jpeg, .png and .svg file is allowed.');
-        }
-      };
+        return redirect()->route('admin.login');
     }
 
-    $validator = Validator::make($request->all(), $rules);
+    public function dashboard(): View
+    {
+        $stats = [
+            'total_users' => User::count(),
+            'total_hotels' => Hotel::count(),
+            'total_admins' => Admin::count(),
+        ];
 
-    if ($validator->fails()) {
-      return redirect()->back()->withErrors($validator);
+        return view('admin.dashboard', compact('stats'));
     }
 
-    $admin = Auth::guard('admin')->user();
-    if ($request->hasFile('image')) {
-      $filename = time() . '.' . $request->file('image')->getClientOriginalExtension();
-      $directory = public_path('assets/img/admins/');
-      @mkdir($directory, 0775, true);
-      $request->file('image')->move($directory, $filename);
-      @unlink(public_path('assets/img/admins/') . $admin->image);
-      $imgName = $filename;
+    public function projects(): View
+    {
+        return view('admin.projects.index');
     }
 
-    $admin->update([
-      'first_name' => $request->first_name,
-      'last_name' => $request->last_name,
-      'image' => $request->hasFile('image') ? $imgName : $admin->image,
-      'username' => $request->username,
-      'email' => $request->email,
-      'address' => $request->address,
-      'details' => $request->details,
-    ]);
+    public function users(): View
+    {
+        $users = User::with('details')->latest()->paginate(10);
 
-    session()->flash('success', 'Profile updated successfully!');
-
-    return redirect()->back();
-  }
-
-  public function changePassword()
-  {
-    return view('admin.admin.change-password');
-  }
-
-  public function updatePassword(Request $request)
-  {
-    $rules = [
-      'current_password' => [
-        'required',
-        new MatchOldPasswordRule('admin')
-      ],
-      'new_password' => 'required|confirmed',
-      'new_password_confirmation' => 'required'
-    ];
-
-    $messages = [
-      'new_password.confirmed' => 'Password confirmation does not match.',
-      'new_password_confirmation.required' => 'The confirm new password field is required.'
-    ];
-
-    $validator = Validator::make($request->all(), $rules, $messages);
-
-    if ($validator->fails()) {
-      return Response::json([
-        'errors' => $validator->getMessageBag()->toArray()
-      ], 400);
+        return view('admin.users.index', compact('users'));
     }
 
-    $admin = Auth::guard('admin')->user();
+    public function profile(): View
+    {
+        $admin = Auth::guard('admin')->user();
 
-    $admin->update([
-      'password' => Hash::make($request->new_password)
-    ]);
-
-    session()->flash('success', 'Password updated successfully!');
-
-    return 'success';
-  }
-
-  public function logout(Request $request)
-  {
-    Auth::guard('admin')->logout();
-    Session::forget('secret_login');
-
-    return redirect()->route('admin.login');
-  }
-
-  public function changeTheme(Request $request)
-  {
-    return redirect()->back()->withCookie(cookie()->forever('admin-theme', $request->theme));
-  }
-
-  //transaction 
-  public function transcation(Request $request)
-  {
-    $transcation_id = null;
-    if ($request->filled('transcation_id')) {
-      $transcation_id = $request->transcation_id;
+        return view('admin.profile', compact('admin'));
     }
-
-    $info['transcations'] = Transaction::when($transcation_id, function ($query) use ($transcation_id) {
-      return $query->where('transcation_id', 'like', '%' . $transcation_id . '%');
-    })->orderByDesc('id')->paginate(10);
-
-    return view('admin.admin.transcation', $info);
-  }
-  //destroy
-  public function destroy(Request $request)
-  {
-    $transcation = Transaction::where('id', $request->id)->first();
-    $transcation->delete();
-    Session::flash('success', 'Transaction Deleted successfully!');
-
-    return back();
-  }
-
-  //destroy
-  public function bulk_destroy(Request $request)
-  {
-    $ids = $request->ids;
-    foreach ($ids as $id) {
-      $transcation = Transaction::where('id', $id)->first();
-      $transcation->delete();
-    }
-    Session::flash('success', 'Transaction Deleted successfully!');
-
-    return 'success';
-  }
-
-  //monthly  income
-  public function monthly_profit(Request $request)
-  {
-    if ($request->filled('year')) {
-      $date = $request->input('year');
-    } else {
-      $date = date('Y');
-    }
-    $monthWiseTotalIncomes = DB::table('transactions')
-      ->select(DB::raw('month(created_at) as month'), DB::raw('sum(commission) as total'))
-      ->where('payment_status', 1)
-      ->whereIn('transcation_type', [1, 5])
-      ->groupBy('month')
-      ->whereYear('created_at', '=', $date)
-      ->get();
-
-    $months = [];
-    $incomes = [];
-    for ($i = 1; $i <= 12; $i++) {
-      // get all 12 months name
-      $monthNum = $i;
-      $dateObj = DateTime::createFromFormat('!m', $monthNum);
-      $monthName = $dateObj->format('M');
-      array_push($months, $monthName);
-
-      // get all 12 months's income of equipment booking
-      $incomeFound = false;
-      foreach ($monthWiseTotalIncomes as $incomeInfo) {
-        if ($incomeInfo->month == $i) {
-          $incomeFound = true;
-          array_push($incomes, $incomeInfo->total);
-          break;
-        }
-      }
-      if ($incomeFound == false) {
-        array_push($incomes, 0);
-      }
-    }
-    $information['months'] = $months;
-    $information['incomes'] = $incomes;
-
-    return view('admin.admin.profit', $information);
-  }
-  //monthly  earning
-  public function monthly_earning(Request $request)
-  {
-    if ($request->filled('year')) {
-      $date = $request->input('year');
-    } else {
-      $date = date('Y');
-    }
-    $monthWiseTotalIncomes = DB::table('transactions')
-      ->select(DB::raw('month(created_at) as month'), DB::raw('sum(grand_total) as total'))
-      ->where('payment_status', 1)
-      ->whereIn('transcation_type', [1, 5])
-      ->groupBy('month')
-      ->whereYear('created_at', '=', $date)
-      ->get();
-
-
-    $months = [];
-    $incomes = [];
-    for ($i = 1; $i <= 12; $i++) {
-      // get all 12 months name
-      $monthNum = $i;
-      $dateObj = DateTime::createFromFormat('!m', $monthNum);
-      $monthName = $dateObj->format('F');
-      array_push($months, $monthName);
-
-      // get all 12 months's income of equipment booking
-      $incomeFound = false;
-      foreach ($monthWiseTotalIncomes as $incomeInfo) {
-        if ($incomeInfo->month == $i) {
-          $incomeFound = true;
-          array_push($incomes, $incomeInfo->total);
-          break;
-        }
-      }
-      if ($incomeFound == false) {
-        array_push($incomes, 0);
-      }
-    }
-    $information['months'] = $months;
-    $information['incomes'] = $incomes;
-
-    return view('admin.admin.earning', $information);
-  }
 }
