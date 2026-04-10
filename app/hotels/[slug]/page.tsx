@@ -18,9 +18,10 @@ import {
 } from "lucide-react";
 import { Header } from "@/sections/Header";
 import { Footer } from "@/sections/Footer";
-import { Button } from "@/components/ui/Button";
 import { ReviewForm } from "@/components/ui/ReviewForm";
+import { BookRoomButton } from "@/components/ui/BookRoomButton";
 import { getHotelBySlug, getHotelReviews } from "@/utils/api";
+import { RoomCard } from "@/components/ui/RoomCard";
 
 const AMENITY_ICONS: Record<string, React.ReactNode> = {
   Pool: <Waves className="h-4 w-4" />,
@@ -41,7 +42,7 @@ export default async function HotelDetailsPage({
   const [hotel, reviews] = await Promise.all([
     getHotelBySlug(slug),
     getHotelBySlug(slug).then((h) =>
-      h ? getHotelReviews(h.id) : Promise.resolve([])
+      h ? getHotelReviews(h.id) : Promise.resolve([]),
     ),
   ]);
 
@@ -145,7 +146,10 @@ export default async function HotelDetailsPage({
                   </p>
                   <div className="mt-1 flex items-baseline gap-1">
                     <span className="text-3xl font-bold text-primary-700 dark:text-primary-400">
-                      ৳{Math.min(...hotel.rooms.map((r) => r.price)).toLocaleString()}
+                      ৳
+                      {Math.min(
+                        ...hotel.rooms.map((r) => r.price),
+                      ).toLocaleString()}
                     </span>
                     <span className="text-sm text-primary-600/70 dark:text-primary-500">
                       /night
@@ -165,85 +169,7 @@ export default async function HotelDetailsPage({
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {hotel.rooms.map((room) => (
-                <article
-                  key={room.id}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
-                >
-                  {/* Room image */}
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                      src={room.image}
-                      alt={room.name}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                    {room.badge && (
-                      <span className="absolute right-3 top-3 rounded-full bg-primary-600 px-3 py-1 text-xs font-semibold text-white shadow">
-                        {room.badge}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Room details */}
-                  <div className="flex flex-1 flex-col p-5">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
-                      {room.name}
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                      {room.description}
-                    </p>
-
-                    {/* Stats row */}
-                    <div className="mt-4 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="flex items-center gap-1.5">
-                        <Users className="h-4 w-4 text-primary-500" />
-                        {room.capacity}{" "}
-                        {room.capacity === 1 ? "Guest" : "Guests"}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <Maximize2 className="h-4 w-4 text-primary-500" />
-                        {room.size}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <Eye className="h-4 w-4 text-primary-500" />
-                        {room.view}
-                      </span>
-                    </div>
-
-                    {/* Amenities */}
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {room.amenities.map((a) => (
-                        <span
-                          key={a}
-                          className="rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                        >
-                          {a}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Price + CTA */}
-                    <div className="mt-auto flex items-center justify-between pt-5">
-                      <div>
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
-                            ৳{room.price.toLocaleString()}
-                          </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            /night
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-400 dark:text-gray-500">
-                          Taxes & fees included
-                        </p>
-                      </div>
-                      <Button variant="primary" size="sm">
-                        Book Room
-                      </Button>
-                    </div>
-                  </div>
-                </article>
+                <RoomCard key={room.id} room={room} hotel={hotel} />
               ))}
             </div>
           </div>

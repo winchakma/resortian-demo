@@ -36,6 +36,22 @@ export interface Review {
   date: string;
 }
 
+export interface CartItem {
+  cartId: string;
+  hotelId: string;
+  hotelName: string;
+  hotelSlug: string;
+  hotelLocation: string;
+  roomId: string;
+  roomName: string;
+  roomImage: string;
+  price: number;
+  currency: string;
+  view: string;
+  size: string;
+  capacity: number;
+}
+
 export interface Destination {
   id: string;
   name: string;

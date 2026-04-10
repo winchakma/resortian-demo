@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import type { NavLink } from "@/types";
+import { Logo } from "./Logo";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -43,9 +44,7 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
       />
       <div className="fixed inset-y-0 right-0 w-72 bg-white p-6 shadow-xl dark:bg-gray-900">
         <div className="mb-8 flex items-center justify-between">
-          <span className="text-lg font-bold text-gray-900 dark:text-white">
-            Menu
-          </span>
+          <Logo />
           <button
             onClick={onClose}
             className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -68,6 +67,6 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
         </nav>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }
