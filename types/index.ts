@@ -1,6 +1,7 @@
 export interface Hotel {
   id: string;
   name: string;
+  slug: string;
   location: string;
   price: number;
   currency: string;
@@ -8,6 +9,31 @@ export interface Hotel {
   reviewCount: number;
   image: string;
   tags: string[];
+  description: string;
+  amenities: string[];
+  rooms: Room[];
+}
+
+export interface Room {
+  id: string;
+  hotel_id: number;
+  name: string;
+  description: string;
+  price: number;
+  capacity: number;
+  image: string;
+  view: string;
+  size: string;
+  amenities: string[];
+  badge?: string;
+}
+
+export interface Review {
+  id: string;
+  author: string;
+  rating: number;
+  comment: string;
+  date: string;
 }
 
 export interface Destination {

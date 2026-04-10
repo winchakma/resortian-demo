@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Star, MapPin } from "lucide-react";
 import type { Hotel } from "@/types";
 
@@ -8,6 +9,10 @@ interface HotelCardProps {
 
 export function HotelCard({ hotel }: HotelCardProps) {
   return (
+    <Link
+      href={`/hotels/${hotel.slug}`}
+      className="block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 rounded-xl"
+    >
     <article className="group overflow-hidden rounded-xl border border-gray-200 bg-white transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
       <div className="relative aspect-[3/2] overflow-hidden">
         <Image
@@ -54,11 +59,9 @@ export function HotelCard({ hotel }: HotelCardProps) {
               /night
             </span>
           </div>
-          <button className="rounded-lg bg-primary-600 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-700">
-            View
-          </button>
         </div>
       </div>
     </article>
+    </Link>
   );
 }
