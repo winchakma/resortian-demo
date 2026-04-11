@@ -17,6 +17,9 @@ import {
   Eye,
   EyeOff,
   Smartphone,
+  Banknote,
+  Info,
+  Check,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useForm, type Resolver } from "react-hook-form";
@@ -26,8 +29,6 @@ import * as yup from "yup";
 type AuthMode = "login" | "guest";
 type PaymentMethod = "stripe" | "uddoktapay";
 type Step = "details" | "payment" | "confirmed";
-
-const TAX_RATE = 0.05;
 
 // ── BD phone regex: starts with +880 or 01, then 9 digits (operator prefix 1x)
 const BD_PHONE_REGEX = /^(?:\+?880|0)1[3-9]\d{8}$/;
@@ -61,34 +62,6 @@ const guestSchema = yup.object({
   guestRequests: yup.string().optional(),
 });
 
-const stripeSchema = yup.object({
-  cardNumber: yup
-    .string()
-    .required("Card number is required")
-    .test("card-length", "Enter a valid 16-digit card number", (v) =>
-      /^[\d ]{19}$/.test(v ?? ""),
-    ),
-  cardName: yup.string().required("Cardholder name is required"),
-  cardExpiry: yup
-    .string()
-    .required("Expiry date is required")
-    .matches(/^\d{2}\/\d{2}$/, "Enter expiry in MM/YY format"),
-  cardCvc: yup
-    .string()
-    .required("CVC is required")
-    .matches(/^\d{3,4}$/, "CVC must be 3 or 4 digits"),
-});
-
-const uddoktaSchema = yup.object({
-  mobileNumber: yup
-    .string()
-    .required("Mobile number is required")
-    .matches(
-      BD_PHONE_REGEX,
-      "Enter a valid Bangladeshi phone number (e.g. 01XXXXXXXXX)",
-    ),
-});
-
 // ── Type helpers ─────────────────────────────────────────────────────────────
 type LoginFormValues = yup.InferType<typeof loginSchema>;
 // Manual type: guestRequests must be optional (?) not just `string | undefined`
@@ -99,8 +72,6 @@ type GuestFormValues = {
   guestPhone: string;
   guestRequests?: string;
 };
-type StripeFormValues = yup.InferType<typeof stripeSchema>;
-type UddoktaFormValues = yup.InferType<typeof uddoktaSchema>;
 
 // ── Shared error message component ───────────────────────────────────────────
 function FieldError({ message }: { message?: string }) {
@@ -124,15 +95,20 @@ function inputCls(hasError?: boolean) {
   ].join(" ");
 }
 
+const ADVANCE_RATE = 0.2;
+
 export function CheckoutContent() {
   const { items, totalAmount, clearCart } = useCart();
-  // const taxes = Math.round(totalAmount * TAX_RATE);
-  const grandTotal = totalAmount;
+  const advanceAmount = Math.round(totalAmount * ADVANCE_RATE);
+  const balanceAmount = totalAmount - advanceAmount;
 
   const [authMode, setAuthMode] = useState<AuthMode>("guest");
   const [step, setStep] = useState<Step>("details");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("stripe");
   const [showPassword, setShowPassword] = useState(false);
+  // Snapshot amounts at payment time so confirmed screen shows correct values after cart is cleared
+  const [confirmedAdvance, setConfirmedAdvance] = useState(0);
+  const [confirmedBalance, setConfirmedBalance] = useState(0);
 
   // ── Forms ─────────────────────────────────────────────────────────────────
   const loginForm = useForm<LoginFormValues>({
@@ -144,37 +120,6 @@ export function CheckoutContent() {
     resolver: yupResolver(guestSchema) as Resolver<GuestFormValues>,
     mode: "onTouched",
   });
-
-  const stripeForm = useForm<StripeFormValues>({
-    resolver: yupResolver(stripeSchema),
-    mode: "onTouched",
-  });
-
-  const uddoktaForm = useForm<UddoktaFormValues>({
-    resolver: yupResolver(uddoktaSchema),
-    mode: "onTouched",
-  });
-
-  // ── Card preview values (watch for live preview) ──────────────────────────
-  const watchedCardNumber = stripeForm.watch("cardNumber") ?? "";
-  const watchedCardName = stripeForm.watch("cardName") ?? "";
-  const watchedCardExpiry = stripeForm.watch("cardExpiry") ?? "";
-
-  // ── Format helpers ────────────────────────────────────────────────────────
-  function formatCardNumber(val: string) {
-    return val
-      .replace(/\D/g, "")
-      .slice(0, 16)
-      .replace(/(.{4})/g, "$1 ")
-      .trim();
-  }
-
-  function formatExpiry(val: string) {
-    const cleaned = val.replace(/\D/g, "").slice(0, 4);
-    return cleaned.length > 2
-      ? `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`
-      : cleaned;
-  }
 
   // ── Submit handlers ───────────────────────────────────────────────────────
   function handleGuestDetailsNext(data: GuestFormValues) {
@@ -190,15 +135,9 @@ export function CheckoutContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function handleStripeSubmit(data: StripeFormValues) {
-    void data;
-    setStep("confirmed");
-    clearCart();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function handleUddoktaSubmit(data: UddoktaFormValues) {
-    void data;
+  function handlePaymentConfirm() {
+    setConfirmedAdvance(advanceAmount);
+    setConfirmedBalance(balanceAmount);
     setStep("confirmed");
     clearCart();
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -208,33 +147,102 @@ export function CheckoutContent() {
   if (step === "confirmed") {
     const ref = Math.random().toString(36).slice(2, 8).toUpperCase();
     return (
-      <div className="flex min-h-[70vh] items-center justify-center py-20">
-        <div className="mx-auto max-w-md px-4 text-center">
-          <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-950/40">
-            <CheckCircle2 className="h-12 w-12 text-primary-600 dark:text-primary-400" />
+      <div className="flex min-h-[70vh] items-center justify-center py-16">
+        <div className="mx-auto w-full max-w-md px-4">
+          {/* Success icon */}
+          <div className="mb-6 flex justify-center">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-950/40">
+              <CheckCircle2 className="h-12 w-12 text-primary-600 dark:text-primary-400" />
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+
+          <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-white">
             Booking Confirmed!
           </h1>
-          <p className="mt-3 text-gray-500 dark:text-gray-400">
-            Your reservation has been placed successfully. A confirmation email
-            has been sent to your inbox.
+          <p className="mt-3 text-center text-gray-500 dark:text-gray-400">
+            Your reservation is secured. A confirmation has been sent to your
+            inbox.
           </p>
-          <div className="mt-8 rounded-2xl border border-primary-100 bg-primary-50 p-6 text-left dark:border-primary-900/30 dark:bg-primary-950/20">
-            <p className="text-sm font-semibold text-primary-700 dark:text-primary-400">
+
+          {/* Booking reference */}
+          <div className="mt-6 rounded-2xl border border-primary-100 bg-primary-50 p-5 dark:border-primary-900/30 dark:bg-primary-950/20">
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
               Booking Reference
             </p>
-            <p className="mt-1 font-mono text-xl font-bold text-gray-900 dark:text-white">
+            <p className="mt-1 font-mono text-2xl font-bold text-gray-900 dark:text-white">
               RST-{ref}
             </p>
-            <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-              Please keep this reference for your records. Our team will contact
-              you within 24 hours to confirm the details.
+            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+              Keep this reference for your records.
             </p>
           </div>
+
+          {/* Payment summary */}
+          <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+            <div className="border-b border-gray-100 px-5 py-3 dark:border-gray-800">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                Payment Summary
+              </p>
+            </div>
+
+            {/* Paid now */}
+            <div className="flex items-center justify-between bg-primary-50 px-5 py-4 dark:bg-primary-950/30">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/50">
+                  <CreditCard className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-primary-700 dark:text-primary-300">
+                    Advance Paid
+                  </p>
+                  <p className="text-xs text-primary-600/70 dark:text-primary-500">
+                    20% — charged today
+                  </p>
+                </div>
+              </div>
+              <span className="text-lg font-bold text-primary-700 dark:text-primary-300">
+                ৳{confirmedAdvance.toLocaleString()}
+              </span>
+            </div>
+
+            {/* Due at hotel */}
+            <div className="flex items-center justify-between px-5 py-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+                  <Banknote className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    Due at Hotel
+                  </p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500">
+                    80% — pay at check-in
+                  </p>
+                </div>
+              </div>
+              <span className="text-lg font-bold text-gray-600 dark:text-gray-300">
+                ৳{confirmedBalance.toLocaleString()}
+              </span>
+            </div>
+          </div>
+
+          {/* What to expect */}
+          <div className="mt-4 flex gap-3 rounded-2xl border border-amber-100 bg-amber-50 p-4 dark:border-amber-900/30 dark:bg-amber-950/20">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+            <p className="text-xs leading-relaxed text-amber-700 dark:text-amber-300">
+              Please present your booking reference{" "}
+              <strong className="font-semibold">RST-{ref}</strong> at the front
+              desk. The remaining{" "}
+              <strong className="font-semibold">
+                ৳{confirmedBalance.toLocaleString()}
+              </strong>{" "}
+              will be collected when you check in.
+            </p>
+          </div>
+
           <Link
             href="/"
-            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-8 py-3.5 font-semibold text-white transition-colors hover:bg-primary-700"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 px-8 py-3.5 font-semibold text-white transition-colors hover:bg-primary-700"
           >
             Back to Home
           </Link>
@@ -541,347 +549,173 @@ export function CheckoutContent() {
 
           {/* ── STEP: payment ── */}
           {step === "payment" && (
-            <div className="space-y-6">
+            <div className="space-y-5">
               {/* Payment method selector */}
               <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
                 <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
                   <h2 className="font-semibold text-gray-900 dark:text-white">
                     Select Payment Method
                   </h2>
+                  <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                    You will be redirected to the payment gateway to complete
+                    your transaction securely.
+                  </p>
                 </div>
-                <div className="grid gap-3 p-6 sm:grid-cols-2">
-                  {/* Stripe option */}
+
+                <div className="grid gap-3 p-5 sm:grid-cols-2">
+                  {/* ── Stripe / Card option ── */}
                   <button
                     type="button"
                     onClick={() => setPaymentMethod("stripe")}
-                    className={`relative flex flex-col items-center gap-3 rounded-xl border-2 p-5 transition-all ${
+                    className={`group flex flex-col gap-4 rounded-2xl border-2 p-5 text-left transition-all ${
                       paymentMethod === "stripe"
                         ? "border-primary-500 bg-primary-50 dark:border-primary-500 dark:bg-primary-950/30"
-                        : "border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+                        : "border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:border-gray-600"
                     }`}
                   >
-                    {paymentMethod === "stripe" && (
-                      <CheckCircle2 className="absolute right-3 top-3 h-5 w-5 text-primary-600 dark:text-primary-400" />
-                    )}
-                    <div className="flex h-10 w-full items-center justify-center rounded-lg bg-[#635BFF] px-4">
-                      <svg
-                        viewBox="0 0 60 25"
-                        fill="none"
-                        className="h-5"
-                        aria-label="Stripe"
+                    {/* Top row: logo + check */}
+                    <div className="flex items-center justify-between gap-2">
+                      {/* Stripe wordmark on brand background */}
+                      <div className="flex h-9 items-center rounded-lg bg-[#635BFF] px-3">
+                        <svg
+                          viewBox="0 0 48 20"
+                          fill="none"
+                          className="h-4 w-auto"
+                          aria-label="Stripe"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          {/* Stripe "S" mark */}
+                          <path
+                            d="M4.2 7.8c0-.6.5-.8 1.3-.8 1.1 0 2.5.4 3.7 1V4.7C8 4.2 6.8 4 5.5 4 2.5 4 .4 5.5.4 8c0 3.5 4.8 3 4.8 4.4 0 .7-.6.9-1.4.9-1.2 0-2.8-.5-4-1.2v3.2c1.4.6 2.8.9 4 .9 3.1 0 5.1-1.5 5.1-3.8C8.9 9 4.2 9.5 4.2 7.8z"
+                            fill="white"
+                          />
+                          <path
+                            d="M12.4 2.2l-3.3.7v11.2l3.3-.7V2.2z"
+                            fill="white"
+                          />
+                          <path
+                            d="M21.2 5.8c-.6 0-1.1.2-1.5.5V2.2l-3.3.7v11.2h3.3V9.3c.4-.3.9-.5 1.4-.5 1 0 1.4.7 1.4 1.7v4.9h3.4V10c0-2.1-1.2-4.2-4.7-4.2z"
+                            fill="white"
+                          />
+                          <path
+                            d="M30.1 5.8c-2.4 0-4 1.8-4 4.5 0 2.9 1.6 4.3 4 4.3 1.1 0 2.1-.3 2.9-.9l.2.7h3V6h-3l-.3.9c-.8-.7-1.7-1.1-2.8-1.1zm1.1 6.4c-.5 0-.9-.2-1.2-.6V9.2c.3-.3.7-.5 1.2-.5.9 0 1.4.6 1.4 1.8 0 1.2-.5 1.7-1.4 1.7z"
+                            fill="white"
+                          />
+                          <path
+                            d="M37.2 5.9V14h3.3V5.9h-3.3zm1.7-4c-1.1 0-1.9.8-1.9 1.8s.8 1.8 1.9 1.8 1.9-.8 1.9-1.8-.8-1.8-1.9-1.8z"
+                            fill="white"
+                          />
+                          <path
+                            d="M46.8 6.1c-.5-.2-1.1-.3-1.7-.3-2.5 0-4.1 1.8-4.1 4.5 0 2.9 1.6 4.3 4.1 4.3.7 0 1.3-.1 1.7-.3v-2.5c-.3.2-.7.3-1.1.3-.9 0-1.5-.6-1.5-1.8 0-1.2.6-1.8 1.5-1.8.4 0 .8.1 1.1.3V6.1z"
+                            fill="white"
+                          />
+                        </svg>
+                      </div>
+                      {/* Check indicator — inside layout, no absolute */}
+                      <div
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                          paymentMethod === "stripe"
+                            ? "border-primary-600 bg-primary-600 dark:border-primary-400 dark:bg-primary-400"
+                            : "border-gray-300 dark:border-gray-600"
+                        }`}
                       >
-                        <path
-                          d="M5.45 10.17c0-.76.63-1.06 1.66-1.06 1.48 0 3.36.45 4.84 1.25V6.33C10.4 5.7 8.84 5.45 7.11 5.45 3.26 5.45 0.7 7.43 0.7 10.4c0 4.57 6.3 3.84 6.3 5.81 0 .9-.78 1.19-1.86 1.19-1.61 0-3.67-.67-5.3-1.56v4.09c1.8.78 3.62 1.1 5.3 1.1 4.04 0 6.71-2 6.71-5 0-4.93-6.4-4.06-6.4-5.86zm11.56-7.3L12.53 3.8l-.02 14.6 4.5.01V2.87zm9.14 14.48c-1.25 0-2.1-.57-2.1-1.93 0-1.43.85-1.96 2.1-1.96.69 0 1.37.17 1.93.46V12.6a6.54 6.54 0 00-2-.31c-3.31 0-5.5 1.76-5.5 4.7 0 2.88 2.12 4.63 5.38 4.63.76 0 1.47-.09 2.12-.27v-3.26a4.72 4.72 0 01-1.93.46zm9.67-8.87c-.76 0-1.48.23-2.07.64V3.8l-4.47 1.08v15.53h4.47v-8.18c.55-.37 1.17-.6 1.84-.6 1.38 0 1.84.9 1.84 2.27v6.51h4.49v-7.41c0-2.8-1.64-4.52-4.1-4.52zm15.95 1.1c-.67-1.46-1.97-2.23-3.7-2.23-3.13 0-5.1 2.44-5.1 5.86 0 3.78 2.17 5.62 5.28 5.62 1.48 0 2.74-.44 3.75-1.22l.23 1h4.02V8.4h-4.02l-.46 1.18zm-2.68 7.02c-1.22 0-1.89-.85-1.89-2.41 0-1.53.69-2.41 1.89-2.41.67 0 1.24.3 1.62.76v3.3a2.2 2.2 0 01-1.62.76z"
-                          fill="white"
-                        />
-                      </svg>
+                        {paymentMethod === "stripe" && (
+                          <Check
+                            className="h-3 w-3 text-white"
+                            strokeWidth={2.5}
+                          />
+                        )}
+                      </div>
                     </div>
-                    <div className="w-full text-center">
+
+                    {/* Labels */}
+                    <div>
                       <p className="text-sm font-semibold text-gray-900 dark:text-white">
                         Credit / Debit Card
                       </p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500">
-                        Visa, Mastercard, Amex
+                      <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                        Visa · Mastercard · Amex
                       </p>
                     </div>
                   </button>
 
-                  {/* UddoktaPay option */}
+                  {/* ── UddoktaPay / Mobile option ── */}
                   <button
                     type="button"
                     onClick={() => setPaymentMethod("uddoktapay")}
-                    className={`relative flex flex-col items-center gap-3 rounded-xl border-2 p-5 transition-all ${
+                    className={`group flex flex-col gap-4 rounded-2xl border-2 p-5 text-left transition-all ${
                       paymentMethod === "uddoktapay"
                         ? "border-primary-500 bg-primary-50 dark:border-primary-500 dark:bg-primary-950/30"
-                        : "border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+                        : "border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:border-gray-600"
                     }`}
                   >
-                    {paymentMethod === "uddoktapay" && (
-                      <CheckCircle2 className="absolute right-3 top-3 h-5 w-5 text-primary-600 dark:text-primary-400" />
-                    )}
-                    <div className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-green-500 px-4">
-                      <Smartphone className="h-5 w-5 text-white" />
-                      <span className="text-sm font-bold text-white">
-                        UddoktaPay
-                      </span>
+                    {/* Top row: logo + check */}
+                    <div className="flex items-center justify-between gap-2">
+                      {/* UddoktaPay brand bar */}
+                      <div className="flex h-9 items-center gap-2 rounded-lg bg-gradient-to-r from-[#e2136e] via-[#f55f14] to-[#8b3fc7] px-3">
+                        <Smartphone className="h-4 w-4 text-white" />
+                        {/* <span className="text-xs font-bold tracking-wide text-white">
+                          UddoktaPay
+                        </span> */}
+                      </div>
+                      {/* Check indicator */}
+                      <div
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                          paymentMethod === "uddoktapay"
+                            ? "border-primary-600 bg-primary-600 dark:border-primary-400 dark:bg-primary-400"
+                            : "border-gray-300 dark:border-gray-600"
+                        }`}
+                      >
+                        {paymentMethod === "uddoktapay" && (
+                          <Check
+                            className="h-3 w-3 text-white"
+                            strokeWidth={2.5}
+                          />
+                        )}
+                      </div>
                     </div>
-                    <div className="w-full text-center">
+
+                    {/* Labels */}
+                    <div>
                       <p className="text-sm font-semibold text-gray-900 dark:text-white">
                         Mobile Banking
                       </p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500">
-                        bKash, Nagad, Rocket
+                      <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                        bKash · Nagad · Rocket
                       </p>
                     </div>
                   </button>
                 </div>
+
+                {/* What-happens-next note */}
+                <div className="mx-5 mb-5 flex gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/60">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500" />
+                  <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                    {paymentMethod === "stripe"
+                      ? "Clicking the button below will redirect you to Stripe's secure checkout page to enter your card details."
+                      : "Clicking the button below will redirect you to UddoktaPay where you can complete payment via bKash, Nagad, or Rocket."}
+                  </p>
+                </div>
               </div>
 
-              {/* ── Stripe form ── */}
-              {paymentMethod === "stripe" && (
-                <form
-                  onSubmit={stripeForm.handleSubmit(handleStripeSubmit)}
-                  noValidate
-                  className="space-y-6"
-                >
-                  <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                    <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-                      <h2 className="font-semibold text-gray-900 dark:text-white">
-                        Card Details
-                      </h2>
-                    </div>
-                    <div className="space-y-5 p-6">
-                      {/* Visual card preview */}
-                      <div className="relative h-44 overflow-hidden rounded-2xl bg-gradient-to-br from-primary-600 via-primary-500 to-primary-700 p-6 shadow-lg">
-                        <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
-                        <div className="absolute -bottom-10 -left-6 h-32 w-32 rounded-full bg-white/10" />
-                        <div className="relative">
-                          <p className="text-xs font-medium uppercase tracking-widest text-primary-100">
-                            Resortian Pay
-                          </p>
-                          <p className="mt-6 font-mono text-lg tracking-widest text-white">
-                            {watchedCardNumber || "•••• •••• •••• ••••"}
-                          </p>
-                          <div className="mt-4 flex items-end justify-between">
-                            <div>
-                              <p className="text-[10px] uppercase text-primary-200">
-                                Cardholder
-                              </p>
-                              <p className="text-sm font-medium text-white">
-                                {watchedCardName || "YOUR NAME"}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-[10px] uppercase text-primary-200">
-                                Expires
-                              </p>
-                              <p className="text-sm font-medium text-white">
-                                {watchedCardExpiry || "MM/YY"}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+              {/* Security notice */}
+              <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white px-4 py-3 dark:border-gray-800 dark:bg-gray-900">
+                <Lock className="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" />
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  All transactions are protected with 256-bit SSL encryption.
+                  Resortian never stores your payment details.
+                </p>
+              </div>
 
-                      {/* Card Number */}
-                      <div>
-                        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                          Card Number
-                        </label>
-                        <div className="relative">
-                          <CreditCard className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                          <input
-                            type="text"
-                            inputMode="numeric"
-                            placeholder="1234 5678 9012 3456"
-                            {...stripeForm.register("cardNumber")}
-                            onChange={(e) =>
-                              stripeForm.setValue(
-                                "cardNumber",
-                                formatCardNumber(e.target.value),
-                                { shouldValidate: true },
-                              )
-                            }
-                            className={`${inputCls(!!stripeForm.formState.errors.cardNumber)} pl-10 pr-4 font-mono`}
-                          />
-                        </div>
-                        <FieldError
-                          message={
-                            stripeForm.formState.errors.cardNumber?.message
-                          }
-                        />
-                      </div>
-
-                      {/* Cardholder Name */}
-                      <div>
-                        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                          Cardholder Name
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="AHMED RAHMAN"
-                          {...stripeForm.register("cardName")}
-                          onChange={(e) =>
-                            stripeForm.setValue(
-                              "cardName",
-                              e.target.value.toUpperCase(),
-                              { shouldValidate: true },
-                            )
-                          }
-                          className={`${inputCls(!!stripeForm.formState.errors.cardName)} px-4 font-mono`}
-                        />
-                        <FieldError
-                          message={
-                            stripeForm.formState.errors.cardName?.message
-                          }
-                        />
-                      </div>
-
-                      {/* Expiry + CVC */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Expiry Date
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="MM/YY"
-                            {...stripeForm.register("cardExpiry")}
-                            onChange={(e) =>
-                              stripeForm.setValue(
-                                "cardExpiry",
-                                formatExpiry(e.target.value),
-                                { shouldValidate: true },
-                              )
-                            }
-                            className={`${inputCls(!!stripeForm.formState.errors.cardExpiry)} px-4 font-mono`}
-                          />
-                          <FieldError
-                            message={
-                              stripeForm.formState.errors.cardExpiry?.message
-                            }
-                          />
-                        </div>
-                        <div>
-                          <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            CVC
-                          </label>
-                          <div className="relative">
-                            <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                            <input
-                              type="text"
-                              inputMode="numeric"
-                              placeholder="•••"
-                              {...stripeForm.register("cardCvc")}
-                              onChange={(e) =>
-                                stripeForm.setValue(
-                                  "cardCvc",
-                                  e.target.value.replace(/\D/g, "").slice(0, 4),
-                                  { shouldValidate: true },
-                                )
-                              }
-                              className={`${inputCls(!!stripeForm.formState.errors.cardCvc)} pl-10 pr-4 font-mono`}
-                            />
-                          </div>
-                          <FieldError
-                            message={
-                              stripeForm.formState.errors.cardCvc?.message
-                            }
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Security notice */}
-                  <div className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-                    <Lock className="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" />
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Your payment is secured with 256-bit SSL encryption. We
-                      never store your card details.
-                    </p>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-4 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
-                  >
-                    <Lock className="h-4 w-4" />
-                    Complete Booking — ৳{grandTotal.toLocaleString()}
-                  </button>
-                </form>
-              )}
-
-              {/* ── UddoktaPay form ── */}
-              {paymentMethod === "uddoktapay" && (
-                <form
-                  onSubmit={uddoktaForm.handleSubmit(handleUddoktaSubmit)}
-                  noValidate
-                  className="space-y-6"
-                >
-                  <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                    <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-                      <h2 className="font-semibold text-gray-900 dark:text-white">
-                        Mobile Payment Details
-                      </h2>
-                    </div>
-                    <div className="space-y-5 p-6">
-                      <div className="rounded-xl bg-green-50 p-4 dark:bg-green-950/20">
-                        <p className="text-sm font-medium text-green-800 dark:text-green-400">
-                          You will be redirected to UddoktaPay to complete your
-                          payment securely.
-                        </p>
-                        <p className="mt-1 text-xs text-green-700 dark:text-green-500">
-                          Supports bKash, Nagad, Rocket, and all major mobile
-                          banking services in Bangladesh.
-                        </p>
-                      </div>
-
-                      <div className="grid grid-cols-3 gap-3">
-                        {(
-                          [
-                            { name: "bKash", color: "bg-[#e2136e]" },
-                            { name: "Nagad", color: "bg-[#f55f14]" },
-                            { name: "Rocket", color: "bg-[#8b3fc7]" },
-                          ] as const
-                        ).map((p) => (
-                          <div
-                            key={p.name}
-                            className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 p-3 dark:border-gray-700"
-                          >
-                            <div
-                              className={`flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold text-white ${p.color}`}
-                            >
-                              {p.name[0]}
-                            </div>
-                            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                              {p.name}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Mobile Number */}
-                      <div>
-                        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                          Mobile Number <span className="text-red-500">*</span>
-                        </label>
-                        <div className="relative">
-                          <Phone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                          <input
-                            type="tel"
-                            {...uddoktaForm.register("mobileNumber")}
-                            placeholder="01XXXXXXXXX"
-                            className={`${inputCls(!!uddoktaForm.formState.errors.mobileNumber)} pl-10 pr-4`}
-                          />
-                        </div>
-                        <FieldError
-                          message={
-                            uddoktaForm.formState.errors.mobileNumber?.message
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Security notice */}
-                  <div className="flex items-center gap-2 rounded-xl border border-gray-100 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-                    <Lock className="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" />
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Your payment is secured with 256-bit SSL encryption. We
-                      never store your card details.
-                    </p>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-4 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
-                  >
-                    <Lock className="h-4 w-4" />
-                    Complete Booking — ৳{grandTotal.toLocaleString()}
-                  </button>
-                </form>
-              )}
+              {/* Single submit */}
+              <button
+                type="button"
+                onClick={handlePaymentConfirm}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-4 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
+              >
+                <Lock className="h-4 w-4" />
+                Pay ৳{advanceAmount.toLocaleString()} Advance &amp; Confirm
+              </button>
             </div>
           )}
         </div>
@@ -913,26 +747,33 @@ export function CheckoutContent() {
                   <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                     {item.hotelName}
                   </p>
+                  {item.checkIn && item.checkOut && (
+                    <p className="mt-0.5 text-xs text-primary-600 dark:text-primary-400">
+                      {item.checkIn} → {item.checkOut}
+                      {item.nights
+                        ? ` · ${item.nights} night${item.nights !== 1 ? "s" : ""}`
+                        : ""}
+                    </p>
+                  )}
                 </div>
                 <p className="shrink-0 text-sm font-semibold text-gray-900 dark:text-white">
-                  ৳{item.price.toLocaleString()}
+                  ৳{(item.totalPrice ?? item.price).toLocaleString()}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="my-5 border-t border-gray-100 dark:border-gray-800" />
+          <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
 
-          <div className="space-y-2.5 text-sm">
-            <div className="flex justify-between text-gray-600 dark:text-gray-400">
-              <span>Subtotal</span>
-              <span>৳{totalAmount.toLocaleString()}</span>
+          {/* Totals */}
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between text-gray-500 dark:text-gray-400">
+              <span>Total booking value</span>
+              <span className="font-medium text-gray-700 dark:text-gray-300">
+                ৳{totalAmount.toLocaleString()}
+              </span>
             </div>
-            {/* <div className="flex justify-between text-gray-600 dark:text-gray-400">
-              <span>VAT (5%)</span>
-              <span>৳{taxes.toLocaleString()}</span>
-            </div> */}
-            <div className="flex justify-between text-gray-500 dark:text-gray-500">
+            <div className="flex justify-between text-gray-500 dark:text-gray-400">
               <span>Service fee</span>
               <span className="text-primary-600 dark:text-primary-400">
                 Free
@@ -940,19 +781,38 @@ export function CheckoutContent() {
             </div>
           </div>
 
-          <div className="my-5 border-t border-gray-100 dark:border-gray-800" />
+          <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
 
-          <div className="flex items-center justify-between">
-            <span className="font-semibold text-gray-900 dark:text-white">
-              Total
-            </span>
-            <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
-              ৳{grandTotal.toLocaleString()}
-            </span>
+          {/* Payment split */}
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between rounded-xl bg-primary-50 px-4 py-3 dark:bg-primary-950/30">
+              <div>
+                <p className="text-xs font-semibold text-primary-700 dark:text-primary-400">
+                  Pay now — 20% advance
+                </p>
+                <p className="mt-0.5 text-[10px] text-primary-600/70 dark:text-primary-500">
+                  Charged today to confirm
+                </p>
+              </div>
+              <span className="text-xl font-bold text-primary-700 dark:text-primary-300">
+                ৳{advanceAmount.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
+              <div>
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                  Pay at hotel — 80%
+                </p>
+                <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                  Due at check-in
+                </p>
+              </div>
+              <span className="text-xl font-bold text-gray-500 dark:text-gray-400">
+                ৳{balanceAmount.toLocaleString()}
+              </span>
+            </div>
           </div>
-          <p className="mt-1 text-right text-xs text-gray-400 dark:text-gray-500">
-            Includes all taxes &amp; fees
-          </p>
         </div>
       </div>
     </div>

@@ -12,18 +12,22 @@ import {
   Maximize2,
   Eye,
   ArrowRight,
-  Tag,
+  CalendarDays,
+  Moon,
+  Banknote,
+  CreditCard,
+  Info,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
-const TAX_RATE = 0.05;
+const ADVANCE_RATE = 0.2; // 20% paid now
 
 export function CartContent() {
   const { items, removeItem, totalAmount } = useCart();
   const router = useRouter();
 
-  // const taxes = Math.round(totalAmount * TAX_RATE);
-  const grandTotal = totalAmount;
+  const advanceAmount = Math.round(totalAmount * ADVANCE_RATE);
+  const balanceAmount = totalAmount - advanceAmount;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -71,7 +75,7 @@ export function CartContent() {
         </div>
       ) : (
         /* ── Cart layout ── */
-        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+        <div className="grid gap-8 lg:grid-cols-[1fr_400px]">
           {/* Left — cart items */}
           <div className="space-y-4">
             {items.map((item) => (
@@ -134,93 +138,174 @@ export function CartContent() {
                           {item.view}
                         </span>
                       </div>
+
+                      {/* Dates */}
+                      {item.checkIn && item.checkOut && (
+                        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
+                          <span className="flex items-center gap-1 rounded-lg bg-primary-50 px-2.5 py-1 font-medium text-primary-700 dark:bg-primary-950/30 dark:text-primary-300">
+                            <CalendarDays className="h-3.5 w-3.5" />
+                            {item.checkIn} → {item.checkOut}
+                          </span>
+                          {item.nights && (
+                            <span className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                              <Moon className="h-3.5 w-3.5 text-primary-500" />
+                              {item.nights} night{item.nights !== 1 ? "s" : ""}
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
 
-                    <div className="mt-4 flex items-end justify-between">
-                      <div className="flex items-center gap-1.5 rounded-lg bg-primary-50 px-3 py-1 dark:bg-primary-950/20">
-                        <Tag className="h-3.5 w-3.5 text-primary-600 dark:text-primary-400" />
-                        <span className="text-xs text-primary-600 dark:text-primary-400">
-                          All fees included
-                        </span>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-xl font-bold text-primary-600 dark:text-primary-400">
-                          ৳{item.price.toLocaleString()}
+                    {/* Price + advance split */}
+                    <div className="mt-4 border-t border-gray-100 pt-4 dark:border-gray-800">
+                      {item.totalPrice ? (
+                        <>
+                          {/* Full price row */}
+                          <div className="flex items-baseline justify-between">
+                            <span className="text-xs text-gray-400 dark:text-gray-500">
+                              ৳{item.price.toLocaleString()} × {item.nights} night{(item.nights ?? 0) !== 1 ? "s" : ""}
+                            </span>
+                            <span className="text-base font-semibold text-gray-700 dark:text-gray-300">
+                              ৳{item.totalPrice.toLocaleString()}
+                            </span>
+                          </div>
+                          {/* Advance / balance split */}
+                          <div className="mt-2 grid grid-cols-2 gap-2">
+                            <div className="rounded-lg bg-primary-50 px-3 py-2 dark:bg-primary-950/30">
+                              <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
+                                <CreditCard className="h-3 w-3" />
+                                Pay now (20%)
+                              </div>
+                              <p className="mt-0.5 text-sm font-bold text-primary-700 dark:text-primary-300">
+                                ৳{Math.round(item.totalPrice * ADVANCE_RATE).toLocaleString()}
+                              </p>
+                            </div>
+                            <div className="rounded-lg bg-gray-50 px-3 py-2 dark:bg-gray-800/60">
+                              <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                <Banknote className="h-3 w-3" />
+                                At hotel (80%)
+                              </div>
+                              <p className="mt-0.5 text-sm font-bold text-gray-700 dark:text-gray-300">
+                                ৳{(item.totalPrice - Math.round(item.totalPrice * ADVANCE_RATE)).toLocaleString()}
+                              </p>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="flex items-end justify-between">
+                          <span className="text-xs text-gray-400 dark:text-gray-500">per night</span>
+                          <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
+                            ৳{item.price.toLocaleString()}
+                          </span>
                         </div>
-                        <div className="text-xs text-gray-400 dark:text-gray-500">
-                          per night
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>
               </article>
             ))}
+
+            {/* How it works info banner */}
+            <div className="flex gap-3 rounded-2xl border border-amber-100 bg-amber-50 p-4 dark:border-amber-900/30 dark:bg-amber-950/20">
+              <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+              <div className="text-xs text-amber-800 dark:text-amber-300">
+                <p className="font-semibold">How advance payment works</p>
+                <p className="mt-1 leading-relaxed text-amber-700 dark:text-amber-400">
+                  You pay <strong>20% now</strong> to confirm your reservation. The remaining{" "}
+                  <strong>80% is collected at the hotel</strong> when you check in — no surprise charges.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Right — order summary */}
           <div className="h-fit rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 lg:sticky lg:top-24">
-            <h2 className="mb-6 text-lg font-bold text-gray-900 dark:text-white">
+            <h2 className="mb-5 text-lg font-bold text-gray-900 dark:text-white">
               Order Summary
             </h2>
 
+            {/* Item list */}
             <div className="space-y-3">
               {items.map((item) => (
                 <div
                   key={item.cartId}
                   className="flex items-start justify-between gap-3 text-sm"
                 >
-                  <span className="text-gray-600 dark:text-gray-400 line-clamp-2">
-                    {item.roomName}
+                  <span className="text-gray-600 dark:text-gray-400">
+                    <span className="line-clamp-1 font-medium text-gray-800 dark:text-gray-200">{item.roomName}</span>
                     <span className="block text-xs text-gray-400 dark:text-gray-500">
                       {item.hotelName}
                     </span>
+                    {item.checkIn && item.checkOut && (
+                      <span className="block text-xs text-primary-600 dark:text-primary-400">
+                        {item.checkIn} → {item.checkOut}
+                        {item.nights ? ` · ${item.nights}n` : ""}
+                      </span>
+                    )}
                   </span>
-                  <span className="shrink-0 font-medium text-gray-900 dark:text-white">
-                    ৳{item.price.toLocaleString()}
+                  <span className="shrink-0 font-semibold text-gray-900 dark:text-white">
+                    ৳{(item.totalPrice ?? item.price).toLocaleString()}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div className="my-5 border-t border-gray-100 dark:border-gray-800" />
+            <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
 
-            <div className="space-y-2.5 text-sm">
-              <div className="flex justify-between text-gray-600 dark:text-gray-400">
-                <span>Subtotal</span>
-                <span>৳{totalAmount.toLocaleString()}</span>
+            {/* Totals */}
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between text-gray-500 dark:text-gray-400">
+                <span>Total booking value</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">৳{totalAmount.toLocaleString()}</span>
               </div>
-              {/* <div className="flex justify-between text-gray-600 dark:text-gray-400">
-                <span>VAT (5%)</span>
-                <span>৳{taxes.toLocaleString()}</span>
-              </div> */}
-              <div className="flex justify-between text-gray-500 dark:text-gray-500">
+              <div className="flex justify-between text-gray-500 dark:text-gray-400">
                 <span>Service fee</span>
-                <span className="text-primary-600 dark:text-primary-400">
-                  Free
+                <span className="text-primary-600 dark:text-primary-400">Free</span>
+              </div>
+            </div>
+
+            <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
+
+            {/* Payment split */}
+            <div className="space-y-3">
+              {/* Advance */}
+              <div className="flex items-center justify-between rounded-xl bg-primary-50 px-4 py-3 dark:bg-primary-950/30">
+                <div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-primary-700 dark:text-primary-400">
+                    <CreditCard className="h-3.5 w-3.5" />
+                    Pay now (20% advance)
+                  </div>
+                  <p className="mt-0.5 text-[10px] text-primary-600/70 dark:text-primary-500">
+                    Charged today to confirm booking
+                  </p>
+                </div>
+                <span className="text-xl font-bold text-primary-700 dark:text-primary-300">
+                  ৳{advanceAmount.toLocaleString()}
+                </span>
+              </div>
+
+              {/* Balance */}
+              <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
+                <div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300">
+                    <Banknote className="h-3.5 w-3.5" />
+                    Pay at hotel (80%)
+                  </div>
+                  <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                    Due at check-in — cash or card
+                  </p>
+                </div>
+                <span className="text-xl font-bold text-gray-600 dark:text-gray-300">
+                  ৳{balanceAmount.toLocaleString()}
                 </span>
               </div>
             </div>
 
-            <div className="my-5 border-t border-gray-100 dark:border-gray-800" />
-
-            <div className="flex items-center justify-between">
-              <span className="font-semibold text-gray-900 dark:text-white">
-                Total
-              </span>
-              <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                ৳{grandTotal.toLocaleString()}
-              </span>
-            </div>
-            <p className="mt-1 text-right text-xs text-gray-400 dark:text-gray-500">
-              All fees included
-            </p>
-
             <Link
               href="/checkout"
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
+              className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
             >
-              Proceed to Checkout
+              Pay ৳{advanceAmount.toLocaleString()} Advance
               <ArrowRight className="h-4 w-4" />
             </Link>
 

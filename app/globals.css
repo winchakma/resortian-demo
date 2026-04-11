@@ -234,6 +234,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0.5;
 }
 
+/* ── Booked / unavailable dates ─────────────────────────────────────────── */
+.resortian-cal .react-calendar__tile.booked-date {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    Dark-mode variants
    ═══════════════════════════════════════════════════════════════════ */
@@ -307,4 +316,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dark .resortian-cal .react-calendar__tile:disabled {
   color: #374151 !important;
   opacity: 0.6;
+}
+
+.dark .resortian-cal .react-calendar__tile.booked-date {
+  background: #450a0a !important;
+  color: #fca5a5 !important;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  opacity: 0.8;
 }

@@ -27,6 +27,7 @@ export interface Room {
   size: string;
   amenities: string[];
   badge?: string;
+  booked_dates?: string[];
 }
 
 export interface Review {
@@ -46,11 +47,15 @@ export interface CartItem {
   roomId: string;
   roomName: string;
   roomImage: string;
-  price: number;
+  price: number;       // price per night
   currency: string;
   view: string;
   size: string;
   capacity: number;
+  checkIn?: string;    // "YYYY-MM-DD"
+  checkOut?: string;   // "YYYY-MM-DD"
+  nights?: number;
+  totalPrice?: number; // nights × price
 }
 
 export interface Destination {

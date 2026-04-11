@@ -55,6 +55,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
           badge: "Best Value",
+          booked_dates: ["2026-04-11", "2026-04-12"],
         },
         {
           id: "2",
@@ -69,6 +70,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           amenities: ["WiFi", "TV", "AC", "Balcony"],
           image:
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
+          booked_dates: ["2026-04-16", "2026-04-19"],
         },
         {
           id: "3",
@@ -84,6 +86,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&h=400&fit=crop",
           badge: "Most Popular",
+          booked_dates: ["2026-04-17", "2026-04-18"],
         },
       ],
     },
@@ -133,6 +136,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&h=400&fit=crop",
           badge: "Sea Front",
+          booked_dates: ["2026-04-25", "2026-04-27"],
         },
       ],
     },
@@ -165,6 +169,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           amenities: ["WiFi", "TV", "AC"],
           image:
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          booked_dates: ["2026-04-22", "2026-04-23"],
         },
         {
           id: "2",
@@ -180,6 +185,12 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&h=400&fit=crop",
           badge: "Business Pick",
+          booked_dates: [
+            "2026-04-25",
+            "2026-04-26",
+            "2026-04-27",
+            "2026-04-28",
+          ],
         },
         {
           id: "3",
@@ -194,6 +205,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
           badge: "Most Popular",
+          booked_dates: ["2026-04-21", "2026-04-22"],
         },
       ],
     },
@@ -243,6 +255,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
           badge: "Most Popular",
+          booked_dates: ["2026-04-26", "2026-04-27", "2026-04-28"],
         },
       ],
     },
@@ -276,6 +289,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
           badge: "Best Value",
+          booked_dates: ["2026-04-26", "2026-04-27", "2026-04-28"],
         },
         {
           id: "2",
@@ -325,6 +339,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
           badge: "Best Value",
+          booked_dates: ["2026-04-28", "2026-04-29"],
         },
         {
           id: "2",
@@ -340,6 +355,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
           badge: "Most Popular",
+          booked_dates: ["2026-04-29", "2026-04-30"],
         },
       ],
     },
@@ -373,6 +389,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           amenities: ["WiFi", "TV", "AC"],
           image:
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          booked_dates: ["2026-04-29", "2026-04-30"],
         },
         {
           id: "2",
@@ -422,6 +439,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
           badge: "Best Value",
+          booked_dates: ["2026-04-23", "2026-04-24"],
         },
         {
           id: "2",
@@ -437,6 +455,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           image:
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
           badge: "Premium Pick",
+          booked_dates: ["2026-04-23", "2026-04-24", "2026-04-25"],
         },
       ],
     },
@@ -556,9 +575,7 @@ export interface HotelSearchParams {
   limit?: number;
 }
 
-export async function getHotels(
-  params?: HotelSearchParams,
-): Promise<Hotel[]> {
+export async function getHotels(params?: HotelSearchParams): Promise<Hotel[]> {
   await delay(300);
   // TODO: Replace with real API call:
   //   const qs = new URLSearchParams(params as Record<string, string>).toString();
