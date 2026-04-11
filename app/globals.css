@@ -52,3 +52,259 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .dark input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   React Calendar — scoped overrides (.resortian-cal wrapper)
+   Base CSS is imported directly inside DateRangePicker.tsx.
+   All selectors here start with .resortian-cal so specificity (0,2,0) always
+   beats the base calendar CSS (0,1,0), regardless of stylesheet load order.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Container ─────────────────────────────────────────────────────────── */
+.resortian-cal .react-calendar {
+  width: 100%;
+  min-width: 296px;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* ── Navigation row ────────────────────────────────────────────────────── */
+.resortian-cal .react-calendar__navigation {
+  display: flex;
+  align-items: center;
+  height: auto;
+  margin-bottom: 0.75rem;
+}
+
+.resortian-cal .react-calendar__navigation button {
+  min-width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  background: transparent;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resortian-cal .react-calendar__navigation button:enabled:hover,
+.resortian-cal .react-calendar__navigation button:enabled:focus {
+  background: #f3f4f6;
+}
+
+.resortian-cal .react-calendar__navigation button:disabled {
+  background: transparent;
+  opacity: 0.35;
+}
+
+.resortian-cal .react-calendar__navigation__label {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: #111827;
+  flex-grow: 1;
+}
+
+/* ── Weekday header ────────────────────────────────────────────────────── */
+.resortian-cal .react-calendar__month-view__weekdays__weekday {
+  padding: 0.25rem 0;
+  text-align: center;
+}
+
+.resortian-cal .react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Remove red on weekends */
+.resortian-cal .react-calendar__month-view__days__day--weekend {
+  color: #374151;
+}
+
+/* Neighboring-month days */
+.resortian-cal .react-calendar__month-view__days__day--neighboringMonth,
+.resortian-cal .react-calendar__month-view__days__day--neighboringMonth abbr {
+  color: #d1d5db !important;
+}
+
+/* ── Base tile ─────────────────────────────────────────────────────────── */
+.resortian-cal .react-calendar__tile {
+  max-width: 100%;
+  padding: 0.55em 0;
+  background: transparent;
+  border-radius: 9999px;        /* default: fully round */
+  text-align: center;
+  font: inherit;
+  font-size: 0.8125rem;
+  color: #374151;
+  transition: background-color 0.12s, color 0.12s, border-radius 0.12s;
+  position: relative;
+}
+
+.resortian-cal .react-calendar__tile:enabled:hover,
+.resortian-cal .react-calendar__tile:enabled:focus {
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 9999px;
+}
+
+/* ── Today ─────────────────────────────────────────────────────────────── */
+.resortian-cal .react-calendar__tile--now {
+  background: #f0fdf4;
+  color: #15803d;
+  font-weight: 700;
+  border-radius: 9999px;
+}
+
+.resortian-cal .react-calendar__tile--now:enabled:hover,
+.resortian-cal .react-calendar__tile--now:enabled:focus {
+  background: #bbf7d0;
+  color: #166534;
+}
+
+/* ── Active (single pick or partial range) ─────────────────────────────── */
+.resortian-cal .react-calendar__tile--active {
+  background: #34a853;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 9999px;
+}
+
+.resortian-cal .react-calendar__tile--active:enabled:hover,
+.resortian-cal .react-calendar__tile--active:enabled:focus {
+  background: #2b8c45;
+  color: #fff;
+}
+
+/* ── Range band (tiles strictly between start and end) ─────────────────── */
+/*
+  react-calendar applies these classes:
+    rangeStart  → --range + --rangeStart + --active
+    rangeEnd    → --range + --rangeEnd   + --active
+    middle      → --range  (no --active)
+
+  Cascade order matters: range rules come first, then more-specific
+  rangeStart/End rules override them for the boundary tiles.
+*/
+
+.resortian-cal .react-calendar__tile--range {
+  background: #dcfce7 !important;
+  color: #166534 !important;
+  border-radius: 0 !important;       /* flat edges → continuous band */
+}
+
+.resortian-cal .react-calendar__tile--rangeStart {
+  background: #34a853 !important;
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 9999px 0 0 9999px !important;   /* round left cap */
+}
+
+.resortian-cal .react-calendar__tile--rangeEnd {
+  background: #34a853 !important;
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 0 9999px 9999px 0 !important;   /* round right cap */
+}
+
+/* When start === end (single day) */
+.resortian-cal .react-calendar__tile--rangeBothEnds {
+  border-radius: 9999px !important;
+}
+
+/* Hover-preview band while user is dragging to pick end date */
+.resortian-cal .react-calendar--selectRange .react-calendar__tile--hover {
+  background: #bbf7d0 !important;
+  border-radius: 0 !important;
+}
+
+/* ── Disabled tiles (past / beyond 30-day window) ───────────────────────── */
+.resortian-cal .react-calendar__tile:disabled {
+  background: transparent !important;
+  color: #d1d5db !important;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Dark-mode variants
+   ═══════════════════════════════════════════════════════════════════ */
+
+.dark .resortian-cal .react-calendar__navigation button {
+  color: #d1d5db;
+}
+
+.dark .resortian-cal .react-calendar__navigation button:enabled:hover,
+.dark .resortian-cal .react-calendar__navigation button:enabled:focus {
+  background: #1f2937;
+}
+
+.dark .resortian-cal .react-calendar__navigation__label {
+  color: #f9fafb;
+}
+
+.dark .resortian-cal .react-calendar__month-view__weekdays__weekday abbr {
+  color: #6b7280;
+}
+
+.dark .resortian-cal .react-calendar__month-view__days__day--weekend {
+  color: #d1d5db;
+}
+
+.dark .resortian-cal .react-calendar__month-view__days__day--neighboringMonth,
+.dark .resortian-cal .react-calendar__month-view__days__day--neighboringMonth abbr {
+  color: #374151 !important;
+}
+
+.dark .resortian-cal .react-calendar__tile {
+  color: #d1d5db;
+}
+
+.dark .resortian-cal .react-calendar__tile:enabled:hover,
+.dark .resortian-cal .react-calendar__tile:enabled:focus {
+  background: #14532d;
+  color: #86efac;
+  border-radius: 9999px;
+}
+
+.dark .resortian-cal .react-calendar__tile--now {
+  background: #052e16;
+  color: #4ade80;
+}
+
+.dark .resortian-cal .react-calendar__tile--now:enabled:hover {
+  background: #14532d;
+}
+
+.dark .resortian-cal .react-calendar__tile--active {
+  background: #34a853;
+  color: #fff;
+}
+
+.dark .resortian-cal .react-calendar__tile--range {
+  background: #052e16 !important;
+  color: #86efac !important;
+}
+
+.dark .resortian-cal .react-calendar__tile--rangeStart,
+.dark .resortian-cal .react-calendar__tile--rangeEnd {
+  background: #34a853 !important;
+  color: #fff !important;
+}
+
+.dark .resortian-cal .react-calendar--selectRange .react-calendar__tile--hover {
+  background: #14532d !important;
+}
+
+.dark .resortian-cal .react-calendar__tile:disabled {
+  color: #374151 !important;
+  opacity: 0.6;
+}

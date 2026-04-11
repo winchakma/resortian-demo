@@ -26,6 +26,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
   return [
     {
       id: "1",
+      destination_id: "1",
       name: "The Royal Sylhet Resort & Spa",
       slug: "the-royal-sylhet-resort-spa",
       location: "Sylhet, Bangladesh",
@@ -44,7 +45,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "1",
           hotel_id: 1,
           name: "Standard Room",
-          description: "Comfortable room with garden view and modern furnishings.",
+          description:
+            "Comfortable room with garden view and modern furnishings.",
           price: 3600,
           capacity: 2,
           view: "Garden View",
@@ -58,7 +60,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "2",
           hotel_id: 1,
           name: "Deluxe Room",
-          description: "Spacious room with upgraded furnishings and tea garden view.",
+          description:
+            "Spacious room with upgraded furnishings and tea garden view.",
           price: 5500,
           capacity: 2,
           view: "Tea Garden View",
@@ -71,7 +74,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "3",
           hotel_id: 1,
           name: "Executive Suite",
-          description: "Luxurious suite with separate living area and panoramic views.",
+          description:
+            "Luxurious suite with separate living area and panoramic views.",
           price: 8800,
           capacity: 4,
           view: "Panoramic View",
@@ -85,6 +89,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
     },
     {
       id: "2",
+      destination_id: "2",
       name: "Cox's Bazar Ocean Paradise",
       slug: "coxs-bazar-ocean-paradise",
       location: "Cox's Bazar, Bangladesh",
@@ -103,7 +108,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "1",
           hotel_id: 2,
           name: "Standard Room",
-          description: "Cozy room with partial sea view and all essential comforts.",
+          description:
+            "Cozy room with partial sea view and all essential comforts.",
           price: 3600,
           capacity: 2,
           view: "Partial Sea View",
@@ -117,7 +123,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "2",
           hotel_id: 2,
           name: "Ocean View Suite",
-          description: "Stunning suite with full ocean view and private balcony.",
+          description:
+            "Stunning suite with full ocean view and private balcony.",
           price: 7200,
           capacity: 3,
           view: "Full Ocean View",
@@ -131,6 +138,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
     },
     {
       id: "3",
+      destination_id: "3",
       name: "Dhaka Grand Hotel",
       slug: "dhaka-grand-hotel",
       location: "Dhaka, Bangladesh",
@@ -162,7 +170,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "2",
           hotel_id: 3,
           name: "Business Suite",
-          description: "Spacious suite with dedicated work desk and premium amenities.",
+          description:
+            "Spacious suite with dedicated work desk and premium amenities.",
           price: 5500,
           capacity: 2,
           view: "Skyline View",
@@ -190,6 +199,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
     },
     {
       id: "4",
+      destination_id: "4",
       name: "Sundarbans Eco Resort",
       slug: "sundarbans-eco-resort",
       location: "Khulna, Bangladesh",
@@ -208,7 +218,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "1",
           hotel_id: 4,
           name: "Forest Cabin",
-          description: "Rustic cabin nestled in the mangroves with forest views.",
+          description:
+            "Rustic cabin nestled in the mangroves with forest views.",
           price: 2800,
           capacity: 2,
           view: "Forest View",
@@ -222,7 +233,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "2",
           hotel_id: 4,
           name: "Deluxe Bungalow",
-          description: "Spacious bungalow with private deck overlooking the river.",
+          description:
+            "Spacious bungalow with private deck overlooking the river.",
           price: 4500,
           capacity: 3,
           view: "River View",
@@ -236,6 +248,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
     },
     {
       id: "5",
+      destination_id: "1",
       name: "Bandarban Hill Resort",
       slug: "bandarban-hill-resort",
       location: "Bandarban, Bangladesh",
@@ -268,7 +281,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "2",
           hotel_id: 5,
           name: "Mountain Suite",
-          description: "Elevated suite with wrap-around balcony and sunrise views.",
+          description:
+            "Elevated suite with wrap-around balcony and sunrise views.",
           price: 4200,
           capacity: 3,
           view: "Mountain View",
@@ -282,6 +296,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
     },
     {
       id: "6",
+      destination_id: "5",
       name: "Rangamati Lake View Hotel",
       slug: "rangamati-lake-view-hotel",
       location: "Rangamati, Bangladesh",
@@ -300,7 +315,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "1",
           hotel_id: 6,
           name: "Lake View Room",
-          description: "Bright room with direct lake view and wooden interiors.",
+          description:
+            "Bright room with direct lake view and wooden interiors.",
           price: 2500,
           capacity: 2,
           view: "Lake View",
@@ -314,7 +330,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "2",
           hotel_id: 6,
           name: "Lakeside Suite",
-          description: "Premium suite with private jetty access and lake panorama.",
+          description:
+            "Premium suite with private jetty access and lake panorama.",
           price: 5000,
           capacity: 4,
           view: "Full Lake View",
@@ -328,6 +345,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
     },
     {
       id: "7",
+      destination_id: "6",
       name: "Chittagong Harbour Inn",
       slug: "chittagong-harbour-inn",
       location: "Chittagong, Bangladesh",
@@ -346,7 +364,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "1",
           hotel_id: 7,
           name: "Standard Room",
-          description: "Well-appointed room with city view and modern amenities.",
+          description:
+            "Well-appointed room with city view and modern amenities.",
           price: 1800,
           capacity: 2,
           view: "City View",
@@ -359,7 +378,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "2",
           hotel_id: 7,
           name: "Deluxe Room",
-          description: "Spacious room with upgraded furnishings and harbour view.",
+          description:
+            "Spacious room with upgraded furnishings and harbour view.",
           price: 2800,
           capacity: 2,
           view: "Harbour View",
@@ -373,6 +393,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
     },
     {
       id: "8",
+      destination_id: "7",
       name: "Saint Martin Island Resort",
       slug: "saint-martin-island-resort",
       location: "Saint Martin, Bangladesh",
@@ -391,7 +412,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "1",
           hotel_id: 8,
           name: "Island Cottage",
-          description: "Charming cottage steps from the beach with ocean breeze.",
+          description:
+            "Charming cottage steps from the beach with ocean breeze.",
           price: 4500,
           capacity: 2,
           view: "Ocean View",
@@ -405,7 +427,8 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           id: "2",
           hotel_id: 8,
           name: "Beachfront Villa",
-          description: "Private villa with direct beach access and outdoor shower.",
+          description:
+            "Private villa with direct beach access and outdoor shower.",
           price: 8500,
           capacity: 4,
           view: "Beachfront",
@@ -508,6 +531,40 @@ export async function getFooterData(): Promise<FooterColumn[]> {
       ],
     },
   ];
+}
+
+export async function getAllHotels(): Promise<Hotel[]> {
+  await delay(300);
+  // TODO: Replace with real API call — GET /api/hotels
+  return getFeaturedStays();
+}
+
+export interface HotelSearchParams {
+  location?: string;
+  checkIn?: string;
+  checkOut?: string;
+  adults?: number;
+  children?: number;
+  rooms?: number;
+  sortBy?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+  amenities?: string[];
+  tags?: string[];
+  page?: number;
+  limit?: number;
+}
+
+export async function getHotels(
+  params?: HotelSearchParams,
+): Promise<Hotel[]> {
+  await delay(300);
+  // TODO: Replace with real API call:
+  //   const qs = new URLSearchParams(params as Record<string, string>).toString();
+  //   const res = await fetch(`/api/hotels?${qs}`);
+  //   return res.json();
+  return getFeaturedStays();
 }
 
 export async function searchHotels(query: SearchFormData): Promise<Hotel[]> {
