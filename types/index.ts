@@ -61,8 +61,11 @@ export interface CartItem {
 export interface Destination {
   id: string;
   name: string;
+  region: string;
   propertyCount: number;
   image: string;
+  description: string;
+  highlights: string[];
 }
 
 export interface NavLink {

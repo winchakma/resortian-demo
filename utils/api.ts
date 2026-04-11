@@ -462,52 +462,129 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
   ];
 }
 
+const ALL_DESTINATIONS: Destination[] = [
+  {
+    id: "1",
+    name: "Cox's Bazar",
+    region: "Chittagong Division",
+    propertyCount: 120,
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop",
+    description:
+      "Home to the world's longest natural sea beach stretching 120 km, Cox's Bazar is Bangladesh's premier coastal destination. Crystal-clear waters, golden sands, and vibrant local markets make it an unmissable getaway.",
+    highlights: ["Sea Beach", "Seafood", "Sunset Views", "Water Sports"],
+  },
+  {
+    id: "2",
+    name: "Sylhet",
+    region: "Sylhet Division",
+    propertyCount: 85,
+    image:
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&h=500&fit=crop",
+    description:
+      "Blanketed by emerald tea gardens, Sylhet enchants with its rolling hills, gushing waterfalls, and centuries-old shrines. The spiritual aura of Hazrat Shah Jalal's shrine and the serene beauty of Ratargul Swamp Forest await.",
+    highlights: ["Tea Gardens", "Waterfalls", "Hakaluki Haor", "Heritage"],
+  },
+  {
+    id: "3",
+    name: "Bandarban",
+    region: "Chittagong Hill Tracts",
+    propertyCount: 45,
+    image:
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&h=500&fit=crop",
+    description:
+      "Perched among Bangladesh's highest peaks, Bandarban is a trekker's paradise. Mist-draped mountains, indigenous hill tribe cultures, Boga Lake, and the Nilgiri hills offer a raw, adventurous escape far from city life.",
+    highlights: ["Trekking", "Boga Lake", "Nilgiri Hills", "Hill Tribes"],
+  },
+  {
+    id: "4",
+    name: "Sundarbans",
+    region: "Khulna Division",
+    propertyCount: 30,
+    image:
+      "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&h=500&fit=crop",
+    description:
+      "The world's largest mangrove forest and a UNESCO World Heritage Site. Home to the majestic Royal Bengal Tiger, saltwater crocodiles, and thousands of bird species — the Sundarbans is nature at its most untamed.",
+    highlights: ["Royal Bengal Tiger", "Mangroves", "UNESCO Site", "Boat Safari"],
+  },
+  {
+    id: "5",
+    name: "Dhaka",
+    region: "Dhaka Division",
+    propertyCount: 200,
+    image:
+      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&h=500&fit=crop",
+    description:
+      "Bangladesh's vibrant capital pulses with energy, history, and culture. From the Mughal grandeur of Lalbagh Fort and the old lanes of Puran Dhaka to cutting-edge restaurants and rooftop bars, Dhaka never sleeps.",
+    highlights: ["Lalbagh Fort", "Old Dhaka", "Fine Dining", "Shopping"],
+  },
+  {
+    id: "6",
+    name: "Rangamati",
+    region: "Chittagong Hill Tracts",
+    propertyCount: 38,
+    image:
+      "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=500&fit=crop",
+    description:
+      "Cradled by the shimmering Kaptai Lake and lush green hills, Rangamati is a tranquil hill district known for its hanging bridge, indigenous Chakma culture, handicrafts, and peaceful boat rides through emerald-green waters.",
+    highlights: ["Kaptai Lake", "Hanging Bridge", "Chakma Culture", "Handicrafts"],
+  },
+  {
+    id: "7",
+    name: "Saint Martin",
+    region: "Cox's Bazar District",
+    propertyCount: 22,
+    image:
+      "https://images.unsplash.com/photo-1573052905904-34ad8c27f0cc?w=800&h=500&fit=crop",
+    description:
+      "Bangladesh's only coral island is a slice of paradise — turquoise waters, pristine beaches, coconut palms, and vibrant marine life. Saint Martin is perfect for snorkeling, diving, and watching breathtaking sunsets over the Bay of Bengal.",
+    highlights: ["Coral Island", "Snorkeling", "Diving", "Sunset Cruises"],
+  },
+  {
+    id: "8",
+    name: "Chittagong",
+    region: "Chittagong Division",
+    propertyCount: 95,
+    image:
+      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=500&fit=crop",
+    description:
+      "Bangladesh's port city and second-largest metropolis blends natural beauty with commercial energy. Patenga beach, the iconic ship-breaking yards, Foy's Lake, and the lush hills of Sitakunda make Chittagong a city of contrasts.",
+    highlights: ["Patenga Beach", "Ship Breaking", "Foy's Lake", "Sitakunda Hills"],
+  },
+  {
+    id: "9",
+    name: "Kuakata",
+    region: "Barisal Division",
+    propertyCount: 28,
+    image:
+      "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&h=500&fit=crop",
+    description:
+      "Known as the \"Daughter of the Sea\", Kuakata is one of the few beaches in the world where you can witness both sunrise and sunset over the ocean. The Rakhain tribal villages and mangrove forest add cultural depth to this serene coastline.",
+    highlights: ["Sunrise & Sunset", "Rakhain Culture", "Mangroves", "Fishing Villages"],
+  },
+  {
+    id: "10",
+    name: "Mymensingh",
+    region: "Mymensingh Division",
+    propertyCount: 18,
+    image:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=500&fit=crop",
+    description:
+      "Where the Brahmaputra River meets lush green plains, Mymensingh is the cultural and agricultural heartland of Bangladesh. The historic Mymensingh Rajbari palace, Birishiri's colourful earth and clear rivers offer a serene authentic experience.",
+    highlights: ["Brahmaputra River", "Rajbari Palace", "Birishiri", "River Cruises"],
+  },
+];
+
 export async function getPopularDestinations(): Promise<Destination[]> {
   await delay(150);
-  return [
-    {
-      id: "1",
-      name: "Cox's Bazar",
-      propertyCount: 120,
-      image:
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop",
-    },
-    {
-      id: "2",
-      name: "Sylhet",
-      propertyCount: 85,
-      image:
-        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=400&fit=crop",
-    },
-    {
-      id: "3",
-      name: "Bandarban",
-      propertyCount: 45,
-      image:
-        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop",
-    },
-    {
-      id: "4",
-      name: "Sundarbans",
-      propertyCount: 30,
-      image:
-        "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&h=400&fit=crop",
-    },
-    {
-      id: "5",
-      name: "Dhaka",
-      propertyCount: 200,
-      image:
-        "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&h=400&fit=crop",
-    },
-    {
-      id: "6",
-      name: "Rangamati",
-      propertyCount: 38,
-      image:
-        "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&h=400&fit=crop",
-    },
-  ];
+  // Return the first 6 for the home page section
+  return ALL_DESTINATIONS.slice(0, 6);
+}
+
+export async function getDestinations(): Promise<Destination[]> {
+  await delay(200);
+  // TODO: Replace with real API call — GET /api/destinations
+  return ALL_DESTINATIONS;
 }
 
 export async function getFooterData(): Promise<FooterColumn[]> {

@@ -13,7 +13,7 @@
   --color-primary-300: #86efac;
   --color-primary-400: #4ade80;
   --color-primary-500: #3cc85f;
-  --color-primary-600: #34A853;
+  --color-primary-600: #34a853;
   --color-primary-700: #2b8c45;
   --color-primary-800: #236f38;
   --color-primary-900: #1a5c2d;
@@ -31,7 +31,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-padding-top: 4rem; /* offset for sticky header (h-16 = 4rem) */
 }
 
 body {
@@ -40,7 +40,7 @@ body {
 }
 
 ::selection {
-  background-color: #34A853;
+  background-color: #34a853;
   color: #ffffff;
 }
 
@@ -140,12 +140,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   max-width: 100%;
   padding: 0.55em 0;
   background: transparent;
-  border-radius: 9999px;        /* default: fully round */
+  border-radius: 9999px; /* default: fully round */
   text-align: center;
   font: inherit;
   font-size: 0.8125rem;
   color: #374151;
-  transition: background-color 0.12s, color 0.12s, border-radius 0.12s;
+  transition:
+    background-color 0.12s,
+    color 0.12s,
+    border-radius 0.12s;
   position: relative;
 }
 
@@ -198,21 +201,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .resortian-cal .react-calendar__tile--range {
   background: #dcfce7 !important;
   color: #166534 !important;
-  border-radius: 0 !important;       /* flat edges → continuous band */
+  border-radius: 0 !important; /* flat edges → continuous band */
 }
 
 .resortian-cal .react-calendar__tile--rangeStart {
   background: #34a853 !important;
   color: #fff !important;
   font-weight: 600;
-  border-radius: 9999px 0 0 9999px !important;   /* round left cap */
+  border-radius: 9999px 0 0 9999px !important; /* round left cap */
 }
 
 .resortian-cal .react-calendar__tile--rangeEnd {
   background: #34a853 !important;
   color: #fff !important;
   font-weight: 600;
-  border-radius: 0 9999px 9999px 0 !important;   /* round right cap */
+  border-radius: 0 9999px 9999px 0 !important; /* round right cap */
 }
 
 /* When start === end (single day) */
@@ -269,7 +272,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .dark .resortian-cal .react-calendar__month-view__days__day--neighboringMonth,
-.dark .resortian-cal .react-calendar__month-view__days__day--neighboringMonth abbr {
+.dark
+  .resortian-cal
+  .react-calendar__month-view__days__day--neighboringMonth
+  abbr {
   color: #374151 !important;
 }
 
