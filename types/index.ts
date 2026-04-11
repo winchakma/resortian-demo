@@ -78,6 +78,39 @@ export interface FooterColumn {
   links: { label: string; href: string }[];
 }
 
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  memberSince: string;
+  avatar?: string;
+}
+
+export type BookingStatus = "upcoming" | "completed" | "cancelled";
+
+export interface Booking {
+  id: string;
+  reference: string;
+  hotelName: string;
+  hotelSlug: string;
+  hotelImage: string;
+  hotelLocation: string;
+  roomName: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  guests: number;
+  totalPrice: number;
+  advancePaid: number;
+  balanceDue: number;
+  status: BookingStatus;
+  bookedOn: string;
+  paymentMethod: "stripe" | "uddoktapay";
+  currency: string;
+}
+
 export interface SearchFormData {
   location: string;
   checkIn: string;

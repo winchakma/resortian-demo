@@ -5,6 +5,8 @@ import type {
   NavLink,
   SearchFormData,
   Review,
+  UserProfile,
+  Booking,
 } from "@/types";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -727,4 +729,150 @@ export async function getHotelReviews(hotelId: string): Promise<Review[]> {
     ],
   };
   return reviewsByHotel[hotelId] ?? [];
+}
+
+export async function getUserProfile(): Promise<UserProfile> {
+  await delay(100);
+  // TODO: Replace with real API call — GET /api/user/me
+  return {
+    id: "u1",
+    name: "Ahmed Rahman",
+    email: "ahmed.rahman@example.com",
+    phone: "01712345678",
+    address: "Gulshan-2, Dhaka, Bangladesh",
+    memberSince: "2025-01-15",
+  };
+}
+
+export async function getUserBookings(): Promise<Booking[]> {
+  await delay(200);
+  // TODO: Replace with real API call — GET /api/user/bookings
+  return [
+    {
+      id: "b1",
+      reference: "RST-A4F2E1",
+      hotelName: "Saint Martin Island Resort",
+      hotelSlug: "saint-martin-island-resort",
+      hotelImage:
+        "https://images.unsplash.com/photo-1573052905904-34ad8c27f0cc?w=400&h=280&fit=crop",
+      hotelLocation: "Saint Martin, Bangladesh",
+      roomName: "Beachfront Villa",
+      checkIn: "2026-04-28",
+      checkOut: "2026-05-01",
+      nights: 3,
+      guests: 2,
+      totalPrice: 25500,
+      advancePaid: 5100,
+      balanceDue: 20400,
+      status: "upcoming",
+      bookedOn: "2026-04-10",
+      paymentMethod: "stripe",
+      currency: "BDT",
+    },
+    {
+      id: "b2",
+      reference: "RST-B9C3D7",
+      hotelName: "The Royal Sylhet Resort & Spa",
+      hotelSlug: "the-royal-sylhet-resort-spa",
+      hotelImage:
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=280&fit=crop",
+      hotelLocation: "Sylhet, Bangladesh",
+      roomName: "Executive Suite",
+      checkIn: "2026-05-10",
+      checkOut: "2026-05-14",
+      nights: 4,
+      guests: 2,
+      totalPrice: 35200,
+      advancePaid: 7040,
+      balanceDue: 28160,
+      status: "upcoming",
+      bookedOn: "2026-04-08",
+      paymentMethod: "uddoktapay",
+      currency: "BDT",
+    },
+    {
+      id: "b3",
+      reference: "RST-C1E5F8",
+      hotelName: "Cox's Bazar Ocean Paradise",
+      hotelSlug: "coxs-bazar-ocean-paradise",
+      hotelImage:
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=280&fit=crop",
+      hotelLocation: "Cox's Bazar, Bangladesh",
+      roomName: "Ocean View Suite",
+      checkIn: "2026-03-20",
+      checkOut: "2026-03-23",
+      nights: 3,
+      guests: 2,
+      totalPrice: 21600,
+      advancePaid: 4320,
+      balanceDue: 0,
+      status: "completed",
+      bookedOn: "2026-03-05",
+      paymentMethod: "stripe",
+      currency: "BDT",
+    },
+    {
+      id: "b4",
+      reference: "RST-D2G6H9",
+      hotelName: "Sundarbans Eco Resort",
+      hotelSlug: "sundarbans-eco-resort",
+      hotelImage:
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=280&fit=crop",
+      hotelLocation: "Khulna, Bangladesh",
+      roomName: "Deluxe Bungalow",
+      checkIn: "2026-02-14",
+      checkOut: "2026-02-17",
+      nights: 3,
+      guests: 2,
+      totalPrice: 13500,
+      advancePaid: 2700,
+      balanceDue: 0,
+      status: "completed",
+      bookedOn: "2026-01-30",
+      paymentMethod: "stripe",
+      currency: "BDT",
+    },
+    {
+      id: "b5",
+      reference: "RST-E7K2L4",
+      hotelName: "Bandarban Hill Resort",
+      hotelSlug: "bandarban-hill-resort",
+      hotelImage:
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&h=280&fit=crop",
+      hotelLocation: "Bandarban, Bangladesh",
+      roomName: "Mountain Suite",
+      checkIn: "2026-01-25",
+      checkOut: "2026-01-27",
+      nights: 2,
+      guests: 3,
+      totalPrice: 8400,
+      advancePaid: 1680,
+      balanceDue: 0,
+      status: "cancelled",
+      bookedOn: "2026-01-10",
+      paymentMethod: "uddoktapay",
+      currency: "BDT",
+    },
+    {
+      id: "b6",
+      reference: "RST-F3M8N5",
+      hotelName: "Rangamati Lake View Hotel",
+      hotelSlug: "rangamati-lake-view-hotel",
+      hotelImage:
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400&h=280&fit=crop",
+      hotelLocation: "Rangamati, Bangladesh",
+      roomName: "Lakeside Suite",
+      checkIn: "2025-12-22",
+      checkOut: "2025-12-25",
+      nights: 3,
+      guests: 2,
+      totalPrice: 15000,
+      advancePaid: 3000,
+      balanceDue: 0,
+      status: "completed",
+      bookedOn: "2025-12-08",
+      paymentMethod: "stripe",
+      currency: "BDT",
+    },
+  ];
 }
