@@ -4,7 +4,14 @@ import "react-calendar/dist/Calendar.css";
 
 import { useState, useEffect, useCallback } from "react";
 import Calendar from "react-calendar";
-import { X, CalendarDays, Users, Maximize2, Eye, ChevronRight } from "lucide-react";
+import {
+  X,
+  CalendarDays,
+  Users,
+  Maximize2,
+  Eye,
+  ChevronRight,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useCart } from "@/context/CartContext";
@@ -26,7 +33,11 @@ function parseLocal(iso: string): Date {
 }
 
 function fmtShort(d: Date): string {
-  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  return d.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
@@ -87,7 +98,9 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
 
       // Validate range doesn't cross booked dates
       if (start && end && rangeHasBookedDate(start, end)) {
-        toast.error("Your selected range includes unavailable dates. Please choose different dates.");
+        toast.error(
+          "Your selected range includes unavailable dates. Please choose different dates.",
+        );
         setCheckIn(startStr);
         setCheckOut("");
         return;
@@ -105,7 +118,9 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
 
   const nights =
     checkInDate && checkOutDate
-      ? Math.round((checkOutDate.getTime() - checkInDate.getTime()) / 86_400_000)
+      ? Math.round(
+          (checkOutDate.getTime() - checkInDate.getTime()) / 86_400_000,
+        )
       : 0;
 
   const totalPrice = nights * room.price;
@@ -113,7 +128,7 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
   const calendarValue: Date | [Date, Date] | null =
     checkInDate && checkOutDate
       ? [checkInDate, checkOutDate]
-      : checkInDate ?? null;
+      : (checkInDate ?? null);
 
   // Lock body scroll
   useEffect(() => {
@@ -159,26 +174,27 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
 
     onClose();
 
-    toast.success(
-      (t) => (
-        <div className="flex flex-col gap-1">
-          <p className="font-semibold text-gray-900">Room added to cart!</p>
-          <p className="text-xs text-gray-500">
-            {room.name} · {nights} night{nights !== 1 ? "s" : ""}
-          </p>
-          <button
-            onClick={() => {
-              toast.dismiss(t.id);
-              router.push("/cart");
-            }}
-            className="mt-1 self-start rounded-md bg-primary-600 px-3 py-1 text-xs font-semibold text-white hover:bg-primary-700"
-          >
-            View Cart
-          </button>
-        </div>
-      ),
-      { duration: 5000 },
-    );
+    // toast.success(
+    //   (t) => (
+    //     <div className="flex flex-col gap-1">
+    //       <p className="font-semibold text-gray-900">Room added to cart!</p>
+    //       <p className="text-xs text-gray-500">
+    //         {room.name} · {nights} night{nights !== 1 ? "s" : ""}
+    //       </p>
+    //       <button
+    //         onClick={() => {
+    //           toast.dismiss(t.id);
+    //           router.push("/cart");
+    //         }}
+    //         className="mt-1 self-start rounded-md bg-primary-600 px-3 py-1 text-xs font-semibold text-white hover:bg-primary-700"
+    //       >
+    //         View Cart
+    //       </button>
+    //     </div>
+    //   ),
+    //   { duration: 5000 },
+    // );
+    router.push("/checkout");
   }
 
   return (
@@ -322,7 +338,8 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
           {nights > 0 && (
             <div className="mb-3 flex items-baseline justify-between text-sm">
               <span className="text-gray-600 dark:text-gray-400">
-                ৳{room.price.toLocaleString()} × {nights} night{nights !== 1 ? "s" : ""}
+                ৳{room.price.toLocaleString()} × {nights} night
+                {nights !== 1 ? "s" : ""}
               </span>
               <span className="text-lg font-bold text-gray-900 dark:text-white">
                 ৳{totalPrice.toLocaleString()}
