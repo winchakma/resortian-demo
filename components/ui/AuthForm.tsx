@@ -314,7 +314,7 @@ export function AuthForm({ role }: AuthFormProps) {
     : "Sign in as Hotel Owner";
 
   function handleSuccess() {
-    router.push("/profile");
+    router.push("/");
   }
 
   return (
