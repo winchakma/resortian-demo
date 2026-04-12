@@ -2,7 +2,14 @@ Resortian API — Frontend Reference
 
 Base URL: http://localhost:3005 | https://api.resortian.com
 Auth: Authorization: Bearer <accessToken> on all protected routes
-Content-Type: application/json for all request bodies
+Content-Type: application/json for all request bodies (except image upload endpoints — use multipart/form-data)
+
+Image URLs
+  All image paths returned by the API are relative paths: /uploads/<folder>/<file>.webp
+  Prepend the Base URL to get the full URL, e.g.:
+    http://localhost:3005/uploads/hotels/1714000000000-abc123.webp
+  Images are auto-converted to WebP (max 1280×960, quality 82) on upload.
+  Supported upload formats: JPEG, PNG, WebP, GIF, BMP, TIFF — max 10 MB per file.
 
 ---
 Auth
@@ -173,7 +180,7 @@ Response 200
     "room": {
       "id": "clx...",
       "name": "Deluxe Sea View",
-      "image": "https://...",
+      "images": ["/uploads/rooms/1714000000000-abc123.webp"],
       "price": 5000
     },
     "payments": [
@@ -315,7 +322,10 @@ Response 200
       "view": "Sea View",
       "size": "38 m²",
       "amenities": ["AC", "WiFi", "Minibar"],
-      "image": "https://...",
+      "images": [
+        "/uploads/rooms/1714000000000-abc123.webp",
+        "/uploads/rooms/1714000000001-def456.webp"
+      ],
       "badge": "Best Value",
       "isActive": true
     }
@@ -363,34 +373,39 @@ Response 200
 POST /hotels
 
 Admin only
+Content-Type: multipart/form-data
 
-Body
-{
-  "destinationId": "clx...",
-  "name": "Royal Tulip Sea Pearl",
-  "slug": "royal-tulip-sea-pearl",
-  "location": "Cox's Bazar",
-  "description": "Luxury resort on the beachfront...",
-  "image": "https://...",
-  "price": 8000,
-  "tags": ["beachfront", "luxury"],
-  "amenities": ["WiFi", "Pool", "Spa", "Gym"]
-}
+Fields
+  destinationId   string   (required)
+  name            string   (required)
+  slug            string   (required)
+  location        string   (required)
+  description     string   (required)
+  price           number   (required)
+  tags            string   optional — JSON array string: '["beachfront","luxury"]'
+                           or repeated fields: tags=beachfront&tags=luxury
+  amenities       string   optional — same format as tags
+  image           file     (required) — JPEG/PNG/WebP, max 10 MB
+                           Processed to WebP, served at /uploads/hotels/<name>.webp
 
-Response 201 — created hotel object
+Response 201 — created hotel object (image field = "/uploads/hotels/xxx.webp")
 
 ---
 PATCH /hotels/:id
 
 Admin only
+Content-Type: multipart/form-data
 
-Body (all fields optional)
-{
-  "name": "Updated Name",
-  "price": 9000,
-  "isActive": true,
-  "amenities": ["WiFi", "Pool"]
-}
+Fields (all optional)
+  name            string
+  slug            string
+  location        string
+  description     string
+  price           number
+  tags            string   JSON array string or repeated fields
+  amenities       string   JSON array string or repeated fields
+  isActive        boolean  "true" or "false"
+  image           file     optional — replaces the existing image (old file is deleted)
 
 Response 200 — updated hotel object
 
@@ -471,28 +486,31 @@ Response 200
 POST /destinations
 
 Admin only
+Content-Type: multipart/form-data
 
-Body
-{
-  "name": "Sylhet",
-  "region": "Sylhet Division",
-  "description": "Land of tea gardens and natural beauty...",
-  "image": "https://...",
-  "highlights": ["Tea gardens", "Ratargul swamp", "Jaflong"]
-}
+Fields
+  name            string   (required)
+  region          string   (required)
+  description     string   (required)
+  highlights      string   (required) — JSON array string: '["Tea gardens","Jaflong"]'
+                           or repeated fields: highlights=Tea+gardens&highlights=Jaflong
+  image           file     (required) — JPEG/PNG/WebP, max 10 MB
+                           Processed to WebP, served at /uploads/destinations/<name>.webp
 
-Response 201 — created destination object
+Response 201 — created destination object (image field = "/uploads/destinations/xxx.webp")
 
 ---
 PATCH /destinations/:id
 
 Admin only
+Content-Type: multipart/form-data
 
-Body (all fields optional)
-{
-  "description": "Updated description",
-  "highlights": ["Tea gardens", "Ratargul swamp", "Bichanakandi"]
-}
+Fields (all optional)
+  name            string
+  region          string
+  description     string
+  highlights      string   JSON array string or repeated fields
+  image           file     optional — replaces the existing image (old file is deleted)
 
 Response 200 — updated destination object
 
@@ -517,36 +535,64 @@ Use this to disable dates in the booking calendar. A date in this array means th
 POST /rooms
 
 Admin only
+Content-Type: multipart/form-data
 
-Body
+Fields
+  hotelId         string   (required)
+  name            string   (required)
+  description     string   (required)
+  price           number   (required)
+  capacity        number   (required)
+  view            string   (required)
+  size            string   (required) e.g. "38 m²"
+  amenities       string   (required) — JSON array string: '["AC","WiFi"]'
+                           or repeated fields: amenities=AC&amenities=WiFi
+  images          files    (required) — 1 to 10 image files (field name: "images")
+                           Each processed to WebP, served at /uploads/rooms/<name>.webp
+  badge           string   optional e.g. "Best Value"
+
+Response 201 — created room object
 {
+  "id": "clx...",
   "hotelId": "clx...",
   "name": "Deluxe Sea View",
-  "description": "Spacious room with panoramic sea view...",
-  "price": 5000,                                            
+  "description": "...",
+  "price": 5000,
   "capacity": 2,
   "view": "Sea View",
-  "size": "38 m²",   
-  "amenities": ["AC", "WiFi", "Minibar", "Bathtub"],
-  "image": "https://...",                           
-  "badge": "Best Value"  
+  "size": "38 m²",
+  "amenities": ["AC", "WiFi", "Minibar"],
+  "images": [
+    "/uploads/rooms/1714000000000-abc123.webp",
+    "/uploads/rooms/1714000000001-def456.webp"
+  ],
+  "badge": "Best Value",
+  "isActive": true,
+  "createdAt": "2026-04-12T10:00:00.000Z"
 }
-                                                                                                                                                                                
-Response 201 — created room object
-                                                                                                                                                                                
----                                                       
+
+---
 PATCH /rooms/:id
 
 Admin only
+Content-Type: multipart/form-data
 
-Body (all fields optional)
-{
-  "price": 5500,
-  "badge": "Most Popular",
-  "isActive": true                                                                                                                                                              
-}                 
-                                                                                                                                                                                
-Response 200 — updated room object                        
+Fields (all optional)
+  name            string
+  description     string
+  price           number
+  capacity        number
+  view            string
+  size            string
+  amenities       string   JSON array string or repeated fields
+  badge           string
+  isActive        boolean  "true" or "false"
+  images          files    optional — 1 to 10 files
+                           ⚠ Uploading new images REPLACES ALL existing images.
+                           Old image files are deleted from disk.
+                           Do not send this field if you want to keep existing images.
+
+Response 200 — updated room object (same shape as POST /rooms response)                        
                                                                                                                                                                                 
 ---
 DELETE /rooms/:id                                                                                                                                                               
@@ -593,11 +639,11 @@ Response 201
     "paymentMethod": "STRIPE",                                                                                                                                                  
     "currency": "BDT",        
     "bookedOn": "2026-04-12T10:00:00.000Z",                                                                                                                                     
-    "room": {                                             
-      "id": "clx...",                                                                                                                                                           
+    "room": {
+      "id": "clx...",
       "name": "Deluxe Sea View",
-      "image": "https://...",                                                                                                                                                   
-      "price": 5000                                       
+      "images": ["/uploads/rooms/1714000000000-abc123.webp"],
+      "price": 5000
     }              
   }, 
   "payment": {                                                                                                                                                                  
@@ -641,11 +687,11 @@ Response 200
   "bookedOn": "2026-04-12T10:00:00.000Z",                                                                                                                                       
   "cancelledAt": null,                                    
   "cancelReason": null,                                                                                                                                                         
-  "room": {            
-    "id": "clx...",                                                                                                                                                             
-    "name": "Deluxe Sea View",                            
-    "image": "https://...",   
-    "price": 5000                                                                                                                                                               
+  "room": {
+    "id": "clx...",
+    "name": "Deluxe Sea View",
+    "images": ["/uploads/rooms/1714000000000-abc123.webp"],
+    "price": 5000
   },             
   "payments": [                                                                                                                                                                 
     {                                                     
