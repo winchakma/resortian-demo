@@ -1,0 +1,863 @@
+Resortian API — Frontend Reference
+
+Base URL: http://localhost:3005 | https://api.resortian.com
+Auth: Authorization: Bearer <accessToken> on all protected routes
+Content-Type: application/json for all request bodies
+
+---
+Auth
+
+POST /auth/register
+
+Public
+
+Body
+{
+  "name": "Rahim Uddin",
+  "phone": "01711223344",
+  "password": "secret123",
+  "role": "HOTEL_OWNER/USER" // optional | default "USER"
+  "email": "rahim@example.com"  // optional
+}
+
+Response 201
+{
+  "user": {
+    "id": "clx...",
+    "name": "Rahim Uddin",
+    "phone": "01711223344",
+    "email": null,
+    "role": "USER",
+    "isVerified": false,
+    "avatar": null,
+    "address": null,
+    "memberSince": "2026-04-12T10:00:00.000Z"
+  },
+  "accessToken": "eyJ..."
+}
+Refresh token is set as an HttpOnly cookie (refresh_token).
+
+---
+POST /auth/login
+
+Public
+
+Body
+{
+  "identifier": "01711223344" || "user@example.com",
+  "password": "secret123"
+}
+
+Response 200
+{
+  "user": {
+    "id": "clx...",
+    "name": "Rahim Uddin",
+    "phone": "01711223344",
+    "email": null,
+    "role": "USER",
+    "isVerified": false,
+    "avatar": null
+  },
+  "accessToken": "eyJ..."
+}
+
+---
+POST /auth/refresh
+
+Public — Reads refresh_token cookie automatically
+
+Body — none
+
+Response 200
+{ "accessToken": "eyJ..." }
+
+---
+POST /auth/logout
+
+Auth required
+
+Body — none
+
+Response 200
+{ "message": "Logged out" }
+
+---
+GET /auth/me
+
+Auth required
+
+Response 200
+{
+  "id": "clx...",
+  "name": "Rahim Uddin",
+  "phone": "01711223344",
+  "email": null,
+  "role": "USER",
+  "isVerified": false,
+  "avatar": null
+}
+
+---
+Users
+
+GET /users/me
+
+Auth required
+
+Response 200
+{
+  "id": "clx...",
+  "name": "Rahim Uddin",
+  "phone": "01711223344",
+  "email": null,
+  "role": "USER",
+  "isVerified": false,
+  "avatar": null,
+  "address": null,
+  "memberSince": "2026-04-12T10:00:00.000Z"
+}
+
+---
+PATCH /users/me
+
+Auth required
+
+Body (all fields optional)
+{
+  "name": "Rahim Ahmed",
+  "phone": "01799887766",
+  "email": "new@example.com",
+  "address": "Dhaka, Bangladesh",
+  "avatar": "https://cdn.example.com/avatar.jpg"
+}
+
+Response 200 — updated user object (same shape as GET /users/me)
+
+---
+PATCH /users/me/password
+
+Auth required
+
+Body
+{
+  "currentPassword": "secret123",
+  "newPassword": "newSecret456"
+}
+
+Response 200
+{ "message": "Password changed successfully" }
+
+---
+GET /users/me/bookings
+
+Auth required
+
+Response 200
+[
+  {
+    "id": "clx...",
+    "reference": "RST-A4F2E1",
+    "hotelId": "clx...",
+    "roomId": "clx...",
+    "checkIn": "2026-05-10T00:00:00.000Z",
+    "checkOut": "2026-05-13T00:00:00.000Z",
+    "nights": 3,
+    "guests": 2,
+    "totalPrice": 15000,
+    "advancePaid": 3000,
+    "balanceDue": 12000,
+    "status": "CONFIRMED",
+    "paymentMethod": "STRIPE",
+    "bookedOn": "2026-04-12T10:00:00.000Z",
+    "room": {
+      "id": "clx...",
+      "name": "Deluxe Sea View",
+      "image": "https://...",
+      "price": 5000
+    },
+    "payments": [
+      {
+        "id": "clx...",
+        "amount": 3000,
+        "status": "PAID",
+        "method": "STRIPE",
+        "paidAt": "2026-04-12T10:05:00.000Z"
+      }
+    ]
+  }
+]
+
+---
+Hotels
+
+GET /hotels
+
+Public
+
+Query params (all optional)
+
+┌───────────┬──────────────────────────────────────────┬───────────────────┐
+│   Param   │                   Type                   │      Example      │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ location  │ string                                   │ Cox's Bazar       │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ checkIn   │ ISO date                                 │ 2026-05-10        │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ checkOut  │ ISO date                                 │ 2026-05-13        │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ adults    │ number                                   │ 2                 │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ rooms     │ number                                   │ 1                 │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ minPrice  │ number                                   │ 2000              │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ maxPrice  │ number                                   │ 10000             │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ minRating │ number (1–5)                             │ 4                 │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ amenities │ comma-sep string                         │ WiFi,Pool         │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ tags      │ comma-sep string                         │ beachfront,luxury │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ sortBy    │ price_asc | price_desc | rating | newest │ rating            │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ page      │ number                                   │ 1                 │
+├───────────┼──────────────────────────────────────────┼───────────────────┤
+│ limit     │ number (max 100)                         │ 10                │
+└───────────┴──────────────────────────────────────────┴───────────────────┘
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "name": "Sea Pearl Beach Resort",
+      "slug": "sea-pearl-beach-resort",
+      "location": "Cox's Bazar",
+      "description": "...",
+      "image": "https://...",
+      "price": 5000,
+      "currency": "BDT",
+      "rating": 4.7,
+      "reviewCount": 38,
+      "tags": ["beachfront", "luxury"],
+      "amenities": ["WiFi", "Pool", "Spa"],
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "destination": {
+        "id": "clx...",
+        "name": "Cox's Bazar",
+        "region": "Chittagong"
+      },
+      "_count": { "rooms": 12, "reviews": 38 }
+    }
+  ],
+  "meta": {
+    "total": 42,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 5
+  }
+}
+
+---
+GET /hotels/featured
+
+Public
+
+Query params
+
+┌───────┬────────┬─────────┐
+│ Param │  Type  │ Default │
+├───────┼────────┼─────────┤
+│ limit │ number │ 6       │
+└───────┴────────┴─────────┘
+
+Response 200 — array of hotel objects (same shape as items in GET /hotels, without _count)
+
+---
+GET /hotels/:slug
+
+Public
+
+Response 200
+{
+  "id": "clx...",
+  "name": "Sea Pearl Beach Resort",
+  "slug": "sea-pearl-beach-resort",
+  "location": "Cox's Bazar",
+  "description": "Full description...",
+  "image": "https://...",
+  "price": 5000,
+  "currency": "BDT",
+  "rating": 4.7,
+  "reviewCount": 38,
+  "tags": ["beachfront", "luxury"],
+  "amenities": ["WiFi", "Pool", "Spa"],
+  "isActive": true,
+  "destination": {
+    "id": "clx...",
+    "name": "Cox's Bazar",
+    "region": "Chittagong",
+    "description": "...",
+    "image": "https://...",
+    "highlights": ["Longest beach", "Himchari"],
+    "propertyCount": 18
+  },
+  "rooms": [
+    {
+      "id": "clx...",
+      "name": "Deluxe Sea View",
+      "description": "...",
+      "price": 5000,
+      "capacity": 2,
+      "view": "Sea View",
+      "size": "38 m²",
+      "amenities": ["AC", "WiFi", "Minibar"],
+      "image": "https://...",
+      "badge": "Best Value",
+      "isActive": true
+    }
+  ],
+  "_count": { "reviews": 38 }
+}
+
+Response 404 — hotel not found or inactive
+
+---
+GET /hotels/:id/reviews
+
+Public
+
+Query params
+
+┌───────┬────────┬─────────┐
+│ Param │  Type  │ Default │
+├───────┼────────┼─────────┤
+│ page  │ number │ 1       │
+├───────┼────────┼─────────┤
+│ limit │ number │ 10      │
+└───────┴────────┴─────────┘
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "author": "Rahim Uddin",
+      "rating": 5,
+      "comment": "Absolutely wonderful stay!",
+      "createdAt": "2026-03-15T08:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "total": 38,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 4
+  }
+}
+
+---
+POST /hotels
+
+Admin only
+
+Body
+{
+  "destinationId": "clx...",
+  "name": "Royal Tulip Sea Pearl",
+  "slug": "royal-tulip-sea-pearl",
+  "location": "Cox's Bazar",
+  "description": "Luxury resort on the beachfront...",
+  "image": "https://...",
+  "price": 8000,
+  "tags": ["beachfront", "luxury"],
+  "amenities": ["WiFi", "Pool", "Spa", "Gym"]
+}
+
+Response 201 — created hotel object
+
+---
+PATCH /hotels/:id
+
+Admin only
+
+Body (all fields optional)
+{
+  "name": "Updated Name",
+  "price": 9000,
+  "isActive": true,
+  "amenities": ["WiFi", "Pool"]
+}
+
+Response 200 — updated hotel object
+
+---
+DELETE /hotels/:id
+
+Admin only — soft delete (isActive → false)
+
+Response 200
+{ "message": "Hotel deleted successfully" }
+
+---
+Destinations
+
+GET /destinations
+
+Public
+
+Query params
+
+┌────────┬────────┬─────────┐
+│ Param  │  Type  │ Example │
+├────────┼────────┼─────────┤
+│ search │ string │ Sylhet  │
+└────────┴────────┴─────────┘
+
+Response 200
+[
+  {
+    "id": "clx...",
+    "name": "Cox's Bazar",
+    "region": "Chittagong",
+    "description": "...",
+    "image": "https://...",
+    "highlights": ["Longest beach", "Himchari"],
+    "propertyCount": 18,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-04-01T00:00:00.000Z"
+  }
+]
+
+---
+GET /destinations/popular
+
+Public — top 6 by propertyCount
+
+Response 200 — array of destination objects (same shape as above)
+
+---
+GET /destinations/:id
+
+Public
+
+Response 200
+{
+  "id": "clx...",
+  "name": "Cox's Bazar",
+  "region": "Chittagong",
+  "description": "...",
+  "image": "https://...",
+  "highlights": ["Longest beach", "Himchari"],
+  "propertyCount": 18,
+  "hotels": [
+    {
+      "id": "clx...",
+      "name": "Sea Pearl Beach Resort",
+      "slug": "sea-pearl-beach-resort",
+      "image": "https://...",
+      "price": 5000,
+      "rating": 4.7,
+      "reviewCount": 38,
+      "location": "Cox's Bazar"
+    }
+  ]
+}
+
+---
+POST /destinations
+
+Admin only
+
+Body
+{
+  "name": "Sylhet",
+  "region": "Sylhet Division",
+  "description": "Land of tea gardens and natural beauty...",
+  "image": "https://...",
+  "highlights": ["Tea gardens", "Ratargul swamp", "Jaflong"]
+}
+
+Response 201 — created destination object
+
+---
+PATCH /destinations/:id
+
+Admin only
+
+Body (all fields optional)
+{
+  "description": "Updated description",
+  "highlights": ["Tea gardens", "Ratargul swamp", "Bichanakandi"]
+}
+
+Response 200 — updated destination object
+
+---
+Rooms
+
+GET /rooms/:id/availability
+
+Public
+
+Response 200
+{
+  "bookedDates": [
+    "2026-05-10",
+    "2026-05-11",
+    "2026-05-12"
+  ]
+}
+Use this to disable dates in the booking calendar. A date in this array means the room is fully booked on that day.
+
+---
+POST /rooms
+
+Admin only
+
+Body
+{
+  "hotelId": "clx...",
+  "name": "Deluxe Sea View",
+  "description": "Spacious room with panoramic sea view...",
+  "price": 5000,                                            
+  "capacity": 2,
+  "view": "Sea View",
+  "size": "38 m²",   
+  "amenities": ["AC", "WiFi", "Minibar", "Bathtub"],
+  "image": "https://...",                           
+  "badge": "Best Value"  
+}
+                                                                                                                                                                                
+Response 201 — created room object
+                                                                                                                                                                                
+---                                                       
+PATCH /rooms/:id
+
+Admin only
+
+Body (all fields optional)
+{
+  "price": 5500,
+  "badge": "Most Popular",
+  "isActive": true                                                                                                                                                              
+}                 
+                                                                                                                                                                                
+Response 200 — updated room object                        
+                                                                                                                                                                                
+---
+DELETE /rooms/:id                                                                                                                                                               
+                                                          
+Admin only — soft delete
+
+Response 200
+{ "message": "Room deleted successfully" }
+
+---
+Bookings
+        
+POST /bookings
+                                                                                                                                                                                
+Auth required
+                                                                                                                                                                                
+Body                                                      
+{
+  "roomId": "clx...",
+  "checkIn": "2026-05-10",
+  "checkOut": "2026-05-13",
+  "guests": 2,             
+  "paymentMethod": "STRIPE"                                                                                                                                                     
+}                          
+paymentMethod: "STRIPE" or "UDDOKTAPAY"                                                                                                                                         
+                                                          
+Response 201                                                                                                                                                                    
+  
+{                                                                                                                                                                               
+  "booking": {                                            
+    "reference": "RST-A4F2E1",
+    "userId": "clx...",                                                                                                                                                         
+    "roomId": "clx...",
+    "hotelId": "clx...",                                                                                                                                                        
+    "checkIn": "2026-05-10T00:00:00.000Z",                
+    "checkOut": "2026-05-13T00:00:00.000Z",                                                                                                                                     
+    "nights": 3,                           
+    "guests": 2,                                                                                                                                                                
+    "totalPrice": 15000,                                  
+    "advancePaid": 3000,                                                                                                                                                        
+    "balanceDue": 12000,
+    "advanceRate": 0.2,                                                                                                                                                         
+    "status": "PENDING",                                  
+    "paymentMethod": "STRIPE",                                                                                                                                                  
+    "currency": "BDT",        
+    "bookedOn": "2026-04-12T10:00:00.000Z",                                                                                                                                     
+    "room": {                                             
+      "id": "clx...",                                                                                                                                                           
+      "name": "Deluxe Sea View",
+      "image": "https://...",                                                                                                                                                   
+      "price": 5000                                       
+    }              
+  }, 
+  "payment": {                                                                                                                                                                  
+    "id": "clx...",
+    "bookingId": "clx...",                                                                                                                                                      
+    "amount": 3000,                                       
+    "method": "STRIPE",
+    "status": "PENDING",
+    "isAdvance": true,  
+    "transactionId": null                                                                                                                                                       
+  }                      
+}                                                                                                                                                                               
+                                                          
+▎ Flow: After receiving this response, call POST /payments/stripe/intent or POST /payments/uddoktapay/init with the booking.id to get the payment URL / client secret.          
+                                                                                                                                                                                
+Error 409 — room not available for selected dates                                                                                                                               
+Error 400 — checkOut must be after checkIn                                                                                                                                      
+                                                                                                                                                                                
+---                                                       
+GET /bookings/:id
+                                                                                                                                                                                
+Auth required — owner or admin only
+                                                                                                                                                                                
+Response 200                                              
+{
+  "id": "clx...",
+  "reference": "RST-A4F2E1",
+  "userId": "clx...",       
+  "roomId": "clx...",                                                                                                                                                           
+  "hotelId": "clx...",
+  "checkIn": "2026-05-10T00:00:00.000Z",                                                                                                                                        
+  "checkOut": "2026-05-13T00:00:00.000Z",                 
+  "nights": 3,                           
+  "guests": 2,                                                                                                                                                                  
+  "totalPrice": 15000,
+  "advancePaid": 3000,                                                                                                                                                          
+  "balanceDue": 12000,                                    
+  "status": "CONFIRMED",
+  "paymentMethod": "STRIPE",                                                                                                                                                    
+  "currency": "BDT",        
+  "bookedOn": "2026-04-12T10:00:00.000Z",                                                                                                                                       
+  "cancelledAt": null,                                    
+  "cancelReason": null,                                                                                                                                                         
+  "room": {            
+    "id": "clx...",                                                                                                                                                             
+    "name": "Deluxe Sea View",                            
+    "image": "https://...",   
+    "price": 5000                                                                                                                                                               
+  },             
+  "payments": [                                                                                                                                                                 
+    {                                                     
+      "id": "clx...",
+      "amount": 3000,
+      "method": "STRIPE",
+      "status": "PAID",  
+      "isAdvance": true,                                                                                                                                                        
+      "transactionId": "pi_...",
+      "paidAt": "2026-04-12T10:05:00.000Z"                                                                                                                                      
+    }                                                     
+  ]                                                                                                                                                                             
+}
+                                                                                                                                                                                
+---                                                       
+PATCH /bookings/:id/cancel
+
+Auth required — owner or admin only
+
+Body (optional)                                                                                                                                                                 
+{
+  "cancelReason": "Change of plans"                                                                                                                                             
+}                                                         
+
+Response 200
+{
+  "id": "clx...",
+  "status": "CANCELLED",
+  "cancelledAt": "2026-04-12T11:00:00.000Z",
+  "cancelReason": "Change of plans",                                                                                                                                            
+  ...
+}                                                                                                                                                                               
+                                                          
+Error 400 — already cancelled or completed                                                                                                                                      
+                                                          
+---
+Payments
+        
+POST /payments/stripe/intent
+                                                                                                                                                                                
+Auth required
+                                                                                                                                                                                
+Body                                                      
+{
+  "bookingId": "clx..."
+}                      
+  
+Response 201
+{                                                                                                                                                                               
+  "clientSecret": "pi_3N...._secret_..."
+}                                                                                                                                                                               
+                                                                                                                                                                                
+Pass clientSecret to Stripe.js stripe.confirmCardPayment() on the frontend.
+                                                                                                                                                                                
+---                                                       
+POST /payments/uddoktapay/init                                                                                                                                                  
+                                                          
+Auth required
+                                                                                                                                                                                
+Body
+{                                                                                                                                                                               
+  "bookingId": "clx..."                                   
+}
+
+Response 201
+{
+  "paymentUrl": "https://sandbox.uddoktapay.com/api/checkout/..."
+}                                                                
+                                                                                                                                                                                
+Redirect the user to paymentUrl to complete payment.
+                                                                                                                                                                                
+---                                                       
+POST /payments/stripe/webhook                                                                                                                                                   
+                                                          
+Public — Stripe only
+Content-Type: application/json, stripe-signature header required
+Do not call this from the frontend. Stripe calls it directly.                                                                                                                   
+                                                                                                                                                                                
+---                                                                                                                                                                             
+POST /payments/uddoktapay/webhook                                                                                                                                               
+                                                                                                                                                                                
+Public — UddoktaPay only
+Do not call this from the frontend. UddoktaPay IPN calls it directly.                                                                                                           
+                                                                                                                                                                                
+---
+Reviews                                                                                                                                                                         
+                                                          
+POST /reviews
+
+Auth required
+
+Body
+{
+  "hotelId": "clx...",
+  "rating": 5,        
+  "comment": "Absolutely wonderful stay, will come back!",
+  "bookingId": "clx..."                                                                                                                                                         
+}                      
+bookingId is optional — links the review to a verified booking.                                                                                                                 
+                                                          
+Response 201                                                                                                                                                                    
+{
+  "id": "clx...",                                                                                                                                                               
+  "hotelId": "clx...",                                    
+  "userId": "clx...", 
+  "bookingId": "clx...",
+  "author": "Rahim Uddin",
+  "rating": 5,                                                                                                                                                                  
+  "comment": "Absolutely wonderful stay, will come back!",
+  "isVisible": true,                                                                                                                                                            
+  "createdAt": "2026-04-12T10:00:00.000Z"                 
+}                                                                                                                                                                               
+  
+Hotel.rating and Hotel.reviewCount are recalculated immediately after creation.                                                                                                 
+                                                                                                                                                                                
+---
+DELETE /reviews/:id                                                                                                                                                             
+                                                                                                                                                                                
+Auth required — owner or admin only
+                                                                                                                                                                                
+Response 200                                              
+{ "message": "Review deleted successfully" }
+
+Hotel.rating and Hotel.reviewCount are recalculated immediately after deletion.
+
+---                                                                                                                                                                             
+Contact
+                                                                                                                                                                                
+POST /contact                                             
+
+Public — rate-limited to 5 requests per minute per IP
+
+Body
+{
+  "name": "Karim Hossain",                                                                                                                                                      
+  "email": "karim@example.com",
+  "phone": "01811223344",                                                                                                                                                       
+  "subject": "Room inquiry",                              
+  "message": "I would like to know about group bookings..."                                                                                                                     
+}
+                                                                                                                                                                                
+Response 201                                              
+{                                                                                                                                                                               
+  "id": "clx...",                                         
+  "name": "Karim Hossain",
+  "email": "karim@example.com",
+  "phone": "01811223344",      
+  "subject": "Room inquiry",                                                                                                                                                    
+  "message": "I would like to know about group bookings...",
+  "isRead": false,                                                                                                                                                              
+  "userId": null,                                         
+  "createdAt": "2026-04-12T10:00:00.000Z"                                                                                                                                       
+}                                        
+                                                                                                                                                                                
+Error 429 — too many requests                             
+                                                                                                                                                                                
+---
+GET /contact                                                                                                                                                                    
+                                                          
+Admin only
+
+Response 200 — unread submissions first, then newest first                                                                                                                      
+[
+  {                                                                                                                                                                             
+    "id": "clx...",                                       
+    "name": "Karim Hossain",
+    "email": "karim@example.com",
+    "phone": "01811223344",      
+    "subject": "Room inquiry",
+    "message": "...",                                                                                                                                                           
+    "isRead": false, 
+    "userId": null,                                                                                                                                                             
+    "createdAt": "2026-04-12T10:00:00.000Z",              
+    "user": null
+  }                                                                                                                                                                             
+]
+                                                                                                                                                                                
+---                                                       
+PATCH /contact/:id/read
+                                                                                                                                                                                
+Admin only
+                                                                                                                                                                                
+Body — none                                               
+
+Response 200
+{
+  "id": "clx...",
+  "isRead": true,
+  ...
+}                                                                                                                                                                               
+
+---                                                                                                                                                                             
+Common Error Shapes                                       
+
+{ "statusCode": 400, "message": "Validation error message", "error": "Bad Request" }
+{ "statusCode": 401, "message": "Unauthorized" }                                                                                                                                
+{ "statusCode": 403, "message": "Insufficient permissions" }                                                                                                                    
+{ "statusCode": 404, "message": "Hotel not found" }                                                                                                                             
+{ "statusCode": 409, "message": "Room is not available for the selected dates" }                                                                                                
+{ "statusCode": 429, "message": "ThrottlerException: Too Many Requests" }                                                                                                       
+                                                                                                                                                                                
+---                                                                                                                                                                             
+Enum Reference                                                                                                                                                                  
+                                                                                                                                                                                
+┌───────────────┬───────────────────────────────────────┐
+│     Enum      │                Values                 │                                                                                                                       
+├───────────────┼───────────────────────────────────────┤ 
+│ Role          │ USER ADMIN HOTEL_OWNER                │
+├───────────────┼───────────────────────────────────────┤
+│ BookingStatus │ PENDING CONFIRMED COMPLETED CANCELLED │                                                                                                                       
+├───────────────┼───────────────────────────────────────┤
+│ PaymentMethod │ STRIPE UDDOKTAPAY                     │                                                                                                                       
+├───────────────┼───────────────────────────────────────┤                                                                                                                       
+│ PaymentStatus │ PENDING PAID FAILED REFUNDED          │
+└───────────────┴───────────────────────────────────────┘ 

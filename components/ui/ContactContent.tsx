@@ -23,7 +23,7 @@ const schema = yup.object({
     .required("Email is required"),
   phone: yup
     .string()
-    .matches(/^01[3-9]\d{8}$/, "Enter a valid Bangladeshi phone number")
+    .matches(/^01[3-9]\d{8}$/, "Enter a valid phone number")
     .required("Phone is required"),
   subject: yup.string().required("Please select a subject"),
   message: yup

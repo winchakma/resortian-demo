@@ -4,10 +4,12 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
 import type { ReactNode } from "react";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+      <AuthProvider>
       <CartProvider>
         {children}
         <Toaster
@@ -34,6 +36,7 @@ export function Providers({ children }: { children: ReactNode }) {
           }}
         />
       </CartProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

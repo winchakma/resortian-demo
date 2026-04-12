@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -20,11 +20,15 @@ import {
   Banknote,
   Info,
   Check,
+  BadgeCheck,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import { apiLogin } from "@/utils/auth";
 import { useForm, type Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import toast from "react-hot-toast";
 
 type AuthMode = "login" | "guest";
 type PaymentMethod = "stripe" | "uddoktapay";
@@ -99,6 +103,7 @@ const ADVANCE_RATE = 0.2;
 
 export function CheckoutContent() {
   const { items, totalAmount, clearCart } = useCart();
+  const { user, setAuth } = useAuth();
   const advanceAmount = Math.round(totalAmount * ADVANCE_RATE);
   const balanceAmount = totalAmount - advanceAmount;
 
@@ -106,6 +111,7 @@ export function CheckoutContent() {
   const [step, setStep] = useState<Step>("details");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("stripe");
   const [showPassword, setShowPassword] = useState(false);
+  const [loginSubmitting, setLoginSubmitting] = useState(false);
   // Snapshot amounts at payment time so confirmed screen shows correct values after cart is cleared
   const [confirmedAdvance, setConfirmedAdvance] = useState(0);
   const [confirmedBalance, setConfirmedBalance] = useState(0);
@@ -121,6 +127,15 @@ export function CheckoutContent() {
     mode: "onTouched",
   });
 
+  // Auto-populate guest form when user is logged in
+  useEffect(() => {
+    if (user) {
+      guestForm.setValue("guestName", user.name);
+      guestForm.setValue("guestPhone", user.phone);
+      if (user.email) guestForm.setValue("guestEmail", user.email);
+    }
+  }, [user, guestForm]);
+
   // ── Submit handlers ───────────────────────────────────────────────────────
   function handleGuestDetailsNext(data: GuestFormValues) {
     void data; // data is validated — proceed
@@ -128,11 +143,22 @@ export function CheckoutContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function handleLoginSubmit(data: LoginFormValues) {
-    void data;
-    // TODO: call real login API
-    setStep("payment");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  async function handleLoginSubmit(data: LoginFormValues) {
+    setLoginSubmitting(true);
+    try {
+      const res = await apiLogin({
+        identifier: data.loginPhone,
+        password: data.loginPassword,
+      });
+      setAuth(res.user, res.accessToken);
+      toast.success(`Welcome back, ${res.user.name}!`);
+      setStep("payment");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Login failed");
+    } finally {
+      setLoginSubmitting(false);
+    }
   }
 
   function handlePaymentConfirm() {
@@ -308,138 +334,155 @@ export function CheckoutContent() {
           {/* ── STEP: details ── */}
           {step === "details" && (
             <div className="space-y-6">
-              {/* Auth toggle card */}
-              <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                <div className="flex border-b border-gray-100 dark:border-gray-800">
-                  <button
-                    type="button"
-                    onClick={() => setAuthMode("guest")}
-                    className={`flex flex-1 items-center justify-center gap-2 py-4 text-sm font-semibold transition-colors ${
-                      authMode === "guest"
-                        ? "bg-primary-50 text-primary-700 dark:bg-primary-950/30 dark:text-primary-400"
-                        : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
-                    }`}
-                  >
-                    <User className="h-4 w-4" />
-                    Continue as Guest
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setAuthMode("login")}
-                    className={`flex flex-1 items-center justify-center gap-2 py-4 text-sm font-semibold transition-colors ${
-                      authMode === "login"
-                        ? "bg-primary-50 text-primary-700 dark:bg-primary-950/30 dark:text-primary-400"
-                        : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
-                    }`}
-                  >
-                    <LogIn className="h-4 w-4" />
-                    Sign In
-                  </button>
-                </div>
-
-                {/* ── Login form ── */}
-                {authMode === "login" ? (
-                  <form
-                    onSubmit={loginForm.handleSubmit(handleLoginSubmit)}
-                    className="space-y-4 p-6"
-                    noValidate
-                  >
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Sign in to auto-fill your details and track bookings.
+              {/* Auth toggle card — hidden when already logged in */}
+              {user ? (
+                <div className="flex items-center gap-3 rounded-2xl border border-primary-200 bg-primary-50 px-5 py-4 dark:border-primary-900/40 dark:bg-primary-950/20">
+                  <BadgeCheck className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
+                  <div>
+                    <p className="text-sm font-semibold text-primary-700 dark:text-primary-300">
+                      Signed in as {user.name}
                     </p>
-
-                    {/* Login Phone */}
-                    <div>
-                      <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Phone Number
-                      </label>
-                      <div className="relative">
-                        <Phone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                        <input
-                          type="tel"
-                          {...loginForm.register("loginPhone")}
-                          placeholder="01XXXXXXXXX"
-                          className={`${inputCls(!!loginForm.formState.errors.loginPhone)} pl-10 pr-4`}
-                        />
-                      </div>
-                      <FieldError
-                        message={loginForm.formState.errors.loginPhone?.message}
-                      />
-                    </div>
-
-                    {/* Login Password */}
-                    <div>
-                      <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Password
-                      </label>
-                      <div className="relative">
-                        <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          {...loginForm.register("loginPassword")}
-                          placeholder="••••••••"
-                          className={`${inputCls(!!loginForm.formState.errors.loginPassword)} pl-10 pr-12`}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword((p) => !p)}
-                          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                        >
-                          {showPassword ? (
-                            <EyeOff className="h-4 w-4" />
-                          ) : (
-                            <Eye className="h-4 w-4" />
-                          )}
-                        </button>
-                      </div>
-                      <FieldError
-                        message={
-                          loginForm.formState.errors.loginPassword?.message
-                        }
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <label className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                        <input
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                        />
-                        Remember me
-                      </label>
-                      <a
-                        href="#"
-                        className="text-primary-600 hover:underline dark:text-primary-400"
-                      >
-                        Forgot password?
-                      </a>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full rounded-xl bg-primary-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-                    >
-                      Sign In
-                    </button>
-
-                    <p className="text-center text-xs text-gray-400 dark:text-gray-500">
-                      Don&apos;t have an account?{" "}
-                      <a
-                        href="#"
-                        className="font-medium text-primary-600 hover:underline dark:text-primary-400"
-                      >
-                        Create one
-                      </a>
-                    </p>
-                  </form>
-                ) : (
-                  <div className="px-6 pt-5 pb-2">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      No account needed — fill in your details below.
+                    <p className="text-xs text-primary-600/70 dark:text-primary-500">
+                      Your details have been pre-filled below.
                     </p>
                   </div>
-                )}
-              </div>
+                </div>
+              ) : (
+                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                  <div className="flex border-b border-gray-100 dark:border-gray-800">
+                    <button
+                      type="button"
+                      onClick={() => setAuthMode("guest")}
+                      className={`flex flex-1 items-center justify-center gap-2 py-4 text-sm font-semibold transition-colors ${
+                        authMode === "guest"
+                          ? "bg-primary-50 text-primary-700 dark:bg-primary-950/30 dark:text-primary-400"
+                          : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      <User className="h-4 w-4" />
+                      Continue as Guest
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAuthMode("login")}
+                      className={`flex flex-1 items-center justify-center gap-2 py-4 text-sm font-semibold transition-colors ${
+                        authMode === "login"
+                          ? "bg-primary-50 text-primary-700 dark:bg-primary-950/30 dark:text-primary-400"
+                          : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      <LogIn className="h-4 w-4" />
+                      Sign In
+                    </button>
+                  </div>
+
+                  {/* ── Login form ── */}
+                  {authMode === "login" ? (
+                    <form
+                      onSubmit={loginForm.handleSubmit(handleLoginSubmit)}
+                      className="space-y-4 p-6"
+                      noValidate
+                    >
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Sign in to auto-fill your details and track bookings.
+                      </p>
+
+                      {/* Login Phone */}
+                      <div>
+                        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Phone Number
+                        </label>
+                        <div className="relative">
+                          <Phone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                          <input
+                            type="tel"
+                            {...loginForm.register("loginPhone")}
+                            placeholder="01XXXXXXXXX"
+                            className={`${inputCls(!!loginForm.formState.errors.loginPhone)} pl-10 pr-4`}
+                          />
+                        </div>
+                        <FieldError
+                          message={
+                            loginForm.formState.errors.loginPhone?.message
+                          }
+                        />
+                      </div>
+
+                      {/* Login Password */}
+                      <div>
+                        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Password
+                        </label>
+                        <div className="relative">
+                          <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            {...loginForm.register("loginPassword")}
+                            placeholder="••••••••"
+                            className={`${inputCls(!!loginForm.formState.errors.loginPassword)} pl-10 pr-12`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword((p) => !p)}
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          >
+                            {showPassword ? (
+                              <EyeOff className="h-4 w-4" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
+                          </button>
+                        </div>
+                        <FieldError
+                          message={
+                            loginForm.formState.errors.loginPassword?.message
+                          }
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between text-sm">
+                        <label className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                          />
+                          Remember me
+                        </label>
+                        <a
+                          href="#"
+                          className="text-primary-600 hover:underline dark:text-primary-400"
+                        >
+                          Forgot password?
+                        </a>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={loginSubmitting}
+                        className="w-full rounded-xl bg-primary-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:opacity-60"
+                      >
+                        {loginSubmitting ? "Signing in…" : "Sign In"}
+                      </button>
+
+                      <p className="text-center text-xs text-gray-400 dark:text-gray-500">
+                        Don&apos;t have an account?{" "}
+                        <Link
+                          href="/auth/customer"
+                          className="font-medium text-primary-600 hover:underline dark:text-primary-400"
+                        >
+                          Create one
+                        </Link>
+                      </p>
+                    </form>
+                  ) : (
+                    <div className="px-6 pt-5 pb-2">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        No account needed — fill in your details below.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* ── Guest info form ── */}
               <form
