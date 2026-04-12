@@ -174,7 +174,7 @@ function RegisterForm({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterData>({ resolver: yupResolver(registerSchema) });
+  } = useForm({ resolver: yupResolver(registerSchema) });
 
   async function onSubmit(data: RegisterData) {
     setSubmitting(true);
