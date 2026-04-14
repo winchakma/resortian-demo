@@ -339,7 +339,7 @@ export function AuthForm({ role }: AuthFormProps) {
         {/* Card */}
         <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
           {/* Role badge */}
-          <div className="mb-6 flex items-center gap-2">
+          {/* <div className="mb-6 flex items-center gap-2">
             <span
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
                 isVendor
@@ -350,7 +350,7 @@ export function AuthForm({ role }: AuthFormProps) {
               <MapPin className="h-3 w-3" />
               {isVendor ? "Hotel Owner" : "Customer"}
             </span>
-          </div>
+          </div> */}
 
           {/* Tabs */}
           <div className="mb-6 flex rounded-xl bg-gray-100 p-1 dark:bg-gray-800">

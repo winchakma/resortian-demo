@@ -3,7 +3,14 @@
 import { memo, useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Menu, User, ShoppingCart, ChevronDown, Building2, LogOut } from "lucide-react";
+import {
+  Menu,
+  User,
+  ShoppingCart,
+  ChevronDown,
+  Building2,
+  LogOut,
+} from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { MobileMenu } from "@/components/ui/MobileMenu";
@@ -83,7 +90,7 @@ function SignInDropdown() {
 
   return (
     <div ref={ref} className="relative">
-      <button
+      {/* <button
         onClick={() => setOpen((v) => !v)}
         className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
       >
@@ -91,7 +98,15 @@ function SignInDropdown() {
         <ChevronDown
           className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`}
         />
-      </button>
+      </button> */}
+      <Link href="/auth/customer">
+        <button
+          // onClick={() => setOpen((v) => !v)}
+          className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+        >
+          Sign In
+        </button>
+      </Link>
 
       {open && (
         <div className="absolute right-0 top-full mt-2 w-52 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
