@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import type { ReactNode } from "react";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export function Providers({ children }: { children: ReactNode }) {
       <AuthProvider>
       <CartProvider>
         {children}
+        <WhatsAppButton />
         <Toaster
           position="bottom-right"
           gutter={12}
