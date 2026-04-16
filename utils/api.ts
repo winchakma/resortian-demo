@@ -139,9 +139,12 @@ export async function getNavLinks(): Promise<NavLink[]> {
 
 export async function getFeaturedStays(): Promise<Hotel[]> {
   try {
-    const res = await fetch(`${API_BASE}/hotels/featured?limit=8`, {
-      next: { revalidate: 300 },
-    });
+    const res = await fetch(
+      `${API_BASE}/hotels/featured?limit=8&isActive=true`,
+      {
+        next: { revalidate: 300 },
+      },
+    );
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data: ApiHotel[] = await res.json();
     return data.map(normalizeHotel);
@@ -751,7 +754,7 @@ const ALL_DESTINATIONS: Destination[] = [
 
 export async function getPopularDestinations(): Promise<Destination[]> {
   try {
-    const res = await fetch(`${API_BASE}/destinations/popular`, {
+    const res = await fetch(`${API_BASE}/destinations/popular?isActive=true`, {
       next: { revalidate: 300 },
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -901,7 +904,7 @@ export async function searchHotels(query: SearchFormData): Promise<Hotel[]> {
 
 export async function getHotelBySlug(slug: string): Promise<Hotel | null> {
   try {
-    const res = await fetch(`${API_BASE}/hotels/${slug}`, {
+    const res = await fetch(`${API_BASE}/hotels/${slug}?isActive=true`, {
       next: { revalidate: 60 },
     });
     if (res.status === 404) return null;

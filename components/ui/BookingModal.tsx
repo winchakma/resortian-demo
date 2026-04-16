@@ -40,12 +40,35 @@ function fmtShort(d: Date): string {
   });
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
 export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
   const { addItem } = useCart();
   const router = useRouter();
 
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
+  const [bookedDates, setBookedDates] = useState<string[]>(room.booked_dates ?? []);
+  const [availabilityLoading, setAvailabilityLoading] = useState(true);
+
+  // Fetch real availability on mount
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchAvailability() {
+      try {
+        const res = await fetch(`${API_BASE}/rooms/${room.id}/availability`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data: { bookedDates: string[] } = await res.json();
+        if (!cancelled) setBookedDates(data.bookedDates);
+      } catch {
+        // keep the fallback booked_dates already in state
+      } finally {
+        if (!cancelled) setAvailabilityLoading(false);
+      }
+    }
+    fetchAvailability();
+    return () => { cancelled = true; };
+  }, [room.id]);
 
   // Date bounds
   const today = new Date();
@@ -54,7 +77,7 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
   maxDate.setDate(today.getDate() + 30);
 
   // Parse booked dates into a Set for O(1) lookup
-  const bookedSet = new Set<string>(room.booked_dates ?? []);
+  const bookedSet = new Set<string>(bookedDates);
 
   // Check if a date range spans over any booked date
   function rangeHasBookedDate(start: Date, end: Date): boolean {
@@ -303,19 +326,29 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
 
           {/* Calendar */}
           <div className="resortian-cal px-4 pb-4 pt-1">
-            <Calendar
-              onChange={handleCalendarChange}
-              value={calendarValue}
-              selectRange
-              allowPartialRange
-              minDate={today}
-              maxDate={maxDate}
-              tileDisabled={tileDisabled}
-              tileClassName={tileClassName}
-              showNeighboringMonth={false}
-              prev2Label={null}
-              next2Label={null}
-            />
+            {availabilityLoading ? (
+              <div className="flex items-center justify-center py-10 text-sm text-gray-400 dark:text-gray-500">
+                <svg className="mr-2 h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                </svg>
+                Checking availability…
+              </div>
+            ) : (
+              <Calendar
+                onChange={handleCalendarChange}
+                value={calendarValue}
+                selectRange
+                allowPartialRange
+                minDate={today}
+                maxDate={maxDate}
+                tileDisabled={tileDisabled}
+                tileClassName={tileClassName}
+                showNeighboringMonth={false}
+                prev2Label={null}
+                next2Label={null}
+              />
+            )}
           </div>
 
           {/* Legend */}

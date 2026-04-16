@@ -330,6 +330,17 @@ GET /hotels/:slug
 
 Public
 
+Query params (all optional)
+
+┌──────────┬─────────┬─────────┐
+│  Param   │  Type   │ Default │
+├──────────┼─────────┼─────────┤
+│ isActive │ boolean │ false   │
+└──────────┴─────────┴─────────┘
+
+?isActive=true  → only return rooms where isActive = true
+(omit or false) → return all rooms regardless of isActive status
+
 Response 200
 {
   "id": "clx...",
@@ -701,9 +712,9 @@ Bookings
 
 POST /bookings
 
-Auth required
+Public (Auth optional) — authenticated users book under their account; unauthenticated users make guest bookings
 
-Body
+Body — authenticated user
 {
   "roomId": "clx...",
   "checkIn": "2026-05-10",
@@ -711,6 +722,19 @@ Body
   "guests": 2,
   "paymentMethod": "STRIPE"
 }
+
+Body — guest (no token)
+{
+  "roomId": "clx...",
+  "checkIn": "2026-05-10",
+  "checkOut": "2026-05-13",
+  "guests": 2,
+  "paymentMethod": "STRIPE",
+  "guestName": "Rahim Uddin",
+  "guestPhone": "01711223344",
+  "guestEmail": "rahim@example.com"  // optional
+}
+guestName and guestPhone are required when no Authorization header is sent.
 paymentMethod: "STRIPE" or "UDDOKTAPAY"
 
 Response 201
@@ -718,7 +742,10 @@ Response 201
 {
   "booking": {
     "reference": "RST-A4F2E1",
-    "userId": "clx...",
+    "userId": null,           // null for guest bookings; clx... for logged-in users
+    "guestName": "Rahim Uddin",   // present for guest bookings, null otherwise
+    "guestPhone": "01711223344",  // present for guest bookings, null otherwise
+    "guestEmail": "rahim@example.com", // present if provided, null otherwise
     "roomId": "clx...",
     "hotelId": "clx...",
     "checkIn": "2026-05-10T00:00:00.000Z",
@@ -755,17 +782,22 @@ Response 201
 
 Error 409 — room not available for selected dates
 Error 400 — checkOut must be after checkIn
+Error 400 — guestName and guestPhone are required for guest bookings
 
 ---
 GET /bookings/:id
 
 Auth required — owner or admin only
+Note: unclaimed guest bookings (userId = null) are only accessible by SUPER_ADMIN until claimed.
 
 Response 200
 {
   "id": "clx...",
   "reference": "RST-A4F2E1",
   "userId": "clx...",
+  "guestName": null,
+  "guestPhone": null,
+  "guestEmail": null,
   "roomId": "clx...",
   "hotelId": "clx...",
   "checkIn": "2026-05-10T00:00:00.000Z",
@@ -799,6 +831,22 @@ Response 200
     }
   ]
 }
+
+---
+PATCH /bookings/:id/claim
+
+Auth required — links a guest booking to the logged-in user's account
+
+No request body needed.
+
+The logged-in user's phone must match the guestPhone recorded on the booking.
+Once claimed, userId is populated and guest fields (guestName, guestPhone, guestEmail) are cleared.
+
+Response 200 — updated booking object
+
+Error 400 — booking is cancelled
+Error 403 — phone number does not match the booking contact
+Error 422 — booking is already linked to an account
 
 ---
 PATCH /bookings/:id/cancel

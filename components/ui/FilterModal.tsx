@@ -4,19 +4,20 @@ import { X, ChevronDown } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 
+export interface FilterValues {
+  priceMin: string;
+  priceMax: string;
+  selectedStars: number[];
+  selectedAmenities: string[];
+  sortBy: string;
+}
+
 interface FilterModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialValues?: Partial<FilterValues>;
+  onApply: (values: FilterValues) => void;
 }
-
-const PROPERTY_TYPES = [
-  "Hotel",
-  "Resort",
-  "Homestay",
-  "Villa",
-  "Apartment",
-  "Guest House",
-];
 
 const AMENITIES = [
   "Free WiFi",
@@ -35,23 +36,27 @@ const AMENITIES = [
 
 const STAR_RATINGS = [5, 4, 3, 2, 1];
 
-export function FilterModal({ isOpen, onClose }: FilterModalProps) {
-  const [priceMin, setPriceMin] = useState("");
-  const [priceMax, setPriceMax] = useState("");
-  const [selectedStars, setSelectedStars] = useState<number[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("recommended");
+export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterModalProps) {
+  const [priceMin, setPriceMin] = useState(initialValues?.priceMin ?? "");
+  const [priceMax, setPriceMax] = useState(initialValues?.priceMax ?? "");
+  const [selectedStars, setSelectedStars] = useState<number[]>(initialValues?.selectedStars ?? []);
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(initialValues?.selectedAmenities ?? []);
+  const [sortBy, setSortBy] = useState(initialValues?.sortBy ?? "");
+
+  // Re-sync from URL values every time the modal opens
+  useEffect(() => {
+    if (!isOpen) return;
+    setPriceMin(initialValues?.priceMin ?? "");
+    setPriceMax(initialValues?.priceMax ?? "");
+    setSelectedStars(initialValues?.selectedStars ?? []);
+    setSelectedAmenities(initialValues?.selectedAmenities ?? []);
+    setSortBy(initialValues?.sortBy ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const toggleStar = useCallback((star: number) => {
     setSelectedStars((prev) =>
       prev.includes(star) ? prev.filter((s) => s !== star) : [...prev, star],
-    );
-  }, []);
-
-  const toggleType = useCallback((type: string) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
     );
   }, []);
 
@@ -67,30 +72,14 @@ export function FilterModal({ isOpen, onClose }: FilterModalProps) {
     setPriceMin("");
     setPriceMax("");
     setSelectedStars([]);
-    setSelectedTypes([]);
     setSelectedAmenities([]);
-    setSortBy("recommended");
+    setSortBy("");
   }, []);
 
   const handleApply = useCallback(() => {
-    console.log("Filters applied:", {
-      priceMin,
-      priceMax,
-      selectedStars,
-      selectedTypes,
-      selectedAmenities,
-      sortBy,
-    });
+    onApply({ priceMin, priceMax, selectedStars, selectedAmenities, sortBy });
     onClose();
-  }, [
-    priceMin,
-    priceMax,
-    selectedStars,
-    selectedTypes,
-    selectedAmenities,
-    sortBy,
-    onClose,
-  ]);
+  }, [priceMin, priceMax, selectedStars, selectedAmenities, sortBy, onApply, onClose]);
 
   useEffect(() => {
     if (isOpen) {
@@ -117,9 +106,8 @@ export function FilterModal({ isOpen, onClose }: FilterModalProps) {
   const activeFilterCount =
     (priceMin || priceMax ? 1 : 0) +
     (selectedStars.length > 0 ? 1 : 0) +
-    (selectedTypes.length > 0 ? 1 : 0) +
     selectedAmenities.length +
-    (sortBy !== "recommended" ? 1 : 0);
+    (sortBy !== "" ? 1 : 0);
 
   return createPortal(
     <div
@@ -160,11 +148,11 @@ export function FilterModal({ isOpen, onClose }: FilterModalProps) {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="w-full appearance-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 pr-10 text-sm text-gray-900 outline-none transition-colors focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               >
-                <option value="recommended">Recommended</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
+                <option value="">Recommended</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
                 <option value="rating">Highest Rating</option>
-                <option value="reviews">Most Reviews</option>
+                <option value="newest">Newest First</option>
               </select>
               <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
             </div>
@@ -225,29 +213,6 @@ export function FilterModal({ isOpen, onClose }: FilterModalProps) {
               ))}
             </div>
           </div>
-
-          {/* Property Type */}
-          {/* <div>
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-              Property Type
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {PROPERTY_TYPES.map((type) => (
-                <button
-                  key={type}
-                  type="button"
-                  onClick={() => toggleType(type)}
-                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                    selectedTypes.includes(type)
-                      ? "border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400"
-                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500"
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
-          </div> */}
 
           {/* Amenities */}
           <div>

@@ -354,7 +354,16 @@ export function HotelsContent({ hotels, meta, searchParams }: HotelsContentProps
           </p>
 
           {/* ── Search form (shared component, pre-filled) ── */}
-          <SearchForm initialValues={initialValues} />
+          <SearchForm
+            initialValues={initialValues}
+            searchParams={{
+              minPrice: searchParams.minPrice,
+              maxPrice: searchParams.maxPrice,
+              minRating: searchParams.minRating,
+              amenities: searchParams.amenities,
+              sortBy: searchParams.sortBy,
+            }}
+          />
         </div>
       </div>
 

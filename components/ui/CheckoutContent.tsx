@@ -8,7 +8,7 @@ import {
   User,
   Mail,
   Phone,
-  MessageSquare,
+  // MessageSquare,
   CreditCard,
   Lock,
   CheckCircle2,
@@ -100,10 +100,11 @@ function inputCls(hasError?: boolean) {
 }
 
 const ADVANCE_RATE = 0.2;
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 
 export function CheckoutContent() {
   const { items, totalAmount, clearCart } = useCart();
-  const { user, setAuth } = useAuth();
+  const { user, token, setAuth } = useAuth();
   const advanceAmount = Math.round(totalAmount * ADVANCE_RATE);
   const balanceAmount = totalAmount - advanceAmount;
 
@@ -112,9 +113,14 @@ export function CheckoutContent() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("stripe");
   const [showPassword, setShowPassword] = useState(false);
   const [loginSubmitting, setLoginSubmitting] = useState(false);
-  // Snapshot amounts at payment time so confirmed screen shows correct values after cart is cleared
+  const [bookingSubmitting, setBookingSubmitting] = useState(false);
+  // Guest details captured in step 1, used when submitting in step 2
+  const [savedGuestDetails, setSavedGuestDetails] =
+    useState<GuestFormValues | null>(null);
+  // Snapshot values shown on the confirmed screen (after cart is cleared)
   const [confirmedAdvance, setConfirmedAdvance] = useState(0);
   const [confirmedBalance, setConfirmedBalance] = useState(0);
+  const [confirmedReferences, setConfirmedReferences] = useState<string[]>([]);
 
   // ── Forms ─────────────────────────────────────────────────────────────────
   const loginForm = useForm<LoginFormValues>({
@@ -138,7 +144,7 @@ export function CheckoutContent() {
 
   // ── Submit handlers ───────────────────────────────────────────────────────
   function handleGuestDetailsNext(data: GuestFormValues) {
-    void data; // data is validated — proceed
+    setSavedGuestDetails(data);
     setStep("payment");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -161,17 +167,92 @@ export function CheckoutContent() {
     }
   }
 
-  function handlePaymentConfirm() {
-    setConfirmedAdvance(advanceAmount);
-    setConfirmedBalance(balanceAmount);
-    setStep("confirmed");
-    clearCart();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  async function handlePaymentConfirm() {
+    setBookingSubmitting(true);
+    try {
+      const isAuthenticated = !!token;
+
+      // For guest bookings, we need the details saved from step 1
+      const guestDetails = savedGuestDetails ?? guestForm.getValues();
+
+      const results = await Promise.all(
+        items.map((item) => {
+          const headers: Record<string, string> = {
+            "Content-Type": "application/json",
+          };
+          if (isAuthenticated) {
+            headers["Authorization"] = `Bearer ${token}`;
+          }
+
+          const body: Record<string, unknown> = {
+            roomId: item.roomId,
+            checkIn: item.checkIn,
+            checkOut: item.checkOut,
+            guests: item.capacity,
+            paymentMethod: paymentMethod.toUpperCase(),
+          };
+
+          if (!isAuthenticated) {
+            body.guestName = guestDetails.guestName;
+            body.guestPhone = guestDetails.guestPhone;
+            if (guestDetails.guestEmail) {
+              body.guestEmail = guestDetails.guestEmail;
+            }
+          }
+
+          return fetch(`${API_BASE}/bookings`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify(body),
+          }).then(async (res) => {
+            if (!res.ok) {
+              const err = await res.json().catch(() => ({}));
+              throw new Error(
+                (err as { message?: string }).message ?? `HTTP ${res.status}`,
+              );
+            }
+            return res.json() as Promise<{
+              booking: {
+                reference: string;
+                advancePaid: number;
+                balanceDue: number;
+              };
+            }>;
+          });
+        }),
+      );
+      console.log({ results });
+
+      const references = results.map((r) => r.booking.reference);
+      const totalAdvance = results.reduce(
+        (sum, r) => sum + r.booking.advancePaid,
+        0,
+      );
+      const totalBalance = results.reduce(
+        (sum, r) => sum + r.booking.balanceDue,
+        0,
+      );
+
+      setConfirmedReferences(references);
+      setConfirmedAdvance(totalAdvance);
+      setConfirmedBalance(totalBalance);
+      setStep("confirmed");
+      clearCart();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err: unknown) {
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Booking failed. Please try again.",
+      );
+    } finally {
+      setBookingSubmitting(false);
+    }
   }
 
   // ── Confirmed ─────────────────────────────────────────────────────────────
   if (step === "confirmed") {
-    const ref = Math.random().toString(36).slice(2, 8).toUpperCase();
+    const primaryRef = confirmedReferences[0] ?? "—";
     return (
       <div className="flex min-h-[70vh] items-center justify-center py-16">
         <div className="mx-auto w-full max-w-md px-4">
@@ -196,7 +277,7 @@ export function CheckoutContent() {
               Booking Reference
             </p>
             <p className="mt-1 font-mono text-2xl font-bold text-gray-900 dark:text-white">
-              RST-{ref}
+              {primaryRef}
             </p>
             <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
               Keep this reference for your records.
@@ -257,8 +338,8 @@ export function CheckoutContent() {
             <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
             <p className="text-xs leading-relaxed text-amber-700 dark:text-amber-300">
               Please present your booking reference{" "}
-              <strong className="font-semibold">RST-{ref}</strong> at the front
-              desk. The remaining{" "}
+              <strong className="font-semibold">{primaryRef}</strong> at the
+              front desk. The remaining{" "}
               <strong className="font-semibold">
                 ৳{confirmedBalance.toLocaleString()}
               </strong>{" "}
@@ -559,7 +640,7 @@ export function CheckoutContent() {
                     </div>
 
                     {/* Special requests */}
-                    <div className="sm:col-span-2">
+                    {/* <div className="sm:col-span-2">
                       <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
                         Special Requests
                         <span className="ml-1.5 text-xs font-normal text-gray-400">
@@ -575,7 +656,7 @@ export function CheckoutContent() {
                           className={`${inputCls()} pl-10 pr-4`}
                         />
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
@@ -754,10 +835,38 @@ export function CheckoutContent() {
               <button
                 type="button"
                 onClick={handlePaymentConfirm}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-4 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
+                disabled={bookingSubmitting}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-4 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <Lock className="h-4 w-4" />
-                Pay ৳{advanceAmount.toLocaleString()} Advance &amp; Confirm
+                {bookingSubmitting ? (
+                  <>
+                    <svg
+                      className="h-4 w-4 animate-spin"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      />
+                    </svg>
+                    Confirming Booking…
+                  </>
+                ) : (
+                  <>
+                    <Lock className="h-4 w-4" />
+                    Pay ৳{advanceAmount.toLocaleString()} Advance &amp; Confirm
+                  </>
+                )}
               </button>
             </div>
           )}

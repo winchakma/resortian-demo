@@ -10,9 +10,10 @@ import {
   Plus,
 } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import { DateRangePicker } from "@/components/ui/DateRangePicker";
-import { FilterModal } from "@/components/ui/FilterModal";
+import { FilterModal, type FilterValues } from "@/components/ui/FilterModal";
 import type { SearchFormData } from "@/types";
 
 // ── Stepper row ───────────────────────────────────────────────────────────────
@@ -72,14 +73,24 @@ function Stepper({
 
 // ── SearchForm ────────────────────────────────────────────────────────────────
 
-interface SearchFormProps {
-  initialValues?: Partial<SearchFormData>;
+interface FilterSearchParams {
+  minPrice?: string;
+  maxPrice?: string;
+  minRating?: string;
+  amenities?: string;
+  sortBy?: string;
 }
 
-export function SearchForm({ initialValues }: SearchFormProps = {}) {
+interface SearchFormProps {
+  initialValues?: Partial<SearchFormData>;
+  searchParams?: FilterSearchParams;
+}
+
+export function SearchForm({ initialValues, searchParams }: SearchFormProps = {}) {
   const { formData, updateField, handleSubmit } = useSearchForm({
     initialValues,
   });
+  const router = useRouter();
   const [isGuestOpen, setIsGuestOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -94,6 +105,39 @@ export function SearchForm({ initialValues }: SearchFormProps = {}) {
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
   }, []);
+
+  const handleFilterApply = useCallback(
+    (values: FilterValues) => {
+      const params = new URLSearchParams();
+      if (formData.location) params.set("location", formData.location);
+      if (formData.checkIn) params.set("checkIn", formData.checkIn);
+      if (formData.checkOut) params.set("checkOut", formData.checkOut);
+      params.set("adults", String(formData.adults));
+      params.set("children", String(formData.children));
+      params.set("rooms", String(formData.rooms));
+      if (values.priceMin) params.set("minPrice", values.priceMin);
+      if (values.priceMax) params.set("maxPrice", values.priceMax);
+      if (values.selectedStars.length > 0) {
+        params.set("minRating", String(Math.min(...values.selectedStars)));
+      }
+      if (values.selectedAmenities.length > 0) {
+        params.set("amenities", values.selectedAmenities.join(","));
+      }
+      if (values.sortBy) params.set("sortBy", values.sortBy);
+      router.push(`/hotels?${params.toString()}`);
+    },
+    [formData, router],
+  );
+
+  const initialFilterValues: Partial<FilterValues> = {
+    priceMin: searchParams?.minPrice ?? "",
+    priceMax: searchParams?.maxPrice ?? "",
+    selectedStars: searchParams?.minRating ? [Number(searchParams.minRating)] : [],
+    selectedAmenities: searchParams?.amenities
+      ? searchParams.amenities.split(",").filter(Boolean)
+      : [],
+    sortBy: searchParams?.sortBy ?? "",
+  };
 
   const guestSummary = useCallback(() => {
     const parts: string[] = [];
@@ -247,6 +291,8 @@ export function SearchForm({ initialValues }: SearchFormProps = {}) {
       <FilterModal
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
+        initialValues={initialFilterValues}
+        onApply={handleFilterApply}
       />
     </>
   );
