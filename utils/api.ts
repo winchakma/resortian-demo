@@ -1,5 +1,6 @@
 import type {
   Hotel,
+  Room,
   Destination,
   FooterColumn,
   NavLink,
@@ -10,6 +11,119 @@ import type {
 } from "@/types";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const API_BASE =
+  process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+function imageUrl(path: string): string {
+  if (!path || path.startsWith("http")) return path;
+  return `${API_BASE}${path}`;
+}
+
+// Raw shapes returned by the real API ─────────────────────────────────────────
+
+interface ApiRoom {
+  id: string;
+  hotelId: string;
+  name: string;
+  description: string;
+  price: number;
+  capacity: number;
+  view: string;
+  size: string;
+  amenities: string[];
+  images: string[];
+  badge?: string;
+  isActive: boolean;
+}
+
+interface ApiHotel {
+  id: string;
+  name: string;
+  slug: string;
+  location: string;
+  description: string;
+  image: string;
+  price: number;
+  currency: string;
+  rating: number;
+  reviewCount: number;
+  tags: string[];
+  amenities: string[];
+  isFeatured: boolean;
+  isActive: boolean;
+  createdAt: string;
+  destination?: { id: string; name: string; region: string };
+  rooms?: ApiRoom[];
+}
+
+interface ApiReview {
+  id: string;
+  author: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+}
+
+interface ApiDestination {
+  id: string;
+  name: string;
+  region: string;
+  description: string;
+  image: string;
+  highlights: string[];
+  propertyCount: number;
+  isFeatured: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function normalizeRoom(r: ApiRoom): Room {
+  return {
+    id: r.id,
+    hotel_id: r.hotelId,
+    name: r.name,
+    description: r.description,
+    price: r.price,
+    capacity: r.capacity,
+    view: r.view,
+    size: r.size,
+    amenities: r.amenities,
+    images: r.images.map(imageUrl),
+    badge: r.badge,
+  };
+}
+
+function normalizeHotel(h: ApiHotel): Hotel {
+  return {
+    id: h.id,
+    destination_id: h.destination?.id ?? "",
+    name: h.name,
+    slug: h.slug,
+    location: h.location,
+    description: h.description,
+    image: imageUrl(h.image),
+    price: h.price,
+    currency: h.currency,
+    rating: h.rating,
+    reviewCount: h.reviewCount,
+    tags: h.tags,
+    amenities: h.amenities,
+    rooms: h.rooms ? h.rooms.map(normalizeRoom) : [],
+  };
+}
+
+function normalizeDestination(d: ApiDestination): Destination {
+  return {
+    id: d.id,
+    name: d.name,
+    region: d.region,
+    description: d.description,
+    image: imageUrl(d.image),
+    highlights: d.highlights,
+    propertyCount: d.propertyCount,
+  };
+}
 
 export async function getNavLinks(): Promise<NavLink[]> {
   await delay(100);
@@ -24,6 +138,21 @@ export async function getNavLinks(): Promise<NavLink[]> {
 }
 
 export async function getFeaturedStays(): Promise<Hotel[]> {
+  try {
+    const res = await fetch(`${API_BASE}/hotels/featured?limit=8`, {
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data: ApiHotel[] = await res.json();
+    return data.map(normalizeHotel);
+  } catch {
+    return [];
+  }
+}
+
+// ─── Mock data kept for pages not yet connected to the real API ───────────────
+
+async function getMockHotels(): Promise<Hotel[]> {
   await delay(200);
   return [
     {
@@ -45,7 +174,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
       rooms: [
         {
           id: "1",
-          hotel_id: 1,
+          hotel_id: "1",
           name: "Standard Room",
           description:
             "Comfortable room with garden view and modern furnishings.",
@@ -54,14 +183,15 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Garden View",
           size: "28 m²",
           amenities: ["WiFi", "TV", "AC"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          ],
           badge: "Best Value",
           booked_dates: ["2026-04-11", "2026-04-12"],
         },
         {
           id: "2",
-          hotel_id: 1,
+          hotel_id: "1",
           name: "Deluxe Room",
           description:
             "Spacious room with upgraded furnishings and tea garden view.",
@@ -70,13 +200,14 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Tea Garden View",
           size: "38 m²",
           amenities: ["WiFi", "TV", "AC", "Balcony"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
+          ],
           booked_dates: ["2026-04-16", "2026-04-19"],
         },
         {
           id: "3",
-          hotel_id: 1,
+          hotel_id: "1",
           name: "Executive Suite",
           description:
             "Luxurious suite with separate living area and panoramic views.",
@@ -85,8 +216,9 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Panoramic View",
           size: "65 m²",
           amenities: ["WiFi", "TV", "AC", "Balcony", "Mini-bar"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&h=400&fit=crop",
+          ],
           badge: "Most Popular",
           booked_dates: ["2026-04-17", "2026-04-18"],
         },
@@ -111,7 +243,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
       rooms: [
         {
           id: "1",
-          hotel_id: 2,
+          hotel_id: "2",
           name: "Standard Room",
           description:
             "Cozy room with partial sea view and all essential comforts.",
@@ -120,13 +252,14 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Partial Sea View",
           size: "26 m²",
           amenities: ["WiFi", "TV", "AC"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          ],
           badge: "Best Value",
         },
         {
           id: "2",
-          hotel_id: 2,
+          hotel_id: "2",
           name: "Ocean View Suite",
           description:
             "Stunning suite with full ocean view and private balcony.",
@@ -135,8 +268,9 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Full Ocean View",
           size: "55 m²",
           amenities: ["WiFi", "TV", "AC", "Balcony", "Mini-bar"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&h=400&fit=crop",
+          ],
           badge: "Sea Front",
           booked_dates: ["2026-04-25", "2026-04-27"],
         },
@@ -161,7 +295,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
       rooms: [
         {
           id: "1",
-          hotel_id: 3,
+          hotel_id: "3",
           name: "Standard Room",
           description: "Modern room with city view and high-speed WiFi.",
           price: 2800,
@@ -169,13 +303,14 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "City View",
           size: "30 m²",
           amenities: ["WiFi", "TV", "AC"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          ],
           booked_dates: ["2026-04-22", "2026-04-23"],
         },
         {
           id: "2",
-          hotel_id: 3,
+          hotel_id: "3",
           name: "Business Suite",
           description:
             "Spacious suite with dedicated work desk and premium amenities.",
@@ -184,8 +319,9 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Skyline View",
           size: "48 m²",
           amenities: ["WiFi", "TV", "AC", "Work Desk", "Mini-bar"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&h=400&fit=crop",
+          ],
           badge: "Business Pick",
           booked_dates: [
             "2026-04-25",
@@ -196,7 +332,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
         },
         {
           id: "3",
-          hotel_id: 3,
+          hotel_id: "3",
           name: "Executive Suite",
           description: "Luxurious suite with panoramic city skyline views.",
           price: 8800,
@@ -204,8 +340,9 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Panoramic City View",
           size: "70 m²",
           amenities: ["WiFi", "TV", "AC", "Balcony", "Mini-bar", "Jacuzzi"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
+          ],
           badge: "Most Popular",
           booked_dates: ["2026-04-21", "2026-04-22"],
         },
@@ -230,7 +367,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
       rooms: [
         {
           id: "1",
-          hotel_id: 4,
+          hotel_id: "4",
           name: "Forest Cabin",
           description:
             "Rustic cabin nestled in the mangroves with forest views.",
@@ -239,13 +376,14 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Forest View",
           size: "32 m²",
           amenities: ["WiFi", "AC", "Nature Deck"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          ],
           badge: "Eco Pick",
         },
         {
           id: "2",
-          hotel_id: 4,
+          hotel_id: "4",
           name: "Deluxe Bungalow",
           description:
             "Spacious bungalow with private deck overlooking the river.",
@@ -254,8 +392,9 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "River View",
           size: "50 m²",
           amenities: ["WiFi", "TV", "AC", "Private Deck"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
+          ],
           badge: "Most Popular",
           booked_dates: ["2026-04-26", "2026-04-27", "2026-04-28"],
         },
@@ -280,7 +419,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
       rooms: [
         {
           id: "1",
-          hotel_id: 5,
+          hotel_id: "5",
           name: "Hill View Room",
           description: "Cozy room with panoramic hill and valley views.",
           price: 2200,
@@ -288,14 +427,15 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Hill View",
           size: "28 m²",
           amenities: ["WiFi", "TV", "AC"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          ],
           badge: "Best Value",
           booked_dates: ["2026-04-26", "2026-04-27", "2026-04-28"],
         },
         {
           id: "2",
-          hotel_id: 5,
+          hotel_id: "5",
           name: "Mountain Suite",
           description:
             "Elevated suite with wrap-around balcony and sunrise views.",
@@ -304,8 +444,9 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Mountain View",
           size: "45 m²",
           amenities: ["WiFi", "TV", "AC", "Balcony"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&h=400&fit=crop",
+          ],
           badge: "Scenic Best",
         },
       ],
@@ -329,7 +470,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
       rooms: [
         {
           id: "1",
-          hotel_id: 6,
+          hotel_id: "6",
           name: "Lake View Room",
           description:
             "Bright room with direct lake view and wooden interiors.",
@@ -338,14 +479,15 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Lake View",
           size: "30 m²",
           amenities: ["WiFi", "TV", "AC"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          ],
           badge: "Best Value",
           booked_dates: ["2026-04-28", "2026-04-29"],
         },
         {
           id: "2",
-          hotel_id: 6,
+          hotel_id: "6",
           name: "Lakeside Suite",
           description:
             "Premium suite with private jetty access and lake panorama.",
@@ -354,8 +496,9 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Full Lake View",
           size: "58 m²",
           amenities: ["WiFi", "TV", "AC", "Balcony", "Mini-bar"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
+          ],
           badge: "Most Popular",
           booked_dates: ["2026-04-29", "2026-04-30"],
         },
@@ -380,7 +523,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
       rooms: [
         {
           id: "1",
-          hotel_id: 7,
+          hotel_id: "7",
           name: "Standard Room",
           description:
             "Well-appointed room with city view and modern amenities.",
@@ -389,13 +532,14 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "City View",
           size: "25 m²",
           amenities: ["WiFi", "TV", "AC"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          ],
           booked_dates: ["2026-04-29", "2026-04-30"],
         },
         {
           id: "2",
-          hotel_id: 7,
+          hotel_id: "7",
           name: "Deluxe Room",
           description:
             "Spacious room with upgraded furnishings and harbour view.",
@@ -404,8 +548,9 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Harbour View",
           size: "35 m²",
           amenities: ["WiFi", "TV", "AC", "Mini-bar"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&h=400&fit=crop",
+          ],
           badge: "Harbour View",
         },
       ],
@@ -429,7 +574,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
       rooms: [
         {
           id: "1",
-          hotel_id: 8,
+          hotel_id: "8",
           name: "Island Cottage",
           description:
             "Charming cottage steps from the beach with ocean breeze.",
@@ -438,14 +583,15 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Ocean View",
           size: "30 m²",
           amenities: ["WiFi", "TV", "AC"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+          ],
           badge: "Best Value",
           booked_dates: ["2026-04-23", "2026-04-24"],
         },
         {
           id: "2",
-          hotel_id: 8,
+          hotel_id: "8",
           name: "Beachfront Villa",
           description:
             "Private villa with direct beach access and outdoor shower.",
@@ -454,8 +600,9 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
           view: "Beachfront",
           size: "75 m²",
           amenities: ["WiFi", "TV", "AC", "Private Pool", "Butler Service"],
-          image:
+          images: [
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
+          ],
           badge: "Premium Pick",
           booked_dates: ["2026-04-23", "2026-04-24", "2026-04-25"],
         },
@@ -507,7 +654,12 @@ const ALL_DESTINATIONS: Destination[] = [
       "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&h=500&fit=crop",
     description:
       "The world's largest mangrove forest and a UNESCO World Heritage Site. Home to the majestic Royal Bengal Tiger, saltwater crocodiles, and thousands of bird species — the Sundarbans is nature at its most untamed.",
-    highlights: ["Royal Bengal Tiger", "Mangroves", "UNESCO Site", "Boat Safari"],
+    highlights: [
+      "Royal Bengal Tiger",
+      "Mangroves",
+      "UNESCO Site",
+      "Boat Safari",
+    ],
   },
   {
     id: "5",
@@ -529,7 +681,12 @@ const ALL_DESTINATIONS: Destination[] = [
       "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=500&fit=crop",
     description:
       "Cradled by the shimmering Kaptai Lake and lush green hills, Rangamati is a tranquil hill district known for its hanging bridge, indigenous Chakma culture, handicrafts, and peaceful boat rides through emerald-green waters.",
-    highlights: ["Kaptai Lake", "Hanging Bridge", "Chakma Culture", "Handicrafts"],
+    highlights: [
+      "Kaptai Lake",
+      "Hanging Bridge",
+      "Chakma Culture",
+      "Handicrafts",
+    ],
   },
   {
     id: "7",
@@ -551,7 +708,12 @@ const ALL_DESTINATIONS: Destination[] = [
       "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=500&fit=crop",
     description:
       "Bangladesh's port city and second-largest metropolis blends natural beauty with commercial energy. Patenga beach, the iconic ship-breaking yards, Foy's Lake, and the lush hills of Sitakunda make Chittagong a city of contrasts.",
-    highlights: ["Patenga Beach", "Ship Breaking", "Foy's Lake", "Sitakunda Hills"],
+    highlights: [
+      "Patenga Beach",
+      "Ship Breaking",
+      "Foy's Lake",
+      "Sitakunda Hills",
+    ],
   },
   {
     id: "9",
@@ -561,8 +723,13 @@ const ALL_DESTINATIONS: Destination[] = [
     image:
       "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&h=500&fit=crop",
     description:
-      "Known as the \"Daughter of the Sea\", Kuakata is one of the few beaches in the world where you can witness both sunrise and sunset over the ocean. The Rakhain tribal villages and mangrove forest add cultural depth to this serene coastline.",
-    highlights: ["Sunrise & Sunset", "Rakhain Culture", "Mangroves", "Fishing Villages"],
+      'Known as the "Daughter of the Sea", Kuakata is one of the few beaches in the world where you can witness both sunrise and sunset over the ocean. The Rakhain tribal villages and mangrove forest add cultural depth to this serene coastline.',
+    highlights: [
+      "Sunrise & Sunset",
+      "Rakhain Culture",
+      "Mangroves",
+      "Fishing Villages",
+    ],
   },
   {
     id: "10",
@@ -573,20 +740,40 @@ const ALL_DESTINATIONS: Destination[] = [
       "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=500&fit=crop",
     description:
       "Where the Brahmaputra River meets lush green plains, Mymensingh is the cultural and agricultural heartland of Bangladesh. The historic Mymensingh Rajbari palace, Birishiri's colourful earth and clear rivers offer a serene authentic experience.",
-    highlights: ["Brahmaputra River", "Rajbari Palace", "Birishiri", "River Cruises"],
+    highlights: [
+      "Brahmaputra River",
+      "Rajbari Palace",
+      "Birishiri",
+      "River Cruises",
+    ],
   },
 ];
 
 export async function getPopularDestinations(): Promise<Destination[]> {
-  await delay(150);
-  // Return the first 6 for the home page section
-  return ALL_DESTINATIONS.slice(0, 6);
+  try {
+    const res = await fetch(`${API_BASE}/destinations/popular`, {
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data: ApiDestination[] = await res.json();
+    return data.map(normalizeDestination);
+  } catch {
+    return [];
+  }
 }
 
 export async function getDestinations(): Promise<Destination[]> {
-  await delay(200);
-  // TODO: Replace with real API call — GET /api/destinations
-  return ALL_DESTINATIONS;
+  try {
+    const res = await fetch(`${API_BASE}/destinations`, {
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    const data: ApiDestination[] = json.data ?? json;
+    return data.map(normalizeDestination);
+  } catch {
+    return ALL_DESTINATIONS;
+  }
 }
 
 export async function getFooterData(): Promise<FooterColumn[]> {
@@ -633,8 +820,7 @@ export async function getFooterData(): Promise<FooterColumn[]> {
 
 export async function getAllHotels(): Promise<Hotel[]> {
   await delay(300);
-  // TODO: Replace with real API call — GET /api/hotels
-  return getFeaturedStays();
+  return getMockHotels();
 }
 
 export interface HotelSearchParams {
@@ -654,18 +840,59 @@ export interface HotelSearchParams {
   limit?: number;
 }
 
-export async function getHotels(params?: HotelSearchParams): Promise<Hotel[]> {
-  await delay(300);
-  // TODO: Replace with real API call:
-  //   const qs = new URLSearchParams(params as Record<string, string>).toString();
-  //   const res = await fetch(`/api/hotels?${qs}`);
-  //   return res.json();
-  return getFeaturedStays();
+export interface HotelSearchMeta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface HotelSearchResult {
+  data: Hotel[];
+  meta: HotelSearchMeta;
+}
+
+export async function getHotels(
+  params?: HotelSearchParams,
+): Promise<HotelSearchResult> {
+  try {
+    const qs = new URLSearchParams();
+    if (params?.location) qs.set("location", params.location);
+    if (params?.checkIn) qs.set("checkIn", params.checkIn);
+    if (params?.checkOut) qs.set("checkOut", params.checkOut);
+    if (params?.adults) qs.set("adults", String(params.adults));
+    if (params?.rooms) qs.set("rooms", String(params.rooms));
+    if (params?.minPrice) qs.set("minPrice", String(params.minPrice));
+    if (params?.maxPrice) qs.set("maxPrice", String(params.maxPrice));
+    if (params?.minRating) qs.set("minRating", String(params.minRating));
+    if (params?.amenities?.length)
+      qs.set("amenities", params.amenities.join(","));
+    if (params?.tags?.length) qs.set("tags", params.tags.join(","));
+    if (params?.sortBy) qs.set("sortBy", params.sortBy);
+    if (params?.page) qs.set("page", String(params.page));
+    qs.set("limit", String(params?.limit ?? 10));
+
+    const res = await fetch(`${API_BASE}/hotels?${qs.toString()}`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    return {
+      data: (json.data as ApiHotel[]).map(normalizeHotel),
+      meta: json.meta as HotelSearchMeta,
+    };
+  } catch {
+    const mock = await getMockHotels();
+    return {
+      data: mock,
+      meta: { total: mock.length, page: 1, limit: mock.length, totalPages: 1 },
+    };
+  }
 }
 
 export async function searchHotels(query: SearchFormData): Promise<Hotel[]> {
   await delay(500);
-  const allHotels = await getFeaturedStays();
+  const allHotels = await getMockHotels();
   if (!query.location) return allHotels;
   return allHotels.filter((hotel) =>
     hotel.location.toLowerCase().includes(query.location.toLowerCase()),
@@ -673,62 +900,37 @@ export async function searchHotels(query: SearchFormData): Promise<Hotel[]> {
 }
 
 export async function getHotelBySlug(slug: string): Promise<Hotel | null> {
-  await delay(150);
-  const allHotels = await getFeaturedStays();
-  return allHotels.find((hotel) => hotel.slug === slug) ?? null;
+  try {
+    const res = await fetch(`${API_BASE}/hotels/${slug}`, {
+      next: { revalidate: 60 },
+    });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data: ApiHotel = await res.json();
+    return normalizeHotel(data);
+  } catch {
+    const allHotels = await getMockHotels();
+    return allHotels.find((hotel) => hotel.slug === slug) ?? null;
+  }
 }
 
 export async function getHotelReviews(hotelId: string): Promise<Review[]> {
-  await delay(100);
-  const reviewsByHotel: Record<string, Review[]> = {
-    "1": [
-      {
-        id: "r1",
-        author: "Tanvir Ahmed",
-        rating: 5,
-        comment:
-          "Absolutely stunning resort! The spa treatments were world-class and the views of the tea gardens were breathtaking. Will definitely return.",
-        date: "2026-03-15",
-      },
-      {
-        id: "r2",
-        author: "Nusrat Jahan",
-        rating: 5,
-        comment:
-          "Perfect getaway from the city. The staff were incredibly warm and the food was delicious. The infinity pool is a highlight.",
-        date: "2026-02-28",
-      },
-    ],
-    "2": [
-      {
-        id: "r3",
-        author: "Rahim Chowdhury",
-        rating: 4,
-        comment:
-          "Beautiful beachfront location. Waking up to the sound of waves was magical. The seafood restaurant is a must-try.",
-        date: "2026-03-10",
-      },
-    ],
-    "8": [
-      {
-        id: "r4",
-        author: "Mehreen Islam",
-        rating: 5,
-        comment:
-          "A true paradise! The island is stunning and the resort is top-notch. Snorkeling right off the beach was an unforgettable experience.",
-        date: "2026-03-20",
-      },
-      {
-        id: "r5",
-        author: "Farhan Hossain",
-        rating: 5,
-        comment:
-          "Best hotel experience I've ever had. The beachfront villa was absolutely worth every taka. The butler service was exceptional.",
-        date: "2026-02-14",
-      },
-    ],
-  };
-  return reviewsByHotel[hotelId] ?? [];
+  try {
+    const res = await fetch(`${API_BASE}/hotels/${hotelId}/reviews?limit=20`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    return (json.data as ApiReview[]).map((r) => ({
+      id: r.id,
+      author: r.author,
+      rating: r.rating,
+      comment: r.comment,
+      createdAt: r.createdAt,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export async function getUserProfile(): Promise<UserProfile> {

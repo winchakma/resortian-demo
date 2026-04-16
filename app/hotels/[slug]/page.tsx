@@ -76,6 +76,7 @@ export default async function HotelDetailsPage({
                   src={hotel.image}
                   alt={hotel.name}
                   fill
+                  unoptimized
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 60vw"
                   priority
@@ -147,8 +148,9 @@ export default async function HotelDetailsPage({
                   <div className="mt-1 flex items-baseline gap-1">
                     <span className="text-3xl font-bold text-primary-700 dark:text-primary-400">
                       ৳
-                      {Math.min(
-                        ...hotel.rooms.map((r) => r.price),
+                      {(hotel.rooms.length > 0
+                        ? Math.min(...hotel.rooms.map((r) => r.price))
+                        : hotel.price
                       ).toLocaleString()}
                     </span>
                     <span className="text-sm text-primary-600/70 dark:text-primary-500">
@@ -203,7 +205,7 @@ export default async function HotelDetailsPage({
                             {review.author}
                           </p>
                           <p className="text-xs text-gray-400 dark:text-gray-500">
-                            {new Date(review.date).toLocaleDateString("en-US", {
+                            {new Date(review.createdAt).toLocaleDateString("en-US", {
                               year: "numeric",
                               month: "long",
                               day: "numeric",

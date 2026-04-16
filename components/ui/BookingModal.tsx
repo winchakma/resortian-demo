@@ -160,7 +160,7 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
       hotelLocation: hotel.location,
       roomId: room.id,
       roomName: room.name,
-      roomImage: room.image,
+      roomImage: room.images[0],
       price: room.price,
       currency: hotel.currency,
       view: room.view,

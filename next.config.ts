@@ -8,6 +8,17 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "api.resortian.com",
+        pathname: "/images/**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3005",
+        pathname: "/images/**",
+      },
     ],
   },
 };

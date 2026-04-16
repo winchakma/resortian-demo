@@ -17,12 +17,12 @@ export interface Hotel {
 
 export interface Room {
   id: string;
-  hotel_id: number;
+  hotel_id: string;
   name: string;
   description: string;
   price: number;
   capacity: number;
-  image: string;
+  images: string[];
   view: string;
   size: string;
   amenities: string[];
@@ -35,7 +35,7 @@ export interface Review {
   author: string;
   rating: number;
   comment: string;
-  date: string;
+  createdAt: string;
 }
 
 export interface CartItem {

@@ -19,14 +19,19 @@ interface HotelsPageProps {
     children?: string;
     rooms?: string;
     sortBy?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    minRating?: string;
+    amenities?: string;
+    tags?: string;
+    page?: string;
   }>;
 }
 
 export default async function HotelsPage({ searchParams }: HotelsPageProps) {
   const p = await searchParams;
 
-  // TODO: pass params to getHotels() once real API is connected
-  const hotels = await getHotels({
+  const { data: hotels, meta } = await getHotels({
     location: p.location,
     checkIn: p.checkIn,
     checkOut: p.checkOut,
@@ -34,13 +39,19 @@ export default async function HotelsPage({ searchParams }: HotelsPageProps) {
     children: p.children ? Number(p.children) : undefined,
     rooms: p.rooms ? Number(p.rooms) : undefined,
     sortBy: p.sortBy,
+    minPrice: p.minPrice ? Number(p.minPrice) : undefined,
+    maxPrice: p.maxPrice ? Number(p.maxPrice) : undefined,
+    minRating: p.minRating ? Number(p.minRating) : undefined,
+    amenities: p.amenities ? p.amenities.split(",") : undefined,
+    tags: p.tags ? p.tags.split(",") : undefined,
+    page: p.page ? Number(p.page) : 1,
   });
 
   return (
     <>
       <Header />
       <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        <HotelsContent hotels={hotels} searchParams={p} />
+        <HotelsContent hotels={hotels} meta={meta} searchParams={p} />
       </main>
       <Footer />
     </>

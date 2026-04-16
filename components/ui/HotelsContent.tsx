@@ -10,29 +10,59 @@ import {
   LayoutGrid,
   List as ListIcon,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Search,
 } from "lucide-react";
 import type { Hotel } from "@/types";
+import type { HotelSearchMeta } from "@/utils/api";
 import { HotelCard } from "@/components/ui/HotelCard";
 import { SearchForm } from "@/components/ui/SearchForm";
 import type { SearchFormData } from "@/types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+interface SearchParams {
+  location?: string;
+  checkIn?: string;
+  checkOut?: string;
+  adults?: string;
+  children?: string;
+  rooms?: string;
+  sortBy?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  minRating?: string;
+  amenities?: string;
+  tags?: string;
+  page?: string;
+}
+
 interface HotelsContentProps {
   hotels: Hotel[];
-  searchParams: {
-    location?: string;
-    checkIn?: string;
-    checkOut?: string;
-    adults?: string;
-    children?: string;
-    rooms?: string;
-    sortBy?: string;
-  };
+  meta: HotelSearchMeta;
+  searchParams: SearchParams;
 }
 
 type ViewMode = "list" | "grid";
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function buildParams(base: SearchParams, overrides: Partial<SearchParams>): string {
+  const merged = { ...base, ...overrides };
+  const qs = new URLSearchParams();
+  const keys: (keyof SearchParams)[] = [
+    "location", "checkIn", "checkOut", "adults", "children", "rooms",
+    "sortBy", "minPrice", "maxPrice", "minRating", "amenities", "tags", "page",
+  ];
+  for (const key of keys) {
+    const val = merged[key];
+    if (val && val !== "" && !(key === "page" && val === "1")) {
+      qs.set(key, val);
+    }
+  }
+  return qs.toString();
+}
 
 // ─── HotelListCard ─────────────────────────────────────────────────────────────
 
@@ -49,6 +79,7 @@ function HotelListCard({ hotel }: { hotel: Hotel }) {
             src={hotel.image}
             alt={hotel.name}
             fill
+            unoptimized
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, 288px"
           />
@@ -144,25 +175,121 @@ function HotelListCard({ hotel }: { hotel: Hotel }) {
   );
 }
 
+// ─── Pagination ────────────────────────────────────────────────────────────────
+
+function Pagination({
+  meta,
+  searchParams,
+}: {
+  meta: HotelSearchMeta;
+  searchParams: SearchParams;
+}) {
+  if (meta.totalPages <= 1) return null;
+
+  const currentPage = meta.page;
+  const totalPages = meta.totalPages;
+
+  // Build page numbers to show: always first, last, current ±1, and ellipsis
+  const pages: (number | "…")[] = [];
+  const range = new Set<number>();
+  range.add(1);
+  range.add(totalPages);
+  for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+    if (i >= 1 && i <= totalPages) range.add(i);
+  }
+  const sorted = Array.from(range).sort((a, b) => a - b);
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) pages.push("…");
+    pages.push(sorted[i]);
+  }
+
+  return (
+    <div className="mt-8 flex items-center justify-between">
+      <p className="text-sm text-gray-500 dark:text-gray-400">
+        Showing{" "}
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {(currentPage - 1) * meta.limit + 1}–
+          {Math.min(currentPage * meta.limit, meta.total)}
+        </span>{" "}
+        of{" "}
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {meta.total}
+        </span>{" "}
+        properties
+      </p>
+
+      <nav className="flex items-center gap-1" aria-label="Pagination">
+        {/* Prev */}
+        {currentPage > 1 ? (
+          <Link
+            href={`/hotels?${buildParams(searchParams, { page: String(currentPage - 1) })}`}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-primary-500 dark:hover:text-primary-400"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Link>
+        ) : (
+          <span className="flex h-9 w-9 cursor-not-allowed items-center justify-center rounded-lg border border-gray-100 bg-gray-50 text-gray-300 dark:border-gray-800 dark:bg-gray-900/50 dark:text-gray-700">
+            <ChevronLeft className="h-4 w-4" />
+          </span>
+        )}
+
+        {/* Page numbers */}
+        {pages.map((p, i) =>
+          p === "…" ? (
+            <span
+              key={`ellipsis-${i}`}
+              className="flex h-9 w-9 items-center justify-center text-sm text-gray-400"
+            >
+              …
+            </span>
+          ) : (
+            <Link
+              key={p}
+              href={`/hotels?${buildParams(searchParams, { page: String(p) })}`}
+              className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
+                p === currentPage
+                  ? "bg-primary-600 text-white"
+                  : "border border-gray-200 bg-white text-gray-700 hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-500 dark:hover:text-primary-400"
+              }`}
+              aria-current={p === currentPage ? "page" : undefined}
+            >
+              {p}
+            </Link>
+          ),
+        )}
+
+        {/* Next */}
+        {currentPage < totalPages ? (
+          <Link
+            href={`/hotels?${buildParams(searchParams, { page: String(currentPage + 1) })}`}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-primary-500 dark:hover:text-primary-400"
+            aria-label="Next page"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Link>
+        ) : (
+          <span className="flex h-9 w-9 cursor-not-allowed items-center justify-center rounded-lg border border-gray-100 bg-gray-50 text-gray-300 dark:border-gray-800 dark:bg-gray-900/50 dark:text-gray-700">
+            <ChevronRight className="h-4 w-4" />
+          </span>
+        )}
+      </nav>
+    </div>
+  );
+}
+
 // ─── HotelsContent ─────────────────────────────────────────────────────────────
 
-export function HotelsContent({ hotels, searchParams }: HotelsContentProps) {
+export function HotelsContent({ hotels, meta, searchParams }: HotelsContentProps) {
   const router = useRouter();
   const [viewMode, setViewMode] = useState<ViewMode>("list");
 
-  const currentSort = searchParams.sortBy ?? "recommended";
+  const currentSort = searchParams.sortBy ?? "";
 
   const handleSortChange = useCallback(
     (sortBy: string) => {
-      const params = new URLSearchParams();
-      if (searchParams.location) params.set("location", searchParams.location);
-      if (searchParams.checkIn) params.set("checkIn", searchParams.checkIn);
-      if (searchParams.checkOut) params.set("checkOut", searchParams.checkOut);
-      if (searchParams.adults) params.set("adults", searchParams.adults);
-      if (searchParams.children) params.set("children", searchParams.children);
-      if (searchParams.rooms) params.set("rooms", searchParams.rooms);
-      if (sortBy !== "recommended") params.set("sortBy", sortBy);
-      router.push(`/hotels?${params.toString()}`);
+      const qs = buildParams(searchParams, { sortBy: sortBy || undefined, page: "1" });
+      router.push(`/hotels?${qs}`);
     },
     [searchParams, router],
   );
@@ -221,8 +348,7 @@ export function HotelsContent({ hotels, searchParams }: HotelsContentProps) {
             {pageTitle}
           </h1>
           <p className="mb-6 text-sm text-primary-100">
-            {hotels.length} {hotels.length === 1 ? "property" : "properties"}{" "}
-            available
+            {meta.total} {meta.total === 1 ? "property" : "properties"} available
             {stayLabel ? ` · ${stayLabel}` : ""}
             {guestLabel ? ` · ${guestLabel}` : ""}
           </p>
@@ -237,9 +363,9 @@ export function HotelsContent({ hotels, searchParams }: HotelsContentProps) {
         {/* Results bar */}
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-            {hotels.length === 0
+            {meta.total === 0
               ? "No hotels found"
-              : `${hotels.length} ${hotels.length === 1 ? "hotel" : "hotels"} found`}
+              : `${meta.total} ${meta.total === 1 ? "hotel" : "hotels"} found`}
             {searchParams.location ? (
               <span className="font-normal text-gray-500 dark:text-gray-400">
                 {" "}
@@ -256,11 +382,11 @@ export function HotelsContent({ hotels, searchParams }: HotelsContentProps) {
                 onChange={(e) => handleSortChange(e.target.value)}
                 className="appearance-none rounded-xl border border-gray-200 bg-white py-2 pl-4 pr-9 text-sm text-gray-700 outline-none transition-colors focus:border-primary-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
               >
-                <option value="recommended">Recommended</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
+                <option value="">Recommended</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
                 <option value="rating">Highest Rating</option>
-                <option value="reviews">Most Reviews</option>
+                <option value="newest">Newest First</option>
               </select>
               <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
             </div>
@@ -327,6 +453,9 @@ export function HotelsContent({ hotels, searchParams }: HotelsContentProps) {
             ))}
           </div>
         )}
+
+        {/* Pagination */}
+        <Pagination meta={meta} searchParams={searchParams} />
       </div>
     </div>
   );
