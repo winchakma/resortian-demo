@@ -885,10 +885,10 @@ export async function getHotels(
       meta: json.meta as HotelSearchMeta,
     };
   } catch {
-    const mock = await getMockHotels();
+    // const mock = await getMockHotels();
     return {
-      data: mock,
-      meta: { total: mock.length, page: 1, limit: mock.length, totalPages: 1 },
+      data: [],
+      meta: { total: 0, page: 1, limit: 10, totalPages: 1 },
     };
   }
 }
@@ -946,6 +946,7 @@ export async function getUserProfile(): Promise<UserProfile> {
     phone: "01712345678",
     address: "Gulshan-2, Dhaka, Bangladesh",
     memberSince: "2025-01-15",
+    role: "USER" as const,
   };
 }
 

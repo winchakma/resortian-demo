@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,7 +13,6 @@ import {
   Phone,
   Mail,
   Lock,
-  Bell,
   Trash2,
   Eye,
   EyeOff,
@@ -22,14 +21,33 @@ import {
   Clock,
   XCircle,
   CreditCard,
-  Banknote,
   ChevronRight,
+  ChevronDown,
   Moon,
   Building2,
   Star,
   Shield,
   Smartphone,
   X,
+  Plus,
+  Upload,
+  BedDouble,
+  Store,
+  Tag,
+  Sparkles,
+  RefreshCw,
+  AlertCircle,
+  DollarSign,
+  Users,
+  Maximize2,
+  Hash,
+  ImageIcon,
+  Globe,
+  FileText,
+  Pencil,
+  Loader2,
+  ToggleLeft,
+  ToggleRight,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -38,16 +56,64 @@ import toast from "react-hot-toast";
 import type { UserProfile, Booking, BookingStatus } from "@/types";
 import { useAuth } from "@/context/AuthContext";
 
+const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3005";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Tab = "profile" | "bookings" | "settings";
+type Tab = "profile" | "bookings" | "hotels" | "settings";
+type VendorView = "hotels" | "destinations";
+type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
+
+interface VendorRoom {
+  id: string;
+  name: string;
+  price: number;
+  capacity: number;
+  view: string;
+  size: string;
+  images: string[];
+  badge: string | null;
+  isActive: boolean;
+  approvalStatus: ApprovalStatus;
+  rejectionReason: string | null;
+  createdAt: string;
+}
+
+interface VendorHotel {
+  id: string;
+  name: string;
+  slug: string;
+  location: string;
+  image: string;
+  price: number;
+  rating: number;
+  approvalStatus: ApprovalStatus;
+  rejectionReason: string | null;
+  isActive: boolean;
+  destination: { id: string; name: string; region: string };
+  rooms: VendorRoom[];
+  _count: { rooms: number; reviews: number };
+}
+
+interface VendorDestination {
+  id: string;
+  name: string;
+  region: string;
+  description: string;
+  image: string;
+  isFeatured: boolean;
+  approvalStatus: ApprovalStatus;
+  rejectionReason: string | null;
+  _count: { hotels: number };
+  createdAt: string;
+}
 
 interface ProfileContentProps {
   user: UserProfile;
   bookings: Booking[];
 }
 
-// ─── Password schema ──────────────────────────────────────────────────────────
+// ─── Validation schemas ───────────────────────────────────────────────────────
 
 const passwordSchema = yup.object({
   currentPassword: yup.string().required("Current password is required"),
@@ -64,6 +130,153 @@ const passwordSchema = yup.object({
 });
 
 type PasswordFormValues = yup.InferType<typeof passwordSchema>;
+
+const hotelSchema = yup.object({
+  destinationId: yup.string().required("Destination is required"),
+  name: yup.string().required("Hotel name is required"),
+  slug: yup
+    .string()
+    .required("Slug is required")
+    .matches(/^[a-z0-9-]+$/, "Only lowercase letters, numbers and hyphens"),
+  location: yup.string().required("Location is required"),
+  description: yup
+    .string()
+    .required("Description is required")
+    .min(20, "At least 20 characters"),
+  price: yup
+    .number()
+    .typeError("Must be a number")
+    .required("Price is required")
+    .min(1, "Must be positive"),
+  tags: yup.string(),
+  amenities: yup.string(),
+});
+
+type HotelFormValues = {
+  destinationId: string;
+  name: string;
+  slug: string;
+  location: string;
+  description: string;
+  price: number;
+  tags?: string;
+  amenities?: string;
+};
+
+const roomSchema = yup.object({
+  hotelId: yup.string().required("Hotel ID is required"),
+  name: yup.string().required("Room name is required"),
+  description: yup.string().required("Description is required"),
+  price: yup
+    .number()
+    .typeError("Must be a number")
+    .required("Price is required")
+    .min(1, "Must be positive"),
+  capacity: yup
+    .number()
+    .typeError("Must be a number")
+    .required("Capacity is required")
+    .min(1)
+    .max(20),
+  view: yup.string().required("View type is required"),
+  size: yup.string().required("Size is required"),
+  amenities: yup.string().required("Amenities are required"),
+  badge: yup.string(),
+});
+
+type RoomFormValues = {
+  hotelId: string;
+  name: string;
+  description: string;
+  price: number;
+  capacity: number;
+  view: string;
+  size: string;
+  amenities: string;
+  badge?: string;
+};
+
+const updateHotelSchema = yup.object({
+  name: yup.string().required("Hotel name is required"),
+  slug: yup
+    .string()
+    .required("Slug is required")
+    .matches(/^[a-z0-9-]+$/, "Only lowercase letters, numbers and hyphens"),
+  location: yup.string().required("Location is required"),
+  description: yup
+    .string()
+    .required("Description is required")
+    .min(20, "At least 20 characters"),
+  price: yup
+    .number()
+    .typeError("Must be a number")
+    .required("Price is required")
+    .min(1, "Must be positive"),
+  tags: yup.string(),
+  amenities: yup.string(),
+  isActive: yup.boolean(),
+});
+
+type UpdateHotelFormValues = {
+  name: string;
+  slug: string;
+  location: string;
+  description: string;
+  price: number;
+  tags?: string;
+  amenities?: string;
+  isActive?: boolean;
+};
+
+const updateRoomSchema = yup.object({
+  name: yup.string().required("Room name is required"),
+  description: yup.string().required("Description is required"),
+  price: yup
+    .number()
+    .typeError("Must be a number")
+    .required("Price is required")
+    .min(1, "Must be positive"),
+  capacity: yup
+    .number()
+    .typeError("Must be a number")
+    .required("Capacity is required")
+    .min(1)
+    .max(20),
+  view: yup.string().required("View type is required"),
+  size: yup.string().required("Size is required"),
+  amenities: yup.string().required("Amenities are required"),
+  badge: yup.string(),
+  isActive: yup.boolean(),
+});
+
+type UpdateRoomFormValues = {
+  name: string;
+  description: string;
+  price: number;
+  capacity: number;
+  view: string;
+  size: string;
+  amenities: string;
+  badge?: string;
+  isActive?: boolean;
+};
+
+const destinationSchema = yup.object({
+  name: yup.string().required("Destination name is required"),
+  region: yup.string().required("Region is required"),
+  description: yup
+    .string()
+    .required("Description is required")
+    .min(20, "At least 20 characters"),
+  highlights: yup.string(),
+});
+
+type DestinationFormValues = {
+  name: string;
+  region: string;
+  description: string;
+  highlights?: string;
+};
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -84,37 +297,47 @@ function fmtDate(iso: string) {
   });
 }
 
-function nightsBetween(checkIn: string, checkOut: string) {
-  return Math.round(
-    (new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86_400_000,
-  );
-}
-
 const STATUS_CONFIG: Record<
   BookingStatus,
-  { label: string; icon: React.ReactNode; pill: string; dot: string }
+  { label: string; icon: React.ReactNode; pill: string }
 > = {
   upcoming: {
     label: "Upcoming",
     icon: <Clock className="h-3.5 w-3.5" />,
     pill: "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400",
-    dot: "bg-blue-500",
   },
   completed: {
     label: "Completed",
     icon: <CheckCircle2 className="h-3.5 w-3.5" />,
     pill: "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400",
-    dot: "bg-primary-500",
   },
   cancelled: {
     label: "Cancelled",
     icon: <XCircle className="h-3.5 w-3.5" />,
     pill: "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
-    dot: "bg-red-400",
   },
 };
 
-// ─── Input helper ─────────────────────────────────────────────────────────────
+const APPROVAL_CONFIG: Record<
+  ApprovalStatus,
+  { label: string; pill: string; dot: string }
+> = {
+  APPROVED: {
+    label: "Approved",
+    pill: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400",
+    dot: "bg-emerald-500",
+  },
+  PENDING: {
+    label: "Under Review",
+    pill: "bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400",
+    dot: "bg-amber-400",
+  },
+  REJECTED: {
+    label: "Rejected",
+    pill: "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
+    dot: "bg-red-400",
+  },
+};
 
 function inputCls(hasError?: boolean) {
   return [
@@ -126,118 +349,147 @@ function inputCls(hasError?: boolean) {
   ].join(" ");
 }
 
+function labelCls() {
+  return "mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300";
+}
+
+function FieldError({ msg }: { msg?: string }) {
+  if (!msg) return null;
+  return <p className="mt-1.5 text-xs font-medium text-red-500">{msg}</p>;
+}
+
+function ApprovalBadge({
+  status,
+  sm,
+}: {
+  status: ApprovalStatus;
+  sm?: boolean;
+}) {
+  const cfg = APPROVAL_CONFIG[status];
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full font-semibold ${sm ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-1 text-xs"} ${cfg.pill}`}
+    >
+      <span className={`h-1.5 w-1.5 rounded-full ${cfg.dot}`} />
+      {cfg.label}
+    </span>
+  );
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function ProfileContent({ user, bookings }: ProfileContentProps) {
+  const isVendor = user.role === "HOTEL_OWNER";
   const [activeTab, setActiveTab] = useState<Tab>("profile");
 
   const upcomingCount = bookings.filter((b) => b.status === "upcoming").length;
   const completedCount = bookings.filter(
     (b) => b.status === "completed",
   ).length;
-  const cancelledCount = bookings.filter(
-    (b) => b.status === "cancelled",
-  ).length;
   const totalNights = bookings
     .filter((b) => b.status === "completed")
     .reduce((s, b) => s + b.nights, 0);
 
-  const NAV: {
-    id: Tab;
-    label: string;
-    icon: React.ReactNode;
-    badge?: number;
-  }[] = [
-    {
-      id: "profile",
-      label: "My Profile",
-      icon: <User className="h-4.5 w-4.5" />,
-    },
-    {
-      id: "bookings",
-      label: "My Bookings",
-      icon: <CalendarDays className="h-4.5 w-4.5" />,
-      badge: upcomingCount || undefined,
-    },
-    {
-      id: "settings",
-      label: "Settings",
-      icon: <Settings className="h-4.5 w-4.5" />,
-    },
-  ];
+  const NAV: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] =
+    isVendor
+      ? [
+          { id: "profile", label: "My Profile", icon: <User className="h-4 w-4" /> },
+          { id: "hotels", label: "My Properties", icon: <Building2 className="h-4 w-4" /> },
+          { id: "settings", label: "Settings", icon: <Settings className="h-4 w-4" /> },
+        ]
+      : [
+          { id: "profile", label: "My Profile", icon: <User className="h-4 w-4" /> },
+          {
+            id: "bookings",
+            label: "My Bookings",
+            icon: <CalendarDays className="h-4 w-4" />,
+            badge: upcomingCount || undefined,
+          },
+          { id: "settings", label: "Settings", icon: <Settings className="h-4 w-4" /> },
+        ];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
         {/* ── Sidebar ──────────────────────────────────────────────── */}
         <aside className="w-full shrink-0 lg:w-72">
-          {/* User card */}
           <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
-            {/* Cover gradient */}
-            <div className="h-20 bg-gradient-to-br from-primary-600 via-primary-500 to-primary-400" />
-
-            {/* Avatar + info */}
+            <div
+              className={`h-20 ${isVendor ? "bg-gradient-to-br from-violet-700 via-violet-600 to-purple-500" : "bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500"}`}
+            />
             <div className="-mt-10 px-5 pb-5">
               <div className="mb-3 flex items-end justify-between">
-                <div className="flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-white bg-gradient-to-br from-primary-700 to-primary-500 shadow-lg dark:border-gray-900">
+                <div
+                  className={`flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-white shadow-lg dark:border-gray-900 ${isVendor ? "bg-gradient-to-br from-violet-700 to-violet-500" : "bg-gradient-to-br from-primary-700 to-primary-500"}`}
+                >
                   <span className="text-2xl font-bold tracking-tight text-white">
                     {initials(user.name)}
                   </span>
                 </div>
-                <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-700 dark:bg-primary-950/40 dark:text-primary-400">
-                  <Star className="h-3 w-3 fill-current" />
-                  Member
+                <span
+                  className={`mb-1 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${isVendor ? "bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-400" : "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400"}`}
+                >
+                  {isVendor ? (
+                    <Store className="h-3 w-3" />
+                  ) : (
+                    <Star className="h-3 w-3 fill-current" />
+                  )}
+                  {isVendor ? "Vendor" : "Member"}
                 </span>
               </div>
-
               <h2 className="text-base font-bold text-gray-900 dark:text-white">
                 {user.name}
               </h2>
               <p className="mt-0.5 truncate text-sm text-gray-500 dark:text-gray-400">
-                {user.email}
+                {user.email || user.phone}
               </p>
-
-              {/* Mini stats */}
-              <div className="mt-4 grid grid-cols-3 divide-x divide-gray-100 rounded-xl border border-gray-100 bg-gray-50 dark:divide-gray-800 dark:border-gray-800 dark:bg-gray-800/50">
-                {[
-                  { label: "Bookings", value: bookings.length },
-                  { label: "Nights", value: totalNights },
-                  { label: "Upcoming", value: upcomingCount },
-                ].map((s) => (
-                  <div key={s.label} className="py-2.5 text-center">
-                    <p className="text-base font-bold text-gray-900 dark:text-white">
-                      {s.value}
-                    </p>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
-                      {s.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              {!isVendor && (
+                <div className="mt-4 grid grid-cols-3 divide-x divide-gray-100 rounded-xl border border-gray-100 bg-gray-50 dark:divide-gray-800 dark:border-gray-800 dark:bg-gray-800/50">
+                  {[
+                    { label: "Trips", value: bookings.length },
+                    { label: "Nights", value: totalNights },
+                    { label: "Upcoming", value: upcomingCount },
+                  ].map((s) => (
+                    <div key={s.label} className="py-2.5 text-center">
+                      <p className="text-base font-bold text-gray-900 dark:text-white">
+                        {s.value}
+                      </p>
+                      <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                        {s.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {isVendor && (
+                <div className="mt-4 rounded-xl border border-violet-100 bg-violet-50 px-4 py-3 dark:border-violet-900/30 dark:bg-violet-950/20">
+                  <p className="text-xs font-semibold text-violet-700 dark:text-violet-400">
+                    Hotel Owner Account
+                  </p>
+                  <p className="mt-0.5 text-[11px] text-violet-500/80 dark:text-violet-400/60">
+                    Manage hotels, rooms & destinations
+                  </p>
+                </div>
+              )}
             </div>
 
-            {/* Navigation */}
             <nav className="border-t border-gray-100 px-2 py-2 dark:border-gray-800">
               {NAV.map((item) => {
                 const active = activeTab === item.id;
+                const activeClass = isVendor
+                  ? "bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-400"
+                  : "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400";
+                const activeIcon = isVendor
+                  ? "text-violet-600 dark:text-violet-400"
+                  : "text-primary-600 dark:text-primary-400";
                 return (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                      active
-                        ? "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400"
-                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
-                    }`}
+                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors ${active ? activeClass : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"}`}
                   >
-                    <span
-                      className={
-                        active
-                          ? "text-primary-600 dark:text-primary-400"
-                          : "text-gray-400 dark:text-gray-500"
-                      }
-                    >
+                    <span className={active ? activeIcon : "text-gray-400 dark:text-gray-500"}>
                       {item.icon}
                     </span>
                     <span className="flex-1">{item.label}</span>
@@ -253,22 +505,15 @@ export function ProfileContent({ user, bookings }: ProfileContentProps) {
               })}
             </nav>
 
-            {/* Bottom actions */}
             <div className="border-t border-gray-100 px-2 py-2 dark:border-gray-800">
               <Link
                 href="/help"
                 className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
               >
-                <HelpCircle className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                <HelpCircle className="h-4 w-4 text-gray-400" />
                 Help & Support
               </Link>
-              <button
-                type="button"
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-red-500 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
-              >
-                <LogOut className="h-4 w-4" />
-                Sign Out
-              </button>
+              <SignOutButton />
             </div>
           </div>
         </aside>
@@ -286,7 +531,9 @@ export function ProfileContent({ user, bookings }: ProfileContentProps) {
                   onClick={() => setActiveTab(item.id)}
                   className={`relative flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-2.5 text-xs font-semibold transition-colors ${
                     active
-                      ? "bg-primary-600 text-white shadow-sm"
+                      ? isVendor
+                        ? "bg-violet-600 text-white shadow-sm"
+                        : "bg-primary-600 text-white shadow-sm"
                       : "text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
                   }`}
                 >
@@ -302,19 +549,39 @@ export function ProfileContent({ user, bookings }: ProfileContentProps) {
             })}
           </div>
 
-          {/* Tab panels */}
           {activeTab === "profile" && (
             <ProfileSection
               user={user}
               totalNights={totalNights}
+              completedCount={completedCount}
               bookings={bookings}
+              isVendor={isVendor}
             />
           )}
-          {activeTab === "bookings" && <BookingsSection bookings={bookings} />}
+          {activeTab === "bookings" && !isVendor && (
+            <BookingsSection bookings={bookings} />
+          )}
+          {activeTab === "hotels" && isVendor && <VendorDashboard />}
           {activeTab === "settings" && <SettingsSection />}
         </div>
       </div>
     </div>
+  );
+}
+
+// ─── Sign-out ─────────────────────────────────────────────────────────────────
+
+function SignOutButton() {
+  const { logout } = useAuth();
+  return (
+    <button
+      type="button"
+      onClick={() => logout()}
+      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-red-500 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
+    >
+      <LogOut className="h-4 w-4" />
+      Sign Out
+    </button>
   );
 }
 
@@ -323,162 +590,140 @@ export function ProfileContent({ user, bookings }: ProfileContentProps) {
 function ProfileSection({
   user,
   totalNights,
+  completedCount,
   bookings,
+  isVendor,
 }: {
   user: UserProfile;
   totalNights: number;
+  completedCount: number;
   bookings: Booking[];
+  isVendor: boolean;
 }) {
-  const completedCount = bookings.filter(
-    (b) => b.status === "completed",
-  ).length;
   const totalSpend = bookings
     .filter((b) => b.status !== "cancelled")
     .reduce((s, b) => s + b.advancePaid, 0);
 
   return (
     <div className="space-y-5">
-      {/* Stats row */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {[
-          {
-            label: "Total Bookings",
-            value: bookings.length,
-            icon: (
-              <CalendarDays className="h-5 w-5 text-primary-600 dark:text-primary-400" />
-            ),
-            bg: "bg-primary-50 dark:bg-primary-950/30",
-          },
-          {
-            label: "Trips Completed",
-            value: completedCount,
-            icon: (
-              <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-            ),
-            bg: "bg-emerald-50 dark:bg-emerald-950/30",
-          },
-          {
-            label: "Total Nights",
-            value: totalNights,
-            icon: (
-              <Moon className="h-5 w-5 text-violet-600 dark:text-violet-400" />
-            ),
-            bg: "bg-violet-50 dark:bg-violet-950/30",
-          },
-          {
-            label: "Advance Paid",
-            value: `৳${totalSpend.toLocaleString()}`,
-            icon: (
-              <CreditCard className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-            ),
-            bg: "bg-amber-50 dark:bg-amber-950/30",
-          },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900"
-          >
+      {!isVendor && (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {[
+            {
+              label: "Total Bookings",
+              value: bookings.length,
+              icon: <CalendarDays className="h-5 w-5 text-primary-600 dark:text-primary-400" />,
+              bg: "bg-primary-50 dark:bg-primary-950/30",
+            },
+            {
+              label: "Trips Completed",
+              value: completedCount,
+              icon: <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />,
+              bg: "bg-emerald-50 dark:bg-emerald-950/30",
+            },
+            {
+              label: "Total Nights",
+              value: totalNights,
+              icon: <Moon className="h-5 w-5 text-violet-600 dark:text-violet-400" />,
+              bg: "bg-violet-50 dark:bg-violet-950/30",
+            },
+            {
+              label: "Advance Paid",
+              value: `৳${totalSpend.toLocaleString()}`,
+              icon: <CreditCard className="h-5 w-5 text-amber-600 dark:text-amber-400" />,
+              bg: "bg-amber-50 dark:bg-amber-950/30",
+            },
+          ].map((stat) => (
             <div
-              className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}
+              key={stat.label}
+              className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900"
             >
-              {stat.icon}
+              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}>
+                {stat.icon}
+              </div>
+              <div>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xl font-bold text-gray-900 dark:text-white">
-                {stat.value}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {stat.label}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {/* Personal info card */}
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 dark:border-gray-800">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
-              Personal Information
-            </h3>
-            <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-              Your account details
-            </p>
+            <h3 className="font-semibold text-gray-900 dark:text-white">Personal Information</h3>
+            <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Your account details</p>
           </div>
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/30">
             <User className="h-4 w-4 text-primary-600 dark:text-primary-400" />
           </div>
         </div>
-
         <div className="divide-y divide-gray-100 dark:divide-gray-800">
           {[
-            {
-              icon: <User className="h-4 w-4 text-gray-400" />,
-              label: "Full Name",
-              value: user.name,
-            },
-            {
-              icon: <Mail className="h-4 w-4 text-gray-400" />,
-              label: "Email Address",
-              value: user.email,
-            },
-            {
-              icon: <Phone className="h-4 w-4 text-gray-400" />,
-              label: "Phone Number",
-              value: user.phone,
-            },
-            {
-              icon: <MapPin className="h-4 w-4 text-gray-400" />,
-              label: "Address",
-              value: user.address,
-            },
-            {
-              icon: <Star className="h-4 w-4 text-gray-400" />,
-              label: "Member Since",
-              value: fmtDate(user.memberSince),
-            },
+            { icon: <User className="h-4 w-4 text-gray-400" />, label: "Full Name", value: user.name },
+            { icon: <Mail className="h-4 w-4 text-gray-400" />, label: "Email Address", value: user.email || "—" },
+            { icon: <Phone className="h-4 w-4 text-gray-400" />, label: "Phone Number", value: user.phone },
+            { icon: <MapPin className="h-4 w-4 text-gray-400" />, label: "Address", value: user.address || "—" },
+            { icon: <Star className="h-4 w-4 text-gray-400" />, label: "Member Since", value: fmtDate(user.memberSince) },
           ].map((row) => (
             <div key={row.label} className="flex items-center gap-4 px-6 py-4">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
                 {row.icon}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-xs text-gray-400 dark:text-gray-500">
-                  {row.label}
-                </p>
-                <p className="mt-0.5 truncate text-sm font-medium text-gray-900 dark:text-white">
-                  {row.value}
-                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">{row.label}</p>
+                <p className="mt-0.5 truncate text-sm font-medium text-gray-900 dark:text-white">{row.value}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Membership card */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500 p-6 shadow-sm">
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
-        <div className="pointer-events-none absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/10" />
-        <div className="relative flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-primary-200" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-primary-200">
-                Resortian Member
-              </span>
+      {isVendor ? (
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-700 via-violet-600 to-purple-500 p-6 shadow-sm">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
+          <div className="pointer-events-none absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/10" />
+          <div className="relative flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <Store className="h-5 w-5 text-violet-200" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-violet-200">
+                  Resortian Vendor
+                </span>
+              </div>
+              <h3 className="mt-2 text-2xl font-bold text-white">{user.name}</h3>
+              <p className="mt-1 text-sm text-violet-100">Partner since {fmtDate(user.memberSince)}</p>
             </div>
-            <h3 className="mt-2 text-2xl font-bold text-white">{user.name}</h3>
-            <p className="mt-1 text-sm text-primary-100">
-              Member since {fmtDate(user.memberSince)}
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-3xl font-bold text-white">{bookings.length}</p>
-            <p className="text-xs text-primary-200">Total Bookings</p>
+            <div className="flex flex-col items-end">
+              <Shield className="h-8 w-8 text-violet-300" />
+              <p className="mt-1 text-xs text-violet-200">Hotel Owner</p>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500 p-6 shadow-sm">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
+          <div className="pointer-events-none absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/10" />
+          <div className="relative flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <Shield className="h-5 w-5 text-primary-200" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-primary-200">
+                  Resortian Member
+                </span>
+              </div>
+              <h3 className="mt-2 text-2xl font-bold text-white">{user.name}</h3>
+              <p className="mt-1 text-sm text-primary-100">Member since {fmtDate(user.memberSince)}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-bold text-white">{bookings.length}</p>
+              <p className="text-xs text-primary-200">Total Bookings</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -507,38 +752,21 @@ function BookingsSection({ bookings }: { bookings: Booking[] }) {
 
   const statusTabs: { id: StatusFilter; label: string; count: number }[] = [
     { id: "all", label: "All", count: bookings.length },
-    {
-      id: "upcoming",
-      label: "Upcoming",
-      count: bookings.filter((b) => b.status === "upcoming").length,
-    },
-    {
-      id: "completed",
-      label: "Completed",
-      count: bookings.filter((b) => b.status === "completed").length,
-    },
-    {
-      id: "cancelled",
-      label: "Cancelled",
-      count: bookings.filter((b) => b.status === "cancelled").length,
-    },
+    { id: "upcoming", label: "Upcoming", count: bookings.filter((b) => b.status === "upcoming").length },
+    { id: "completed", label: "Completed", count: bookings.filter((b) => b.status === "completed").length },
+    { id: "cancelled", label: "Cancelled", count: bookings.filter((b) => b.status === "cancelled").length },
   ];
 
   return (
     <div className="space-y-5">
-      {/* Header + search */}
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-5 py-4 dark:border-gray-800">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
-              My Bookings
-            </h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">My Bookings</h3>
             <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-              {bookings.length} booking{bookings.length !== 1 ? "s" : ""} in
-              total
+              {bookings.length} booking{bookings.length !== 1 ? "s" : ""} in total
             </p>
           </div>
-          {/* Search */}
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <input
@@ -559,8 +787,6 @@ function BookingsSection({ bookings }: { bookings: Booking[] }) {
             )}
           </div>
         </div>
-
-        {/* Status filter tabs */}
         <div className="flex overflow-x-auto border-b border-gray-100 dark:border-gray-800">
           {statusTabs.map((tab) => {
             const active = statusFilter === tab.id;
@@ -591,20 +817,14 @@ function BookingsSection({ bookings }: { bookings: Booking[] }) {
             );
           })}
         </div>
-
-        {/* Booking list */}
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
               <CalendarDays className="h-7 w-7 text-gray-400" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-              No bookings found
-            </p>
+            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">No bookings found</p>
             <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-              {query
-                ? "Try a different search term."
-                : "You have no bookings in this category yet."}
+              {query ? "Try a different search term." : "You have no bookings in this category yet."}
             </p>
           </div>
         ) : (
@@ -619,8 +839,6 @@ function BookingsSection({ bookings }: { bookings: Booking[] }) {
   );
 }
 
-// ─── Booking card ─────────────────────────────────────────────────────────────
-
 function BookingCard({ booking }: { booking: Booking }) {
   const [expanded, setExpanded] = useState(false);
   const cfg = STATUS_CONFIG[booking.status];
@@ -628,21 +846,10 @@ function BookingCard({ booking }: { booking: Booking }) {
   return (
     <div className="px-5 py-4">
       <div className="flex gap-4">
-        {/* Hotel image */}
         <div className="relative hidden h-24 w-32 shrink-0 overflow-hidden rounded-xl sm:block">
-          <Image
-            src={booking.hotelImage}
-            alt={booking.hotelName}
-            fill
-            unoptimized
-            className="object-cover"
-            sizes="128px"
-          />
+          <Image src={booking.hotelImage} alt={booking.hotelName} fill unoptimized className="object-cover" sizes="128px" />
         </div>
-
-        {/* Content */}
         <div className="min-w-0 flex-1">
-          {/* Top row */}
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
               <Link
@@ -656,116 +863,54 @@ function BookingCard({ booking }: { booking: Booking }) {
                 {booking.hotelLocation}
               </div>
             </div>
-            <span
-              className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${cfg.pill}`}
-            >
+            <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${cfg.pill}`}>
               {cfg.icon}
               {cfg.label}
             </span>
           </div>
-
-          {/* Room + dates */}
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
-            <span className="flex items-center gap-1">
-              <Building2 className="h-3.5 w-3.5" />
-              {booking.roomName}
-            </span>
-            <span className="flex items-center gap-1">
-              <CalendarDays className="h-3.5 w-3.5" />
-              {fmtDate(booking.checkIn)} → {fmtDate(booking.checkOut)}
-            </span>
-            <span className="flex items-center gap-1">
-              <Moon className="h-3.5 w-3.5" />
-              {booking.nights} night{booking.nights !== 1 ? "s" : ""}
-            </span>
+            <span className="flex items-center gap-1"><Building2 className="h-3.5 w-3.5" />{booking.roomName}</span>
+            <span className="flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5" />{fmtDate(booking.checkIn)} → {fmtDate(booking.checkOut)}</span>
+            <span className="flex items-center gap-1"><Moon className="h-3.5 w-3.5" />{booking.nights} night{booking.nights !== 1 ? "s" : ""}</span>
           </div>
-
-          {/* Reference + payment summary */}
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap gap-2">
               <span className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 font-mono text-[11px] font-semibold text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                 {booking.reference}
               </span>
               <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-                {booking.paymentMethod === "stripe" ? (
-                  <CreditCard className="h-3 w-3" />
-                ) : (
-                  <Smartphone className="h-3 w-3" />
-                )}
+                {booking.paymentMethod === "stripe" ? <CreditCard className="h-3 w-3" /> : <Smartphone className="h-3 w-3" />}
                 {booking.paymentMethod === "stripe" ? "Card" : "Mobile Banking"}
               </span>
             </div>
-
-            <button
-              type="button"
-              onClick={() => setExpanded((p) => !p)}
-              className="text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
-            >
+            <button type="button" onClick={() => setExpanded((p) => !p)} className="text-xs font-medium text-primary-600 hover:underline dark:text-primary-400">
               {expanded ? "Hide details" : "View details"}
             </button>
           </div>
-
-          {/* Expanded payment details */}
           {expanded && (
             <div className="mt-3 overflow-hidden rounded-xl border border-gray-100 dark:border-gray-800">
               <div className="grid grid-cols-3 divide-x divide-gray-100 dark:divide-gray-800">
                 {[
+                  { label: "Total", value: `৳${booking.totalPrice.toLocaleString()}`, sub: "Booking value" },
+                  { label: "Advance Paid", value: `৳${booking.advancePaid.toLocaleString()}`, sub: "20% online", highlight: true },
                   {
-                    label: "Total",
-                    value: `৳${booking.totalPrice.toLocaleString()}`,
-                    sub: "Booking value",
-                  },
-                  {
-                    label: "Advance Paid",
-                    value: `৳${booking.advancePaid.toLocaleString()}`,
-                    sub: "20% online",
-                    highlight: true,
-                  },
-                  {
-                    label:
-                      booking.status === "completed"
-                        ? "Paid at Hotel"
-                        : booking.status === "cancelled"
-                          ? "Refunded"
-                          : "Due at Hotel",
+                    label: booking.status === "completed" ? "Paid at Hotel" : booking.status === "cancelled" ? "Refunded" : "Due at Hotel",
                     value: `৳${booking.balanceDue.toLocaleString()}`,
-                    sub:
-                      booking.status === "completed"
-                        ? "At check-in"
-                        : booking.status === "cancelled"
-                          ? "7–10 days"
-                          : "On arrival",
+                    sub: booking.status === "completed" ? "At check-in" : booking.status === "cancelled" ? "7–10 days" : "On arrival",
                   },
                 ].map((col) => (
-                  <div
-                    key={col.label}
-                    className={`px-4 py-3 ${col.highlight ? "bg-primary-50/60 dark:bg-primary-950/20" : "bg-gray-50/60 dark:bg-gray-800/30"}`}
-                  >
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
-                      {col.label}
-                    </p>
-                    <p
-                      className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-primary-700 dark:text-primary-400" : "text-gray-800 dark:text-gray-200"}`}
-                    >
-                      {col.value}
-                    </p>
-                    <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
-                      {col.sub}
-                    </p>
+                  <div key={col.label} className={`px-4 py-3 ${col.highlight ? "bg-primary-50/60 dark:bg-primary-950/20" : "bg-gray-50/60 dark:bg-gray-800/30"}`}>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500">{col.label}</p>
+                    <p className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-primary-700 dark:text-primary-400" : "text-gray-800 dark:text-gray-200"}`}>{col.value}</p>
+                    <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">{col.sub}</p>
                   </div>
                 ))}
               </div>
               <div className="flex items-center justify-between border-t border-gray-100 px-4 py-2 dark:border-gray-800">
-                <p className="text-xs text-gray-400 dark:text-gray-500">
-                  Booked on {fmtDate(booking.bookedOn)}
-                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">Booked on {fmtDate(booking.bookedOn)}</p>
                 {booking.status === "upcoming" && (
-                  <Link
-                    href={`/hotels/${booking.hotelSlug}`}
-                    className="flex items-center gap-1 text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
-                  >
-                    View Hotel
-                    <ChevronRight className="h-3 w-3" />
+                  <Link href={`/hotels/${booking.hotelSlug}`} className="flex items-center gap-1 text-xs font-medium text-primary-600 hover:underline dark:text-primary-400">
+                    View Hotel <ChevronRight className="h-3 w-3" />
                   </Link>
                 )}
               </div>
@@ -777,6 +922,1841 @@ function BookingCard({ booking }: { booking: Booking }) {
   );
 }
 
+// ─── Vendor dashboard ─────────────────────────────────────────────────────────
+
+type VendorModal =
+  | null
+  | "create-hotel"
+  | "create-destination"
+  | { type: "add-room"; hotelId: string; hotelName: string }
+  | { type: "edit-hotel"; hotel: VendorHotel }
+  | { type: "edit-room"; room: VendorRoom; hotelName: string };
+
+type ConfirmState =
+  | null
+  | { type: "delete-hotel"; id: string; name: string }
+  | { type: "delete-room"; id: string; name: string };
+
+function VendorDashboard() {
+  const [view, setView] = useState<VendorView>("hotels");
+
+  return (
+    <div className="space-y-5">
+      {/* Sub-tab switcher */}
+      <div className="flex gap-1 rounded-2xl border border-gray-200 bg-white p-1 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        {(
+          [
+            { id: "hotels" as VendorView, label: "Hotels & Rooms", icon: <Building2 className="h-4 w-4" /> },
+            { id: "destinations" as VendorView, label: "Destinations", icon: <Globe className="h-4 w-4" /> },
+          ] as const
+        ).map((tab) => {
+          const active = view === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setView(tab.id)}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors ${
+                active
+                  ? "bg-violet-600 text-white shadow-sm"
+                  : "text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+              }`}
+            >
+              {tab.icon}
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {view === "hotels" && <VendorHotelsList />}
+      {view === "destinations" && <VendorDestinationsList />}
+    </div>
+  );
+}
+
+// ─── Vendor hotels list ───────────────────────────────────────────────────────
+
+function VendorHotelsList() {
+  const { token } = useAuth();
+  const [hotels, setHotels] = useState<VendorHotel[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modal, setModal] = useState<VendorModal>(null);
+  const [confirm, setConfirm] = useState<ConfirmState>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  async function handleDeleteHotel(id: string) {
+    setDeleteLoading(true);
+    try {
+      const res = await fetch(`${BASE}/hotels/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.message || "Failed to delete hotel");
+      }
+      toast.success("Hotel deleted successfully.");
+      setConfirm(null);
+      loadHotels();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setDeleteLoading(false);
+    }
+  }
+
+  async function handleDeleteRoom(id: string) {
+    setDeleteLoading(true);
+    try {
+      const res = await fetch(`${BASE}/rooms/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.message || "Failed to delete room");
+      }
+      toast.success("Room deleted successfully.");
+      setConfirm(null);
+      loadHotels();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setDeleteLoading(false);
+    }
+  }
+
+  const loadHotels = useCallback(async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${BASE}/hotels/mine?limit=50`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error();
+      const json = await res.json();
+      setHotels(json.data ?? []);
+    } catch {
+      toast.error("Failed to load your hotels.");
+    } finally {
+      setLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    loadHotels();
+  }, [loadHotels]);
+
+  const totalApproved = hotels.filter((h) => h.approvalStatus === "APPROVED").length;
+  const totalPending = hotels.filter((h) => h.approvalStatus === "PENDING").length;
+  const totalRooms = hotels.reduce((s, h) => s + h._count.rooms, 0);
+
+  return (
+    <>
+      <div className="space-y-5">
+        {/* Stats */}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {[
+            { label: "Total Hotels", value: hotels.length, icon: <Building2 className="h-5 w-5 text-violet-600 dark:text-violet-400" />, bg: "bg-violet-50 dark:bg-violet-950/30" },
+            { label: "Approved", value: totalApproved, icon: <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />, bg: "bg-emerald-50 dark:bg-emerald-950/30" },
+            { label: "Under Review", value: totalPending, icon: <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />, bg: "bg-amber-50 dark:bg-amber-950/30" },
+            { label: "Total Rooms", value: totalRooms, icon: <BedDouble className="h-5 w-5 text-primary-600 dark:text-primary-400" />, bg: "bg-primary-50 dark:bg-primary-950/30" },
+          ].map((s) => (
+            <div key={s.label} className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}>{s.icon}</div>
+              <div>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">{s.value}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{s.label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Header row */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-gray-900 dark:text-white">My Hotels</h3>
+            <p className="text-xs text-gray-400 dark:text-gray-500">
+              {loading ? "Loading…" : `${hotels.length} hotel${hotels.length !== 1 ? "s" : ""} in your portfolio`}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={loadHotels}
+              disabled={loading}
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+              title="Refresh"
+            >
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setModal("create-hotel")}
+              className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
+            >
+              <Plus className="h-4 w-4" />
+              New Hotel
+            </button>
+          </div>
+        </div>
+
+        {/* Approval notice */}
+        {totalPending > 0 && (
+          <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/30 dark:bg-amber-950/20">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+            <p className="text-xs text-amber-700 dark:text-amber-400">
+              {totalPending} hotel{totalPending !== 1 ? "s are" : " is"} under review. Hotels and rooms go live once approved by our team.
+            </p>
+          </div>
+        )}
+
+        {/* Hotel list */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600" />
+          </div>
+        ) : hotels.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white py-16 text-center dark:border-gray-700 dark:bg-gray-900">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-50 dark:bg-violet-950/30">
+              <Building2 className="h-8 w-8 text-violet-400" />
+            </div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">No hotels yet</p>
+            <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">Create your first hotel to get started</p>
+            <button
+              type="button"
+              onClick={() => setModal("create-hotel")}
+              className="mt-5 flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-700"
+            >
+              <Plus className="h-4 w-4" />
+              Create Hotel
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {hotels.map((hotel) => (
+              <HotelCard
+                key={hotel.id}
+                hotel={hotel}
+                expanded={expandedId === hotel.id}
+                onToggle={() => setExpandedId((p) => (p === hotel.id ? null : hotel.id))}
+                onAddRoom={() => setModal({ type: "add-room", hotelId: hotel.id, hotelName: hotel.name })}
+                onEdit={() => setModal({ type: "edit-hotel", hotel })}
+                onDelete={() => setConfirm({ type: "delete-hotel", id: hotel.id, name: hotel.name })}
+                onEditRoom={(room) => setModal({ type: "edit-room", room, hotelName: hotel.name })}
+                onDeleteRoom={(room) => setConfirm({ type: "delete-room", id: room.id, name: room.name })}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Modals */}
+      {modal === "create-hotel" && (
+        <FormModal title="Create New Hotel" onClose={() => setModal(null)}>
+          <CreateHotelForm
+            onCreated={(hotelId, hotelName) => {
+              setModal(null);
+              loadHotels();
+              toast.success("Hotel submitted for approval!");
+              setTimeout(() => setModal({ type: "add-room", hotelId, hotelName }), 400);
+            }}
+          />
+        </FormModal>
+      )}
+      {modal && typeof modal === "object" && modal.type === "add-room" && (
+        <FormModal title={`Add Room — ${modal.hotelName}`} onClose={() => setModal(null)}>
+          <CreateRoomForm
+            hotelId={modal.hotelId}
+            hotelName={modal.hotelName}
+            onCreated={() => {
+              loadHotels();
+              toast.success("Room submitted for approval!");
+            }}
+          />
+        </FormModal>
+      )}
+      {modal && typeof modal === "object" && modal.type === "edit-hotel" && (
+        <FormModal title={`Edit Hotel — ${modal.hotel.name}`} onClose={() => setModal(null)}>
+          <EditHotelForm
+            hotel={modal.hotel}
+            onUpdated={() => {
+              setModal(null);
+              loadHotels();
+              toast.success("Hotel updated successfully!");
+            }}
+          />
+        </FormModal>
+      )}
+      {modal && typeof modal === "object" && modal.type === "edit-room" && (
+        <FormModal title={`Edit Room — ${modal.room.name}`} onClose={() => setModal(null)}>
+          <EditRoomForm
+            room={modal.room}
+            hotelName={modal.hotelName}
+            onUpdated={() => {
+              setModal(null);
+              loadHotels();
+              toast.success("Room updated successfully!");
+            }}
+          />
+        </FormModal>
+      )}
+      {confirm && (
+        <ConfirmModal
+          title={confirm.type === "delete-hotel" ? "Delete Hotel" : "Delete Room"}
+          message={
+            confirm.type === "delete-hotel"
+              ? `Are you sure you want to delete "${confirm.name}"? This will permanently remove all its rooms and data.`
+              : `Are you sure you want to delete room "${confirm.name}"? This cannot be undone.`
+          }
+          loading={deleteLoading}
+          onClose={() => setConfirm(null)}
+          onConfirm={() => {
+            if (confirm.type === "delete-hotel") handleDeleteHotel(confirm.id);
+            else handleDeleteRoom(confirm.id);
+          }}
+        />
+      )}
+    </>
+  );
+}
+
+// ─── Vendor destinations list ─────────────────────────────────────────────────
+
+function VendorDestinationsList() {
+  const { token } = useAuth();
+  const [destinations, setDestinations] = useState<VendorDestination[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const loadDestinations = useCallback(async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${BASE}/destinations/mine?limit=50`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error();
+      const json = await res.json();
+      setDestinations(json.data ?? []);
+    } catch {
+      toast.error("Failed to load your destinations.");
+    } finally {
+      setLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    loadDestinations();
+  }, [loadDestinations]);
+
+  const totalApproved = destinations.filter((d) => d.approvalStatus === "APPROVED").length;
+  const totalPending = destinations.filter((d) => d.approvalStatus === "PENDING").length;
+  const totalHotels = destinations.reduce((s, d) => s + d._count.hotels, 0);
+
+  return (
+    <>
+      <div className="space-y-5">
+        {/* Stats */}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+          {[
+            { label: "Total Destinations", value: destinations.length, icon: <Globe className="h-5 w-5 text-violet-600 dark:text-violet-400" />, bg: "bg-violet-50 dark:bg-violet-950/30" },
+            { label: "Approved", value: totalApproved, icon: <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />, bg: "bg-emerald-50 dark:bg-emerald-950/30" },
+            { label: "Hotels Listed", value: totalHotels, icon: <Building2 className="h-5 w-5 text-primary-600 dark:text-primary-400" />, bg: "bg-primary-50 dark:bg-primary-950/30" },
+          ].map((s) => (
+            <div key={s.label} className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}>{s.icon}</div>
+              <div>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">{s.value}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{s.label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Header row */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-gray-900 dark:text-white">My Destinations</h3>
+            <p className="text-xs text-gray-400 dark:text-gray-500">
+              {loading ? "Loading…" : `${destinations.length} destination${destinations.length !== 1 ? "s" : ""}`}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={loadDestinations}
+              disabled={loading}
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+              title="Refresh"
+            >
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowCreateModal(true)}
+              className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
+            >
+              <Plus className="h-4 w-4" />
+              New Destination
+            </button>
+          </div>
+        </div>
+
+        {/* Pending notice */}
+        {totalPending > 0 && (
+          <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/30 dark:bg-amber-950/20">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+            <p className="text-xs text-amber-700 dark:text-amber-400">
+              {totalPending} destination{totalPending !== 1 ? "s are" : " is"} awaiting review. Once approved, they&apos;ll appear in your hotel creation form.
+            </p>
+          </div>
+        )}
+
+        {/* Info note */}
+        <div className="flex items-start gap-3 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 dark:border-blue-900/30 dark:bg-blue-950/20">
+          <Globe className="mt-0.5 h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
+          <p className="text-xs text-blue-700 dark:text-blue-400">
+            Approved destinations will appear in the hotel creation form when you add a new hotel.
+          </p>
+        </div>
+
+        {/* Destination list */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600" />
+          </div>
+        ) : destinations.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white py-16 text-center dark:border-gray-700 dark:bg-gray-900">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-50 dark:bg-violet-950/30">
+              <Globe className="h-8 w-8 text-violet-400" />
+            </div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">No destinations yet</p>
+            <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">Add a destination to group your hotels by location</p>
+            <button
+              type="button"
+              onClick={() => setShowCreateModal(true)}
+              className="mt-5 flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-700"
+            >
+              <Plus className="h-4 w-4" />
+              Create Destination
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {destinations.map((dest) => (
+              <DestinationCard key={dest.id} destination={dest} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {showCreateModal && (
+        <FormModal title="Create New Destination" onClose={() => setShowCreateModal(false)}>
+          <CreateDestinationForm
+            onCreated={() => {
+              setShowCreateModal(false);
+              loadDestinations();
+              toast.success("Destination submitted for approval!");
+            }}
+          />
+        </FormModal>
+      )}
+    </>
+  );
+}
+
+// ─── Destination card ─────────────────────────────────────────────────────────
+
+function DestinationCard({ destination }: { destination: VendorDestination }) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+      <div className="flex gap-4 p-5">
+        {/* Image */}
+        <div className="relative h-24 w-32 shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+          {destination.image ? (
+            <Image
+              src={`${BASE}${destination.image}`}
+              alt={destination.name}
+              fill
+              unoptimized
+              className="object-cover"
+              sizes="128px"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <Globe className="h-8 w-8 text-gray-300" />
+            </div>
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div className="min-w-0">
+              <h4 className="font-semibold text-gray-900 dark:text-white">{destination.name}</h4>
+              <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+                <MapPin className="h-3 w-3 shrink-0" />
+                {destination.region}
+              </div>
+            </div>
+            <ApprovalBadge status={destination.approvalStatus} />
+          </div>
+
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+            <span className="flex items-center gap-1">
+              <Building2 className="h-3.5 w-3.5" />
+              {destination._count.hotels} hotel{destination._count.hotels !== 1 ? "s" : ""}
+            </span>
+            <span className="flex items-center gap-1">
+              <FileText className="h-3.5 w-3.5" />
+              Added {fmtDate(destination.createdAt)}
+            </span>
+          </div>
+
+          {destination.approvalStatus === "REJECTED" && destination.rejectionReason && (
+            <div className="mt-2.5 flex items-start gap-2 rounded-xl border border-red-100 bg-red-50 px-3 py-2 dark:border-red-900/30 dark:bg-red-950/20">
+              <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
+              <p className="text-xs text-red-600 dark:text-red-400">{destination.rejectionReason}</p>
+            </div>
+          )}
+
+          {destination.description && (
+            <p className="mt-2 line-clamp-2 text-xs text-gray-400 dark:text-gray-500">
+              {destination.description}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Hotel card ───────────────────────────────────────────────────────────────
+
+function HotelCard({
+  hotel,
+  expanded,
+  onToggle,
+  onAddRoom,
+  onEdit,
+  onDelete,
+  onEditRoom,
+  onDeleteRoom,
+}: {
+  hotel: VendorHotel;
+  expanded: boolean;
+  onToggle: () => void;
+  onAddRoom: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+  onEditRoom: (room: VendorRoom) => void;
+  onDeleteRoom: (room: VendorRoom) => void;
+}) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
+      {/* Hotel header */}
+      <div className="flex gap-4 p-5">
+        {/* Image */}
+        <div className="relative h-24 w-32 shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+          {hotel.image ? (
+            <Image
+              src={`${BASE}${hotel.image}`}
+              alt={hotel.name}
+              fill
+              unoptimized
+              className="object-cover"
+              sizes="128px"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <ImageIcon className="h-8 w-8 text-gray-300" />
+            </div>
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div className="min-w-0">
+              <h4 className="font-semibold text-gray-900 dark:text-white">{hotel.name}</h4>
+              <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+                <MapPin className="h-3 w-3 shrink-0" />
+                {hotel.location}
+                {hotel.destination && (
+                  <span className="text-gray-300 dark:text-gray-600">·</span>
+                )}
+                {hotel.destination?.name}
+              </div>
+            </div>
+            <ApprovalBadge status={hotel.approvalStatus} />
+          </div>
+
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+            <span className="flex items-center gap-1">
+              <DollarSign className="h-3.5 w-3.5" />
+              ৳{hotel.price.toLocaleString()}/night
+            </span>
+            <span className="flex items-center gap-1">
+              <BedDouble className="h-3.5 w-3.5" />
+              {hotel._count.rooms} room{hotel._count.rooms !== 1 ? "s" : ""}
+            </span>
+            {hotel.approvalStatus === "APPROVED" && (
+              <span className="flex items-center gap-1">
+                <Star className="h-3.5 w-3.5" />
+                {hotel.rating > 0 ? hotel.rating.toFixed(1) : "No reviews"}
+              </span>
+            )}
+          </div>
+
+          {hotel.approvalStatus === "REJECTED" && hotel.rejectionReason && (
+            <div className="mt-2.5 flex items-start gap-2 rounded-xl border border-red-100 bg-red-50 px-3 py-2 dark:border-red-900/30 dark:bg-red-950/20">
+              <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
+              <p className="text-xs text-red-600 dark:text-red-400">{hotel.rejectionReason}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer actions */}
+      <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 dark:border-gray-800">
+        <button
+          type="button"
+          onClick={onToggle}
+          className="flex items-center gap-1.5 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        >
+          <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`} />
+          {expanded ? "Hide" : "Show"} Rooms
+          <span className="ml-0.5 rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+            {hotel._count.rooms}
+          </span>
+        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onEdit}
+            className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            className="flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 transition-colors hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+            Delete
+          </button>
+          <button
+            type="button"
+            onClick={onAddRoom}
+            className="flex items-center gap-1.5 rounded-xl border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-700 transition-colors hover:bg-violet-100 dark:border-violet-800 dark:bg-violet-950/30 dark:text-violet-400 dark:hover:bg-violet-950/50"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Add Room
+          </button>
+        </div>
+      </div>
+
+      {/* Rooms list */}
+      {expanded && (
+        <div className="border-t border-gray-100 dark:border-gray-800">
+          {hotel.rooms.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-10 text-center">
+              <BedDouble className="mb-2 h-8 w-8 text-gray-200 dark:text-gray-700" />
+              <p className="text-sm text-gray-400 dark:text-gray-500">No rooms added yet</p>
+              <button
+                type="button"
+                onClick={onAddRoom}
+                className="mt-3 text-xs font-medium text-violet-600 hover:underline dark:text-violet-400"
+              >
+                + Add your first room
+              </button>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100 dark:divide-gray-800">
+              {hotel.rooms.map((room) => (
+                <RoomRow
+                  key={room.id}
+                  room={room}
+                  onEdit={() => onEditRoom(room)}
+                  onDelete={() => onDeleteRoom(room)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Room row ─────────────────────────────────────────────────────────────────
+
+function RoomRow({
+  room,
+  onEdit,
+  onDelete,
+}: {
+  room: VendorRoom;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="flex items-start gap-4 px-5 py-4">
+      {/* Thumbnail */}
+      <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+        {room.images?.[0] ? (
+          <Image
+            src={`${BASE}${room.images[0]}`}
+            alt={room.name}
+            fill
+            unoptimized
+            className="object-cover"
+            sizes="80px"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <BedDouble className="h-5 w-5 text-gray-300" />
+          </div>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-semibold text-gray-900 dark:text-white">{room.name}</p>
+            {room.badge && (
+              <span className="rounded-md bg-primary-50 px-1.5 py-0.5 text-[10px] font-semibold text-primary-700 dark:bg-primary-950/30 dark:text-primary-400">
+                {room.badge}
+              </span>
+            )}
+          </div>
+          <ApprovalBadge status={room.approvalStatus} sm />
+        </div>
+
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-400 dark:text-gray-500">
+          <span>৳{room.price.toLocaleString()}/night</span>
+          <span>{room.capacity} guest{room.capacity !== 1 ? "s" : ""}</span>
+          <span>{room.view}</span>
+          <span>{room.size}</span>
+        </div>
+
+        {room.approvalStatus === "REJECTED" && room.rejectionReason && (
+          <div className="mt-1.5 flex items-start gap-1.5">
+            <AlertCircle className="mt-0.5 h-3 w-3 shrink-0 text-red-400" />
+            <p className="text-[11px] text-red-500 dark:text-red-400">{room.rejectionReason}</p>
+          </div>
+        )}
+
+        {/* Room actions */}
+        <div className="mt-2 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onEdit}
+            className="flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-[11px] font-semibold text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
+            <Pencil className="h-3 w-3" />
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            className="flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1 text-[11px] font-semibold text-red-600 transition-colors hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40"
+          >
+            <Trash2 className="h-3 w-3" />
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Confirm modal ────────────────────────────────────────────────────────────
+
+function ConfirmModal({
+  title,
+  message,
+  onConfirm,
+  onClose,
+  loading,
+}: {
+  title: string;
+  message: string;
+  onConfirm: () => void;
+  onClose: () => void;
+  loading?: boolean;
+}) {
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-900">
+        <div className="p-6">
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-100 dark:bg-red-950/40">
+            <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
+          </div>
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">{title}</h3>
+          <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">{message}</p>
+        </div>
+        <div className="flex gap-3 border-t border-gray-100 px-6 py-4 dark:border-gray-800">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={loading}
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-red-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <Trash2 className="h-4 w-4" />
+            {loading ? "Deleting…" : "Delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Form modal ───────────────────────────────────────────────────────────────
+
+function FormModal({
+  title,
+  onClose,
+  children,
+}: {
+  title: string;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      {/* Panel */}
+      <div className="relative z-10 flex max-h-[95dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl dark:bg-gray-900 sm:rounded-2xl">
+        {/* Header */}
+        <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-4 dark:border-gray-800">
+          <h2 className="font-semibold text-gray-900 dark:text-white">{title}</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        {/* Scrollable body */}
+        <div className="overflow-y-auto p-6">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Create hotel form ────────────────────────────────────────────────────────
+
+function CreateHotelForm({
+  onCreated,
+}: {
+  onCreated: (hotelId: string, hotelName: string) => void;
+}) {
+  const { token } = useAuth();
+  const [destinations, setDestinations] = useState<{ id: string; name: string }[]>([]);
+  const imageRef = useRef<HTMLInputElement>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageError, setImageError] = useState("");
+
+  const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitting } } =
+    useForm<HotelFormValues>({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      resolver: yupResolver(hotelSchema) as any,
+      mode: "onTouched",
+    });
+
+  const nameValue = watch("name");
+
+  useEffect(() => {
+    if (nameValue) {
+      const slug = nameValue.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      setValue("slug", slug, { shouldValidate: false });
+    }
+  }, [nameValue, setValue]);
+
+  // Load only the vendor's own approved destinations
+  useEffect(() => {
+    if (!token) return;
+    fetch(`${BASE}/destinations/mine?limit=100`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        const approved = (d.data ?? []).filter(
+          (dest: VendorDestination) => dest.approvalStatus === "APPROVED",
+        );
+        setDestinations(approved);
+      })
+      .catch(() => {});
+  }, [token]);
+
+  async function onSubmit(data: HotelFormValues) {
+    const file = imageRef.current?.files?.[0];
+    if (!file) { setImageError("Please select a hotel cover image"); return; }
+
+    const fd = new FormData();
+    fd.append("destinationId", data.destinationId);
+    fd.append("name", data.name);
+    fd.append("slug", data.slug);
+    fd.append("location", data.location);
+    fd.append("description", data.description);
+    fd.append("price", String(data.price));
+    data.tags?.split(",").map((t) => t.trim()).filter(Boolean).forEach((t) => fd.append("tags", t));
+    data.amenities?.split(",").map((a) => a.trim()).filter(Boolean).forEach((a) => fd.append("amenities", a));
+    fd.append("image", file);
+
+    try {
+      const res = await fetch(`${BASE}/hotels`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to create hotel");
+      reset();
+      if (imageRef.current) imageRef.current.value = "";
+      setImagePreview(null);
+      onCreated(json.id, data.name);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+      {/* Destination */}
+      <div>
+        <label className={labelCls()}>Destination</label>
+        {destinations.length === 0 ? (
+          <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/30 dark:bg-amber-950/20">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+            <p className="text-xs text-amber-700 dark:text-amber-400">
+              No approved destinations yet. Go to the Destinations tab to create one first.
+            </p>
+          </div>
+        ) : (
+          <>
+            <select {...register("destinationId")} className={inputCls(!!errors.destinationId)}>
+              <option value="">Select a destination…</option>
+              {destinations.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
+            </select>
+            <FieldError msg={errors.destinationId?.message} />
+          </>
+        )}
+      </div>
+
+      {/* Name + Slug */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}>Hotel Name</label>
+          <input type="text" {...register("name")} placeholder="Sea Pearl Beach Resort" className={inputCls(!!errors.name)} />
+          <FieldError msg={errors.name?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}>URL Slug <span className="font-normal text-gray-400">(auto-generated)</span></label>
+          <input type="text" {...register("slug")} placeholder="sea-pearl-beach-resort" className={inputCls(!!errors.slug)} />
+          <FieldError msg={errors.slug?.message} />
+        </div>
+      </div>
+
+      {/* Location + Price */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Location</span></label>
+          <input type="text" {...register("location")} placeholder="Cox's Bazar" className={inputCls(!!errors.location)} />
+          <FieldError msg={errors.location?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Price per Night (৳)</span></label>
+          <input type="number" {...register("price")} placeholder="5000" min={1} className={inputCls(!!errors.price)} />
+          <FieldError msg={errors.price?.message} />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className={labelCls()}>Description</label>
+        <textarea {...register("description")} rows={4} placeholder="Describe your hotel — location, ambiance, what makes it special…" className={inputCls(!!errors.description)} />
+        <FieldError msg={errors.description?.message} />
+      </div>
+
+      {/* Tags + Amenities */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" /> Tags <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
+          <input type="text" {...register("tags")} placeholder="beachfront, luxury, family" className={inputCls()} />
+        </div>
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Amenities <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
+          <input type="text" {...register("amenities")} placeholder="WiFi, Pool, Spa, Parking" className={inputCls()} />
+        </div>
+      </div>
+
+      {/* Image */}
+      <div>
+        <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Cover Image</span></label>
+        <div className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-8 transition-colors ${imageError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}>
+          {imagePreview ? (
+            <div className="relative w-full">
+              <div className="relative mx-auto h-40 max-w-xs overflow-hidden rounded-xl">
+                <Image src={imagePreview} alt="Preview" fill unoptimized className="object-cover" />
+              </div>
+              <button type="button" onClick={() => { setImagePreview(null); if (imageRef.current) imageRef.current.value = ""; }} className="absolute right-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow">
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <Upload className="mb-2 h-8 w-8 text-gray-300" />
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click or drag to upload</p>
+              <p className="mt-1 text-xs text-gray-400">JPEG, PNG or WebP — max 10 MB</p>
+            </>
+          )}
+          <input ref={imageRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => { const f = e.target.files?.[0]; if (f) { setImageError(""); setImagePreview(URL.createObjectURL(f)); } }} className="absolute inset-0 cursor-pointer opacity-0" />
+        </div>
+        <FieldError msg={imageError} />
+      </div>
+
+      <button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60">
+        <Plus className="h-4 w-4" />
+        {isSubmitting ? "Submitting…" : "Submit Hotel for Approval"}
+      </button>
+    </form>
+  );
+}
+
+// ─── Edit hotel form ──────────────────────────────────────────────────────────
+
+function EditHotelForm({
+  hotel,
+  onUpdated,
+}: {
+  hotel: VendorHotel;
+  onUpdated: () => void;
+}) {
+  const { token } = useAuth();
+  const imageRef = useRef<HTMLInputElement>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } =
+    useForm<UpdateHotelFormValues>({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      resolver: yupResolver(updateHotelSchema) as any,
+      mode: "onTouched",
+      defaultValues: {
+        name: hotel.name,
+        slug: hotel.slug,
+        location: hotel.location,
+        description: "",
+        price: hotel.price,
+        tags: "",
+        amenities: "",
+        isActive: hotel.isActive,
+      },
+    });
+
+  const nameValue = watch("name");
+
+  useEffect(() => {
+    if (nameValue) {
+      const slug = nameValue.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      setValue("slug", slug, { shouldValidate: false });
+    }
+  }, [nameValue, setValue]);
+
+  async function onSubmit(data: UpdateHotelFormValues) {
+    const fd = new FormData();
+    fd.append("name", data.name);
+    fd.append("slug", data.slug);
+    fd.append("location", data.location);
+    fd.append("description", data.description);
+    fd.append("price", String(data.price));
+    fd.append("isActive", data.isActive ? "true" : "false");
+    data.tags?.split(",").map((t) => t.trim()).filter(Boolean).forEach((t) => fd.append("tags", t));
+    data.amenities?.split(",").map((a) => a.trim()).filter(Boolean).forEach((a) => fd.append("amenities", a));
+    const file = imageRef.current?.files?.[0];
+    if (file) fd.append("image", file);
+
+    try {
+      const res = await fetch(`${BASE}/hotels/${hotel.id}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to update hotel");
+      if (imageRef.current) imageRef.current.value = "";
+      setImagePreview(null);
+      onUpdated();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+      {/* Name + Slug */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}>Hotel Name</label>
+          <input type="text" {...register("name")} className={inputCls(!!errors.name)} />
+          <FieldError msg={errors.name?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}>URL Slug <span className="font-normal text-gray-400">(auto-generated)</span></label>
+          <input type="text" {...register("slug")} className={inputCls(!!errors.slug)} />
+          <FieldError msg={errors.slug?.message} />
+        </div>
+      </div>
+
+      {/* Location + Price */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Location</span></label>
+          <input type="text" {...register("location")} className={inputCls(!!errors.location)} />
+          <FieldError msg={errors.location?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Price per Night (৳)</span></label>
+          <input type="number" {...register("price")} min={1} className={inputCls(!!errors.price)} />
+          <FieldError msg={errors.price?.message} />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className={labelCls()}>Description</label>
+        <textarea {...register("description")} rows={4} placeholder="Describe your hotel — location, ambiance, what makes it special…" className={inputCls(!!errors.description)} />
+        <FieldError msg={errors.description?.message} />
+      </div>
+
+      {/* Tags + Amenities */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" /> Tags <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
+          <input type="text" {...register("tags")} placeholder="beachfront, luxury, family" className={inputCls()} />
+        </div>
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Amenities <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
+          <input type="text" {...register("amenities")} placeholder="WiFi, Pool, Spa, Parking" className={inputCls()} />
+        </div>
+      </div>
+
+      {/* Active toggle */}
+      <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
+        <div>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Active</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500">Only active hotels are visible to guests</p>
+        </div>
+        <label className="relative inline-flex cursor-pointer items-center">
+          <input type="checkbox" className="sr-only peer" {...register("isActive")} />
+          <div className="h-6 w-11 rounded-full bg-gray-200 transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all after:content-[''] peer-checked:bg-violet-600 peer-checked:after:translate-x-full dark:bg-gray-600" />
+        </label>
+      </div>
+
+      {/* Image (optional) */}
+      <div>
+        <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Cover Image <span className="font-normal text-gray-400">(leave empty to keep current)</span></span></label>
+        <div className="relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 px-6 py-8 transition-colors hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50">
+          {imagePreview ? (
+            <div className="relative w-full">
+              <div className="relative mx-auto h-40 max-w-xs overflow-hidden rounded-xl">
+                <Image src={imagePreview} alt="Preview" fill unoptimized className="object-cover" />
+              </div>
+              <button type="button" onClick={() => { setImagePreview(null); if (imageRef.current) imageRef.current.value = ""; }} className="absolute right-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow">
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <div className="relative mx-auto mb-3 h-20 w-32 overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-700">
+                {hotel.image && (
+                  <Image src={`${BASE}${hotel.image}`} alt={hotel.name} fill unoptimized className="object-cover opacity-60" />
+                )}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Upload className="h-5 w-5 text-gray-400" />
+                </div>
+              </div>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click to replace image</p>
+              <p className="mt-1 text-xs text-gray-400">JPEG, PNG or WebP — max 10 MB</p>
+            </div>
+          )}
+          <input ref={imageRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => { const f = e.target.files?.[0]; if (f) setImagePreview(URL.createObjectURL(f)); }} className="absolute inset-0 cursor-pointer opacity-0" />
+        </div>
+      </div>
+
+      <button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60">
+        <Pencil className="h-4 w-4" />
+        {isSubmitting ? "Saving…" : "Save Changes"}
+      </button>
+    </form>
+  );
+}
+
+// ─── Create destination form ──────────────────────────────────────────────────
+
+function CreateDestinationForm({ onCreated }: { onCreated: () => void }) {
+  const { token } = useAuth();
+  const imageRef = useRef<HTMLInputElement>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageError, setImageError] = useState("");
+
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
+    useForm<DestinationFormValues>({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      resolver: yupResolver(destinationSchema) as any,
+      mode: "onTouched",
+    });
+
+  async function onSubmit(data: DestinationFormValues) {
+    const file = imageRef.current?.files?.[0];
+    if (!file) { setImageError("Please select a destination image"); return; }
+
+    const fd = new FormData();
+    fd.append("name", data.name);
+    fd.append("region", data.region);
+    fd.append("description", data.description);
+    data.highlights
+      ?.split(",")
+      .map((h) => h.trim())
+      .filter(Boolean)
+      .forEach((h) => fd.append("highlights", h));
+    fd.append("image", file);
+
+    try {
+      const res = await fetch(`${BASE}/destinations`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to create destination");
+      reset();
+      if (imageRef.current) imageRef.current.value = "";
+      setImagePreview(null);
+      onCreated();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+      {/* Name + Region */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}>Destination Name</label>
+          <input type="text" {...register("name")} placeholder="Cox's Bazar" className={inputCls(!!errors.name)} />
+          <FieldError msg={errors.name?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Region</span></label>
+          <input type="text" {...register("region")} placeholder="Chittagong Division" className={inputCls(!!errors.region)} />
+          <FieldError msg={errors.region?.message} />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className={labelCls()}>Description</label>
+        <textarea
+          {...register("description")}
+          rows={4}
+          placeholder="Describe the destination — geography, culture, what makes it special…"
+          className={inputCls(!!errors.description)}
+        />
+        <FieldError msg={errors.description?.message} />
+      </div>
+
+      {/* Highlights */}
+      <div>
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5" />
+            Highlights
+            <span className="font-normal text-gray-400">(comma-separated)</span>
+          </span>
+        </label>
+        <input
+          type="text"
+          {...register("highlights")}
+          placeholder="World's longest beach, Coral reefs, Sunset views"
+          className={inputCls()}
+        />
+      </div>
+
+      {/* Image */}
+      <div>
+        <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Cover Image</span></label>
+        <div className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-8 transition-colors ${imageError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}>
+          {imagePreview ? (
+            <div className="relative w-full">
+              <div className="relative mx-auto h-40 max-w-xs overflow-hidden rounded-xl">
+                <Image src={imagePreview} alt="Preview" fill unoptimized className="object-cover" />
+              </div>
+              <button
+                type="button"
+                onClick={() => { setImagePreview(null); if (imageRef.current) imageRef.current.value = ""; }}
+                className="absolute right-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <Upload className="mb-2 h-8 w-8 text-gray-300" />
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click or drag to upload</p>
+              <p className="mt-1 text-xs text-gray-400">JPEG, PNG or WebP — max 10 MB</p>
+            </>
+          )}
+          <input
+            ref={imageRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) { setImageError(""); setImagePreview(URL.createObjectURL(f)); }
+            }}
+            className="absolute inset-0 cursor-pointer opacity-0"
+          />
+        </div>
+        <FieldError msg={imageError} />
+      </div>
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        <Globe className="h-4 w-4" />
+        {isSubmitting ? "Submitting…" : "Submit Destination for Approval"}
+      </button>
+    </form>
+  );
+}
+
+// ─── Create room form ─────────────────────────────────────────────────────────
+
+function CreateRoomForm({
+  hotelId,
+  hotelName,
+  onCreated,
+}: {
+  hotelId: string;
+  hotelName: string;
+  onCreated: () => void;
+}) {
+  const { token } = useAuth();
+  const imagesRef = useRef<HTMLInputElement>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [imagesError, setImagesError] = useState("");
+
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
+    useForm<RoomFormValues>({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      resolver: yupResolver(roomSchema) as any,
+      mode: "onTouched",
+      defaultValues: { hotelId },
+    });
+
+  function handleImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files) return;
+    setImagesError("");
+    setImagePreviews(Array.from(files).map((f) => URL.createObjectURL(f)));
+  }
+
+  async function onSubmit(data: RoomFormValues) {
+    const files = imagesRef.current?.files;
+    if (!files || files.length === 0) { setImagesError("Please select at least one image"); return; }
+
+    const fd = new FormData();
+    fd.append("hotelId", hotelId);
+    fd.append("name", data.name);
+    fd.append("description", data.description);
+    fd.append("price", String(data.price));
+    fd.append("capacity", String(data.capacity));
+    fd.append("view", data.view);
+    fd.append("size", data.size);
+    data.amenities.split(",").map((a) => a.trim()).filter(Boolean).forEach((a) => fd.append("amenities", a));
+    if (data.badge) fd.append("badge", data.badge);
+    Array.from(files).forEach((f) => fd.append("images", f));
+
+    try {
+      const res = await fetch(`${BASE}/rooms`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to add room");
+      reset({ hotelId });
+      if (imagesRef.current) imagesRef.current.value = "";
+      setImagePreviews([]);
+      onCreated();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+      {/* Hotel ID (read-only info) */}
+      <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
+        <Hash className="h-4 w-4 shrink-0 text-gray-400" />
+        <div className="min-w-0">
+          <p className="text-xs text-gray-400">Adding room to hotel</p>
+          <p className="mt-0.5 truncate text-xs font-medium text-gray-700 dark:text-gray-300">{hotelName}</p>
+        </div>
+      </div>
+
+      {/* Name + Badge */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}>Room Name</label>
+          <input type="text" {...register("name")} placeholder="Deluxe Sea View" className={inputCls(!!errors.name)} />
+          <FieldError msg={errors.name?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}>Badge <span className="font-normal text-gray-400">(optional)</span></label>
+          <input type="text" {...register("badge")} placeholder="Best Value, Most Popular…" className={inputCls()} />
+        </div>
+      </div>
+
+      {/* Price + Capacity */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Price per Night (৳)</span></label>
+          <input type="number" {...register("price")} placeholder="5000" min={1} className={inputCls(!!errors.price)} />
+          <FieldError msg={errors.price?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" /> Guest Capacity</span></label>
+          <input type="number" {...register("capacity")} placeholder="2" min={1} max={20} className={inputCls(!!errors.capacity)} />
+          <FieldError msg={errors.capacity?.message} />
+        </div>
+      </div>
+
+      {/* View + Size */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}>View Type</label>
+          <input type="text" {...register("view")} placeholder="Sea View, Garden View…" className={inputCls(!!errors.view)} />
+          <FieldError msg={errors.view?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><Maximize2 className="h-3.5 w-3.5" /> Room Size</span></label>
+          <input type="text" {...register("size")} placeholder="38 m²" className={inputCls(!!errors.size)} />
+          <FieldError msg={errors.size?.message} />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className={labelCls()}>Description</label>
+        <textarea {...register("description")} rows={3} placeholder="Describe the room features, furnishings, and highlights…" className={inputCls(!!errors.description)} />
+        <FieldError msg={errors.description?.message} />
+      </div>
+
+      {/* Amenities */}
+      <div>
+        <label className={labelCls()}><span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Amenities <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
+        <input type="text" {...register("amenities")} placeholder="AC, WiFi, Minibar, Smart TV, Bathtub" className={inputCls(!!errors.amenities)} />
+        <FieldError msg={errors.amenities?.message} />
+      </div>
+
+      {/* Room images */}
+      <div>
+        <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Room Photos <span className="font-normal text-gray-400">(up to 10)</span></span></label>
+        <div className={`relative rounded-xl border-2 border-dashed transition-colors ${imagesError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}>
+          {imagePreviews.length > 0 ? (
+            <div className="grid grid-cols-4 gap-2 p-3 sm:grid-cols-5">
+              {imagePreviews.map((src, i) => (
+                <div key={i} className="relative aspect-square overflow-hidden rounded-xl">
+                  <Image src={src} alt={`Photo ${i + 1}`} fill unoptimized className="object-cover" />
+                </div>
+              ))}
+              <label className="flex aspect-square cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-300 transition-colors hover:border-violet-400 dark:border-gray-600">
+                <Plus className="h-5 w-5 text-gray-300" />
+                <input ref={imagesRef} type="file" accept="image/*" multiple onChange={handleImagesChange} className="hidden" />
+              </label>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center py-8 text-center">
+              <ImageIcon className="mb-2 h-8 w-8 text-gray-300" />
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click to upload room photos</p>
+              <p className="mt-1 text-xs text-gray-400">JPEG, PNG or WebP — max 10 MB each</p>
+            </div>
+          )}
+          {imagePreviews.length === 0 && (
+            <input ref={imagesRef} type="file" accept="image/*" multiple onChange={handleImagesChange} className="absolute inset-0 cursor-pointer opacity-0" />
+          )}
+        </div>
+        <FieldError msg={imagesError} />
+      </div>
+
+      <button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60">
+        <BedDouble className="h-4 w-4" />
+        {isSubmitting ? "Submitting…" : "Submit Room for Approval"}
+      </button>
+    </form>
+  );
+}
+
+// ─── Edit room form ───────────────────────────────────────────────────────────
+
+const MAX_ROOM_IMAGES = 10;
+
+function EditRoomForm({
+  room,
+  hotelName,
+  onUpdated,
+}: {
+  room: VendorRoom;
+  hotelName: string;
+  onUpdated: () => void;
+}) {
+  const { token } = useAuth();
+
+  // File objects to send (new + existing-fetched-as-blobs)
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  // Existing server image URLs still retained (URL-only mode)
+  const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
+  // What's shown: existing URLs first, then object URLs for new files
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [imageError, setImageError] = useState("");
+  const [fetchingImages, setFetchingImages] = useState(false);
+  // True when user removed an existing URL without adding new files
+  const [existingModified, setExistingModified] = useState(false);
+
+  // Init existing images from room prop
+  useEffect(() => {
+    const previews = (room.images ?? []).map((img) =>
+      img.startsWith("http") ? img : `${BASE}${img}`
+    );
+    setExistingImageUrls(previews);
+    setImagePreviews(previews);
+    setExistingModified(false);
+    setImageFiles([]);
+  }, [room.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const { register, handleSubmit, formState: { errors, isSubmitting } } =
+    useForm<UpdateRoomFormValues>({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      resolver: yupResolver(updateRoomSchema) as any,
+      mode: "onTouched",
+      defaultValues: {
+        name: room.name,
+        description: "",
+        price: room.price,
+        capacity: room.capacity,
+        view: room.view,
+        size: room.size,
+        amenities: "",
+        badge: room.badge ?? "",
+        isActive: room.isActive,
+      },
+    });
+
+  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const newFiles = Array.from(e.target.files ?? []);
+    if (!newFiles.length) return;
+    e.target.value = "";
+
+    if (imagePreviews.length + newFiles.length > MAX_ROOM_IMAGES) {
+      setImageError(`You can upload at most ${MAX_ROOM_IMAGES} images.`);
+      return;
+    }
+
+    // If existing server images haven't been converted to Files yet, fetch them
+    // so imageFiles contains ALL images (existing + new) for the submit payload.
+    let existingAsFiles: File[] = [];
+    if (existingImageUrls.length > 0) {
+      setFetchingImages(true);
+      try {
+        existingAsFiles = await Promise.all(
+          existingImageUrls.map(async (url, i) => {
+            const res = await fetch(url, { credentials: "include" });
+            const blob = await res.blob();
+            const name = url.split("/").pop() || `existing-${i}.webp`;
+            return new File([blob], name, { type: blob.type });
+          })
+        );
+      } catch {
+        setFetchingImages(false);
+        toast.error("Could not load existing images. Please re-upload all images manually.");
+        return;
+      }
+      setFetchingImages(false);
+      setExistingImageUrls([]);
+    }
+
+    const allFiles = [...existingAsFiles, ...imageFiles, ...newFiles];
+    setImageFiles(allFiles);
+    setImagePreviews((prev) => [
+      ...prev,
+      ...newFiles.map((f) => URL.createObjectURL(f)),
+    ]);
+    setImageError("");
+  }
+
+  function removePreview(index: number) {
+    if (existingImageUrls.length > 0 && index < existingImageUrls.length) {
+      // URL-only mode — remove from URL list
+      setExistingImageUrls((prev) => prev.filter((_, i) => i !== index));
+      setExistingModified(true);
+    } else {
+      // After conversion (or for new files)
+      const fileIndex =
+        existingImageUrls.length > 0 ? index - existingImageUrls.length : index;
+      setImageFiles((prev) => prev.filter((_, i) => i !== fileIndex));
+    }
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  async function onSubmit(data: UpdateRoomFormValues) {
+    const fd = new FormData();
+    fd.append("name", data.name);
+    fd.append("description", data.description);
+    fd.append("price", String(data.price));
+    fd.append("capacity", String(data.capacity));
+    fd.append("view", data.view);
+    fd.append("size", data.size);
+    data.amenities.split(",").map((a) => a.trim()).filter(Boolean).forEach((a) => fd.append("amenities", a));
+    if (data.badge) fd.append("badge", data.badge);
+    fd.append("isActive", data.isActive ? "true" : "false");
+
+    let filesToSend = [...imageFiles];
+
+    // User removed some existing images but didn't add new files — fetch remaining URLs as blobs
+    if (existingModified && imageFiles.length === 0) {
+      setFetchingImages(true);
+      try {
+        filesToSend = await Promise.all(
+          existingImageUrls.map(async (url, i) => {
+            const res = await fetch(url, { credentials: "include" });
+            const blob = await res.blob();
+            const name = url.split("/").pop() || `existing-${i}.webp`;
+            return new File([blob], name, { type: blob.type });
+          })
+        );
+      } catch {
+        setFetchingImages(false);
+        toast.error("Could not process images. Please try again.");
+        return;
+      }
+      setFetchingImages(false);
+    }
+
+    if (filesToSend.length > 0) {
+      filesToSend.forEach((file) => fd.append("images", file));
+    }
+
+    try {
+      const res = await fetch(`${BASE}/rooms/${room.id}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to update room");
+      onUpdated();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
+    }
+  }
+
+  const busy = isSubmitting || fetchingImages;
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+      {/* Hotel info (read-only) */}
+      <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
+        <Hash className="h-4 w-4 shrink-0 text-gray-400" />
+        <div className="min-w-0">
+          <p className="text-xs text-gray-400">Editing room in hotel</p>
+          <p className="mt-0.5 truncate text-xs font-medium text-gray-700 dark:text-gray-300">{hotelName}</p>
+        </div>
+      </div>
+
+      {/* Name + Badge */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}>Room Name</label>
+          <input type="text" {...register("name")} className={inputCls(!!errors.name)} />
+          <FieldError msg={errors.name?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}>Badge <span className="font-normal text-gray-400">(optional)</span></label>
+          <input type="text" {...register("badge")} placeholder="Best Value, Most Popular…" className={inputCls()} />
+        </div>
+      </div>
+
+      {/* Price + Capacity */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Price per Night (৳)</span></label>
+          <input type="number" {...register("price")} min={1} className={inputCls(!!errors.price)} />
+          <FieldError msg={errors.price?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" /> Guest Capacity</span></label>
+          <input type="number" {...register("capacity")} min={1} max={20} className={inputCls(!!errors.capacity)} />
+          <FieldError msg={errors.capacity?.message} />
+        </div>
+      </div>
+
+      {/* View + Size */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}>View Type</label>
+          <input type="text" {...register("view")} className={inputCls(!!errors.view)} />
+          <FieldError msg={errors.view?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}><span className="flex items-center gap-1.5"><Maximize2 className="h-3.5 w-3.5" /> Room Size</span></label>
+          <input type="text" {...register("size")} className={inputCls(!!errors.size)} />
+          <FieldError msg={errors.size?.message} />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className={labelCls()}>Description</label>
+        <textarea {...register("description")} rows={3} placeholder="Describe the room features, furnishings, and highlights…" className={inputCls(!!errors.description)} />
+        <FieldError msg={errors.description?.message} />
+      </div>
+
+      {/* Amenities */}
+      <div>
+        <label className={labelCls()}><span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Amenities <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
+        <input type="text" {...register("amenities")} placeholder="AC, WiFi, Minibar, Smart TV" className={inputCls(!!errors.amenities)} />
+        <FieldError msg={errors.amenities?.message} />
+      </div>
+
+      {/* Active toggle */}
+      <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
+        <div>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Active</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500">Only active rooms are shown to guests</p>
+        </div>
+        <label className="relative inline-flex cursor-pointer items-center">
+          <input type="checkbox" className="sr-only peer" {...register("isActive")} />
+          <div className="h-6 w-11 rounded-full bg-gray-200 transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all after:content-[''] peer-checked:bg-violet-600 peer-checked:after:translate-x-full dark:bg-gray-600" />
+        </label>
+      </div>
+
+      {/* Room images */}
+      <div>
+        <div className="mb-2 flex items-start justify-between">
+          <div>
+            <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Room Photos</span></label>
+            <p className="text-xs text-gray-400 dark:text-gray-500">
+              You can add or remove images individually. Upload 1–{MAX_ROOM_IMAGES} photos.
+            </p>
+          </div>
+          {imagePreviews.length > 0 && imagePreviews.length < MAX_ROOM_IMAGES && (
+            <label className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 ${fetchingImages ? "pointer-events-none opacity-60" : ""}`}>
+              {fetchingImages ? <><Loader2 className="h-3 w-3 animate-spin" /> Loading…</> : "+ Add more"}
+              <input type="file" accept="image/*" multiple className="hidden" disabled={fetchingImages} onChange={handleImageChange} />
+            </label>
+          )}
+        </div>
+
+        {imagePreviews.length > 0 ? (
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+            {imagePreviews.map((src, i) => (
+              <div key={i} className="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+                <Image src={src} alt={`Photo ${i + 1}`} fill unoptimized className="object-cover" sizes="160px" />
+                <button
+                  type="button"
+                  onClick={() => removePreview(i)}
+                  className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/70"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ))}
+            {imagePreviews.length < MAX_ROOM_IMAGES && (
+              <label className={`flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800/50 ${fetchingImages ? "cursor-wait opacity-60" : "hover:border-violet-400 hover:bg-violet-50/30 dark:hover:border-violet-600"}`}>
+                {fetchingImages
+                  ? <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                  : <ImageIcon className="h-5 w-5 text-gray-300" />}
+                <span className="text-xs text-gray-400">{fetchingImages ? "Loading…" : "Add"}</span>
+                <input type="file" accept="image/*" multiple className="hidden" disabled={fetchingImages} onChange={handleImageChange} />
+              </label>
+            )}
+          </div>
+        ) : (
+          <label className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors hover:border-violet-400 hover:bg-violet-50/30 dark:hover:border-violet-600 ${imageError ? "border-red-400 bg-red-50/20 dark:border-red-700" : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50"}`}>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+              <Upload className="h-5 w-5 text-gray-400" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click to upload photos</p>
+              <p className="mt-0.5 text-xs text-gray-400">Select up to {MAX_ROOM_IMAGES} images — JPEG, PNG or WebP</p>
+            </div>
+            <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
+          </label>
+        )}
+
+        {imageError && <p className="mt-1.5 text-xs font-medium text-red-500">{imageError}</p>}
+      </div>
+
+      <button type="submit" disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60">
+        {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pencil className="h-4 w-4" />}
+        {isSubmitting ? "Saving…" : fetchingImages ? "Processing images…" : "Save Changes"}
+      </button>
+    </form>
+  );
+}
+
 // ─── Settings section ─────────────────────────────────────────────────────────
 
 function SettingsSection() {
@@ -784,286 +2764,98 @@ function SettingsSection() {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [emailNotifs, setEmailNotifs] = useState(true);
-  const [smsNotifs, setSmsNotifs] = useState(false);
-  const [promoNotifs, setPromoNotifs] = useState(true);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<PasswordFormValues>({
-    resolver: yupResolver(passwordSchema),
-    mode: "onTouched",
-  });
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
+    useForm<PasswordFormValues>({ resolver: yupResolver(passwordSchema), mode: "onTouched" });
 
   async function onPasswordSubmit(data: PasswordFormValues) {
-    if (!token) {
-      toast.error("Authentication token not found.");
-      return;
-    }
-
+    if (!token) { toast.error("Authentication token not found."); return; }
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/password`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            currentPassword: data.currentPassword,
-            newPassword: data.newPassword,
-          }),
-        },
-      );
-
+      const res = await fetch(`${BASE}/users/me/password`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ currentPassword: data.currentPassword, newPassword: data.newPassword }),
+      });
       const json = await res.json();
-
-      if (!res.ok) {
-        throw new Error(json.message || "Failed to update password");
-      }
-
+      if (!res.ok) throw new Error(json.message || "Failed to update password");
       toast.success(json.message || "Password updated successfully!");
       reset();
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong.");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong.");
     }
   }
 
   return (
     <div className="space-y-5">
-      {/* Change password */}
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-gray-800">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/30">
             <Lock className="h-4 w-4 text-primary-600 dark:text-primary-400" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
-              Change Password
-            </h3>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
-              Keep your account secure with a strong password
-            </p>
+            <h3 className="font-semibold text-gray-900 dark:text-white">Change Password</h3>
+            <p className="text-xs text-gray-400 dark:text-gray-500">Keep your account secure with a strong password</p>
           </div>
         </div>
-
-        <form
-          onSubmit={handleSubmit(onPasswordSubmit)}
-          noValidate
-          className="space-y-4 p-6"
-        >
-          {/* Current password */}
+        <form onSubmit={handleSubmit(onPasswordSubmit)} noValidate className="space-y-4 p-6">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Current Password
-            </label>
+            <label className={labelCls()}>Current Password</label>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <input
-                type={showCurrent ? "text" : "password"}
-                {...register("currentPassword")}
-                placeholder="Enter current password"
-                className={`${inputCls(!!errors.currentPassword)} pl-10 pr-11`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowCurrent((p) => !p)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                {showCurrent ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+              <input type={showCurrent ? "text" : "password"} {...register("currentPassword")} placeholder="Enter current password" className={`${inputCls(!!errors.currentPassword)} pl-10 pr-11`} />
+              <button type="button" onClick={() => setShowCurrent((p) => !p)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
-            {errors.currentPassword && (
-              <p className="mt-1.5 text-xs font-medium text-red-500">
-                {errors.currentPassword.message}
-              </p>
-            )}
+            <FieldError msg={errors.currentPassword?.message} />
           </div>
-
           <div className="grid gap-4 sm:grid-cols-2">
-            {/* New password */}
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                New Password
-              </label>
+              <label className={labelCls()}>New Password</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <input
-                  type={showNew ? "text" : "password"}
-                  {...register("newPassword")}
-                  placeholder="Min. 8 chars, letter + number"
-                  className={`${inputCls(!!errors.newPassword)} pl-10 pr-11`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowNew((p) => !p)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showNew ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+                <input type={showNew ? "text" : "password"} {...register("newPassword")} placeholder="Min. 8 chars, letter + number" className={`${inputCls(!!errors.newPassword)} pl-10 pr-11`} />
+                <button type="button" onClick={() => setShowNew((p) => !p)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-              {errors.newPassword && (
-                <p className="mt-1.5 text-xs font-medium text-red-500">
-                  {errors.newPassword.message}
-                </p>
-              )}
+              <FieldError msg={errors.newPassword?.message} />
             </div>
-
-            {/* Confirm password */}
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Confirm New Password
-              </label>
+              <label className={labelCls()}>Confirm New Password</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <input
-                  type={showConfirm ? "text" : "password"}
-                  {...register("confirmPassword")}
-                  placeholder="Re-enter new password"
-                  className={`${inputCls(!!errors.confirmPassword)} pl-10 pr-11`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirm((p) => !p)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showConfirm ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+                <input type={showConfirm ? "text" : "password"} {...register("confirmPassword")} placeholder="Re-enter new password" className={`${inputCls(!!errors.confirmPassword)} pl-10 pr-11`} />
+                <button type="button" onClick={() => setShowConfirm((p) => !p)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-              {errors.confirmPassword && (
-                <p className="mt-1.5 text-xs font-medium text-red-500">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
+              <FieldError msg={errors.confirmPassword?.message} />
             </div>
           </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60"
-          >
+          <button type="submit" disabled={isSubmitting} className="flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60">
             <Lock className="h-4 w-4" />
             {isSubmitting ? "Updating…" : "Update Password"}
           </button>
         </form>
       </div>
 
-      {/* Notifications */}
-      {/* <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
-        <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-950/30">
-            <Bell className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
-              Notification Preferences
-            </h3>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
-              Control how we reach you
-            </p>
-          </div>
-        </div>
-
-        <div className="divide-y divide-gray-100 dark:divide-gray-800">
-          {[
-            {
-              label: "Email Notifications",
-              desc: "Booking confirmations, receipts and updates",
-              checked: emailNotifs,
-              onChange: setEmailNotifs,
-            },
-            {
-              label: "SMS Notifications",
-              desc: "Check-in reminders and important alerts",
-              checked: smsNotifs,
-              onChange: setSmsNotifs,
-            },
-            {
-              label: "Promotions & Offers",
-              desc: "Deals, discounts and seasonal offers",
-              checked: promoNotifs,
-              onChange: setPromoNotifs,
-            },
-          ].map((pref) => (
-            <div
-              key={pref.label}
-              className="flex items-center justify-between gap-4 px-6 py-4"
-            >
-              <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  {pref.label}
-                </p>
-                <p className="text-xs text-gray-400 dark:text-gray-500">{pref.desc}</p>
-              </div>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={pref.checked}
-                onClick={() => pref.onChange((v) => !v)}
-                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
-                  pref.checked ? "bg-primary-600" : "bg-gray-200 dark:bg-gray-700"
-                }`}
-              >
-                <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition-transform ${
-                    pref.checked ? "translate-x-5" : "translate-x-0"
-                  }`}
-                />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
-      {/* Danger zone */}
       <div className="overflow-hidden rounded-2xl border border-red-200 bg-white shadow-sm dark:border-red-900/40 dark:bg-gray-900">
         <div className="flex items-center gap-3 border-b border-red-100 bg-red-50 px-6 py-4 dark:border-red-900/30 dark:bg-red-950/20">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-100 dark:bg-red-950/40">
             <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />
           </div>
           <div>
-            <h3 className="font-semibold text-red-700 dark:text-red-400">
-              Danger Zone
-            </h3>
-            <p className="text-xs text-red-500/80 dark:text-red-500/60">
-              Irreversible account actions
-            </p>
+            <h3 className="font-semibold text-red-700 dark:text-red-400">Danger Zone</h3>
+            <p className="text-xs text-red-500/80 dark:text-red-500/60">Irreversible account actions</p>
           </div>
         </div>
         <div className="flex flex-col gap-3 p-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
-              Delete Account
-            </p>
-            <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-              Permanently delete your account and all booking data. This cannot
-              be undone.
-            </p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">Delete Account</p>
+            <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">Permanently delete your account and all data. This cannot be undone.</p>
           </div>
-          <button
-            type="button"
-            onClick={() =>
-              toast.error("Please contact support to delete your account.")
-            }
-            className="shrink-0 rounded-xl border border-red-300 px-5 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/30"
-          >
+          <button type="button" onClick={() => toast.error("Please contact support to delete your account.")} className="shrink-0 rounded-xl border border-red-300 px-5 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/30">
             Delete Account
           </button>
         </div>

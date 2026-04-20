@@ -16,7 +16,6 @@ async function fetchWithToken<T>(path: string, token: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-// Map API booking status to our local BookingStatus type
 function mapStatus(s: string): "upcoming" | "completed" | "cancelled" {
   if (s === "CONFIRMED" || s === "PENDING") return "upcoming";
   if (s === "COMPLETED") return "completed";
@@ -34,47 +33,16 @@ export function ProfileLoader() {
 
     async function load() {
       try {
-        const [meData, bookingsData] = await Promise.all([
-          fetchWithToken<{
-            id: string;
-            name: string;
-            phone: string;
-            email: string | null;
-            address: string | null;
-            avatar: string | null;
-            memberSince: string;
-          }>("/users/me", token!),
-          fetchWithToken<{
-            data: Array<{
-              id: string;
-              reference: string;
-              hotelId: string;
-              checkIn: string;
-              checkOut: string;
-              nights: number;
-              guests: number;
-              totalPrice: number;
-              advancePaid: number;
-              balanceDue: number;
-              status: string;
-              paymentMethod: string;
-              bookedOn: string;
-              room: {
-                id: string;
-                name: string;
-                images: string[];
-                price: number;
-                hotel: {
-                  id: string;
-                  name: string;
-                  slug: string;
-                  location: string;
-                  image: string;
-                };
-              };
-            }>;
-          }>("/users/me/bookings", token!),
-        ]);
+        const meData = await fetchWithToken<{
+          id: string;
+          name: string;
+          phone: string;
+          email: string | null;
+          address: string | null;
+          avatar: string | null;
+          memberSince: string;
+          role: "USER" | "ADMIN" | "HOTEL_OWNER" | "SUPER_ADMIN";
+        }>("/users/me", token!);
 
         setProfile({
           id: meData.id,
@@ -84,8 +52,42 @@ export function ProfileLoader() {
           address: meData.address ?? "",
           memberSince: meData.memberSince,
           avatar: meData.avatar ?? undefined,
+          role: meData.role,
         });
-        console.log({ bookingsData });
+
+        // Hotel owners don't have guest bookings
+        if (meData.role === "HOTEL_OWNER") return;
+
+        const bookingsData = await fetchWithToken<{
+          data: Array<{
+            id: string;
+            reference: string;
+            hotelId: string;
+            checkIn: string;
+            checkOut: string;
+            nights: number;
+            guests: number;
+            totalPrice: number;
+            advancePaid: number;
+            balanceDue: number;
+            status: string;
+            paymentMethod: string;
+            bookedOn: string;
+            room: {
+              id: string;
+              name: string;
+              images: string[];
+              price: number;
+              hotel: {
+                id: string;
+                name: string;
+                slug: string;
+                location: string;
+                image: string;
+              };
+            };
+          }>;
+        }>("/users/me/bookings", token!);
 
         setBookings(
           bookingsData?.data?.map((b) => ({
@@ -112,14 +114,13 @@ export function ProfileLoader() {
           })),
         );
       } catch (error) {
-        console.log({ error });
+        console.error(error);
         setFetchError(true);
       }
     }
 
     load();
   }, [token, user]);
-  console.log({ bookings });
 
   if (fetchError) {
     return (

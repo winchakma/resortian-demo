@@ -86,6 +86,7 @@ export interface UserProfile {
   address: string;
   memberSince: string;
   avatar?: string;
+  role: "USER" | "ADMIN" | "HOTEL_OWNER" | "SUPER_ADMIN";
 }
 
 export type BookingStatus = "upcoming" | "completed" | "cancelled";

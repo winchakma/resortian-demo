@@ -443,7 +443,7 @@ Response 200
 ---
 POST /hotels
 
-Admin only
+Admin or Hotel Owner (HOTEL_OWNER)
 Content-Type: multipart/form-data
 
 Fields
@@ -460,7 +460,126 @@ Fields
   image           file     (required) — JPEG/PNG/WebP, max 10 MB
                            Processed to WebP, served at /images/hotels/<name>.webp
 
-Response 201 — created hotel object
+Approval behaviour
+  SUPER_ADMIN → approvalStatus: "APPROVED" immediately, propertyCount incremented
+  HOTEL_OWNER → approvalStatus: "PENDING", hidden from public until approved by admin
+
+Response 201 — created hotel object (includes approvalStatus, vendorId)
+
+---
+GET /hotels/mine
+
+Hotel Owner only (HOTEL_OWNER)
+
+Returns all hotels created by the authenticated vendor, including rooms under each hotel.
+Useful for the vendor dashboard to display their portfolio.
+
+Query params
+
+┌───────┬────────┬─────────┐
+│ Param │  Type  │ Default │
+├───────┼────────┼─────────┤
+│ page  │ number │ 1       │
+├───────┼────────┼─────────┤
+│ limit │ number │ 20      │
+└───────┴────────┴─────────┘
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "name": "Sea Pearl Beach Resort",
+      "slug": "sea-pearl-beach-resort",
+      "location": "Cox's Bazar",
+      "image": "/images/hotels/1714000000000-abc123.webp",
+      "price": 5000,
+      "rating": 0,
+      "approvalStatus": "PENDING",
+      "rejectionReason": null,
+      "isActive": false,
+      "destination": { "id": "clx...", "name": "Cox's Bazar", "region": "Chittagong" },
+      "rooms": [
+        {
+          "id": "clx...",
+          "name": "Deluxe Sea View",
+          "price": 5000,
+          "capacity": 2,
+          "view": "Sea View",
+          "size": "38 m²",
+          "images": ["/images/rooms/1714000000000-abc123.webp"],
+          "badge": null,
+          "isActive": true,
+          "approvalStatus": "PENDING",
+          "rejectionReason": null,
+          "createdAt": "2026-04-12T10:00:00.000Z"
+        }
+      ],
+      "_count": { "rooms": 1, "reviews": 0 }
+    }
+  ],
+  "meta": { "total": 1, "page": 1, "limit": 20, "totalPages": 1 }
+}
+
+---
+GET /hotels/pending
+
+Admin only — returns hotels awaiting approval (approvalStatus = "PENDING"), oldest first
+
+Query params
+
+┌───────┬────────┬─────────┐
+│ Param │  Type  │ Default │
+├───────┼────────┼─────────┤
+│ page  │ number │ 1       │
+├───────┼────────┼─────────┤
+│ limit │ number │ 20      │
+└───────┴────────┴─────────┘
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "name": "Sea Pearl Beach Resort",
+      "slug": "sea-pearl-beach-resort",
+      "location": "Cox's Bazar",
+      "approvalStatus": "PENDING",
+      "vendorId": "clx...",
+      "createdAt": "2026-04-20T10:00:00.000Z",
+      "destination": { "id": "clx...", "name": "Cox's Bazar", "region": "Chittagong" },
+      ...
+    }
+  ],
+  "meta": { "total": 5, "page": 1, "limit": 20, "totalPages": 1 }
+}
+
+---
+POST /hotels/:id/approve
+
+Admin only — approves a pending hotel; increments destination.propertyCount
+
+No request body needed.
+
+Response 200 — updated hotel object with approvalStatus: "APPROVED"
+
+Error 403 — hotel is already approved
+Error 404 — hotel not found
+
+---
+POST /hotels/:id/reject
+
+Admin only — rejects a pending or previously rejected hotel
+
+Body
+{
+  "reason": "Images are missing, please resubmit with proper photos."
+}
+
+Response 200 — updated hotel object with approvalStatus: "REJECTED" and rejectionReason set
+
+Error 403 — cannot reject an already approved hotel
+Error 404 — hotel not found
 
 ---
 PATCH /hotels/:id
@@ -495,7 +614,8 @@ Destinations
 
 GET /destinations
 
-Public
+Public — only returns admin-created (vendorId = null) approved destinations.
+Vendor-created destinations are NOT included here; use GET /destinations/mine for those.
 
 Query params (all optional)
 
@@ -531,6 +651,8 @@ Response 200
       "highlights": ["Longest beach", "Himchari"],
       "propertyCount": 18,
       "isFeatured": false,
+      "vendorId": null,
+      "approvalStatus": "APPROVED",
       "createdAt": "2026-01-01T00:00:00.000Z",
       "updatedAt": "2026-04-01T00:00:00.000Z"
     }
@@ -546,9 +668,79 @@ Response 200
 ---
 GET /destinations/popular
 
-Public — returns destinations where isFeatured = true, ordered by propertyCount desc (max 6)
+Public — returns admin-created destinations where isFeatured = true, ordered by propertyCount desc (max 6)
 
 Response 200 — array of destination objects (same shape as items in GET /destinations data array)
+
+---
+GET /destinations/mine
+
+Hotel Owner only (HOTEL_OWNER)
+
+Returns all destinations created by the authenticated vendor regardless of approval status.
+Used in the vendor dashboard and also to populate the hotel creation form
+(front-end should filter to approvalStatus = "APPROVED" before showing in the dropdown).
+
+Query params
+
+┌───────┬────────┬─────────┐
+│ Param │  Type  │ Default │
+├───────┼────────┼─────────┤
+│ page  │ number │ 1       │
+├───────┼────────┼─────────┤
+│ limit │ number │ 20      │
+└───────┴────────┴─────────┘
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "name": "Cox's Bazar",
+      "region": "Chittagong",
+      "description": "...",
+      "image": "/images/destinations/1714000000000-abc123.webp",
+      "isFeatured": false,
+      "approvalStatus": "APPROVED",
+      "rejectionReason": null,
+      "vendorId": "clx...",
+      "_count": { "hotels": 2 },
+      "createdAt": "2026-04-12T10:00:00.000Z"
+    }
+  ],
+  "meta": { "total": 3, "page": 1, "limit": 20, "totalPages": 1 }
+}
+
+---
+GET /destinations/pending
+
+Admin only — returns destinations awaiting approval (approvalStatus = "PENDING"), oldest first
+
+Query params
+
+┌───────┬────────┬─────────┐
+│ Param │  Type  │ Default │
+├───────┼────────┼─────────┤
+│ page  │ number │ 1       │
+├───────┼────────┼─────────┤
+│ limit │ number │ 20      │
+└───────┴────────┴─────────┘
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "name": "Cox's Bazar",
+      "region": "Chittagong",
+      "approvalStatus": "PENDING",
+      "vendorId": "clx...",
+      "createdAt": "2026-04-20T10:00:00.000Z",
+      ...
+    }
+  ],
+  "meta": { "total": 2, "page": 1, "limit": 20, "totalPages": 1 }
+}
 
 ---
 GET /destinations/:id
@@ -582,25 +774,59 @@ Response 200
 ---
 POST /destinations
 
-Admin only
+Admin or Hotel Owner (HOTEL_OWNER)
 Content-Type: multipart/form-data
 
 Fields
   name            string   (required)
   region          string   (required)
   description     string   (required)
-  highlights      string   (required) — JSON array string: '["Tea gardens","Jaflong"]'
+  highlights      string   optional — JSON array string: '["Tea gardens","Jaflong"]'
                            or repeated fields: highlights=Tea+gardens&highlights=Jaflong
   isFeatured      boolean  optional — "true" or "false" (default: false)
   image           file     (required) — JPEG/PNG/WebP, max 10 MB
                            Processed to WebP, served at /images/destinations/<name>.webp
 
-Response 201 — created destination object
+Approval behaviour
+  SUPER_ADMIN → approvalStatus: "APPROVED" immediately, vendorId: null
+  HOTEL_OWNER → approvalStatus: "PENDING", vendorId set to caller's ID
+                Destination is hidden from public and hotel dropdowns until admin approves it.
+
+Name uniqueness is scoped per vendor — each vendor can have their own "Cox's Bazar" destination.
+
+Response 201 — created destination object (includes approvalStatus, vendorId)
+
+---
+POST /destinations/:id/approve
+
+Admin only — approves a pending vendor destination
+
+No request body needed.
+
+Response 200 — updated destination object with approvalStatus: "APPROVED"
+
+Error 403 — destination is already approved
+Error 404 — destination not found
+
+---
+POST /destinations/:id/reject
+
+Admin only — rejects a pending destination
+
+Body
+{
+  "reason": "Please provide a more detailed description."
+}
+
+Response 200 — updated destination object with approvalStatus: "REJECTED" and rejectionReason set
+
+Error 403 — cannot reject an already approved destination
+Error 404 — destination not found
 
 ---
 PATCH /destinations/:id
 
-Admin only
+Admin or Hotel Owner (own destinations only)
 Content-Type: multipart/form-data
 
 Fields (all optional)
@@ -611,15 +837,27 @@ Fields (all optional)
   isFeatured      boolean  "true" or "false"
   image           file     optional — replaces the existing image (old file is deleted from S3)
 
+Vendors can only update their own destinations (vendorId = caller's ID).
+Admins can update any destination.
+
 Response 200 — updated destination object
+
+Error 403 — vendor trying to edit another vendor's destination
+Error 404 — destination not found
 
 ---
 DELETE /destinations/:id
 
-Admin only — hard delete (removes from database, deletes image from S3)
+Admin or Hotel Owner (own destinations only)
+
+Vendors can only delete their own destinations.
+Hard delete — removes from database and deletes image from S3.
 
 Response 200
 { "message": "Destination deleted successfully" }
+
+Error 403 — vendor trying to delete another vendor's destination
+Error 404 — destination not found
 
 ---
 Rooms
@@ -639,9 +877,38 @@ Response 200
 Use this to disable dates in the booking calendar. A date in this array means the room is fully booked on that day.
 
 ---
+GET /rooms/pending
+
+Admin only — returns rooms awaiting approval (approvalStatus = "PENDING"), oldest first
+
+Query params
+
+┌───────┬────────┬─────────┐
+│ Param │  Type  │ Default │
+├───────┼────────┼─────────┤
+│ page  │ number │ 1       │
+├───────┼────────┼─────────┤
+│ limit │ number │ 20      │
+└───────┴────────┴─────────┘
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "name": "Deluxe Sea View",
+      "approvalStatus": "PENDING",
+      "hotel": { "id": "clx...", "name": "Sea Pearl Hotel", "slug": "sea-pearl-hotel" },
+      ...
+    }
+  ],
+  "meta": { "total": 3, "page": 1, "limit": 20, "totalPages": 1 }
+}
+
+---
 POST /rooms
 
-Admin only
+Admin or Hotel Owner (HOTEL_OWNER)
 Content-Type: multipart/form-data
 
 Fields
@@ -659,6 +926,10 @@ Fields
   badge           string   optional e.g. "Best Value"
   commissionRate  number   optional — platform commission percentage (0–100)
                            ⚠ Only accepted when caller is SUPER_ADMIN; ignored otherwise.
+
+Approval behaviour
+  SUPER_ADMIN → approvalStatus: "APPROVED" immediately
+  HOTEL_OWNER → approvalStatus: "PENDING", hidden from public until approved by admin
 
 Response 201 — created room object
 {
@@ -678,8 +949,36 @@ Response 201 — created room object
   "badge": "Best Value",
   "commissionRate": 10,
   "isActive": true,
+  "approvalStatus": "PENDING",
   "createdAt": "2026-04-12T10:00:00.000Z"
 }
+
+---
+POST /rooms/:id/approve
+
+Admin only — approves a pending room
+
+No request body needed.
+
+Response 200 — updated room object with approvalStatus: "APPROVED"
+
+Error 403 — room is already approved
+Error 404 — room not found
+
+---
+POST /rooms/:id/reject
+
+Admin only — rejects a pending or previously rejected room
+
+Body
+{
+  "reason": "Room images are unclear, please resubmit."
+}
+
+Response 200 — updated room object with approvalStatus: "REJECTED" and rejectionReason set
+
+Error 403 — cannot reject an already approved room
+Error 404 — room not found
 
 ---
 PATCH /rooms/:id
@@ -1076,14 +1375,16 @@ Common Error Shapes
 ---
 Enum Reference
 
-┌───────────────┬────────────────────────────────────────────────┐
-│     Enum      │                     Values                     │
-├───────────────┼────────────────────────────────────────────────┤
-│ Role          │ USER  ADMIN  HOTEL_OWNER  SUPER_ADMIN          │
-├───────────────┼────────────────────────────────────────────────┤
-│ BookingStatus │ PENDING  CONFIRMED  COMPLETED  CANCELLED       │
-├───────────────┼────────────────────────────────────────────────┤
-│ PaymentMethod │ STRIPE  UDDOKTAPAY                             │
-├───────────────┼────────────────────────────────────────────────┤
-│ PaymentStatus │ PENDING  PAID  FAILED  REFUNDED                │
-└───────────────┴────────────────────────────────────────────────┘
+┌────────────────┬────────────────────────────────────────────────┐
+│      Enum      │                     Values                     │
+├────────────────┼────────────────────────────────────────────────┤
+│ Role           │ USER  ADMIN  HOTEL_OWNER  SUPER_ADMIN          │
+├────────────────┼────────────────────────────────────────────────┤
+│ BookingStatus  │ PENDING  CONFIRMED  COMPLETED  CANCELLED       │
+├────────────────┼────────────────────────────────────────────────┤
+│ PaymentMethod  │ STRIPE  UDDOKTAPAY                             │
+├────────────────┼────────────────────────────────────────────────┤
+│ PaymentStatus  │ PENDING  PAID  FAILED  REFUNDED                │
+├────────────────┼────────────────────────────────────────────────┤
+│ ApprovalStatus │ PENDING  APPROVED  REJECTED                    │
+└────────────────┴────────────────────────────────────────────────┘
