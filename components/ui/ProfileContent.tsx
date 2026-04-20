@@ -37,7 +37,6 @@ import {
   Sparkles,
   RefreshCw,
   AlertCircle,
-  DollarSign,
   Users,
   Maximize2,
   Hash,
@@ -46,8 +45,6 @@ import {
   FileText,
   Pencil,
   Loader2,
-  ToggleLeft,
-  ToggleRight,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -67,10 +64,12 @@ type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
 interface VendorRoom {
   id: string;
   name: string;
+  description: string;
   price: number;
   capacity: number;
   view: string;
   size: string;
+  amenities: string[];
   images: string[];
   badge: string | null;
   isActive: boolean;
@@ -390,23 +389,47 @@ export function ProfileContent({ user, bookings }: ProfileContentProps) {
     .filter((b) => b.status === "completed")
     .reduce((s, b) => s + b.nights, 0);
 
-  const NAV: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] =
-    isVendor
-      ? [
-          { id: "profile", label: "My Profile", icon: <User className="h-4 w-4" /> },
-          { id: "hotels", label: "My Properties", icon: <Building2 className="h-4 w-4" /> },
-          { id: "settings", label: "Settings", icon: <Settings className="h-4 w-4" /> },
-        ]
-      : [
-          { id: "profile", label: "My Profile", icon: <User className="h-4 w-4" /> },
-          {
-            id: "bookings",
-            label: "My Bookings",
-            icon: <CalendarDays className="h-4 w-4" />,
-            badge: upcomingCount || undefined,
-          },
-          { id: "settings", label: "Settings", icon: <Settings className="h-4 w-4" /> },
-        ];
+  const NAV: {
+    id: Tab;
+    label: string;
+    icon: React.ReactNode;
+    badge?: number;
+  }[] = isVendor
+    ? [
+        {
+          id: "profile",
+          label: "My Profile",
+          icon: <User className="h-4 w-4" />,
+        },
+        {
+          id: "hotels",
+          label: "My Properties",
+          icon: <Building2 className="h-4 w-4" />,
+        },
+        {
+          id: "settings",
+          label: "Settings",
+          icon: <Settings className="h-4 w-4" />,
+        },
+      ]
+    : [
+        {
+          id: "profile",
+          label: "My Profile",
+          icon: <User className="h-4 w-4" />,
+        },
+        {
+          id: "bookings",
+          label: "My Bookings",
+          icon: <CalendarDays className="h-4 w-4" />,
+          badge: upcomingCount || undefined,
+        },
+        {
+          id: "settings",
+          label: "Settings",
+          icon: <Settings className="h-4 w-4" />,
+        },
+      ];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -489,7 +512,11 @@ export function ProfileContent({ user, bookings }: ProfileContentProps) {
                     onClick={() => setActiveTab(item.id)}
                     className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors ${active ? activeClass : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"}`}
                   >
-                    <span className={active ? activeIcon : "text-gray-400 dark:text-gray-500"}>
+                    <span
+                      className={
+                        active ? activeIcon : "text-gray-400 dark:text-gray-500"
+                      }
+                    >
                       {item.icon}
                     </span>
                     <span className="flex-1">{item.label}</span>
@@ -612,25 +639,33 @@ function ProfileSection({
             {
               label: "Total Bookings",
               value: bookings.length,
-              icon: <CalendarDays className="h-5 w-5 text-primary-600 dark:text-primary-400" />,
+              icon: (
+                <CalendarDays className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+              ),
               bg: "bg-primary-50 dark:bg-primary-950/30",
             },
             {
               label: "Trips Completed",
               value: completedCount,
-              icon: <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />,
+              icon: (
+                <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              ),
               bg: "bg-emerald-50 dark:bg-emerald-950/30",
             },
             {
               label: "Total Nights",
               value: totalNights,
-              icon: <Moon className="h-5 w-5 text-violet-600 dark:text-violet-400" />,
+              icon: (
+                <Moon className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+              ),
               bg: "bg-violet-50 dark:bg-violet-950/30",
             },
             {
               label: "Advance Paid",
               value: `৳${totalSpend.toLocaleString()}`,
-              icon: <CreditCard className="h-5 w-5 text-amber-600 dark:text-amber-400" />,
+              icon: (
+                <CreditCard className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              ),
               bg: "bg-amber-50 dark:bg-amber-950/30",
             },
           ].map((stat) => (
@@ -638,12 +673,18 @@ function ProfileSection({
               key={stat.label}
               className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900"
             >
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}>
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}
+              >
                 {stat.icon}
               </div>
               <div>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  {stat.value}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {stat.label}
+                </p>
               </div>
             </div>
           ))}
@@ -653,8 +694,12 @@ function ProfileSection({
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 dark:border-gray-800">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">Personal Information</h3>
-            <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Your account details</p>
+            <h3 className="font-semibold text-gray-900 dark:text-white">
+              Personal Information
+            </h3>
+            <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+              Your account details
+            </p>
           </div>
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/30">
             <User className="h-4 w-4 text-primary-600 dark:text-primary-400" />
@@ -662,19 +707,43 @@ function ProfileSection({
         </div>
         <div className="divide-y divide-gray-100 dark:divide-gray-800">
           {[
-            { icon: <User className="h-4 w-4 text-gray-400" />, label: "Full Name", value: user.name },
-            { icon: <Mail className="h-4 w-4 text-gray-400" />, label: "Email Address", value: user.email || "—" },
-            { icon: <Phone className="h-4 w-4 text-gray-400" />, label: "Phone Number", value: user.phone },
-            { icon: <MapPin className="h-4 w-4 text-gray-400" />, label: "Address", value: user.address || "—" },
-            { icon: <Star className="h-4 w-4 text-gray-400" />, label: "Member Since", value: fmtDate(user.memberSince) },
+            {
+              icon: <User className="h-4 w-4 text-gray-400" />,
+              label: "Full Name",
+              value: user.name,
+            },
+            {
+              icon: <Mail className="h-4 w-4 text-gray-400" />,
+              label: "Email Address",
+              value: user.email || "—",
+            },
+            {
+              icon: <Phone className="h-4 w-4 text-gray-400" />,
+              label: "Phone Number",
+              value: user.phone,
+            },
+            {
+              icon: <MapPin className="h-4 w-4 text-gray-400" />,
+              label: "Address",
+              value: user.address || "—",
+            },
+            {
+              icon: <Star className="h-4 w-4 text-gray-400" />,
+              label: "Member Since",
+              value: fmtDate(user.memberSince),
+            },
           ].map((row) => (
             <div key={row.label} className="flex items-center gap-4 px-6 py-4">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
                 {row.icon}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-xs text-gray-400 dark:text-gray-500">{row.label}</p>
-                <p className="mt-0.5 truncate text-sm font-medium text-gray-900 dark:text-white">{row.value}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">
+                  {row.label}
+                </p>
+                <p className="mt-0.5 truncate text-sm font-medium text-gray-900 dark:text-white">
+                  {row.value}
+                </p>
               </div>
             </div>
           ))}
@@ -693,8 +762,12 @@ function ProfileSection({
                   Resortian Vendor
                 </span>
               </div>
-              <h3 className="mt-2 text-2xl font-bold text-white">{user.name}</h3>
-              <p className="mt-1 text-sm text-violet-100">Partner since {fmtDate(user.memberSince)}</p>
+              <h3 className="mt-2 text-2xl font-bold text-white">
+                {user.name}
+              </h3>
+              <p className="mt-1 text-sm text-violet-100">
+                Partner since {fmtDate(user.memberSince)}
+              </p>
             </div>
             <div className="flex flex-col items-end">
               <Shield className="h-8 w-8 text-violet-300" />
@@ -714,8 +787,12 @@ function ProfileSection({
                   Resortian Member
                 </span>
               </div>
-              <h3 className="mt-2 text-2xl font-bold text-white">{user.name}</h3>
-              <p className="mt-1 text-sm text-primary-100">Member since {fmtDate(user.memberSince)}</p>
+              <h3 className="mt-2 text-2xl font-bold text-white">
+                {user.name}
+              </h3>
+              <p className="mt-1 text-sm text-primary-100">
+                Member since {fmtDate(user.memberSince)}
+              </p>
             </div>
             <div className="text-right">
               <p className="text-3xl font-bold text-white">{bookings.length}</p>
@@ -752,9 +829,21 @@ function BookingsSection({ bookings }: { bookings: Booking[] }) {
 
   const statusTabs: { id: StatusFilter; label: string; count: number }[] = [
     { id: "all", label: "All", count: bookings.length },
-    { id: "upcoming", label: "Upcoming", count: bookings.filter((b) => b.status === "upcoming").length },
-    { id: "completed", label: "Completed", count: bookings.filter((b) => b.status === "completed").length },
-    { id: "cancelled", label: "Cancelled", count: bookings.filter((b) => b.status === "cancelled").length },
+    {
+      id: "upcoming",
+      label: "Upcoming",
+      count: bookings.filter((b) => b.status === "upcoming").length,
+    },
+    {
+      id: "completed",
+      label: "Completed",
+      count: bookings.filter((b) => b.status === "completed").length,
+    },
+    {
+      id: "cancelled",
+      label: "Cancelled",
+      count: bookings.filter((b) => b.status === "cancelled").length,
+    },
   ];
 
   return (
@@ -762,9 +851,12 @@ function BookingsSection({ bookings }: { bookings: Booking[] }) {
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-5 py-4 dark:border-gray-800">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">My Bookings</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">
+              My Bookings
+            </h3>
             <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-              {bookings.length} booking{bookings.length !== 1 ? "s" : ""} in total
+              {bookings.length} booking{bookings.length !== 1 ? "s" : ""} in
+              total
             </p>
           </div>
           <div className="relative w-full sm:w-64">
@@ -822,9 +914,13 @@ function BookingsSection({ bookings }: { bookings: Booking[] }) {
             <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
               <CalendarDays className="h-7 w-7 text-gray-400" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">No bookings found</p>
+            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              No bookings found
+            </p>
             <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-              {query ? "Try a different search term." : "You have no bookings in this category yet."}
+              {query
+                ? "Try a different search term."
+                : "You have no bookings in this category yet."}
             </p>
           </div>
         ) : (
@@ -847,7 +943,14 @@ function BookingCard({ booking }: { booking: Booking }) {
     <div className="px-5 py-4">
       <div className="flex gap-4">
         <div className="relative hidden h-24 w-32 shrink-0 overflow-hidden rounded-xl sm:block">
-          <Image src={booking.hotelImage} alt={booking.hotelName} fill unoptimized className="object-cover" sizes="128px" />
+          <Image
+            src={booking.hotelImage}
+            alt={booking.hotelName}
+            fill
+            unoptimized
+            className="object-cover"
+            sizes="128px"
+          />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
@@ -863,15 +966,26 @@ function BookingCard({ booking }: { booking: Booking }) {
                 {booking.hotelLocation}
               </div>
             </div>
-            <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${cfg.pill}`}>
+            <span
+              className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${cfg.pill}`}
+            >
               {cfg.icon}
               {cfg.label}
             </span>
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
-            <span className="flex items-center gap-1"><Building2 className="h-3.5 w-3.5" />{booking.roomName}</span>
-            <span className="flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5" />{fmtDate(booking.checkIn)} → {fmtDate(booking.checkOut)}</span>
-            <span className="flex items-center gap-1"><Moon className="h-3.5 w-3.5" />{booking.nights} night{booking.nights !== 1 ? "s" : ""}</span>
+            <span className="flex items-center gap-1">
+              <Building2 className="h-3.5 w-3.5" />
+              {booking.roomName}
+            </span>
+            <span className="flex items-center gap-1">
+              <CalendarDays className="h-3.5 w-3.5" />
+              {fmtDate(booking.checkIn)} → {fmtDate(booking.checkOut)}
+            </span>
+            <span className="flex items-center gap-1">
+              <Moon className="h-3.5 w-3.5" />
+              {booking.nights} night{booking.nights !== 1 ? "s" : ""}
+            </span>
           </div>
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap gap-2">
@@ -879,11 +993,19 @@ function BookingCard({ booking }: { booking: Booking }) {
                 {booking.reference}
               </span>
               <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-                {booking.paymentMethod === "stripe" ? <CreditCard className="h-3 w-3" /> : <Smartphone className="h-3 w-3" />}
+                {booking.paymentMethod === "stripe" ? (
+                  <CreditCard className="h-3 w-3" />
+                ) : (
+                  <Smartphone className="h-3 w-3" />
+                )}
                 {booking.paymentMethod === "stripe" ? "Card" : "Mobile Banking"}
               </span>
             </div>
-            <button type="button" onClick={() => setExpanded((p) => !p)} className="text-xs font-medium text-primary-600 hover:underline dark:text-primary-400">
+            <button
+              type="button"
+              onClick={() => setExpanded((p) => !p)}
+              className="text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
+            >
               {expanded ? "Hide details" : "View details"}
             </button>
           </div>
@@ -891,25 +1013,60 @@ function BookingCard({ booking }: { booking: Booking }) {
             <div className="mt-3 overflow-hidden rounded-xl border border-gray-100 dark:border-gray-800">
               <div className="grid grid-cols-3 divide-x divide-gray-100 dark:divide-gray-800">
                 {[
-                  { label: "Total", value: `৳${booking.totalPrice.toLocaleString()}`, sub: "Booking value" },
-                  { label: "Advance Paid", value: `৳${booking.advancePaid.toLocaleString()}`, sub: "20% online", highlight: true },
                   {
-                    label: booking.status === "completed" ? "Paid at Hotel" : booking.status === "cancelled" ? "Refunded" : "Due at Hotel",
+                    label: "Total",
+                    value: `৳${booking.totalPrice.toLocaleString()}`,
+                    sub: "Booking value",
+                  },
+                  {
+                    label: "Advance Paid",
+                    value: `৳${booking.advancePaid.toLocaleString()}`,
+                    sub: "20% online",
+                    highlight: true,
+                  },
+                  {
+                    label:
+                      booking.status === "completed"
+                        ? "Paid at Hotel"
+                        : booking.status === "cancelled"
+                          ? "Refunded"
+                          : "Due at Hotel",
                     value: `৳${booking.balanceDue.toLocaleString()}`,
-                    sub: booking.status === "completed" ? "At check-in" : booking.status === "cancelled" ? "7–10 days" : "On arrival",
+                    sub:
+                      booking.status === "completed"
+                        ? "At check-in"
+                        : booking.status === "cancelled"
+                          ? "7–10 days"
+                          : "On arrival",
                   },
                 ].map((col) => (
-                  <div key={col.label} className={`px-4 py-3 ${col.highlight ? "bg-primary-50/60 dark:bg-primary-950/20" : "bg-gray-50/60 dark:bg-gray-800/30"}`}>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500">{col.label}</p>
-                    <p className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-primary-700 dark:text-primary-400" : "text-gray-800 dark:text-gray-200"}`}>{col.value}</p>
-                    <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">{col.sub}</p>
+                  <div
+                    key={col.label}
+                    className={`px-4 py-3 ${col.highlight ? "bg-primary-50/60 dark:bg-primary-950/20" : "bg-gray-50/60 dark:bg-gray-800/30"}`}
+                  >
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                      {col.label}
+                    </p>
+                    <p
+                      className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-primary-700 dark:text-primary-400" : "text-gray-800 dark:text-gray-200"}`}
+                    >
+                      {col.value}
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                      {col.sub}
+                    </p>
                   </div>
                 ))}
               </div>
               <div className="flex items-center justify-between border-t border-gray-100 px-4 py-2 dark:border-gray-800">
-                <p className="text-xs text-gray-400 dark:text-gray-500">Booked on {fmtDate(booking.bookedOn)}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">
+                  Booked on {fmtDate(booking.bookedOn)}
+                </p>
                 {booking.status === "upcoming" && (
-                  <Link href={`/hotels/${booking.hotelSlug}`} className="flex items-center gap-1 text-xs font-medium text-primary-600 hover:underline dark:text-primary-400">
+                  <Link
+                    href={`/hotels/${booking.hotelSlug}`}
+                    className="flex items-center gap-1 text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
+                  >
                     View Hotel <ChevronRight className="h-3 w-3" />
                   </Link>
                 )}
@@ -946,8 +1103,16 @@ function VendorDashboard() {
       <div className="flex gap-1 rounded-2xl border border-gray-200 bg-white p-1 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         {(
           [
-            { id: "hotels" as VendorView, label: "Hotels & Rooms", icon: <Building2 className="h-4 w-4" /> },
-            { id: "destinations" as VendorView, label: "Destinations", icon: <Globe className="h-4 w-4" /> },
+            {
+              id: "hotels" as VendorView,
+              label: "Hotels & Rooms",
+              icon: <Building2 className="h-4 w-4" />,
+            },
+            {
+              id: "destinations" as VendorView,
+              label: "Destinations",
+              icon: <Globe className="h-4 w-4" />,
+            },
           ] as const
         ).map((tab) => {
           const active = view === tab.id;
@@ -1049,8 +1214,12 @@ function VendorHotelsList() {
     loadHotels();
   }, [loadHotels]);
 
-  const totalApproved = hotels.filter((h) => h.approvalStatus === "APPROVED").length;
-  const totalPending = hotels.filter((h) => h.approvalStatus === "PENDING").length;
+  const totalApproved = hotels.filter(
+    (h) => h.approvalStatus === "APPROVED",
+  ).length;
+  const totalPending = hotels.filter(
+    (h) => h.approvalStatus === "PENDING",
+  ).length;
   const totalRooms = hotels.reduce((s, h) => s + h._count.rooms, 0);
 
   return (
@@ -1059,16 +1228,55 @@ function VendorHotelsList() {
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {[
-            { label: "Total Hotels", value: hotels.length, icon: <Building2 className="h-5 w-5 text-violet-600 dark:text-violet-400" />, bg: "bg-violet-50 dark:bg-violet-950/30" },
-            { label: "Approved", value: totalApproved, icon: <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />, bg: "bg-emerald-50 dark:bg-emerald-950/30" },
-            { label: "Under Review", value: totalPending, icon: <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />, bg: "bg-amber-50 dark:bg-amber-950/30" },
-            { label: "Total Rooms", value: totalRooms, icon: <BedDouble className="h-5 w-5 text-primary-600 dark:text-primary-400" />, bg: "bg-primary-50 dark:bg-primary-950/30" },
+            {
+              label: "Total Hotels",
+              value: hotels.length,
+              icon: (
+                <Building2 className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+              ),
+              bg: "bg-violet-50 dark:bg-violet-950/30",
+            },
+            {
+              label: "Approved",
+              value: totalApproved,
+              icon: (
+                <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              ),
+              bg: "bg-emerald-50 dark:bg-emerald-950/30",
+            },
+            {
+              label: "Under Review",
+              value: totalPending,
+              icon: (
+                <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              ),
+              bg: "bg-amber-50 dark:bg-amber-950/30",
+            },
+            {
+              label: "Total Rooms",
+              value: totalRooms,
+              icon: (
+                <BedDouble className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+              ),
+              bg: "bg-primary-50 dark:bg-primary-950/30",
+            },
           ].map((s) => (
-            <div key={s.label} className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}>{s.icon}</div>
+            <div
+              key={s.label}
+              className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900"
+            >
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}
+              >
+                {s.icon}
+              </div>
               <div>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">{s.value}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{s.label}</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  {s.value}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {s.label}
+                </p>
               </div>
             </div>
           ))}
@@ -1077,9 +1285,13 @@ function VendorHotelsList() {
         {/* Header row */}
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">My Hotels</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">
+              My Hotels
+            </h3>
             <p className="text-xs text-gray-400 dark:text-gray-500">
-              {loading ? "Loading…" : `${hotels.length} hotel${hotels.length !== 1 ? "s" : ""} in your portfolio`}
+              {loading
+                ? "Loading…"
+                : `${hotels.length} hotel${hotels.length !== 1 ? "s" : ""} in your portfolio`}
             </p>
           </div>
           <div className="flex gap-2">
@@ -1090,16 +1302,20 @@ function VendorHotelsList() {
               className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
               title="Refresh"
             >
-              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+              <RefreshCw
+                className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
+              />
             </button>
-            <button
-              type="button"
-              onClick={() => setModal("create-hotel")}
-              className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
-            >
-              <Plus className="h-4 w-4" />
-              New Hotel
-            </button>
+            {hotels.length === 0 && (
+              <button
+                type="button"
+                onClick={() => setModal("create-hotel")}
+                className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
+              >
+                <Plus className="h-4 w-4" />
+                New Hotel
+              </button>
+            )}
           </div>
         </div>
 
@@ -1108,7 +1324,8 @@ function VendorHotelsList() {
           <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/30 dark:bg-amber-950/20">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
             <p className="text-xs text-amber-700 dark:text-amber-400">
-              {totalPending} hotel{totalPending !== 1 ? "s are" : " is"} under review. Hotels and rooms go live once approved by our team.
+              {totalPending} hotel{totalPending !== 1 ? "s are" : " is"} under
+              review. Hotels and rooms go live once approved by our team.
             </p>
           </div>
         )}
@@ -1123,8 +1340,12 @@ function VendorHotelsList() {
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-50 dark:bg-violet-950/30">
               <Building2 className="h-8 w-8 text-violet-400" />
             </div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">No hotels yet</p>
-            <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">Create your first hotel to get started</p>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              No hotels yet
+            </p>
+            <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
+              Create your first hotel to get started
+            </p>
             <button
               type="button"
               onClick={() => setModal("create-hotel")}
@@ -1141,12 +1362,34 @@ function VendorHotelsList() {
                 key={hotel.id}
                 hotel={hotel}
                 expanded={expandedId === hotel.id}
-                onToggle={() => setExpandedId((p) => (p === hotel.id ? null : hotel.id))}
-                onAddRoom={() => setModal({ type: "add-room", hotelId: hotel.id, hotelName: hotel.name })}
+                onToggle={() =>
+                  setExpandedId((p) => (p === hotel.id ? null : hotel.id))
+                }
+                onAddRoom={() =>
+                  setModal({
+                    type: "add-room",
+                    hotelId: hotel.id,
+                    hotelName: hotel.name,
+                  })
+                }
                 onEdit={() => setModal({ type: "edit-hotel", hotel })}
-                onDelete={() => setConfirm({ type: "delete-hotel", id: hotel.id, name: hotel.name })}
-                onEditRoom={(room) => setModal({ type: "edit-room", room, hotelName: hotel.name })}
-                onDeleteRoom={(room) => setConfirm({ type: "delete-room", id: room.id, name: room.name })}
+                onDelete={() =>
+                  setConfirm({
+                    type: "delete-hotel",
+                    id: hotel.id,
+                    name: hotel.name,
+                  })
+                }
+                onEditRoom={(room) => {
+                  setModal({ type: "edit-room", room, hotelName: hotel.name });
+                }}
+                onDeleteRoom={(room) =>
+                  setConfirm({
+                    type: "delete-room",
+                    id: room.id,
+                    name: room.name,
+                  })
+                }
               />
             ))}
           </div>
@@ -1161,13 +1404,19 @@ function VendorHotelsList() {
               setModal(null);
               loadHotels();
               toast.success("Hotel submitted for approval!");
-              setTimeout(() => setModal({ type: "add-room", hotelId, hotelName }), 400);
+              setTimeout(
+                () => setModal({ type: "add-room", hotelId, hotelName }),
+                400,
+              );
             }}
           />
         </FormModal>
       )}
       {modal && typeof modal === "object" && modal.type === "add-room" && (
-        <FormModal title={`Add Room — ${modal.hotelName}`} onClose={() => setModal(null)}>
+        <FormModal
+          title={`Add Room — ${modal.hotelName}`}
+          onClose={() => setModal(null)}
+        >
           <CreateRoomForm
             hotelId={modal.hotelId}
             hotelName={modal.hotelName}
@@ -1179,7 +1428,10 @@ function VendorHotelsList() {
         </FormModal>
       )}
       {modal && typeof modal === "object" && modal.type === "edit-hotel" && (
-        <FormModal title={`Edit Hotel — ${modal.hotel.name}`} onClose={() => setModal(null)}>
+        <FormModal
+          title={`Edit Hotel — ${modal.hotel.name}`}
+          onClose={() => setModal(null)}
+        >
           <EditHotelForm
             hotel={modal.hotel}
             onUpdated={() => {
@@ -1191,7 +1443,10 @@ function VendorHotelsList() {
         </FormModal>
       )}
       {modal && typeof modal === "object" && modal.type === "edit-room" && (
-        <FormModal title={`Edit Room — ${modal.room.name}`} onClose={() => setModal(null)}>
+        <FormModal
+          title={`Edit Room — ${modal.room.name}`}
+          onClose={() => setModal(null)}
+        >
           <EditRoomForm
             room={modal.room}
             hotelName={modal.hotelName}
@@ -1205,7 +1460,9 @@ function VendorHotelsList() {
       )}
       {confirm && (
         <ConfirmModal
-          title={confirm.type === "delete-hotel" ? "Delete Hotel" : "Delete Room"}
+          title={
+            confirm.type === "delete-hotel" ? "Delete Hotel" : "Delete Room"
+          }
           message={
             confirm.type === "delete-hotel"
               ? `Are you sure you want to delete "${confirm.name}"? This will permanently remove all its rooms and data.`
@@ -1252,8 +1509,12 @@ function VendorDestinationsList() {
     loadDestinations();
   }, [loadDestinations]);
 
-  const totalApproved = destinations.filter((d) => d.approvalStatus === "APPROVED").length;
-  const totalPending = destinations.filter((d) => d.approvalStatus === "PENDING").length;
+  const totalApproved = destinations.filter(
+    (d) => d.approvalStatus === "APPROVED",
+  ).length;
+  const totalPending = destinations.filter(
+    (d) => d.approvalStatus === "PENDING",
+  ).length;
   const totalHotels = destinations.reduce((s, d) => s + d._count.hotels, 0);
 
   return (
@@ -1262,15 +1523,47 @@ function VendorDestinationsList() {
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           {[
-            { label: "Total Destinations", value: destinations.length, icon: <Globe className="h-5 w-5 text-violet-600 dark:text-violet-400" />, bg: "bg-violet-50 dark:bg-violet-950/30" },
-            { label: "Approved", value: totalApproved, icon: <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />, bg: "bg-emerald-50 dark:bg-emerald-950/30" },
-            { label: "Hotels Listed", value: totalHotels, icon: <Building2 className="h-5 w-5 text-primary-600 dark:text-primary-400" />, bg: "bg-primary-50 dark:bg-primary-950/30" },
+            {
+              label: "Total Destinations",
+              value: destinations.length,
+              icon: (
+                <Globe className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+              ),
+              bg: "bg-violet-50 dark:bg-violet-950/30",
+            },
+            {
+              label: "Approved",
+              value: totalApproved,
+              icon: (
+                <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              ),
+              bg: "bg-emerald-50 dark:bg-emerald-950/30",
+            },
+            {
+              label: "Hotels Listed",
+              value: totalHotels,
+              icon: (
+                <Building2 className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+              ),
+              bg: "bg-primary-50 dark:bg-primary-950/30",
+            },
           ].map((s) => (
-            <div key={s.label} className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}>{s.icon}</div>
+            <div
+              key={s.label}
+              className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900"
+            >
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}
+              >
+                {s.icon}
+              </div>
               <div>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">{s.value}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{s.label}</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  {s.value}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {s.label}
+                </p>
               </div>
             </div>
           ))}
@@ -1279,9 +1572,13 @@ function VendorDestinationsList() {
         {/* Header row */}
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">My Destinations</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">
+              My Destinations
+            </h3>
             <p className="text-xs text-gray-400 dark:text-gray-500">
-              {loading ? "Loading…" : `${destinations.length} destination${destinations.length !== 1 ? "s" : ""}`}
+              {loading
+                ? "Loading…"
+                : `${destinations.length} destination${destinations.length !== 1 ? "s" : ""}`}
             </p>
           </div>
           <div className="flex gap-2">
@@ -1292,7 +1589,9 @@ function VendorDestinationsList() {
               className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
               title="Refresh"
             >
-              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+              <RefreshCw
+                className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
+              />
             </button>
             <button
               type="button"
@@ -1310,7 +1609,9 @@ function VendorDestinationsList() {
           <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/30 dark:bg-amber-950/20">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
             <p className="text-xs text-amber-700 dark:text-amber-400">
-              {totalPending} destination{totalPending !== 1 ? "s are" : " is"} awaiting review. Once approved, they&apos;ll appear in your hotel creation form.
+              {totalPending} destination{totalPending !== 1 ? "s are" : " is"}{" "}
+              awaiting review. Once approved, they&apos;ll appear in your hotel
+              creation form.
             </p>
           </div>
         )}
@@ -1319,7 +1620,8 @@ function VendorDestinationsList() {
         <div className="flex items-start gap-3 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 dark:border-blue-900/30 dark:bg-blue-950/20">
           <Globe className="mt-0.5 h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
           <p className="text-xs text-blue-700 dark:text-blue-400">
-            Approved destinations will appear in the hotel creation form when you add a new hotel.
+            Approved destinations will appear in the hotel creation form when
+            you add a new hotel.
           </p>
         </div>
 
@@ -1333,8 +1635,12 @@ function VendorDestinationsList() {
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-50 dark:bg-violet-950/30">
               <Globe className="h-8 w-8 text-violet-400" />
             </div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">No destinations yet</p>
-            <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">Add a destination to group your hotels by location</p>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              No destinations yet
+            </p>
+            <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
+              Add a destination to group your hotels by location
+            </p>
             <button
               type="button"
               onClick={() => setShowCreateModal(true)}
@@ -1354,7 +1660,10 @@ function VendorDestinationsList() {
       </div>
 
       {showCreateModal && (
-        <FormModal title="Create New Destination" onClose={() => setShowCreateModal(false)}>
+        <FormModal
+          title="Create New Destination"
+          onClose={() => setShowCreateModal(false)}
+        >
           <CreateDestinationForm
             onCreated={() => {
               setShowCreateModal(false);
@@ -1396,7 +1705,9 @@ function DestinationCard({ destination }: { destination: VendorDestination }) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
-              <h4 className="font-semibold text-gray-900 dark:text-white">{destination.name}</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-white">
+                {destination.name}
+              </h4>
               <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
                 <MapPin className="h-3 w-3 shrink-0" />
                 {destination.region}
@@ -1408,7 +1719,8 @@ function DestinationCard({ destination }: { destination: VendorDestination }) {
           <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
             <span className="flex items-center gap-1">
               <Building2 className="h-3.5 w-3.5" />
-              {destination._count.hotels} hotel{destination._count.hotels !== 1 ? "s" : ""}
+              {destination._count.hotels} hotel
+              {destination._count.hotels !== 1 ? "s" : ""}
             </span>
             <span className="flex items-center gap-1">
               <FileText className="h-3.5 w-3.5" />
@@ -1416,12 +1728,15 @@ function DestinationCard({ destination }: { destination: VendorDestination }) {
             </span>
           </div>
 
-          {destination.approvalStatus === "REJECTED" && destination.rejectionReason && (
-            <div className="mt-2.5 flex items-start gap-2 rounded-xl border border-red-100 bg-red-50 px-3 py-2 dark:border-red-900/30 dark:bg-red-950/20">
-              <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
-              <p className="text-xs text-red-600 dark:text-red-400">{destination.rejectionReason}</p>
-            </div>
-          )}
+          {destination.approvalStatus === "REJECTED" &&
+            destination.rejectionReason && (
+              <div className="mt-2.5 flex items-start gap-2 rounded-xl border border-red-100 bg-red-50 px-3 py-2 dark:border-red-900/30 dark:bg-red-950/20">
+                <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
+                <p className="text-xs text-red-600 dark:text-red-400">
+                  {destination.rejectionReason}
+                </p>
+              </div>
+            )}
 
           {destination.description && (
             <p className="mt-2 line-clamp-2 text-xs text-gray-400 dark:text-gray-500">
@@ -1455,6 +1770,7 @@ function HotelCard({
   onEditRoom: (room: VendorRoom) => void;
   onDeleteRoom: (room: VendorRoom) => void;
 }) {
+  console.log({ hotel });
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
       {/* Hotel header */}
@@ -1481,7 +1797,9 @@ function HotelCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
-              <h4 className="font-semibold text-gray-900 dark:text-white">{hotel.name}</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-white">
+                {hotel.name}
+              </h4>
               <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
                 <MapPin className="h-3 w-3 shrink-0" />
                 {hotel.location}
@@ -1496,7 +1814,6 @@ function HotelCard({
 
           <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
             <span className="flex items-center gap-1">
-              <DollarSign className="h-3.5 w-3.5" />
               ৳{hotel.price.toLocaleString()}/night
             </span>
             <span className="flex items-center gap-1">
@@ -1514,7 +1831,9 @@ function HotelCard({
           {hotel.approvalStatus === "REJECTED" && hotel.rejectionReason && (
             <div className="mt-2.5 flex items-start gap-2 rounded-xl border border-red-100 bg-red-50 px-3 py-2 dark:border-red-900/30 dark:bg-red-950/20">
               <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
-              <p className="text-xs text-red-600 dark:text-red-400">{hotel.rejectionReason}</p>
+              <p className="text-xs text-red-600 dark:text-red-400">
+                {hotel.rejectionReason}
+              </p>
             </div>
           )}
         </div>
@@ -1527,7 +1846,9 @@ function HotelCard({
           onClick={onToggle}
           className="flex items-center gap-1.5 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
-          <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`} />
+          <ChevronDown
+            className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`}
+          />
           {expanded ? "Hide" : "Show"} Rooms
           <span className="ml-0.5 rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-500 dark:bg-gray-800 dark:text-gray-400">
             {hotel._count.rooms}
@@ -1567,7 +1888,9 @@ function HotelCard({
           {hotel.rooms.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-center">
               <BedDouble className="mb-2 h-8 w-8 text-gray-200 dark:text-gray-700" />
-              <p className="text-sm text-gray-400 dark:text-gray-500">No rooms added yet</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500">
+                No rooms added yet
+              </p>
               <button
                 type="button"
                 onClick={onAddRoom}
@@ -1629,7 +1952,9 @@ function RoomRow({
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold text-gray-900 dark:text-white">{room.name}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-white">
+              {room.name}
+            </p>
             {room.badge && (
               <span className="rounded-md bg-primary-50 px-1.5 py-0.5 text-[10px] font-semibold text-primary-700 dark:bg-primary-950/30 dark:text-primary-400">
                 {room.badge}
@@ -1641,7 +1966,9 @@ function RoomRow({
 
         <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-400 dark:text-gray-500">
           <span>৳{room.price.toLocaleString()}/night</span>
-          <span>{room.capacity} guest{room.capacity !== 1 ? "s" : ""}</span>
+          <span>
+            {room.capacity} guest{room.capacity !== 1 ? "s" : ""}
+          </span>
           <span>{room.view}</span>
           <span>{room.size}</span>
         </div>
@@ -1649,7 +1976,9 @@ function RoomRow({
         {room.approvalStatus === "REJECTED" && room.rejectionReason && (
           <div className="mt-1.5 flex items-start gap-1.5">
             <AlertCircle className="mt-0.5 h-3 w-3 shrink-0 text-red-400" />
-            <p className="text-[11px] text-red-500 dark:text-red-400">{room.rejectionReason}</p>
+            <p className="text-[11px] text-red-500 dark:text-red-400">
+              {room.rejectionReason}
+            </p>
           </div>
         )}
 
@@ -1702,19 +2031,28 @@ function ConfirmModal({
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, []);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
       <div className="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-900">
         <div className="p-6">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-100 dark:bg-red-950/40">
             <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
           </div>
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">{title}</h3>
-          <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">{message}</p>
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+            {title}
+          </h3>
+          <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">
+            {message}
+          </p>
         </div>
         <div className="flex gap-3 border-t border-gray-100 px-6 py-4 dark:border-gray-800">
           <button
@@ -1761,7 +2099,9 @@ function FormModal({
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, []);
 
   return (
@@ -1775,7 +2115,9 @@ function FormModal({
       <div className="relative z-10 flex max-h-[95dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl dark:bg-gray-900 sm:rounded-2xl">
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-          <h2 className="font-semibold text-gray-900 dark:text-white">{title}</h2>
+          <h2 className="font-semibold text-gray-900 dark:text-white">
+            {title}
+          </h2>
           <button
             type="button"
             onClick={onClose}
@@ -1799,23 +2141,34 @@ function CreateHotelForm({
   onCreated: (hotelId: string, hotelName: string) => void;
 }) {
   const { token } = useAuth();
-  const [destinations, setDestinations] = useState<{ id: string; name: string }[]>([]);
+  const [destinations, setDestinations] = useState<
+    { id: string; name: string }[]
+  >([]);
   const imageRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageError, setImageError] = useState("");
 
-  const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitting } } =
-    useForm<HotelFormValues>({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      resolver: yupResolver(hotelSchema) as any,
-      mode: "onTouched",
-    });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<HotelFormValues>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: yupResolver(hotelSchema) as any,
+    mode: "onTouched",
+  });
 
   const nameValue = watch("name");
 
   useEffect(() => {
     if (nameValue) {
-      const slug = nameValue.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const slug = nameValue
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
       setValue("slug", slug, { shouldValidate: false });
     }
   }, [nameValue, setValue]);
@@ -1838,7 +2191,10 @@ function CreateHotelForm({
 
   async function onSubmit(data: HotelFormValues) {
     const file = imageRef.current?.files?.[0];
-    if (!file) { setImageError("Please select a hotel cover image"); return; }
+    if (!file) {
+      setImageError("Please select a hotel cover image");
+      return;
+    }
 
     const fd = new FormData();
     fd.append("destinationId", data.destinationId);
@@ -1847,8 +2203,16 @@ function CreateHotelForm({
     fd.append("location", data.location);
     fd.append("description", data.description);
     fd.append("price", String(data.price));
-    data.tags?.split(",").map((t) => t.trim()).filter(Boolean).forEach((t) => fd.append("tags", t));
-    data.amenities?.split(",").map((a) => a.trim()).filter(Boolean).forEach((a) => fd.append("amenities", a));
+    data.tags
+      ?.split(",")
+      .map((t) => t.trim())
+      .filter(Boolean)
+      .forEach((t) => fd.append("tags", t));
+    data.amenities
+      ?.split(",")
+      .map((a) => a.trim())
+      .filter(Boolean)
+      .forEach((a) => fd.append("amenities", a));
     fd.append("image", file);
 
     try {
@@ -1869,7 +2233,11 @@ function CreateHotelForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+    <form
+      onSubmit={handleSubmit(onSubmit as never)}
+      noValidate
+      className="space-y-5"
+    >
       {/* Destination */}
       <div>
         <label className={labelCls()}>Destination</label>
@@ -1877,14 +2245,22 @@ function CreateHotelForm({
           <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/30 dark:bg-amber-950/20">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
             <p className="text-xs text-amber-700 dark:text-amber-400">
-              No approved destinations yet. Go to the Destinations tab to create one first.
+              No approved destinations yet. Go to the Destinations tab to create
+              one first.
             </p>
           </div>
         ) : (
           <>
-            <select {...register("destinationId")} className={inputCls(!!errors.destinationId)}>
+            <select
+              {...register("destinationId")}
+              className={inputCls(!!errors.destinationId)}
+            >
               <option value="">Select a destination…</option>
-              {destinations.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
+              {destinations.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
             </select>
             <FieldError msg={errors.destinationId?.message} />
           </>
@@ -1895,12 +2271,25 @@ function CreateHotelForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelCls()}>Hotel Name</label>
-          <input type="text" {...register("name")} placeholder="Sea Pearl Beach Resort" className={inputCls(!!errors.name)} />
+          <input
+            type="text"
+            {...register("name")}
+            placeholder="Sea Pearl Beach Resort"
+            className={inputCls(!!errors.name)}
+          />
           <FieldError msg={errors.name?.message} />
         </div>
         <div>
-          <label className={labelCls()}>URL Slug <span className="font-normal text-gray-400">(auto-generated)</span></label>
-          <input type="text" {...register("slug")} placeholder="sea-pearl-beach-resort" className={inputCls(!!errors.slug)} />
+          <label className={labelCls()}>
+            URL Slug{" "}
+            <span className="font-normal text-gray-400">(auto-generated)</span>
+          </label>
+          <input
+            type="text"
+            {...register("slug")}
+            placeholder="sea-pearl-beach-resort"
+            className={inputCls(!!errors.slug)}
+          />
           <FieldError msg={errors.slug?.message} />
         </div>
       </div>
@@ -1908,13 +2297,32 @@ function CreateHotelForm({
       {/* Location + Price */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Location</span></label>
-          <input type="text" {...register("location")} placeholder="Cox's Bazar" className={inputCls(!!errors.location)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5" /> Location
+            </span>
+          </label>
+          <input
+            type="text"
+            {...register("location")}
+            placeholder="Cox's Bazar"
+            className={inputCls(!!errors.location)}
+          />
           <FieldError msg={errors.location?.message} />
         </div>
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Price per Night (৳)</span></label>
-          <input type="number" {...register("price")} placeholder="5000" min={1} className={inputCls(!!errors.price)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              Price per Night (৳)
+            </span>
+          </label>
+          <input
+            type="number"
+            {...register("price")}
+            placeholder="5000"
+            min={1}
+            className={inputCls(!!errors.price)}
+          />
           <FieldError msg={errors.price?.message} />
         </div>
       </div>
@@ -1922,48 +2330,116 @@ function CreateHotelForm({
       {/* Description */}
       <div>
         <label className={labelCls()}>Description</label>
-        <textarea {...register("description")} rows={4} placeholder="Describe your hotel — location, ambiance, what makes it special…" className={inputCls(!!errors.description)} />
+        <textarea
+          {...register("description")}
+          rows={4}
+          placeholder="Describe your hotel — location, ambiance, what makes it special…"
+          className={inputCls(!!errors.description)}
+        />
         <FieldError msg={errors.description?.message} />
       </div>
 
       {/* Tags + Amenities */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" /> Tags <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
-          <input type="text" {...register("tags")} placeholder="beachfront, luxury, family" className={inputCls()} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Tag className="h-3.5 w-3.5" /> Tags{" "}
+              <span className="font-normal text-gray-400">
+                (comma-separated)
+              </span>
+            </span>
+          </label>
+          <input
+            type="text"
+            {...register("tags")}
+            placeholder="beachfront, luxury, family"
+            className={inputCls()}
+          />
         </div>
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Amenities <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
-          <input type="text" {...register("amenities")} placeholder="WiFi, Pool, Spa, Parking" className={inputCls()} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5" /> Amenities{" "}
+              <span className="font-normal text-gray-400">
+                (comma-separated)
+              </span>
+            </span>
+          </label>
+          <input
+            type="text"
+            {...register("amenities")}
+            placeholder="WiFi, Pool, Spa, Parking"
+            className={inputCls()}
+          />
         </div>
       </div>
 
       {/* Image */}
       <div>
-        <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Cover Image</span></label>
-        <div className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-8 transition-colors ${imageError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}>
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <Upload className="h-3.5 w-3.5" /> Cover Image
+          </span>
+        </label>
+        <div
+          className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-8 transition-colors ${imageError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}
+        >
           {imagePreview ? (
             <div className="relative w-full">
               <div className="relative mx-auto h-40 max-w-xs overflow-hidden rounded-xl">
-                <Image src={imagePreview} alt="Preview" fill unoptimized className="object-cover" />
+                <Image
+                  src={imagePreview}
+                  alt="Preview"
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
               </div>
-              <button type="button" onClick={() => { setImagePreview(null); if (imageRef.current) imageRef.current.value = ""; }} className="absolute right-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow">
+              <button
+                type="button"
+                onClick={() => {
+                  setImagePreview(null);
+                  if (imageRef.current) imageRef.current.value = "";
+                }}
+                className="absolute right-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow"
+              >
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
           ) : (
             <>
               <Upload className="mb-2 h-8 w-8 text-gray-300" />
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click or drag to upload</p>
-              <p className="mt-1 text-xs text-gray-400">JPEG, PNG or WebP — max 10 MB</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Click or drag to upload
+              </p>
+              <p className="mt-1 text-xs text-gray-400">
+                JPEG, PNG or WebP — max 10 MB
+              </p>
             </>
           )}
-          <input ref={imageRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => { const f = e.target.files?.[0]; if (f) { setImageError(""); setImagePreview(URL.createObjectURL(f)); } }} className="absolute inset-0 cursor-pointer opacity-0" />
+          <input
+            ref={imageRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) {
+                setImageError("");
+                setImagePreview(URL.createObjectURL(f));
+              }
+            }}
+            className="absolute inset-0 cursor-pointer opacity-0"
+          />
         </div>
         <FieldError msg={imageError} />
       </div>
 
-      <button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60">
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         <Plus className="h-4 w-4" />
         {isSubmitting ? "Submitting…" : "Submit Hotel for Approval"}
       </button>
@@ -1984,28 +2460,36 @@ function EditHotelForm({
   const imageRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } =
-    useForm<UpdateHotelFormValues>({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      resolver: yupResolver(updateHotelSchema) as any,
-      mode: "onTouched",
-      defaultValues: {
-        name: hotel.name,
-        slug: hotel.slug,
-        location: hotel.location,
-        description: "",
-        price: hotel.price,
-        tags: "",
-        amenities: "",
-        isActive: hotel.isActive,
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<UpdateHotelFormValues>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: yupResolver(updateHotelSchema) as any,
+    mode: "onTouched",
+    defaultValues: {
+      name: hotel.name,
+      slug: hotel.slug,
+      location: hotel.location,
+      description: "",
+      price: hotel.price,
+      tags: "",
+      amenities: "",
+      isActive: hotel.isActive,
+    },
+  });
 
   const nameValue = watch("name");
 
   useEffect(() => {
     if (nameValue) {
-      const slug = nameValue.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const slug = nameValue
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
       setValue("slug", slug, { shouldValidate: false });
     }
   }, [nameValue, setValue]);
@@ -2018,8 +2502,16 @@ function EditHotelForm({
     fd.append("description", data.description);
     fd.append("price", String(data.price));
     fd.append("isActive", data.isActive ? "true" : "false");
-    data.tags?.split(",").map((t) => t.trim()).filter(Boolean).forEach((t) => fd.append("tags", t));
-    data.amenities?.split(",").map((a) => a.trim()).filter(Boolean).forEach((a) => fd.append("amenities", a));
+    data.tags
+      ?.split(",")
+      .map((t) => t.trim())
+      .filter(Boolean)
+      .forEach((t) => fd.append("tags", t));
+    data.amenities
+      ?.split(",")
+      .map((a) => a.trim())
+      .filter(Boolean)
+      .forEach((a) => fd.append("amenities", a));
     const file = imageRef.current?.files?.[0];
     if (file) fd.append("image", file);
 
@@ -2040,17 +2532,32 @@ function EditHotelForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+    <form
+      onSubmit={handleSubmit(onSubmit as never)}
+      noValidate
+      className="space-y-5"
+    >
       {/* Name + Slug */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelCls()}>Hotel Name</label>
-          <input type="text" {...register("name")} className={inputCls(!!errors.name)} />
+          <input
+            type="text"
+            {...register("name")}
+            className={inputCls(!!errors.name)}
+          />
           <FieldError msg={errors.name?.message} />
         </div>
         <div>
-          <label className={labelCls()}>URL Slug <span className="font-normal text-gray-400">(auto-generated)</span></label>
-          <input type="text" {...register("slug")} className={inputCls(!!errors.slug)} />
+          <label className={labelCls()}>
+            URL Slug{" "}
+            <span className="font-normal text-gray-400">(auto-generated)</span>
+          </label>
+          <input
+            type="text"
+            {...register("slug")}
+            className={inputCls(!!errors.slug)}
+          />
           <FieldError msg={errors.slug?.message} />
         </div>
       </div>
@@ -2058,13 +2565,30 @@ function EditHotelForm({
       {/* Location + Price */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Location</span></label>
-          <input type="text" {...register("location")} className={inputCls(!!errors.location)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5" /> Location
+            </span>
+          </label>
+          <input
+            type="text"
+            {...register("location")}
+            className={inputCls(!!errors.location)}
+          />
           <FieldError msg={errors.location?.message} />
         </div>
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Price per Night (৳)</span></label>
-          <input type="number" {...register("price")} min={1} className={inputCls(!!errors.price)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              Price per Night (৳)
+            </span>
+          </label>
+          <input
+            type="number"
+            {...register("price")}
+            min={1}
+            className={inputCls(!!errors.price)}
+          />
           <FieldError msg={errors.price?.message} />
         </div>
       </div>
@@ -2072,44 +2596,101 @@ function EditHotelForm({
       {/* Description */}
       <div>
         <label className={labelCls()}>Description</label>
-        <textarea {...register("description")} rows={4} placeholder="Describe your hotel — location, ambiance, what makes it special…" className={inputCls(!!errors.description)} />
+        <textarea
+          {...register("description")}
+          rows={4}
+          placeholder="Describe your hotel — location, ambiance, what makes it special…"
+          className={inputCls(!!errors.description)}
+        />
         <FieldError msg={errors.description?.message} />
       </div>
 
       {/* Tags + Amenities */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" /> Tags <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
-          <input type="text" {...register("tags")} placeholder="beachfront, luxury, family" className={inputCls()} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Tag className="h-3.5 w-3.5" /> Tags{" "}
+              <span className="font-normal text-gray-400">
+                (comma-separated)
+              </span>
+            </span>
+          </label>
+          <input
+            type="text"
+            {...register("tags")}
+            placeholder="beachfront, luxury, family"
+            className={inputCls()}
+          />
         </div>
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Amenities <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
-          <input type="text" {...register("amenities")} placeholder="WiFi, Pool, Spa, Parking" className={inputCls()} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5" /> Amenities{" "}
+              <span className="font-normal text-gray-400">
+                (comma-separated)
+              </span>
+            </span>
+          </label>
+          <input
+            type="text"
+            {...register("amenities")}
+            placeholder="WiFi, Pool, Spa, Parking"
+            className={inputCls()}
+          />
         </div>
       </div>
 
       {/* Active toggle */}
       <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
         <div>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Active</p>
-          <p className="text-xs text-gray-400 dark:text-gray-500">Only active hotels are visible to guests</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+            Active
+          </p>
+          <p className="text-xs text-gray-400 dark:text-gray-500">
+            Only active hotels are visible to guests
+          </p>
         </div>
         <label className="relative inline-flex cursor-pointer items-center">
-          <input type="checkbox" className="sr-only peer" {...register("isActive")} />
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            {...register("isActive")}
+          />
           <div className="h-6 w-11 rounded-full bg-gray-200 transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all after:content-[''] peer-checked:bg-violet-600 peer-checked:after:translate-x-full dark:bg-gray-600" />
         </label>
       </div>
 
       {/* Image (optional) */}
       <div>
-        <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Cover Image <span className="font-normal text-gray-400">(leave empty to keep current)</span></span></label>
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <Upload className="h-3.5 w-3.5" /> Cover Image{" "}
+            <span className="font-normal text-gray-400">
+              (leave empty to keep current)
+            </span>
+          </span>
+        </label>
         <div className="relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 px-6 py-8 transition-colors hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50">
           {imagePreview ? (
             <div className="relative w-full">
               <div className="relative mx-auto h-40 max-w-xs overflow-hidden rounded-xl">
-                <Image src={imagePreview} alt="Preview" fill unoptimized className="object-cover" />
+                <Image
+                  src={imagePreview}
+                  alt="Preview"
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
               </div>
-              <button type="button" onClick={() => { setImagePreview(null); if (imageRef.current) imageRef.current.value = ""; }} className="absolute right-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow">
+              <button
+                type="button"
+                onClick={() => {
+                  setImagePreview(null);
+                  if (imageRef.current) imageRef.current.value = "";
+                }}
+                className="absolute right-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow"
+              >
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -2117,21 +2698,44 @@ function EditHotelForm({
             <div className="flex flex-col items-center">
               <div className="relative mx-auto mb-3 h-20 w-32 overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-700">
                 {hotel.image && (
-                  <Image src={`${BASE}${hotel.image}`} alt={hotel.name} fill unoptimized className="object-cover opacity-60" />
+                  <Image
+                    src={`${BASE}${hotel.image}`}
+                    alt={hotel.name}
+                    fill
+                    unoptimized
+                    className="object-cover opacity-60"
+                  />
                 )}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Upload className="h-5 w-5 text-gray-400" />
                 </div>
               </div>
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click to replace image</p>
-              <p className="mt-1 text-xs text-gray-400">JPEG, PNG or WebP — max 10 MB</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Click to replace image
+              </p>
+              <p className="mt-1 text-xs text-gray-400">
+                JPEG, PNG or WebP — max 10 MB
+              </p>
             </div>
           )}
-          <input ref={imageRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => { const f = e.target.files?.[0]; if (f) setImagePreview(URL.createObjectURL(f)); }} className="absolute inset-0 cursor-pointer opacity-0" />
+          <input
+            ref={imageRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) setImagePreview(URL.createObjectURL(f));
+            }}
+            className="absolute inset-0 cursor-pointer opacity-0"
+          />
         </div>
       </div>
 
-      <button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60">
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         <Pencil className="h-4 w-4" />
         {isSubmitting ? "Saving…" : "Save Changes"}
       </button>
@@ -2147,16 +2751,23 @@ function CreateDestinationForm({ onCreated }: { onCreated: () => void }) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageError, setImageError] = useState("");
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
-    useForm<DestinationFormValues>({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      resolver: yupResolver(destinationSchema) as any,
-      mode: "onTouched",
-    });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<DestinationFormValues>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: yupResolver(destinationSchema) as any,
+    mode: "onTouched",
+  });
 
   async function onSubmit(data: DestinationFormValues) {
     const file = imageRef.current?.files?.[0];
-    if (!file) { setImageError("Please select a destination image"); return; }
+    if (!file) {
+      setImageError("Please select a destination image");
+      return;
+    }
 
     const fd = new FormData();
     fd.append("name", data.name);
@@ -2176,7 +2787,8 @@ function CreateDestinationForm({ onCreated }: { onCreated: () => void }) {
         body: fd,
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.message || "Failed to create destination");
+      if (!res.ok)
+        throw new Error(json.message || "Failed to create destination");
       reset();
       if (imageRef.current) imageRef.current.value = "";
       setImagePreview(null);
@@ -2187,17 +2799,35 @@ function CreateDestinationForm({ onCreated }: { onCreated: () => void }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+    <form
+      onSubmit={handleSubmit(onSubmit as never)}
+      noValidate
+      className="space-y-5"
+    >
       {/* Name + Region */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelCls()}>Destination Name</label>
-          <input type="text" {...register("name")} placeholder="Cox's Bazar" className={inputCls(!!errors.name)} />
+          <input
+            type="text"
+            {...register("name")}
+            placeholder="Cox's Bazar"
+            className={inputCls(!!errors.name)}
+          />
           <FieldError msg={errors.name?.message} />
         </div>
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> Region</span></label>
-          <input type="text" {...register("region")} placeholder="Chittagong Division" className={inputCls(!!errors.region)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5" /> Region
+            </span>
+          </label>
+          <input
+            type="text"
+            {...register("region")}
+            placeholder="Chittagong Division"
+            className={inputCls(!!errors.region)}
+          />
           <FieldError msg={errors.region?.message} />
         </div>
       </div>
@@ -2233,16 +2863,31 @@ function CreateDestinationForm({ onCreated }: { onCreated: () => void }) {
 
       {/* Image */}
       <div>
-        <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Cover Image</span></label>
-        <div className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-8 transition-colors ${imageError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}>
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <Upload className="h-3.5 w-3.5" /> Cover Image
+          </span>
+        </label>
+        <div
+          className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-8 transition-colors ${imageError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}
+        >
           {imagePreview ? (
             <div className="relative w-full">
               <div className="relative mx-auto h-40 max-w-xs overflow-hidden rounded-xl">
-                <Image src={imagePreview} alt="Preview" fill unoptimized className="object-cover" />
+                <Image
+                  src={imagePreview}
+                  alt="Preview"
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
               </div>
               <button
                 type="button"
-                onClick={() => { setImagePreview(null); if (imageRef.current) imageRef.current.value = ""; }}
+                onClick={() => {
+                  setImagePreview(null);
+                  if (imageRef.current) imageRef.current.value = "";
+                }}
                 className="absolute right-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow"
               >
                 <X className="h-3.5 w-3.5" />
@@ -2251,8 +2896,12 @@ function CreateDestinationForm({ onCreated }: { onCreated: () => void }) {
           ) : (
             <>
               <Upload className="mb-2 h-8 w-8 text-gray-300" />
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click or drag to upload</p>
-              <p className="mt-1 text-xs text-gray-400">JPEG, PNG or WebP — max 10 MB</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Click or drag to upload
+              </p>
+              <p className="mt-1 text-xs text-gray-400">
+                JPEG, PNG or WebP — max 10 MB
+              </p>
             </>
           )}
           <input
@@ -2261,7 +2910,10 @@ function CreateDestinationForm({ onCreated }: { onCreated: () => void }) {
             accept="image/jpeg,image/png,image/webp"
             onChange={(e) => {
               const f = e.target.files?.[0];
-              if (f) { setImageError(""); setImagePreview(URL.createObjectURL(f)); }
+              if (f) {
+                setImageError("");
+                setImagePreview(URL.createObjectURL(f));
+              }
             }}
             className="absolute inset-0 cursor-pointer opacity-0"
           />
@@ -2295,26 +2947,35 @@ function CreateRoomForm({
   const { token } = useAuth();
   const imagesRef = useRef<HTMLInputElement>(null);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [imagesError, setImagesError] = useState("");
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
-    useForm<RoomFormValues>({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      resolver: yupResolver(roomSchema) as any,
-      mode: "onTouched",
-      defaultValues: { hotelId },
-    });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<RoomFormValues>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: yupResolver(roomSchema) as any,
+    mode: "onTouched",
+    defaultValues: { hotelId },
+  });
 
   function handleImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (!files) return;
     setImagesError("");
-    setImagePreviews(Array.from(files).map((f) => URL.createObjectURL(f)));
+    const arr = Array.from(files);
+    setSelectedFiles(arr);
+    setImagePreviews(arr.map((f) => URL.createObjectURL(f)));
   }
 
   async function onSubmit(data: RoomFormValues) {
-    const files = imagesRef.current?.files;
-    if (!files || files.length === 0) { setImagesError("Please select at least one image"); return; }
+    if (selectedFiles.length === 0) {
+      setImagesError("Please select at least one image");
+      return;
+    }
 
     const fd = new FormData();
     fd.append("hotelId", hotelId);
@@ -2324,9 +2985,13 @@ function CreateRoomForm({
     fd.append("capacity", String(data.capacity));
     fd.append("view", data.view);
     fd.append("size", data.size);
-    data.amenities.split(",").map((a) => a.trim()).filter(Boolean).forEach((a) => fd.append("amenities", a));
+    data.amenities
+      .split(",")
+      .map((a) => a.trim())
+      .filter(Boolean)
+      .forEach((a) => fd.append("amenities", a));
     if (data.badge) fd.append("badge", data.badge);
-    Array.from(files).forEach((f) => fd.append("images", f));
+    selectedFiles.forEach((f) => fd.append("images", f));
 
     try {
       const res = await fetch(`${BASE}/rooms`, {
@@ -2339,6 +3004,7 @@ function CreateRoomForm({
       reset({ hotelId });
       if (imagesRef.current) imagesRef.current.value = "";
       setImagePreviews([]);
+      setSelectedFiles([]);
       onCreated();
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Something went wrong.");
@@ -2346,13 +3012,19 @@ function CreateRoomForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+    <form
+      onSubmit={handleSubmit(onSubmit as never)}
+      noValidate
+      className="space-y-5"
+    >
       {/* Hotel ID (read-only info) */}
       <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
         <Hash className="h-4 w-4 shrink-0 text-gray-400" />
         <div className="min-w-0">
           <p className="text-xs text-gray-400">Adding room to hotel</p>
-          <p className="mt-0.5 truncate text-xs font-medium text-gray-700 dark:text-gray-300">{hotelName}</p>
+          <p className="mt-0.5 truncate text-xs font-medium text-gray-700 dark:text-gray-300">
+            {hotelName}
+          </p>
         </div>
       </div>
 
@@ -2360,25 +3032,58 @@ function CreateRoomForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelCls()}>Room Name</label>
-          <input type="text" {...register("name")} placeholder="Deluxe Sea View" className={inputCls(!!errors.name)} />
+          <input
+            type="text"
+            {...register("name")}
+            placeholder="Deluxe Sea View"
+            className={inputCls(!!errors.name)}
+          />
           <FieldError msg={errors.name?.message} />
         </div>
         <div>
-          <label className={labelCls()}>Badge <span className="font-normal text-gray-400">(optional)</span></label>
-          <input type="text" {...register("badge")} placeholder="Best Value, Most Popular…" className={inputCls()} />
+          <label className={labelCls()}>
+            Badge <span className="font-normal text-gray-400">(optional)</span>
+          </label>
+          <input
+            type="text"
+            {...register("badge")}
+            placeholder="Best Value, Most Popular…"
+            className={inputCls()}
+          />
         </div>
       </div>
 
       {/* Price + Capacity */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Price per Night (৳)</span></label>
-          <input type="number" {...register("price")} placeholder="5000" min={1} className={inputCls(!!errors.price)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              Price per Night (৳)
+            </span>
+          </label>
+          <input
+            type="number"
+            {...register("price")}
+            placeholder="5000"
+            min={1}
+            className={inputCls(!!errors.price)}
+          />
           <FieldError msg={errors.price?.message} />
         </div>
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" /> Guest Capacity</span></label>
-          <input type="number" {...register("capacity")} placeholder="2" min={1} max={20} className={inputCls(!!errors.capacity)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Users className="h-3.5 w-3.5" /> Guest Capacity
+            </span>
+          </label>
+          <input
+            type="number"
+            {...register("capacity")}
+            placeholder="2"
+            min={1}
+            max={20}
+            className={inputCls(!!errors.capacity)}
+          />
           <FieldError msg={errors.capacity?.message} />
         </div>
       </div>
@@ -2387,12 +3092,26 @@ function CreateRoomForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelCls()}>View Type</label>
-          <input type="text" {...register("view")} placeholder="Sea View, Garden View…" className={inputCls(!!errors.view)} />
+          <input
+            type="text"
+            {...register("view")}
+            placeholder="Sea View, Garden View…"
+            className={inputCls(!!errors.view)}
+          />
           <FieldError msg={errors.view?.message} />
         </div>
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><Maximize2 className="h-3.5 w-3.5" /> Room Size</span></label>
-          <input type="text" {...register("size")} placeholder="38 m²" className={inputCls(!!errors.size)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Maximize2 className="h-3.5 w-3.5" /> Room Size
+            </span>
+          </label>
+          <input
+            type="text"
+            {...register("size")}
+            placeholder="38 m²"
+            className={inputCls(!!errors.size)}
+          />
           <FieldError msg={errors.size?.message} />
         </div>
       </div>
@@ -2400,48 +3119,101 @@ function CreateRoomForm({
       {/* Description */}
       <div>
         <label className={labelCls()}>Description</label>
-        <textarea {...register("description")} rows={3} placeholder="Describe the room features, furnishings, and highlights…" className={inputCls(!!errors.description)} />
+        <textarea
+          {...register("description")}
+          rows={3}
+          placeholder="Describe the room features, furnishings, and highlights…"
+          className={inputCls(!!errors.description)}
+        />
         <FieldError msg={errors.description?.message} />
       </div>
 
       {/* Amenities */}
       <div>
-        <label className={labelCls()}><span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Amenities <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
-        <input type="text" {...register("amenities")} placeholder="AC, WiFi, Minibar, Smart TV, Bathtub" className={inputCls(!!errors.amenities)} />
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5" /> Amenities{" "}
+            <span className="font-normal text-gray-400">(comma-separated)</span>
+          </span>
+        </label>
+        <input
+          type="text"
+          {...register("amenities")}
+          placeholder="AC, WiFi, Minibar, Smart TV, Bathtub"
+          className={inputCls(!!errors.amenities)}
+        />
         <FieldError msg={errors.amenities?.message} />
       </div>
 
       {/* Room images */}
       <div>
-        <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Room Photos <span className="font-normal text-gray-400">(up to 10)</span></span></label>
-        <div className={`relative rounded-xl border-2 border-dashed transition-colors ${imagesError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}>
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <Upload className="h-3.5 w-3.5" /> Room Photos{" "}
+            <span className="font-normal text-gray-400">(up to 10)</span>
+          </span>
+        </label>
+        <div
+          className={`relative rounded-xl border-2 border-dashed transition-colors ${imagesError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}
+        >
           {imagePreviews.length > 0 ? (
             <div className="grid grid-cols-4 gap-2 p-3 sm:grid-cols-5">
               {imagePreviews.map((src, i) => (
-                <div key={i} className="relative aspect-square overflow-hidden rounded-xl">
-                  <Image src={src} alt={`Photo ${i + 1}`} fill unoptimized className="object-cover" />
+                <div
+                  key={i}
+                  className="relative aspect-square overflow-hidden rounded-xl"
+                >
+                  <Image
+                    src={src}
+                    alt={`Photo ${i + 1}`}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
                 </div>
               ))}
               <label className="flex aspect-square cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-300 transition-colors hover:border-violet-400 dark:border-gray-600">
                 <Plus className="h-5 w-5 text-gray-300" />
-                <input ref={imagesRef} type="file" accept="image/*" multiple onChange={handleImagesChange} className="hidden" />
+                <input
+                  ref={imagesRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImagesChange}
+                  className="hidden"
+                />
               </label>
             </div>
           ) : (
             <div className="flex flex-col items-center py-8 text-center">
               <ImageIcon className="mb-2 h-8 w-8 text-gray-300" />
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click to upload room photos</p>
-              <p className="mt-1 text-xs text-gray-400">JPEG, PNG or WebP — max 10 MB each</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Click to upload room photos
+              </p>
+              <p className="mt-1 text-xs text-gray-400">
+                JPEG, PNG or WebP — max 10 MB each
+              </p>
             </div>
           )}
           {imagePreviews.length === 0 && (
-            <input ref={imagesRef} type="file" accept="image/*" multiple onChange={handleImagesChange} className="absolute inset-0 cursor-pointer opacity-0" />
+            <input
+              ref={imagesRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImagesChange}
+              className="absolute inset-0 cursor-pointer opacity-0"
+            />
           )}
         </div>
         <FieldError msg={imagesError} />
       </div>
 
-      <button type="submit" disabled={isSubmitting} className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60">
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+      >
         <BedDouble className="h-4 w-4" />
         {isSubmitting ? "Submitting…" : "Submit Room for Approval"}
       </button>
@@ -2478,7 +3250,7 @@ function EditRoomForm({
   // Init existing images from room prop
   useEffect(() => {
     const previews = (room.images ?? []).map((img) =>
-      img.startsWith("http") ? img : `${BASE}${img}`
+      img.startsWith("http") ? img : `${BASE}${img}`,
     );
     setExistingImageUrls(previews);
     setImagePreviews(previews);
@@ -2486,23 +3258,26 @@ function EditRoomForm({
     setImageFiles([]);
   }, [room.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } =
-    useForm<UpdateRoomFormValues>({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      resolver: yupResolver(updateRoomSchema) as any,
-      mode: "onTouched",
-      defaultValues: {
-        name: room.name,
-        description: "",
-        price: room.price,
-        capacity: room.capacity,
-        view: room.view,
-        size: room.size,
-        amenities: "",
-        badge: room.badge ?? "",
-        isActive: room.isActive,
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<UpdateRoomFormValues>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: yupResolver(updateRoomSchema) as any,
+    mode: "onTouched",
+    defaultValues: {
+      name: room.name,
+      description: room.description ?? "",
+      price: room.price,
+      capacity: room.capacity,
+      view: room.view,
+      size: room.size,
+      amenities: (room.amenities ?? []).join(", "),
+      badge: room.badge ?? "",
+      isActive: room.isActive,
+    },
+  });
 
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newFiles = Array.from(e.target.files ?? []);
@@ -2526,11 +3301,13 @@ function EditRoomForm({
             const blob = await res.blob();
             const name = url.split("/").pop() || `existing-${i}.webp`;
             return new File([blob], name, { type: blob.type });
-          })
+          }),
         );
       } catch {
         setFetchingImages(false);
-        toast.error("Could not load existing images. Please re-upload all images manually.");
+        toast.error(
+          "Could not load existing images. Please re-upload all images manually.",
+        );
         return;
       }
       setFetchingImages(false);
@@ -2568,7 +3345,11 @@ function EditRoomForm({
     fd.append("capacity", String(data.capacity));
     fd.append("view", data.view);
     fd.append("size", data.size);
-    data.amenities.split(",").map((a) => a.trim()).filter(Boolean).forEach((a) => fd.append("amenities", a));
+    data.amenities
+      .split(",")
+      .map((a) => a.trim())
+      .filter(Boolean)
+      .forEach((a) => fd.append("amenities", a));
     if (data.badge) fd.append("badge", data.badge);
     fd.append("isActive", data.isActive ? "true" : "false");
 
@@ -2584,7 +3365,7 @@ function EditRoomForm({
             const blob = await res.blob();
             const name = url.split("/").pop() || `existing-${i}.webp`;
             return new File([blob], name, { type: blob.type });
-          })
+          }),
         );
       } catch {
         setFetchingImages(false);
@@ -2615,13 +3396,19 @@ function EditRoomForm({
   const busy = isSubmitting || fetchingImages;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit as never)} noValidate className="space-y-5">
+    <form
+      onSubmit={handleSubmit(onSubmit as never)}
+      noValidate
+      className="space-y-5"
+    >
       {/* Hotel info (read-only) */}
       <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
         <Hash className="h-4 w-4 shrink-0 text-gray-400" />
         <div className="min-w-0">
           <p className="text-xs text-gray-400">Editing room in hotel</p>
-          <p className="mt-0.5 truncate text-xs font-medium text-gray-700 dark:text-gray-300">{hotelName}</p>
+          <p className="mt-0.5 truncate text-xs font-medium text-gray-700 dark:text-gray-300">
+            {hotelName}
+          </p>
         </div>
       </div>
 
@@ -2629,25 +3416,55 @@ function EditRoomForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelCls()}>Room Name</label>
-          <input type="text" {...register("name")} className={inputCls(!!errors.name)} />
+          <input
+            type="text"
+            {...register("name")}
+            className={inputCls(!!errors.name)}
+          />
           <FieldError msg={errors.name?.message} />
         </div>
         <div>
-          <label className={labelCls()}>Badge <span className="font-normal text-gray-400">(optional)</span></label>
-          <input type="text" {...register("badge")} placeholder="Best Value, Most Popular…" className={inputCls()} />
+          <label className={labelCls()}>
+            Badge <span className="font-normal text-gray-400">(optional)</span>
+          </label>
+          <input
+            type="text"
+            {...register("badge")}
+            placeholder="Best Value, Most Popular…"
+            className={inputCls()}
+          />
         </div>
       </div>
 
       {/* Price + Capacity */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Price per Night (৳)</span></label>
-          <input type="number" {...register("price")} min={1} className={inputCls(!!errors.price)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              Price per Night (৳)
+            </span>
+          </label>
+          <input
+            type="number"
+            {...register("price")}
+            min={1}
+            className={inputCls(!!errors.price)}
+          />
           <FieldError msg={errors.price?.message} />
         </div>
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" /> Guest Capacity</span></label>
-          <input type="number" {...register("capacity")} min={1} max={20} className={inputCls(!!errors.capacity)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Users className="h-3.5 w-3.5" /> Guest Capacity
+            </span>
+          </label>
+          <input
+            type="number"
+            {...register("capacity")}
+            min={1}
+            max={20}
+            className={inputCls(!!errors.capacity)}
+          />
           <FieldError msg={errors.capacity?.message} />
         </div>
       </div>
@@ -2656,12 +3473,24 @@ function EditRoomForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelCls()}>View Type</label>
-          <input type="text" {...register("view")} className={inputCls(!!errors.view)} />
+          <input
+            type="text"
+            {...register("view")}
+            className={inputCls(!!errors.view)}
+          />
           <FieldError msg={errors.view?.message} />
         </div>
         <div>
-          <label className={labelCls()}><span className="flex items-center gap-1.5"><Maximize2 className="h-3.5 w-3.5" /> Room Size</span></label>
-          <input type="text" {...register("size")} className={inputCls(!!errors.size)} />
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Maximize2 className="h-3.5 w-3.5" /> Room Size
+            </span>
+          </label>
+          <input
+            type="text"
+            {...register("size")}
+            className={inputCls(!!errors.size)}
+          />
           <FieldError msg={errors.size?.message} />
         </div>
       </div>
@@ -2669,25 +3498,48 @@ function EditRoomForm({
       {/* Description */}
       <div>
         <label className={labelCls()}>Description</label>
-        <textarea {...register("description")} rows={3} placeholder="Describe the room features, furnishings, and highlights…" className={inputCls(!!errors.description)} />
+        <textarea
+          {...register("description")}
+          rows={3}
+          placeholder="Describe the room features, furnishings, and highlights…"
+          className={inputCls(!!errors.description)}
+        />
         <FieldError msg={errors.description?.message} />
       </div>
 
       {/* Amenities */}
       <div>
-        <label className={labelCls()}><span className="flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Amenities <span className="font-normal text-gray-400">(comma-separated)</span></span></label>
-        <input type="text" {...register("amenities")} placeholder="AC, WiFi, Minibar, Smart TV" className={inputCls(!!errors.amenities)} />
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5" /> Amenities{" "}
+            <span className="font-normal text-gray-400">(comma-separated)</span>
+          </span>
+        </label>
+        <input
+          type="text"
+          {...register("amenities")}
+          placeholder="AC, WiFi, Minibar, Smart TV"
+          className={inputCls(!!errors.amenities)}
+        />
         <FieldError msg={errors.amenities?.message} />
       </div>
 
       {/* Active toggle */}
       <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
         <div>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Active</p>
-          <p className="text-xs text-gray-400 dark:text-gray-500">Only active rooms are shown to guests</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+            Active
+          </p>
+          <p className="text-xs text-gray-400 dark:text-gray-500">
+            Only active rooms are shown to guests
+          </p>
         </div>
         <label className="relative inline-flex cursor-pointer items-center">
-          <input type="checkbox" className="sr-only peer" {...register("isActive")} />
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            {...register("isActive")}
+          />
           <div className="h-6 w-11 rounded-full bg-gray-200 transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all after:content-[''] peer-checked:bg-violet-600 peer-checked:after:translate-x-full dark:bg-gray-600" />
         </label>
       </div>
@@ -2696,24 +3548,55 @@ function EditRoomForm({
       <div>
         <div className="mb-2 flex items-start justify-between">
           <div>
-            <label className={labelCls()}><span className="flex items-center gap-1.5"><Upload className="h-3.5 w-3.5" /> Room Photos</span></label>
+            <label className={labelCls()}>
+              <span className="flex items-center gap-1.5">
+                <Upload className="h-3.5 w-3.5" /> Room Photos
+              </span>
+            </label>
             <p className="text-xs text-gray-400 dark:text-gray-500">
-              You can add or remove images individually. Upload 1–{MAX_ROOM_IMAGES} photos.
+              You can add or remove images individually. Upload 1–
+              {MAX_ROOM_IMAGES} photos.
             </p>
           </div>
-          {imagePreviews.length > 0 && imagePreviews.length < MAX_ROOM_IMAGES && (
-            <label className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 ${fetchingImages ? "pointer-events-none opacity-60" : ""}`}>
-              {fetchingImages ? <><Loader2 className="h-3 w-3 animate-spin" /> Loading…</> : "+ Add more"}
-              <input type="file" accept="image/*" multiple className="hidden" disabled={fetchingImages} onChange={handleImageChange} />
-            </label>
-          )}
+          {imagePreviews.length > 0 &&
+            imagePreviews.length < MAX_ROOM_IMAGES && (
+              <label
+                className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 ${fetchingImages ? "pointer-events-none opacity-60" : ""}`}
+              >
+                {fetchingImages ? (
+                  <>
+                    <Loader2 className="h-3 w-3 animate-spin" /> Loading…
+                  </>
+                ) : (
+                  "+ Add more"
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  disabled={fetchingImages}
+                  onChange={handleImageChange}
+                />
+              </label>
+            )}
         </div>
 
         {imagePreviews.length > 0 ? (
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
             {imagePreviews.map((src, i) => (
-              <div key={i} className="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
-                <Image src={src} alt={`Photo ${i + 1}`} fill unoptimized className="object-cover" sizes="160px" />
+              <div
+                key={i}
+                className="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800"
+              >
+                <Image
+                  src={src}
+                  alt={`Photo ${i + 1}`}
+                  fill
+                  unoptimized
+                  className="object-cover"
+                  sizes="160px"
+                />
                 <button
                   type="button"
                   onClick={() => removePreview(i)}
@@ -2724,34 +3607,75 @@ function EditRoomForm({
               </div>
             ))}
             {imagePreviews.length < MAX_ROOM_IMAGES && (
-              <label className={`flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800/50 ${fetchingImages ? "cursor-wait opacity-60" : "hover:border-violet-400 hover:bg-violet-50/30 dark:hover:border-violet-600"}`}>
-                {fetchingImages
-                  ? <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-                  : <ImageIcon className="h-5 w-5 text-gray-300" />}
-                <span className="text-xs text-gray-400">{fetchingImages ? "Loading…" : "Add"}</span>
-                <input type="file" accept="image/*" multiple className="hidden" disabled={fetchingImages} onChange={handleImageChange} />
+              <label
+                className={`flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800/50 ${fetchingImages ? "cursor-wait opacity-60" : "hover:border-violet-400 hover:bg-violet-50/30 dark:hover:border-violet-600"}`}
+              >
+                {fetchingImages ? (
+                  <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                ) : (
+                  <ImageIcon className="h-5 w-5 text-gray-300" />
+                )}
+                <span className="text-xs text-gray-400">
+                  {fetchingImages ? "Loading…" : "Add"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  disabled={fetchingImages}
+                  onChange={handleImageChange}
+                />
               </label>
             )}
           </div>
         ) : (
-          <label className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors hover:border-violet-400 hover:bg-violet-50/30 dark:hover:border-violet-600 ${imageError ? "border-red-400 bg-red-50/20 dark:border-red-700" : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50"}`}>
+          <label
+            className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors hover:border-violet-400 hover:bg-violet-50/30 dark:hover:border-violet-600 ${imageError ? "border-red-400 bg-red-50/20 dark:border-red-700" : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50"}`}
+          >
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
               <Upload className="h-5 w-5 text-gray-400" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Click to upload photos</p>
-              <p className="mt-0.5 text-xs text-gray-400">Select up to {MAX_ROOM_IMAGES} images — JPEG, PNG or WebP</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Click to upload photos
+              </p>
+              <p className="mt-0.5 text-xs text-gray-400">
+                Select up to {MAX_ROOM_IMAGES} images — JPEG, PNG or WebP
+              </p>
             </div>
-            <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={handleImageChange}
+            />
           </label>
         )}
 
-        {imageError && <p className="mt-1.5 text-xs font-medium text-red-500">{imageError}</p>}
+        {imageError && (
+          <p className="mt-1.5 text-xs font-medium text-red-500">
+            {imageError}
+          </p>
+        )}
       </div>
 
-      <button type="submit" disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60">
-        {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Pencil className="h-4 w-4" />}
-        {isSubmitting ? "Saving…" : fetchingImages ? "Processing images…" : "Save Changes"}
+      <button
+        type="submit"
+        disabled={busy}
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {busy ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <Pencil className="h-4 w-4" />
+        )}
+        {isSubmitting
+          ? "Saving…"
+          : fetchingImages
+            ? "Processing images…"
+            : "Save Changes"}
       </button>
     </form>
   );
@@ -2765,16 +3689,32 @@ function SettingsSection() {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
-    useForm<PasswordFormValues>({ resolver: yupResolver(passwordSchema), mode: "onTouched" });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<PasswordFormValues>({
+    resolver: yupResolver(passwordSchema),
+    mode: "onTouched",
+  });
 
   async function onPasswordSubmit(data: PasswordFormValues) {
-    if (!token) { toast.error("Authentication token not found."); return; }
+    if (!token) {
+      toast.error("Authentication token not found.");
+      return;
+    }
     try {
       const res = await fetch(`${BASE}/users/me/password`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ currentPassword: data.currentPassword, newPassword: data.newPassword }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          currentPassword: data.currentPassword,
+          newPassword: data.newPassword,
+        }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.message || "Failed to update password");
@@ -2793,18 +3733,39 @@ function SettingsSection() {
             <Lock className="h-4 w-4 text-primary-600 dark:text-primary-400" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">Change Password</h3>
-            <p className="text-xs text-gray-400 dark:text-gray-500">Keep your account secure with a strong password</p>
+            <h3 className="font-semibold text-gray-900 dark:text-white">
+              Change Password
+            </h3>
+            <p className="text-xs text-gray-400 dark:text-gray-500">
+              Keep your account secure with a strong password
+            </p>
           </div>
         </div>
-        <form onSubmit={handleSubmit(onPasswordSubmit)} noValidate className="space-y-4 p-6">
+        <form
+          onSubmit={handleSubmit(onPasswordSubmit)}
+          noValidate
+          className="space-y-4 p-6"
+        >
           <div>
             <label className={labelCls()}>Current Password</label>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <input type={showCurrent ? "text" : "password"} {...register("currentPassword")} placeholder="Enter current password" className={`${inputCls(!!errors.currentPassword)} pl-10 pr-11`} />
-              <button type="button" onClick={() => setShowCurrent((p) => !p)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              <input
+                type={showCurrent ? "text" : "password"}
+                {...register("currentPassword")}
+                placeholder="Enter current password"
+                className={`${inputCls(!!errors.currentPassword)} pl-10 pr-11`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowCurrent((p) => !p)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                {showCurrent ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
             </div>
             <FieldError msg={errors.currentPassword?.message} />
@@ -2814,9 +3775,22 @@ function SettingsSection() {
               <label className={labelCls()}>New Password</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <input type={showNew ? "text" : "password"} {...register("newPassword")} placeholder="Min. 8 chars, letter + number" className={`${inputCls(!!errors.newPassword)} pl-10 pr-11`} />
-                <button type="button" onClick={() => setShowNew((p) => !p)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                  {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                <input
+                  type={showNew ? "text" : "password"}
+                  {...register("newPassword")}
+                  placeholder="Min. 8 chars, letter + number"
+                  className={`${inputCls(!!errors.newPassword)} pl-10 pr-11`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNew((p) => !p)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showNew ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
               <FieldError msg={errors.newPassword?.message} />
@@ -2825,15 +3799,32 @@ function SettingsSection() {
               <label className={labelCls()}>Confirm New Password</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <input type={showConfirm ? "text" : "password"} {...register("confirmPassword")} placeholder="Re-enter new password" className={`${inputCls(!!errors.confirmPassword)} pl-10 pr-11`} />
-                <button type="button" onClick={() => setShowConfirm((p) => !p)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                  {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  {...register("confirmPassword")}
+                  placeholder="Re-enter new password"
+                  className={`${inputCls(!!errors.confirmPassword)} pl-10 pr-11`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm((p) => !p)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showConfirm ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
               <FieldError msg={errors.confirmPassword?.message} />
             </div>
           </div>
-          <button type="submit" disabled={isSubmitting} className="flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
+          >
             <Lock className="h-4 w-4" />
             {isSubmitting ? "Updating…" : "Update Password"}
           </button>
@@ -2846,16 +3837,31 @@ function SettingsSection() {
             <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />
           </div>
           <div>
-            <h3 className="font-semibold text-red-700 dark:text-red-400">Danger Zone</h3>
-            <p className="text-xs text-red-500/80 dark:text-red-500/60">Irreversible account actions</p>
+            <h3 className="font-semibold text-red-700 dark:text-red-400">
+              Danger Zone
+            </h3>
+            <p className="text-xs text-red-500/80 dark:text-red-500/60">
+              Irreversible account actions
+            </p>
           </div>
         </div>
         <div className="flex flex-col gap-3 p-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-900 dark:text-white">Delete Account</p>
-            <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">Permanently delete your account and all data. This cannot be undone.</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">
+              Delete Account
+            </p>
+            <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+              Permanently delete your account and all data. This cannot be
+              undone.
+            </p>
           </div>
-          <button type="button" onClick={() => toast.error("Please contact support to delete your account.")} className="shrink-0 rounded-xl border border-red-300 px-5 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/30">
+          <button
+            type="button"
+            onClick={() =>
+              toast.error("Please contact support to delete your account.")
+            }
+            className="shrink-0 rounded-xl border border-red-300 px-5 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/30"
+          >
             Delete Account
           </button>
         </div>
