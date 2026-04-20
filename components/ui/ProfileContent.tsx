@@ -36,6 +36,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import toast from "react-hot-toast";
 import type { UserProfile, Booking, BookingStatus } from "@/types";
+import { useAuth } from "@/context/AuthContext";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -633,6 +634,7 @@ function BookingCard({ booking }: { booking: Booking }) {
             src={booking.hotelImage}
             alt={booking.hotelName}
             fill
+            unoptimized
             className="object-cover"
             sizes="128px"
           />
@@ -778,6 +780,7 @@ function BookingCard({ booking }: { booking: Booking }) {
 // ─── Settings section ─────────────────────────────────────────────────────────
 
 function SettingsSection() {
+  const { token } = useAuth();
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -795,16 +798,39 @@ function SettingsSection() {
     mode: "onTouched",
   });
 
-  function onPasswordSubmit(data: PasswordFormValues) {
-    void data;
-    // TODO: call real API — PATCH /api/user/password
-    return new Promise<void>((resolve) =>
-      setTimeout(() => {
-        toast.success("Password updated successfully!");
-        reset();
-        resolve();
-      }, 1000),
-    );
+  async function onPasswordSubmit(data: PasswordFormValues) {
+    if (!token) {
+      toast.error("Authentication token not found.");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/password`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            currentPassword: data.currentPassword,
+            newPassword: data.newPassword,
+          }),
+        },
+      );
+
+      const json = await res.json();
+
+      if (!res.ok) {
+        throw new Error(json.message || "Failed to update password");
+      }
+
+      toast.success(json.message || "Password updated successfully!");
+      reset();
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong.");
+    }
   }
 
   return (

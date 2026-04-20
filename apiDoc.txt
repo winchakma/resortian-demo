@@ -202,7 +202,14 @@ Response 200
         "id": "clx...",
         "name": "Deluxe Sea View",
         "images": ["/images/rooms/1714000000000-abc123.webp"],
-        "price": 5000
+        "price": 5000,
+        "hotel": {
+          "id": "clx...",
+          "name": "Sea Pearl Hotel",
+          "slug": "sea-pearl-hotel",
+          "location": "Cox's Bazar",
+          "image": "/images/hotels/1714000000000-abc123.webp"
+        }
       },
       "payments": [
         {

@@ -44,8 +44,8 @@ export function ProfileLoader() {
             avatar: string | null;
             memberSince: string;
           }>("/users/me", token!),
-          fetchWithToken<
-            Array<{
+          fetchWithToken<{
+            data: Array<{
               id: string;
               reference: string;
               hotelId: string;
@@ -59,9 +59,21 @@ export function ProfileLoader() {
               status: string;
               paymentMethod: string;
               bookedOn: string;
-              room: { id: string; name: string; image: string; price: number };
-            }>
-          >("/users/me/bookings", token!),
+              room: {
+                id: string;
+                name: string;
+                images: string[];
+                price: number;
+                hotel: {
+                  id: string;
+                  name: string;
+                  slug: string;
+                  location: string;
+                  image: string;
+                };
+              };
+            }>;
+          }>("/users/me/bookings", token!),
         ]);
 
         setProfile({
@@ -73,15 +85,17 @@ export function ProfileLoader() {
           memberSince: meData.memberSince,
           avatar: meData.avatar ?? undefined,
         });
+        console.log({ bookingsData });
 
         setBookings(
-          bookingsData.map((b) => ({
+          bookingsData?.data?.map((b) => ({
             id: b.id,
             reference: b.reference,
-            hotelName: "",
-            hotelSlug: "",
-            hotelImage: b.room.image,
-            hotelLocation: "",
+            hotelName: b.room.hotel.name,
+            hotelSlug: b.room.hotel.slug,
+            hotelImage:
+              b.room.images?.length > 0 ? `${BASE}${b.room.images[0]}` : "",
+            hotelLocation: b.room.hotel.location,
             roomName: b.room.name,
             checkIn: b.checkIn,
             checkOut: b.checkOut,
@@ -95,20 +109,24 @@ export function ProfileLoader() {
             paymentMethod:
               b.paymentMethod === "STRIPE" ? "stripe" : "uddoktapay",
             currency: "BDT",
-          }))
+          })),
         );
-      } catch {
+      } catch (error) {
+        console.log({ error });
         setFetchError(true);
       }
     }
 
     load();
   }, [token, user]);
+  console.log({ bookings });
 
   if (fetchError) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-sm text-red-500">Failed to load profile data. Please try again.</p>
+        <p className="text-sm text-red-500">
+          Failed to load profile data. Please try again.
+        </p>
       </div>
     );
   }

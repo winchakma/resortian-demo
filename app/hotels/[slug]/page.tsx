@@ -147,11 +147,7 @@ export default async function HotelDetailsPage({
                   </p>
                   <div className="mt-1 flex items-baseline gap-1">
                     <span className="text-3xl font-bold text-primary-700 dark:text-primary-400">
-                      ৳
-                      {(hotel.rooms.length > 0
-                        ? Math.min(...hotel.rooms.map((r) => r.price))
-                        : hotel.price
-                      ).toLocaleString()}
+                      ৳{hotel.price.toLocaleString()}
                     </span>
                     <span className="text-sm text-primary-600/70 dark:text-primary-500">
                       /night
@@ -205,11 +201,14 @@ export default async function HotelDetailsPage({
                             {review.author}
                           </p>
                           <p className="text-xs text-gray-400 dark:text-gray-500">
-                            {new Date(review.createdAt).toLocaleDateString("en-US", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })}
+                            {new Date(review.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              },
+                            )}
                           </p>
                         </div>
                         <div className="flex shrink-0 items-center gap-0.5">
