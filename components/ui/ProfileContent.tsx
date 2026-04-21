@@ -58,7 +58,7 @@ const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3005";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Tab = "profile" | "bookings" | "hotels" | "settings";
-type VendorView = "hotels" | "destinations";
+type VendorView = "hotels" | "destinations" | "bookings";
 type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 interface VendorRoom {
@@ -92,6 +92,82 @@ interface VendorHotel {
   destination: { id: string; name: string; region: string };
   rooms: VendorRoom[];
   _count: { rooms: number; reviews: number };
+}
+
+type VendorBookingStatus = "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED";
+
+interface VendorBooking {
+  id: string;
+  reference: string;
+  userId: string | null;
+  guestName: string | null;
+  guestPhone: string | null;
+  guestEmail: string | null;
+  roomId: string;
+  hotelId: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  guests: number;
+  totalPrice: number;
+  advancePaid: number;
+  balanceDue: number;
+  status: VendorBookingStatus;
+  paymentMethod: "STRIPE" | "UDDOKTAPAY";
+  bookedOn: string;
+  cancelledAt: string | null;
+  cancelReason: string | null;
+  user: {
+    id: string;
+    name: string;
+    phone: string;
+    email: string | null;
+    avatar: string | null;
+  } | null;
+  room: {
+    id: string;
+    name: string;
+    images: string[];
+    price: number;
+    hotel: {
+      id: string;
+      name: string;
+      slug: string;
+      location: string;
+    };
+  };
+  commissionRate: number;
+  commissionAmount: number;
+  payoutAmount: number;
+  payments: {
+    id: string;
+    amount: number;
+    status: string;
+    method: string;
+    isAdvance: boolean;
+    transactionId: string | null;
+    paidAt: string | null;
+  }[];
+  cashoutRequest: {
+    id: string;
+    status: "PENDING" | "APPROVED" | "REJECTED" | "PAID";
+    amount: number;
+    createdAt: string;
+  } | null;
+}
+
+interface BankInfo {
+  id: string;
+  userId: string;
+  bankName: string | null;
+  accountName: string | null;
+  accountNumber: string | null;
+  routingNumber: string | null;
+  bkashNumber: string | null;
+  nagadNumber: string | null;
+  rocketNumber: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface VendorDestination {
@@ -276,6 +352,18 @@ type DestinationFormValues = {
   description: string;
   highlights?: string;
 };
+
+const bankInfoSchema = yup.object({
+  bankName: yup.string().default(""),
+  accountName: yup.string().default(""),
+  accountNumber: yup.string().default(""),
+  routingNumber: yup.string().default(""),
+  bkashNumber: yup.string().default(""),
+  nagadNumber: yup.string().default(""),
+  rocketNumber: yup.string().default(""),
+});
+
+type BankInfoFormValues = yup.InferType<typeof bankInfoSchema>;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -589,7 +677,7 @@ export function ProfileContent({ user, bookings }: ProfileContentProps) {
             <BookingsSection bookings={bookings} />
           )}
           {activeTab === "hotels" && isVendor && <VendorDashboard />}
-          {activeTab === "settings" && <SettingsSection />}
+          {activeTab === "settings" && <SettingsSection isVendor={isVendor} />}
         </div>
       </div>
     </div>
@@ -1113,6 +1201,11 @@ function VendorDashboard() {
               label: "Destinations",
               icon: <Globe className="h-4 w-4" />,
             },
+            {
+              id: "bookings" as VendorView,
+              label: "Bookings",
+              icon: <CalendarDays className="h-4 w-4" />,
+            },
           ] as const
         ).map((tab) => {
           const active = view === tab.id;
@@ -1136,6 +1229,7 @@ function VendorDashboard() {
 
       {view === "hotels" && <VendorHotelsList />}
       {view === "destinations" && <VendorDestinationsList />}
+      {view === "bookings" && <VendorBookingsList />}
     </div>
   );
 }
@@ -1477,6 +1571,538 @@ function VendorHotelsList() {
         />
       )}
     </>
+  );
+}
+
+// ─── Vendor bookings list ─────────────────────────────────────────────────────
+
+const VENDOR_BOOKING_STATUS_CONFIG: Record<
+  VendorBookingStatus,
+  { label: string; pill: string; dot: string }
+> = {
+  CONFIRMED: {
+    label: "Confirmed",
+    pill: "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400",
+    dot: "bg-blue-500",
+  },
+  PENDING: {
+    label: "Pending",
+    pill: "bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400",
+    dot: "bg-amber-400",
+  },
+  COMPLETED: {
+    label: "Completed",
+    pill: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400",
+    dot: "bg-emerald-500",
+  },
+  CANCELLED: {
+    label: "Cancelled",
+    pill: "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
+    dot: "bg-red-400",
+  },
+};
+
+type VendorBookingStatusFilter = "all" | VendorBookingStatus;
+
+function VendorBookingsList() {
+  const { token } = useAuth();
+  const [bookings, setBookings] = useState<VendorBooking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] =
+    useState<VendorBookingStatusFilter>("all");
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [hasBankInfo, setHasBankInfo] = useState(false);
+
+  const loadBookings = useCallback(
+    async (p = 1, status: VendorBookingStatusFilter = "all", q = "") => {
+      if (!token) return;
+      setLoading(true);
+      try {
+        const params = new URLSearchParams({ page: String(p), limit: "10" });
+        if (status !== "all") params.set("status", status);
+        if (q.trim()) {
+          params.set("search", q.trim());
+          params.set("searchField", "reference");
+        }
+        const res = await fetch(`${BASE}/bookings/mine?${params}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error();
+        const json = await res.json();
+        setBookings(json.data ?? []);
+        setTotal(json.meta?.total ?? 0);
+        setTotalPages(json.meta?.totalPages ?? 1);
+      } catch {
+        toast.error("Failed to load bookings.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token],
+  );
+
+  useEffect(() => {
+    if (!token) return;
+    fetch(`${BASE}/users/me/bank-info`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((json) => {
+        const info: BankInfo | null = json ?? null;
+        if (info) {
+          setHasBankInfo(
+            !!(
+              info.accountNumber ||
+              info.bkashNumber ||
+              info.nagadNumber ||
+              info.rocketNumber
+            ),
+          );
+        }
+      })
+      .catch(() => {});
+  }, [token]);
+
+  useEffect(() => {
+    loadBookings(1, statusFilter, query);
+    setPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusFilter]);
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    setPage(1);
+    loadBookings(1, statusFilter, query);
+  }
+
+  function goToPage(p: number) {
+    setPage(p);
+    loadBookings(p, statusFilter, query);
+  }
+
+  const statusTabs: { id: VendorBookingStatusFilter; label: string }[] = [
+    { id: "all", label: "All" },
+    { id: "CONFIRMED", label: "Confirmed" },
+    { id: "PENDING", label: "Pending" },
+    { id: "COMPLETED", label: "Completed" },
+    { id: "CANCELLED", label: "Cancelled" },
+  ];
+
+  return (
+    <div className="space-y-5">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="font-semibold text-gray-900 dark:text-white">
+            Guest Bookings
+          </h3>
+          <p className="text-xs text-gray-400 dark:text-gray-500">
+            {loading
+              ? "Loading…"
+              : `${total} booking${total !== 1 ? "s" : ""} across your hotels`}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => loadBookings(page, statusFilter, query)}
+          disabled={loading}
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+          title="Refresh"
+        >
+          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+        </button>
+      </div>
+
+      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        {/* Search */}
+        <div className="border-b border-gray-100 px-5 py-4 dark:border-gray-800">
+          <form onSubmit={handleSearch} className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by booking reference…"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2 pl-9 pr-8 text-sm text-gray-900 outline-none transition-colors focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery("");
+                  setPage(1);
+                  loadBookings(1, statusFilter, "");
+                }}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </form>
+        </div>
+
+        {/* Status tabs */}
+        <div className="flex overflow-x-auto border-b border-gray-100 dark:border-gray-800">
+          {statusTabs.map((tab) => {
+            const active = statusFilter === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setStatusFilter(tab.id)}
+                className={`flex shrink-0 items-center gap-1.5 border-b-2 px-5 py-3 text-sm font-medium transition-colors ${
+                  active
+                    ? "border-violet-600 text-violet-700 dark:border-violet-400 dark:text-violet-400"
+                    : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Content */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600" />
+          </div>
+        ) : bookings.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+              <CalendarDays className="h-7 w-7 text-gray-400" />
+            </div>
+            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              No bookings found
+            </p>
+            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+              {query
+                ? "Try a different reference."
+                : "No bookings in this category yet."}
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-100 dark:divide-gray-800">
+            {bookings.map((b) => (
+              <VendorBookingRow
+                key={b.id}
+                booking={b}
+                hasBankInfo={hasBankInfo}
+                onCashoutRequested={() =>
+                  loadBookings(page, statusFilter, query)
+                }
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 dark:border-gray-800">
+            <p className="text-xs text-gray-400">
+              Page {page} of {totalPages}
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => goToPage(page - 1)}
+                disabled={page <= 1 || loading}
+                className="rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-40 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() => goToPage(page + 1)}
+                disabled={page >= totalPages || loading}
+                className="rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-40 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function VendorBookingRow({
+  booking,
+  hasBankInfo,
+  onCashoutRequested,
+}: {
+  booking: VendorBooking;
+  hasBankInfo: boolean;
+  onCashoutRequested: () => void;
+}) {
+  const { token } = useAuth();
+  const [expanded, setExpanded] = useState(false);
+  const [cashoutLoading, setCashoutLoading] = useState(false);
+  const cfg = VENDOR_BOOKING_STATUS_CONFIG[booking.status];
+  const guestName = booking.user?.name ?? booking.guestName ?? "Guest";
+
+  async function handleRequestCashout() {
+    if (!token) return;
+    setCashoutLoading(true);
+    try {
+      const res = await fetch(`${BASE}/cashout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ bookingId: booking.id }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to request cashout");
+      toast.success("Cashout request submitted!");
+      onCashoutRequested();
+    } catch (err: unknown) {
+      toast.error(
+        err instanceof Error ? err.message : "Could not request cashout.",
+      );
+    } finally {
+      setCashoutLoading(false);
+    }
+  }
+  const guestPhone = booking.user?.phone ?? booking.guestPhone ?? "—";
+
+  return (
+    <div className="px-5 py-4">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                {booking.room.hotel.name}
+              </p>
+              <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                {booking.room.name}
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${cfg.pill}`}
+              >
+                <span className={`h-1.5 w-1.5 rounded-full ${cfg.dot}`} />
+                {cfg.label}
+              </span>
+              {booking.cashoutRequest && (
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                    booking.cashoutRequest.status === "PAID"
+                      ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400"
+                      : booking.cashoutRequest.status === "APPROVED"
+                        ? "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400"
+                        : booking.cashoutRequest.status === "REJECTED"
+                          ? "bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400"
+                          : "bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400"
+                  }`}
+                >
+                  <CreditCard className="h-3 w-3" />
+                  {booking.cashoutRequest.status === "PAID"
+                    ? "Paid out"
+                    : booking.cashoutRequest.status === "APPROVED"
+                      ? "Cashout approved"
+                      : booking.cashoutRequest.status === "REJECTED"
+                        ? "Cashout rejected"
+                        : "Cashout pending"}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+            <span className="flex items-center gap-1">
+              <CalendarDays className="h-3.5 w-3.5" />
+              {fmtDate(booking.checkIn)} → {fmtDate(booking.checkOut)}
+            </span>
+            <span className="flex items-center gap-1">
+              <Moon className="h-3.5 w-3.5" />
+              {booking.nights} night{booking.nights !== 1 ? "s" : ""}
+            </span>
+            <span className="flex items-center gap-1">
+              <Users className="h-3.5 w-3.5" />
+              {booking.guests} guest{booking.guests !== 1 ? "s" : ""}
+            </span>
+          </div>
+
+          <div className="mt-2.5 flex flex-wrap items-center gap-2">
+            <span className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 font-mono text-[11px] font-semibold text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+              {booking.reference}
+            </span>
+            <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+              <User className="h-3 w-3" />
+              {guestName}
+            </span>
+            <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+              <Phone className="h-3 w-3" />
+              {guestPhone}
+            </span>
+            <button
+              type="button"
+              onClick={() => setExpanded((p) => !p)}
+              className="text-xs font-medium text-violet-600 hover:underline dark:text-violet-400"
+            >
+              {expanded ? "Hide details" : "View details"}
+            </button>
+          </div>
+
+          {expanded && (
+            <div className="mt-3 overflow-hidden rounded-xl border border-gray-100 dark:border-gray-800">
+              {/* Booking financials */}
+              <div className="grid grid-cols-3 divide-x divide-gray-100 dark:divide-gray-800">
+                {[
+                  {
+                    label: "Total",
+                    value: `৳${booking.totalPrice.toLocaleString()}`,
+                    sub: "Booking value",
+                    highlight: false,
+                  },
+                  {
+                    label: "Advance Paid",
+                    value: `৳${booking.advancePaid.toLocaleString()}`,
+                    sub: "20% online",
+                    highlight: true,
+                  },
+                  {
+                    label:
+                      booking.status === "COMPLETED"
+                        ? "Paid at Hotel"
+                        : booking.status === "CANCELLED"
+                          ? "Refunded"
+                          : "Due at Hotel",
+                    value: `৳${booking.balanceDue.toLocaleString()}`,
+                    sub:
+                      booking.status === "COMPLETED"
+                        ? "At check-in"
+                        : booking.status === "CANCELLED"
+                          ? "7–10 days"
+                          : "On arrival",
+                    highlight: false,
+                  },
+                ].map((col) => (
+                  <div
+                    key={col.label}
+                    className={`px-4 py-3 ${col.highlight ? "bg-violet-50/60 dark:bg-violet-950/20" : "bg-gray-50/60 dark:bg-gray-800/30"}`}
+                  >
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                      {col.label}
+                    </p>
+                    <p
+                      className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-violet-700 dark:text-violet-400" : "text-gray-800 dark:text-gray-200"}`}
+                    >
+                      {col.value}
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                      {col.sub}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Commission breakdown */}
+              <div className="grid grid-cols-3 divide-x divide-gray-100 border-t border-gray-100 dark:divide-gray-800 dark:border-gray-800">
+                <div className="bg-gray-50/40 px-4 py-3 dark:bg-gray-800/20">
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                    Commission Rate
+                  </p>
+                  <p className="mt-0.5 text-sm font-bold text-gray-700 dark:text-gray-300">
+                    {booking.commissionRate}%
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                    Platform fee
+                  </p>
+                </div>
+                <div className="bg-red-50/40 px-4 py-3 dark:bg-red-950/10">
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                    Platform Fee
+                  </p>
+                  <p className="mt-0.5 text-sm font-bold text-red-600 dark:text-red-400">
+                    ৳{booking.commissionAmount.toLocaleString()}
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                    Deducted
+                  </p>
+                </div>
+                <div className="bg-emerald-50/60 px-4 py-3 dark:bg-emerald-950/20">
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                    Your Payout
+                  </p>
+                  <p className="mt-0.5 text-sm font-bold text-emerald-700 dark:text-emerald-400">
+                    ৳{booking.payoutAmount.toLocaleString()}
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                    {booking.cashoutRequest
+                      ? booking.cashoutRequest.status === "PAID"
+                        ? "Paid out"
+                        : booking.cashoutRequest.status === "APPROVED"
+                          ? "Approved"
+                          : booking.cashoutRequest.status === "REJECTED"
+                            ? "Request rejected"
+                            : "Cashout pending"
+                      : "Cashout available"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between border-t border-gray-100 px-4 py-2 dark:border-gray-800">
+                <p className="text-xs text-gray-400 dark:text-gray-500">
+                  Booked on {fmtDate(booking.bookedOn)}
+                </p>
+                <span className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+                  {booking.paymentMethod === "STRIPE" ? (
+                    <CreditCard className="h-3 w-3" />
+                  ) : (
+                    <Smartphone className="h-3 w-3" />
+                  )}
+                  {booking.paymentMethod === "STRIPE"
+                    ? "Card"
+                    : "Mobile Banking"}
+                </span>
+              </div>
+
+              {/* Cashout action */}
+              {/* {booking.status === "CONFIRMED" && !booking.cashoutRequest && ( */}
+              {!booking.cashoutRequest && (
+                <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
+                  {hasBankInfo ? (
+                    <button
+                      type="button"
+                      onClick={handleRequestCashout}
+                      disabled={cashoutLoading}
+                      className="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {cashoutLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <CreditCard className="h-4 w-4" />
+                      )}
+                      {cashoutLoading ? "Requesting…" : "Request Cashout"}
+                    </button>
+                  ) : (
+                    <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 dark:border-amber-800/40 dark:bg-amber-950/20">
+                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                      <p className="text-xs text-amber-700 dark:text-amber-400">
+                        Add your bank or mobile banking info in{" "}
+                        <span className="font-semibold">
+                          Settings → Bank & Payment Info
+                        </span>{" "}
+                        before requesting a cashout.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -3681,9 +4307,200 @@ function EditRoomForm({
   );
 }
 
+// ─── Vendor bank info section ─────────────────────────────────────────────────
+
+function VendorBankInfoSection() {
+  const { token } = useAuth();
+  const [loadingInfo, setLoadingInfo] = useState(true);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<BankInfoFormValues>({
+    resolver: yupResolver(bankInfoSchema),
+    mode: "onTouched",
+  });
+
+  useEffect(() => {
+    if (!token) return;
+    fetch(`${BASE}/users/me/bank-info`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((json) => {
+        const info: BankInfo | null = json.data ?? null;
+        if (info) {
+          reset({
+            bankName: info.bankName ?? "",
+            accountName: info.accountName ?? "",
+            accountNumber: info.accountNumber ?? "",
+            routingNumber: info.routingNumber ?? "",
+            bkashNumber: info.bkashNumber ?? "",
+            nagadNumber: info.nagadNumber ?? "",
+            rocketNumber: info.rocketNumber ?? "",
+          });
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingInfo(false));
+  }, [token, reset]);
+
+  async function onBankInfoSubmit(data: BankInfoFormValues) {
+    if (!token) return;
+    try {
+      const res = await fetch(`${BASE}/users/me/bank-info`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to save bank info");
+      toast.success("Bank & payment info saved!");
+    } catch (err: unknown) {
+      toast.error(
+        err instanceof Error ? err.message : "Could not save bank info.",
+      );
+    }
+  }
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+      <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-gray-800">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-950/30">
+          <CreditCard className="h-4 w-4 text-violet-600 dark:text-violet-400" />
+        </div>
+        <div>
+          <h3 className="font-semibold text-gray-900 dark:text-white">
+            Bank & Payment Info
+          </h3>
+          <p className="text-xs text-gray-400 dark:text-gray-500">
+            Required for cashout requests
+          </p>
+        </div>
+      </div>
+
+      {loadingInfo ? (
+        <div className="flex items-center justify-center py-10">
+          <div className="h-6 w-6 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600" />
+        </div>
+      ) : (
+        <form
+          onSubmit={handleSubmit(onBankInfoSubmit)}
+          noValidate
+          className="space-y-5 p-6"
+        >
+          {/* Bank account */}
+          <div>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+              Bank Account
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className={labelCls()}>Bank Name</label>
+                <input
+                  {...register("bankName")}
+                  placeholder="e.g. Dutch-Bangla Bank"
+                  className={inputCls(!!errors.bankName)}
+                />
+                <FieldError msg={errors.bankName?.message} />
+              </div>
+              <div>
+                <label className={labelCls()}>Account Holder Name</label>
+                <input
+                  {...register("accountName")}
+                  placeholder="Full name on account"
+                  className={inputCls(!!errors.accountName)}
+                />
+                <FieldError msg={errors.accountName?.message} />
+              </div>
+              <div>
+                <label className={labelCls()}>Account Number</label>
+                <input
+                  {...register("accountNumber")}
+                  placeholder="Your account number"
+                  className={inputCls(!!errors.accountNumber)}
+                />
+                <FieldError msg={errors.accountNumber?.message} />
+              </div>
+              <div>
+                <label className={labelCls()}>Routing Number</label>
+                <input
+                  {...register("routingNumber")}
+                  placeholder="9-digit routing number"
+                  className={inputCls(!!errors.routingNumber)}
+                />
+                <FieldError msg={errors.routingNumber?.message} />
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile banking */}
+          <div>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+              Mobile Banking
+            </p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <label className={labelCls()}>bKash Number</label>
+                <div className="relative">
+                  <Smartphone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-pink-500" />
+                  <input
+                    {...register("bkashNumber")}
+                    placeholder="01XXXXXXXXX"
+                    className={`${inputCls(!!errors.bkashNumber)} pl-10`}
+                  />
+                </div>
+                <FieldError msg={errors.bkashNumber?.message} />
+              </div>
+              <div>
+                <label className={labelCls()}>Nagad Number</label>
+                <div className="relative">
+                  <Smartphone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-orange-500" />
+                  <input
+                    {...register("nagadNumber")}
+                    placeholder="01XXXXXXXXX"
+                    className={`${inputCls(!!errors.nagadNumber)} pl-10`}
+                  />
+                </div>
+                <FieldError msg={errors.nagadNumber?.message} />
+              </div>
+              <div>
+                <label className={labelCls()}>Rocket Number</label>
+                <div className="relative">
+                  <Smartphone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-violet-500" />
+                  <input
+                    {...register("rocketNumber")}
+                    placeholder="01XXXXXXXXX"
+                    className={`${inputCls(!!errors.rocketNumber)} pl-10`}
+                  />
+                </div>
+                <FieldError msg={errors.rocketNumber?.message} />
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <CreditCard className="h-4 w-4" />
+            {isSubmitting ? "Saving…" : "Save Payment Info"}
+          </button>
+        </form>
+      )}
+    </div>
+  );
+}
+
 // ─── Settings section ─────────────────────────────────────────────────────────
 
-function SettingsSection() {
+function SettingsSection({ isVendor }: { isVendor: boolean }) {
   const { token } = useAuth();
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -3727,6 +4544,8 @@ function SettingsSection() {
 
   return (
     <div className="space-y-5">
+      {isVendor && <VendorBankInfoSection />}
+
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-gray-800">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/30">

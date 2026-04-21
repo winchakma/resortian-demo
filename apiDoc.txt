@@ -109,6 +109,58 @@ Response 200
 ---
 Users
 
+GET /users
+
+Admin only (SUPER_ADMIN or ADMIN)
+
+Query params (all optional)
+
+┌─────────────┬───────────────────────────────┬─────────┐
+│    Param    │             Type              │ Default │
+├─────────────┼───────────────────────────────┼─────────┤
+│ search      │ string                        │ —       │
+├─────────────┼───────────────────────────────┼─────────┤
+│ searchField │ name | phone | email          │ —       │
+├─────────────┼───────────────────────────────┼─────────┤
+│ role        │ USER | ADMIN | HOTEL_OWNER |  │ —       │
+│             │ SUPER_ADMIN                   │         │
+├─────────────┼───────────────────────────────┼─────────┤
+│ page        │ number                        │ 1       │
+├─────────────┼───────────────────────────────┼─────────┤
+│ limit       │ number                        │ 10      │
+└─────────────┴───────────────────────────────┴─────────┘
+
+Search behaviour
+  ?search=rahim            → searches name + phone + email (OR, case-insensitive)
+  ?search=rahim&searchField=name   → searches name only
+  ?search=017&searchField=phone    → searches phone only
+  ?search=gmail&searchField=email  → searches email only
+  ?role=HOTEL_OWNER        → filter by role
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "name": "Rahim Uddin",
+      "phone": "01711223344",
+      "email": "rahim@example.com",
+      "role": "USER",
+      "isVerified": false,
+      "avatar": null,
+      "address": null,
+      "memberSince": "2026-04-12T10:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "total": 120,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 12
+  }
+}
+
+---
 GET /users/me
 
 Auth required
@@ -155,6 +207,66 @@ Body
 
 Response 200
 { "message": "Password changed successfully" }
+
+---
+GET /users/me/bank-info
+
+Auth required
+
+Response 200 — null if not set yet, otherwise:
+{
+  "id": "clx...",
+  "userId": "clx...",
+  "bankName": "Dutch Bangla Bank",
+  "accountName": "Rahim Uddin",
+  "accountNumber": "1234567890",
+  "routingNumber": "090268301",
+  "bkashNumber": "01711223344",
+  "nagadNumber": null,
+  "rocketNumber": null,
+  "createdAt": "2026-04-12T10:00:00.000Z",
+  "updatedAt": "2026-04-12T10:00:00.000Z"
+}
+
+---
+PUT /users/me/bank-info
+
+Auth required — creates or replaces bank info (upsert)
+
+Body (all fields optional)
+{
+  "bankName": "Dutch Bangla Bank",
+  "accountName": "Rahim Uddin",
+  "accountNumber": "1234567890",
+  "routingNumber": "090268301",
+  "bkashNumber": "01711223344",
+  "nagadNumber": "01711223344",
+  "rocketNumber": null
+}
+
+Response 200 — updated bank info object (same shape as GET /users/me/bank-info)
+
+---
+GET /users/:id/bank-info
+
+Admin only (SUPER_ADMIN or ADMIN) — retrieve bank info for any user by their ID
+
+Response 200 — null if the user has not set bank info yet, otherwise:
+{
+  "id": "clx...",
+  "userId": "clx...",
+  "bankName": "Dutch Bangla Bank",
+  "accountName": "Rahim Uddin",
+  "accountNumber": "1234567890",
+  "routingNumber": "090268301",
+  "bkashNumber": "01711223344",
+  "nagadNumber": null,
+  "rocketNumber": null,
+  "createdAt": "2026-04-12T10:00:00.000Z",
+  "updatedAt": "2026-04-12T10:00:00.000Z"
+}
+
+Error 404 — user not found
 
 ---
 GET /users/me/bookings
@@ -467,61 +579,6 @@ Approval behaviour
 Response 201 — created hotel object (includes approvalStatus, vendorId)
 
 ---
-GET /hotels/mine
-
-Hotel Owner only (HOTEL_OWNER)
-
-Returns all hotels created by the authenticated vendor, including rooms under each hotel.
-Useful for the vendor dashboard to display their portfolio.
-
-Query params
-
-┌───────┬────────┬─────────┐
-│ Param │  Type  │ Default │
-├───────┼────────┼─────────┤
-│ page  │ number │ 1       │
-├───────┼────────┼─────────┤
-│ limit │ number │ 20      │
-└───────┴────────┴─────────┘
-
-Response 200
-{
-  "data": [
-    {
-      "id": "clx...",
-      "name": "Sea Pearl Beach Resort",
-      "slug": "sea-pearl-beach-resort",
-      "location": "Cox's Bazar",
-      "image": "/images/hotels/1714000000000-abc123.webp",
-      "price": 5000,
-      "rating": 0,
-      "approvalStatus": "PENDING",
-      "rejectionReason": null,
-      "isActive": false,
-      "destination": { "id": "clx...", "name": "Cox's Bazar", "region": "Chittagong" },
-      "rooms": [
-        {
-          "id": "clx...",
-          "name": "Deluxe Sea View",
-          "price": 5000,
-          "capacity": 2,
-          "view": "Sea View",
-          "size": "38 m²",
-          "images": ["/images/rooms/1714000000000-abc123.webp"],
-          "badge": null,
-          "isActive": true,
-          "approvalStatus": "PENDING",
-          "rejectionReason": null,
-          "createdAt": "2026-04-12T10:00:00.000Z"
-        }
-      ],
-      "_count": { "rooms": 1, "reviews": 0 }
-    }
-  ],
-  "meta": { "total": 1, "page": 1, "limit": 20, "totalPages": 1 }
-}
-
----
 GET /hotels/pending
 
 Admin only — returns hotels awaiting approval (approvalStatus = "PENDING"), oldest first
@@ -614,8 +671,7 @@ Destinations
 
 GET /destinations
 
-Public — only returns admin-created (vendorId = null) approved destinations.
-Vendor-created destinations are NOT included here; use GET /destinations/mine for those.
+Public
 
 Query params (all optional)
 
@@ -651,8 +707,6 @@ Response 200
       "highlights": ["Longest beach", "Himchari"],
       "propertyCount": 18,
       "isFeatured": false,
-      "vendorId": null,
-      "approvalStatus": "APPROVED",
       "createdAt": "2026-01-01T00:00:00.000Z",
       "updatedAt": "2026-04-01T00:00:00.000Z"
     }
@@ -668,79 +722,9 @@ Response 200
 ---
 GET /destinations/popular
 
-Public — returns admin-created destinations where isFeatured = true, ordered by propertyCount desc (max 6)
+Public — returns destinations where isFeatured = true, ordered by propertyCount desc (max 6)
 
 Response 200 — array of destination objects (same shape as items in GET /destinations data array)
-
----
-GET /destinations/mine
-
-Hotel Owner only (HOTEL_OWNER)
-
-Returns all destinations created by the authenticated vendor regardless of approval status.
-Used in the vendor dashboard and also to populate the hotel creation form
-(front-end should filter to approvalStatus = "APPROVED" before showing in the dropdown).
-
-Query params
-
-┌───────┬────────┬─────────┐
-│ Param │  Type  │ Default │
-├───────┼────────┼─────────┤
-│ page  │ number │ 1       │
-├───────┼────────┼─────────┤
-│ limit │ number │ 20      │
-└───────┴────────┴─────────┘
-
-Response 200
-{
-  "data": [
-    {
-      "id": "clx...",
-      "name": "Cox's Bazar",
-      "region": "Chittagong",
-      "description": "...",
-      "image": "/images/destinations/1714000000000-abc123.webp",
-      "isFeatured": false,
-      "approvalStatus": "APPROVED",
-      "rejectionReason": null,
-      "vendorId": "clx...",
-      "_count": { "hotels": 2 },
-      "createdAt": "2026-04-12T10:00:00.000Z"
-    }
-  ],
-  "meta": { "total": 3, "page": 1, "limit": 20, "totalPages": 1 }
-}
-
----
-GET /destinations/pending
-
-Admin only — returns destinations awaiting approval (approvalStatus = "PENDING"), oldest first
-
-Query params
-
-┌───────┬────────┬─────────┐
-│ Param │  Type  │ Default │
-├───────┼────────┼─────────┤
-│ page  │ number │ 1       │
-├───────┼────────┼─────────┤
-│ limit │ number │ 20      │
-└───────┴────────┴─────────┘
-
-Response 200
-{
-  "data": [
-    {
-      "id": "clx...",
-      "name": "Cox's Bazar",
-      "region": "Chittagong",
-      "approvalStatus": "PENDING",
-      "vendorId": "clx...",
-      "createdAt": "2026-04-20T10:00:00.000Z",
-      ...
-    }
-  ],
-  "meta": { "total": 2, "page": 1, "limit": 20, "totalPages": 1 }
-}
 
 ---
 GET /destinations/:id
@@ -774,59 +758,25 @@ Response 200
 ---
 POST /destinations
 
-Admin or Hotel Owner (HOTEL_OWNER)
+Admin only
 Content-Type: multipart/form-data
 
 Fields
   name            string   (required)
   region          string   (required)
   description     string   (required)
-  highlights      string   optional — JSON array string: '["Tea gardens","Jaflong"]'
+  highlights      string   (required) — JSON array string: '["Tea gardens","Jaflong"]'
                            or repeated fields: highlights=Tea+gardens&highlights=Jaflong
   isFeatured      boolean  optional — "true" or "false" (default: false)
   image           file     (required) — JPEG/PNG/WebP, max 10 MB
                            Processed to WebP, served at /images/destinations/<name>.webp
 
-Approval behaviour
-  SUPER_ADMIN → approvalStatus: "APPROVED" immediately, vendorId: null
-  HOTEL_OWNER → approvalStatus: "PENDING", vendorId set to caller's ID
-                Destination is hidden from public and hotel dropdowns until admin approves it.
-
-Name uniqueness is scoped per vendor — each vendor can have their own "Cox's Bazar" destination.
-
-Response 201 — created destination object (includes approvalStatus, vendorId)
-
----
-POST /destinations/:id/approve
-
-Admin only — approves a pending vendor destination
-
-No request body needed.
-
-Response 200 — updated destination object with approvalStatus: "APPROVED"
-
-Error 403 — destination is already approved
-Error 404 — destination not found
-
----
-POST /destinations/:id/reject
-
-Admin only — rejects a pending destination
-
-Body
-{
-  "reason": "Please provide a more detailed description."
-}
-
-Response 200 — updated destination object with approvalStatus: "REJECTED" and rejectionReason set
-
-Error 403 — cannot reject an already approved destination
-Error 404 — destination not found
+Response 201 — created destination object
 
 ---
 PATCH /destinations/:id
 
-Admin or Hotel Owner (own destinations only)
+Admin only
 Content-Type: multipart/form-data
 
 Fields (all optional)
@@ -837,27 +787,15 @@ Fields (all optional)
   isFeatured      boolean  "true" or "false"
   image           file     optional — replaces the existing image (old file is deleted from S3)
 
-Vendors can only update their own destinations (vendorId = caller's ID).
-Admins can update any destination.
-
 Response 200 — updated destination object
-
-Error 403 — vendor trying to edit another vendor's destination
-Error 404 — destination not found
 
 ---
 DELETE /destinations/:id
 
-Admin or Hotel Owner (own destinations only)
-
-Vendors can only delete their own destinations.
-Hard delete — removes from database and deletes image from S3.
+Admin only — hard delete (removes from database, deletes image from S3)
 
 Response 200
 { "message": "Destination deleted successfully" }
-
-Error 403 — vendor trying to delete another vendor's destination
-Error 404 — destination not found
 
 ---
 Rooms
@@ -1016,6 +954,181 @@ Response 200
 ---
 Bookings
 
+GET /bookings
+
+Admin only (SUPER_ADMIN or ADMIN)
+
+Query params (all optional)
+
+┌─────────────┬──────────────────────────────────────────────┬─────────┐
+│    Param    │                     Type                     │ Default │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ search      │ string                                       │ —       │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ searchField │ reference | status | guestName | guestPhone  │ —       │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ status      │ PENDING | CONFIRMED | COMPLETED | CANCELLED  │ —       │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ page        │ number                                       │ 1       │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ limit       │ number                                       │ 10      │
+└─────────────┴──────────────────────────────────────────────┴─────────┘
+
+Search behaviour
+  ?search=RST-A4            → searches reference (contains, case-insensitive)
+  ?search=RST-A4&searchField=reference  → same as above
+  ?search=CONFIRMED&searchField=status  → exact status match
+  ?search=Rahim&searchField=guestName   → searches guestName only
+  ?search=017&searchField=guestPhone    → searches guestPhone only
+  ?status=PENDING           → filter by booking status (combinable with search)
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "reference": "RST-A4F2E1",
+      "userId": "clx...",
+      "guestName": null,
+      "guestPhone": null,
+      "guestEmail": null,
+      "roomId": "clx...",
+      "hotelId": "clx...",
+      "checkIn": "2026-05-10T00:00:00.000Z",
+      "checkOut": "2026-05-13T00:00:00.000Z",
+      "nights": 3,
+      "guests": 2,
+      "totalPrice": 15000,
+      "advancePaid": 3000,
+      "balanceDue": 12000,
+      "status": "CONFIRMED",
+      "paymentMethod": "STRIPE",
+      "bookedOn": "2026-04-12T10:00:00.000Z",
+      "cancelledAt": null,
+      "cancelReason": null,
+      "user": {
+        "id": "clx...",
+        "name": "Rahim Uddin",
+        "phone": "01711223344",
+        "email": "rahim@example.com",
+        "avatar": null
+      },
+      "room": {
+        "id": "clx...",
+        "name": "Deluxe Sea View",
+        "images": ["/images/rooms/1714000000000-abc123.webp"],
+        "price": 5000,
+        "hotel": {
+          "id": "clx...",
+          "name": "Sea Pearl Hotel",
+          "slug": "sea-pearl-hotel",
+          "location": "Cox's Bazar"
+        }
+      },
+      "payments": [
+        {
+          "id": "clx...",
+          "amount": 3000,
+          "status": "PAID",
+          "method": "STRIPE",
+          "isAdvance": true,
+          "transactionId": "pi_...",
+          "paidAt": "2026-04-12T10:05:00.000Z"
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "total": 58,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 6
+  }
+}
+
+---
+GET /bookings/mine
+
+Hotel Owner only (HOTEL_OWNER) — returns bookings for rooms belonging to the authenticated owner's hotels
+Each booking includes commission fields computed from the room's commissionRate (defaults to 7% if not set by admin)
+
+Query params (all optional)
+
+┌─────────────┬──────────────────────────────────────────────┬─────────┐
+│    Param    │                     Type                     │ Default │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ search      │ string                                       │ —       │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ searchField │ reference | status | guestName | guestPhone  │ —       │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ status      │ PENDING | CONFIRMED | COMPLETED | CANCELLED  │ —       │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ hotelId     │ string                                       │ —       │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ page        │ number                                       │ 1       │
+├─────────────┼──────────────────────────────────────────────┼─────────┤
+│ limit       │ number                                       │ 10      │
+└─────────────┴──────────────────────────────────────────────┴─────────┘
+
+Search behaviour
+  ?search=RST-A4            → searches reference (contains, case-insensitive)
+  ?search=RST-A4&searchField=reference  → same as above
+  ?search=CONFIRMED&searchField=status  → exact status match
+  ?search=Rahim&searchField=guestName   → searches guestName only
+  ?search=017&searchField=guestPhone    → searches guestPhone only
+  ?status=CONFIRMED         → filter by booking status (combinable with search)
+  ?hotelId=clx...           → scope to a specific hotel (must belong to the owner)
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "reference": "RST-A4F2E1",
+      "userId": "clx...",
+      "guestName": null,
+      "guestPhone": null,
+      "guestEmail": null,
+      "roomId": "clx...",
+      "hotelId": "clx...",
+      "checkIn": "2026-05-10T00:00:00.000Z",
+      "checkOut": "2026-05-13T00:00:00.000Z",
+      "nights": 3,
+      "guests": 2,
+      "totalPrice": 15000,
+      "advancePaid": 3000,
+      "balanceDue": 12000,
+      "status": "CONFIRMED",
+      "paymentMethod": "STRIPE",
+      "bookedOn": "2026-04-12T10:00:00.000Z",
+      "commissionRate": 10,
+      "commissionAmount": 300,
+      "payoutAmount": 2700,
+      "user": { "id": "clx...", "name": "Rahim Uddin", "phone": "01711223344", "email": null, "avatar": null },
+      "room": {
+        "id": "clx...",
+        "name": "Deluxe Sea View",
+        "images": [...],
+        "price": 5000,
+        "commissionRate": 10,
+        "hotel": { "id": "clx...", "name": "Sea Pearl Hotel", "slug": "sea-pearl-hotel", "location": "Cox's Bazar" }
+      },
+      "payments": [...],
+      "cashoutRequest": null
+    }
+  ],
+  "meta": { "total": 12, "page": 1, "limit": 10, "totalPages": 2 }
+}
+
+Commission logic
+  commissionRate  = room.commissionRate if set by admin, otherwise 7 (default)
+  commissionAmount = round(advancePaid × commissionRate / 100)
+  payoutAmount     = advancePaid − commissionAmount
+  cashoutRequest   = null if no request filed yet, otherwise { id, status, amount, createdAt }
+
+Error 403 — caller is not a HOTEL_OWNER
+
+---
 POST /bookings
 
 Public (Auth optional) — authenticated users book under their account; unauthenticated users make guest bookings
@@ -1094,7 +1207,7 @@ Error 400 — guestName and guestPhone are required for guest bookings
 GET /bookings/:id
 
 Auth required — owner or admin only
-Note: unclaimed guest bookings (userId = null) are only accessible by SUPER_ADMIN until claimed.
+Note: unclaimed guest bookings (userId = null) are only accessible by SUPER_ADMIN or ADMIN until claimed.
 
 Response 200
 {
@@ -1363,6 +1476,149 @@ Response 200
 }
 
 ---
+Cashout
+
+POST /cashout
+
+Hotel Owner only (HOTEL_OWNER) — submit a cashout request for a confirmed booking
+
+Body
+{
+  "bookingId": "clx..."
+}
+
+Rules
+  - Booking must have status CONFIRMED (advance payment received)
+  - Booking must belong to one of the caller's hotels
+  - Only one cashout request allowed per booking
+
+Commission calculation at request time
+  commissionRate   = room.commissionRate if set, otherwise 7%
+  commissionAmount = round(advancePaid × commissionRate / 100)
+  amount (payout)  = advancePaid − commissionAmount
+
+Response 201
+{
+  "id": "clx...",
+  "bookingId": "clx...",
+  "vendorId": "clx...",
+  "amount": 2700,
+  "commissionRate": 10,
+  "commissionAmount": 300,
+  "status": "PENDING",
+  "rejectionReason": null,
+  "note": null,
+  "processedAt": null,
+  "processedBy": null,
+  "createdAt": "2026-04-21T10:00:00.000Z",
+  "updatedAt": "2026-04-21T10:00:00.000Z",
+  "booking": {
+    "id": "clx...",
+    "reference": "RST-A4F2E1",
+    "checkIn": "2026-05-10T00:00:00.000Z",
+    "checkOut": "2026-05-13T00:00:00.000Z",
+    "nights": 3,
+    "totalPrice": 15000,
+    "advancePaid": 3000,
+    "status": "CONFIRMED",
+    "room": {
+      "id": "clx...",
+      "name": "Deluxe Sea View",
+      "hotel": { "id": "clx...", "name": "Sea Pearl Hotel", "slug": "sea-pearl-hotel" }
+    }
+  },
+  "vendor": { "id": "clx...", "name": "Rahim Uddin", "phone": "01711223344", "email": null }
+}
+
+Error 400 — booking is not CONFIRMED
+Error 403 — booking does not belong to your hotel
+Error 409 — cashout request already exists for this booking
+
+---
+GET /cashout/mine
+
+Hotel Owner only (HOTEL_OWNER) — list own cashout requests
+
+Query params (all optional)
+
+┌────────┬───────────────────────────────────┬─────────┐
+│ Param  │               Type                │ Default │
+├────────┼───────────────────────────────────┼─────────┤
+│ status │ PENDING | APPROVED | REJECTED |   │ —       │
+│        │ PAID                              │         │
+├────────┼───────────────────────────────────┼─────────┤
+│ page   │ number                            │ 1       │
+├────────┼───────────────────────────────────┼─────────┤
+│ limit  │ number                            │ 10      │
+└────────┴───────────────────────────────────┴─────────┘
+
+Response 200 — paginated list of cashout request objects (same shape as POST /cashout response)
+
+---
+GET /cashout
+
+Admin only (SUPER_ADMIN or ADMIN) — list all cashout requests
+
+Query params (all optional)
+
+┌──────────┬───────────────────────────────────┬─────────┐
+│  Param   │               Type                │ Default │
+├──────────┼───────────────────────────────────┼─────────┤
+│ status   │ PENDING | APPROVED | REJECTED |   │ —       │
+│          │ PAID                              │         │
+├──────────┼───────────────────────────────────┼─────────┤
+│ vendorId │ string                            │ —       │
+├──────────┼───────────────────────────────────┼─────────┤
+│ page     │ number                            │ 1       │
+├──────────┼───────────────────────────────────┼─────────┤
+│ limit    │ number                            │ 10      │
+└──────────┴───────────────────────────────────┴─────────┘
+
+Response 200 — paginated list of cashout request objects (same shape as POST /cashout response)
+
+---
+PATCH /cashout/:id/approve
+
+Admin only — approve a pending cashout request
+
+Body (optional)
+{
+  "note": "Will be transferred within 2 business days."
+}
+
+Response 200 — updated cashout request with status: "APPROVED"
+
+Error 400 — request is not PENDING
+
+---
+PATCH /cashout/:id/paid
+
+Admin only — mark an approved cashout as paid (money transferred)
+
+Body (optional)
+{
+  "note": "Transferred via bKash on 2026-04-21."
+}
+
+Response 200 — updated cashout request with status: "PAID"
+
+Error 400 — request is not APPROVED
+
+---
+PATCH /cashout/:id/reject
+
+Admin only — reject a pending or approved cashout request
+
+Body
+{
+  "reason": "Bank account details are missing. Please update your bank info."
+}
+
+Response 200 — updated cashout request with status: "REJECTED" and rejectionReason set
+
+Error 400 — request is already PAID
+
+---
 Common Error Shapes
 
 { "statusCode": 400, "message": "Validation error message", "error": "Bad Request" }
@@ -1387,4 +1643,6 @@ Enum Reference
 │ PaymentStatus  │ PENDING  PAID  FAILED  REFUNDED                │
 ├────────────────┼────────────────────────────────────────────────┤
 │ ApprovalStatus │ PENDING  APPROVED  REJECTED                    │
+├────────────────┼────────────────────────────────────────────────┤
+│ CashoutStatus  │ PENDING  APPROVED  REJECTED  PAID              │
 └────────────────┴────────────────────────────────────────────────┘
