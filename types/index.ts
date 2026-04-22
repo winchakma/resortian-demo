@@ -122,7 +122,56 @@ export interface SearchFormData {
 }
 
 export type Tab = "profile" | "bookings" | "hotels" | "settings";
-export type VendorView = "hotels" | "destinations" | "bookings";
+export type VendorView = "overview" | "hotels" | "destinations" | "bookings";
+
+export interface VendorDashboardStats {
+  hotels: { total: number; approved: number; pending: number };
+  rooms: { total: number; active: number; pending: number };
+  bookings: {
+    total: number;
+    thisMonth: number;
+    pending: number;
+    confirmed: number;
+    completed: number;
+    cancelled: number;
+  };
+  cashouts: {
+    pending: number;
+    approved: number;
+    paid: number;
+    eligibleBookings: number;
+  };
+  revenue: {
+    totalRequestedPayout: number;
+    thisMonthRequestedPayout: number;
+    pendingPayoutAmount: number;
+    totalPaidOut: number;
+  };
+  recentBookings: {
+    id: string;
+    reference: string;
+    status: VendorBookingStatus;
+    totalPrice: number;
+    advancePaid: number;
+    nights: number;
+    bookedOn: string;
+    checkIn: string;
+    checkOut: string;
+    cashoutRequest: {
+      id: string;
+      status: "PENDING" | "APPROVED" | "REJECTED" | "PAID";
+      amount: number;
+      createdAt: string;
+    } | null;
+    user: { id: string; name: string; phone: string } | null;
+    room: {
+      id: string;
+      name: string;
+      commissionRate: number;
+      hotel: { id: string; name: string; slug: string };
+    };
+  }[];
+}
 export type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
 export type VendorBookingStatusFilter = "all" | VendorBookingStatus;
 
