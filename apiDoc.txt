@@ -22,7 +22,7 @@ Public
 Body
 {
   "name": "Rahim Uddin",
-  "phone": "01711223344",
+  "phone": "01711223344",    // optional (required only for phone-based login later)
   "password": "secret123",
   "role": "HOTEL_OWNER/USER" // optional | default "USER"
   "email": "rahim@example.com"  // optional
@@ -44,6 +44,41 @@ Response 201
   "accessToken": "eyJ..."
 }
 Refresh token is set as an HttpOnly cookie (refresh_token).
+
+---
+GET /auth/google
+
+Public — initiates Google OAuth2 login flow
+
+No request body needed.
+
+The browser should navigate to this URL (not fetch it with JS).
+Passport redirects to Google's consent screen automatically.
+
+---
+GET /auth/google/callback
+
+Public — Google redirects here after the user approves
+
+No request body needed. This endpoint is called by Google, not the frontend.
+
+On success:
+  → 302 redirect to FRONTEND_URL/auth/callback?accessToken=<token>
+  Refresh token is set as an HttpOnly cookie (refresh_token).
+
+On failure (user denied or error):
+  → 302 redirect to FRONTEND_URL/auth/callback?error=oauth_failed
+
+Frontend flow
+  1. User clicks "Sign in with Google" → open/redirect to GET /auth/google
+  2. User approves Google consent
+  3. API redirects to your frontend callback URL with accessToken in query param
+  4. Frontend reads accessToken from URL, stores it, removes it from URL
+
+Account linking
+  • If the Google email matches an existing account → the googleId is linked to that account automatically
+  • If no match is found → a new account is created (phone = null, password = null, isVerified = true)
+  • Google-only users cannot use POST /auth/login (no password); they must use Google Sign-In
 
 ---
 POST /auth/login
@@ -207,6 +242,8 @@ Body
 
 Response 200
 { "message": "Password changed successfully" }
+
+Error 400 — account uses Google Sign-In and has no password set
 
 ---
 GET /users/me/bank-info

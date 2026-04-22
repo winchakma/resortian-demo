@@ -7,9 +7,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import toast from "react-hot-toast";
-import { Eye, EyeOff, Phone, Lock, User, Mail, MapPin } from "lucide-react";
+import { Eye, EyeOff, Phone, Lock, User, Mail } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { apiLogin, apiRegister } from "@/utils/auth";
+import GoogleSignInButton from "@/components/ui/GoogleSignInButton";
 
 // ─── Schemas ──────────────────────────────────────────────────────────────────
 
@@ -70,6 +71,18 @@ function Field({
 
 const inputCls =
   "w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-primary-400 dark:focus:bg-gray-900";
+
+// ─── Google divider ───────────────────────────────────────────────────────────
+
+function OrDivider() {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
+      <span className="text-xs text-gray-400 dark:text-gray-500">or</span>
+      <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
+    </div>
+  );
+}
 
 // ─── Login form ───────────────────────────────────────────────────────────────
 
@@ -152,6 +165,13 @@ function LoginForm({
       >
         {submitting ? "Signing in…" : "Sign In"}
       </button>
+
+      {role === "USER" && (
+        <>
+          <OrDivider />
+          <GoogleSignInButton label="Sign in with Google" />
+        </>
+      )}
     </form>
   );
 }
@@ -293,6 +313,13 @@ function RegisterForm({
       >
         {submitting ? "Creating account…" : "Create Account"}
       </button>
+
+      {role === "USER" && (
+        <>
+          <OrDivider />
+          <GoogleSignInButton label="Sign up with Google" />
+        </>
+      )}
     </form>
   );
 }
