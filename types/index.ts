@@ -47,13 +47,13 @@ export interface CartItem {
   roomId: string;
   roomName: string;
   roomImage: string;
-  price: number;       // price per night
+  price: number; // price per night
   currency: string;
   view: string;
   size: string;
   capacity: number;
-  checkIn?: string;    // "YYYY-MM-DD"
-  checkOut?: string;   // "YYYY-MM-DD"
+  checkIn?: string; // "YYYY-MM-DD"
+  checkOut?: string; // "YYYY-MM-DD"
   nights?: number;
   totalPrice?: number; // nights × price
 }
@@ -119,4 +119,151 @@ export interface SearchFormData {
   adults: number;
   children: number;
   rooms: number;
+}
+
+export type Tab = "profile" | "bookings" | "hotels" | "settings";
+export type VendorView = "hotels" | "destinations" | "bookings";
+export type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type VendorBookingStatusFilter = "all" | VendorBookingStatus;
+
+export type HotelFormValues = {
+  destinationId: string;
+  name: string;
+  slug: string;
+  location: string;
+  description: string;
+  price: number;
+  tags?: string;
+  amenities?: string;
+};
+
+export interface VendorRoom {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  capacity: number;
+  view: string;
+  size: string;
+  amenities: string[];
+  images: string[];
+  badge: string | null;
+  isActive: boolean;
+  approvalStatus: ApprovalStatus;
+  rejectionReason: string | null;
+  createdAt: string;
+}
+
+export interface VendorHotel {
+  id: string;
+  name: string;
+  slug: string;
+  location: string;
+  image: string;
+  price: number;
+  rating: number;
+  approvalStatus: ApprovalStatus;
+  rejectionReason: string | null;
+  isActive: boolean;
+  destination: { id: string; name: string; region: string };
+  rooms: VendorRoom[];
+  _count: { rooms: number; reviews: number };
+}
+
+export type VendorBookingStatus =
+  | "PENDING"
+  | "CONFIRMED"
+  | "COMPLETED"
+  | "CANCELLED";
+
+export interface VendorBooking {
+  id: string;
+  reference: string;
+  userId: string | null;
+  guestName: string | null;
+  guestPhone: string | null;
+  guestEmail: string | null;
+  roomId: string;
+  hotelId: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  guests: number;
+  totalPrice: number;
+  advancePaid: number;
+  balanceDue: number;
+  status: VendorBookingStatus;
+  paymentMethod: "STRIPE" | "UDDOKTAPAY";
+  bookedOn: string;
+  cancelledAt: string | null;
+  cancelReason: string | null;
+  user: {
+    id: string;
+    name: string;
+    phone: string;
+    email: string | null;
+    avatar: string | null;
+  } | null;
+  room: {
+    id: string;
+    name: string;
+    images: string[];
+    price: number;
+    hotel: {
+      id: string;
+      name: string;
+      slug: string;
+      location: string;
+    };
+  };
+  commissionRate: number;
+  commissionAmount: number;
+  payoutAmount: number;
+  payments: {
+    id: string;
+    amount: number;
+    status: string;
+    method: string;
+    isAdvance: boolean;
+    transactionId: string | null;
+    paidAt: string | null;
+  }[];
+  cashoutRequest: {
+    id: string;
+    status: "PENDING" | "APPROVED" | "REJECTED" | "PAID";
+    amount: number;
+    createdAt: string;
+  } | null;
+}
+
+export interface BankInfo {
+  id: string;
+  userId: string;
+  bankName: string | null;
+  accountName: string | null;
+  accountNumber: string | null;
+  routingNumber: string | null;
+  bkashNumber: string | null;
+  nagadNumber: string | null;
+  rocketNumber: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProfileContentProps {
+  user: UserProfile;
+  bookings: Booking[];
+}
+
+export interface VendorDestination {
+  id: string;
+  name: string;
+  region: string;
+  description: string;
+  image: string;
+  isFeatured: boolean;
+  approvalStatus: ApprovalStatus;
+  rejectionReason: string | null;
+  _count: { hotels: number };
+  createdAt: string;
 }

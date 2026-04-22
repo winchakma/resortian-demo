@@ -1619,6 +1619,167 @@ Response 200 — updated cashout request with status: "REJECTED" and rejectionRe
 Error 400 — request is already PAID
 
 ---
+Dashboard
+
+GET /dashboard
+
+Admin only (SUPER_ADMIN or ADMIN)
+
+Response 200
+{
+  "users": {
+    "total": 145,
+    "guests": 130,
+    "vendors": 15,
+    "newThisMonth": 12
+  },
+  "hotels": {
+    "total": 42,
+    "active": 38,
+    "pending": 3,
+    "featured": 6
+  },
+  "rooms": {
+    "total": 210,
+    "active": 195,
+    "pending": 8
+  },
+  "destinations": {
+    "total": 12,
+    "featured": 5
+  },
+  "bookings": {
+    "total": 580,
+    "today": 7,
+    "pending": 42,
+    "confirmed": 310,
+    "completed": 195,
+    "cancelled": 33
+  },
+  "revenue": {
+    "total": 4250000,
+    "thisMonth": 320000,
+    "pendingCashoutAmount": 85000,
+    "paidOutTotal": 1200000
+  },
+  "cashouts": {
+    "pending": 18,
+    "approved": 5,
+    "paid": 74
+  },
+  "reviews": {
+    "total": 389
+  },
+  "contacts": {
+    "unread": 6
+  },
+  "recentBookings": [
+    {
+      "id": "clx...",
+      "reference": "RST-A4F2E1",
+      "status": "CONFIRMED",
+      "totalPrice": 15000,
+      "advancePaid": 3000,
+      "nights": 3,
+      "bookedOn": "2026-04-22T08:00:00.000Z",
+      "checkIn": "2026-05-10T00:00:00.000Z",
+      "checkOut": "2026-05-13T00:00:00.000Z",
+      "user": { "id": "clx...", "name": "Rahim Uddin", "phone": "01711223344" },
+      "room": {
+        "id": "clx...",
+        "name": "Deluxe Sea View",
+        "hotel": { "id": "clx...", "name": "Sea Pearl Hotel", "slug": "sea-pearl-hotel" }
+      }
+    }
+  ],
+  "topHotels": [
+    {
+      "id": "clx...",
+      "name": "Sea Pearl Beach Resort",
+      "slug": "sea-pearl-beach-resort",
+      "location": "Cox's Bazar",
+      "image": "/images/hotels/1714000000000-abc123.webp",
+      "rating": 4.9,
+      "reviewCount": 82,
+      "price": 5000
+    }
+  ],
+  "monthlyBookingStats": [
+    { "month": "2025-11", "bookings": 48, "revenue": 210000 },
+    { "month": "2025-12", "bookings": 71, "revenue": 310000 },
+    { "month": "2026-01", "bookings": 60, "revenue": 260000 },
+    { "month": "2026-02", "bookings": 55, "revenue": 240000 },
+    { "month": "2026-03", "bookings": 88, "revenue": 380000 },
+    { "month": "2026-04", "bookings": 43, "revenue": 320000 }
+  ]
+}
+
+monthlyBookingStats — last 6 calendar months (oldest → newest). revenue is sum of PAID payments within that month.
+
+---
+GET /dashboard/mine
+
+Hotel Owner only (HOTEL_OWNER)
+
+Response 200
+{
+  "hotels": {
+    "total": 3,
+    "approved": 2,
+    "pending": 1
+  },
+  "rooms": {
+    "total": 18,
+    "active": 16,
+    "pending": 2
+  },
+  "bookings": {
+    "total": 74,
+    "thisMonth": 8,
+    "pending": 5,
+    "confirmed": 42,
+    "completed": 21,
+    "cancelled": 6
+  },
+  "cashouts": {
+    "pending": 4,
+    "approved": 1,
+    "paid": 28,
+    "eligibleBookings": 14
+  },
+  "revenue": {
+    "totalRequestedPayout": 180000,
+    "thisMonthRequestedPayout": 21000,
+    "pendingPayoutAmount": 14400,
+    "totalPaidOut": 140000
+  },
+  "recentBookings": [
+    {
+      "id": "clx...",
+      "reference": "RST-A4F2E1",
+      "status": "CONFIRMED",
+      "totalPrice": 15000,
+      "advancePaid": 3000,
+      "nights": 3,
+      "bookedOn": "2026-04-22T08:00:00.000Z",
+      "checkIn": "2026-05-10T00:00:00.000Z",
+      "checkOut": "2026-05-13T00:00:00.000Z",
+      "cashoutRequest": null,
+      "user": { "id": "clx...", "name": "Rahim Uddin", "phone": "01711223344" },
+      "room": {
+        "id": "clx...",
+        "name": "Deluxe Sea View",
+        "commissionRate": 10,
+        "hotel": { "id": "clx...", "name": "Sea Pearl Hotel", "slug": "sea-pearl-hotel" }
+      }
+    }
+  ]
+}
+
+cashouts.eligibleBookings — count of CONFIRMED bookings belonging to this vendor that have no cashout request filed yet.
+revenue fields are derived from CashoutRequest records (not raw payment sums).
+
+---
 Common Error Shapes
 
 { "statusCode": 400, "message": "Validation error message", "error": "Bad Request" }
