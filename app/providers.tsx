@@ -6,10 +6,12 @@ import type { ReactNode } from "react";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
+import { NavigationProgress } from "@/components/ui/NavigationProgress";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+      <NavigationProgress />
       <AuthProvider>
       <CartProvider>
         {children}

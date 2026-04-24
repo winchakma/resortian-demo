@@ -11,13 +11,16 @@ import { Calendar as CalendarIcon, X, ChevronRight } from "lucide-react";
 type RangeValue = [Date | null, Date | null];
 
 interface DateRangePickerProps {
-  checkIn: string;  // "YYYY-MM-DD" or ""
+  checkIn: string; // "YYYY-MM-DD" or ""
   checkOut: string; // "YYYY-MM-DD" or ""
   onChange: (checkIn: string, checkOut: string) => void;
 }
 
 function toISODate(d: Date): string {
-  return d.toISOString().split("T")[0];
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 /** Parse "YYYY-MM-DD" as local midnight to avoid UTC-offset date shifts. */
@@ -30,7 +33,11 @@ function fmtShort(d: Date): string {
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 }
 
-export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePickerProps) {
+export function DateRangePicker({
+  checkIn,
+  checkOut,
+  onChange,
+}: DateRangePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -40,14 +47,17 @@ export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePicker
   const maxDate = new Date(today);
   maxDate.setDate(today.getDate() + 30);
 
-  const checkInDate  = checkIn  ? parseLocal(checkIn)  : null;
+  const checkInDate = checkIn ? parseLocal(checkIn) : null;
   const checkOutDate = checkOut ? parseLocal(checkOut) : null;
 
   // Close on outside-click (desktop only; mobile uses the backdrop overlay)
   useEffect(() => {
     if (!isOpen) return;
     function onOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
@@ -68,30 +78,41 @@ export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePicker
   // Lock body scroll while the bottom-sheet is open on mobile
   useEffect(() => {
     if (isOpen) document.body.style.overflow = "hidden";
-    else        document.body.style.overflow = "";
-    return () => { document.body.style.overflow = ""; };
+    else document.body.style.overflow = "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
-  const handleCalendarChange = useCallback((val: unknown) => {
-    if (!Array.isArray(val)) return;
-    const [start, end] = val as RangeValue;
-    const startStr = start ? toISODate(start) : "";
-    const endStr   = end   ? toISODate(end)   : "";
-    onChange(startStr, endStr);
-    if (startStr && endStr) setIsOpen(false);
-  }, [onChange]);
+  const handleCalendarChange = useCallback(
+    (val: unknown) => {
+      if (!Array.isArray(val)) return;
+      const [start, end] = val as RangeValue;
+      const startStr = start ? toISODate(start) : "";
+      const endStr = end ? toISODate(end) : "";
+      onChange(startStr, endStr);
+      if (startStr && endStr) setIsOpen(false);
+    },
+    [onChange],
+  );
 
-  const handleClear = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    onChange("", "");
-  }, [onChange]);
+  const handleClear = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onChange("", "");
+    },
+    [onChange],
+  );
 
   const hasRange = Boolean(checkInDate && checkOutDate);
   const hasStart = Boolean(checkInDate && !checkOutDate);
 
-  const nights = hasRange && checkInDate && checkOutDate
-    ? Math.round((checkOutDate.getTime() - checkInDate.getTime()) / 86_400_000)
-    : 0;
+  const nights =
+    hasRange && checkInDate && checkOutDate
+      ? Math.round(
+          (checkOutDate.getTime() - checkInDate.getTime()) / 86_400_000,
+        )
+      : 0;
 
   const triggerLabel = hasRange
     ? `${fmtShort(checkInDate!)} → ${fmtShort(checkOutDate!)}`
@@ -106,8 +127,9 @@ export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePicker
       : `${nights} night${nights !== 1 ? "s" : ""} selected`;
 
   const calendarValue: Date | [Date, Date] | null =
-    checkInDate && checkOutDate ? [checkInDate, checkOutDate]
-    : checkInDate ?? null;
+    checkInDate && checkOutDate
+      ? [checkInDate, checkOutDate]
+      : (checkInDate ?? null);
 
   // ─── Shared panel content ───────────────────────────────────────────────────
   const panelContent = (
@@ -116,9 +138,15 @@ export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePicker
       <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-800">
         <div>
           <p className="text-sm font-semibold text-gray-900 dark:text-white">
-            {!checkInDate ? "Pick check-in" : !checkOutDate ? "Pick check-out" : "Date range"}
+            {!checkInDate
+              ? "Pick check-in"
+              : !checkOutDate
+                ? "Pick check-out"
+                : "Date range"}
           </p>
-          <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">{hint}</p>
+          <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+            {hint}
+          </p>
         </div>
         <button
           type="button"
@@ -132,22 +160,34 @@ export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePicker
 
       {/* Selected-dates summary */}
       <div className="flex items-center gap-2 border-b border-gray-100 px-4 py-2.5 dark:border-gray-800">
-        <div className={`flex-1 rounded-xl px-3 py-2 text-center text-xs ${
-          checkInDate
-            ? "bg-primary-50 font-medium text-primary-800 ring-1 ring-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:ring-primary-800"
-            : "bg-gray-50 text-gray-400 ring-1 ring-dashed ring-gray-300 dark:bg-gray-800 dark:ring-gray-700"
-        }`}>
-          <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider opacity-70">Check-in</p>
-          <p className="font-semibold">{checkInDate ? fmtShort(checkInDate) : "—"}</p>
+        <div
+          className={`flex-1 rounded-xl px-3 py-2 text-center text-xs ${
+            checkInDate
+              ? "bg-primary-50 font-medium text-primary-800 ring-1 ring-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:ring-primary-800"
+              : "bg-gray-50 text-gray-400 ring-1 ring-dashed ring-gray-300 dark:bg-gray-800 dark:ring-gray-700"
+          }`}
+        >
+          <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider opacity-70">
+            Check-in
+          </p>
+          <p className="font-semibold">
+            {checkInDate ? fmtShort(checkInDate) : "—"}
+          </p>
         </div>
         <ChevronRight className="h-4 w-4 shrink-0 text-gray-400" />
-        <div className={`flex-1 rounded-xl px-3 py-2 text-center text-xs ${
-          checkOutDate
-            ? "bg-primary-50 font-medium text-primary-800 ring-1 ring-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:ring-primary-800"
-            : "bg-gray-50 text-gray-400 ring-1 ring-dashed ring-gray-300 dark:bg-gray-800 dark:ring-gray-700"
-        }`}>
-          <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider opacity-70">Check-out</p>
-          <p className="font-semibold">{checkOutDate ? fmtShort(checkOutDate) : "—"}</p>
+        <div
+          className={`flex-1 rounded-xl px-3 py-2 text-center text-xs ${
+            checkOutDate
+              ? "bg-primary-50 font-medium text-primary-800 ring-1 ring-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:ring-primary-800"
+              : "bg-gray-50 text-gray-400 ring-1 ring-dashed ring-gray-300 dark:bg-gray-800 dark:ring-gray-700"
+          }`}
+        >
+          <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider opacity-70">
+            Check-out
+          </p>
+          <p className="font-semibold">
+            {checkOutDate ? fmtShort(checkOutDate) : "—"}
+          </p>
         </div>
       </div>
 
@@ -169,7 +209,11 @@ export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePicker
       {/* Footer */}
       <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3 dark:border-gray-800">
         <p className="text-xs text-gray-400 dark:text-gray-500">
-          Available up to {maxDate.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+          Available up to{" "}
+          {maxDate.toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+          })}
         </p>
         <div className="flex gap-2">
           {(checkInDate || checkOutDate) && (
@@ -186,7 +230,9 @@ export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePicker
             onClick={() => setIsOpen(false)}
             className="rounded-lg bg-primary-600 px-4 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-primary-700"
           >
-            {hasRange ? `Done · ${nights} night${nights !== 1 ? "s" : ""}` : "Close"}
+            {hasRange
+              ? `Done · ${nights} night${nights !== 1 ? "s" : ""}`
+              : "Close"}
           </button>
         </div>
       </div>
@@ -207,7 +253,9 @@ export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePicker
           <p className="whitespace-nowrap text-xs font-medium text-gray-500 dark:text-gray-400">
             Check-in / Check-out
           </p>
-          <p className={`truncate text-sm ${checkInDate ? "font-medium text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500"}`}>
+          <p
+            className={`truncate text-sm ${checkInDate ? "font-medium text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500"}`}
+          >
             {triggerLabel}
           </p>
         </div>
@@ -226,10 +274,7 @@ export function DateRangePicker({ checkIn, checkOut, onChange }: DateRangePicker
       {isOpen && (
         <>
           {/* ── Mobile: full-screen backdrop + bottom sheet ──────────────── */}
-          <div
-            className="fixed inset-0 z-[300] sm:hidden"
-            aria-hidden="true"
-          >
+          <div className="fixed inset-0 z-[300] sm:hidden" aria-hidden="true">
             {/* Dim backdrop */}
             <div
               className="absolute inset-0 bg-black/40 backdrop-blur-sm"

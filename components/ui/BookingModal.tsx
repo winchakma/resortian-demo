@@ -24,7 +24,10 @@ interface BookingModalProps {
 }
 
 function toISODate(d: Date): string {
-  return d.toISOString().split("T")[0];
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 function parseLocal(iso: string): Date {
@@ -48,7 +51,9 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
 
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [bookedDates, setBookedDates] = useState<string[]>(room.booked_dates ?? []);
+  const [bookedDates, setBookedDates] = useState<string[]>(
+    room.booked_dates ?? [],
+  );
   const [availabilityLoading, setAvailabilityLoading] = useState(true);
 
   // Fetch real availability on mount
@@ -67,7 +72,9 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
       }
     }
     fetchAvailability();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [room.id]);
 
   // Date bounds
@@ -328,9 +335,24 @@ export function BookingModal({ hotel, room, onClose }: BookingModalProps) {
           <div className="resortian-cal px-4 pb-4 pt-1">
             {availabilityLoading ? (
               <div className="flex items-center justify-center py-10 text-sm text-gray-400 dark:text-gray-500">
-                <svg className="mr-2 h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                <svg
+                  className="mr-2 h-4 w-4 animate-spin"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  />
                 </svg>
                 Checking availability…
               </div>

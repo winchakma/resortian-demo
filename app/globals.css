@@ -54,6 +54,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   Navigation progress bar
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes nav-sweep {
+  0%   { left: -45%; }
+  100% { left: 100%; }
+}
+
+.nav-progress-bar {
+  animation: nav-sweep 1.4s ease-in-out infinite alternate;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    React Calendar — scoped overrides (.resortian-cal wrapper)
    Base CSS is imported directly inside DateRangePicker.tsx.
    All selectors here start with .resortian-cal so specificity (0,2,0) always
