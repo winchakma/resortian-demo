@@ -140,5 +140,11 @@ export function ProfileLoader() {
     );
   }
 
-  return <ProfileContent user={profile} bookings={bookings} />;
+  return (
+    <ProfileContent
+      user={profile}
+      bookings={bookings}
+      onProfileUpdate={setProfile}
+    />
+  );
 }

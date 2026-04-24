@@ -302,6 +302,7 @@ export interface BankInfo {
 export interface ProfileContentProps {
   user: UserProfile;
   bookings: Booking[];
+  onProfileUpdate: (updated: UserProfile) => void;
 }
 
 export interface VendorDestination {

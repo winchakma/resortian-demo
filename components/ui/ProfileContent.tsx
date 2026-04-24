@@ -20,7 +20,7 @@ import BookingsSection from "./profile/BookingsSection";
 import VendorDashboard from "./profile/vendor/VendorDashboard";
 import SettingsSection from "./profile/SettingsSection";
 
-export function ProfileContent({ user, bookings }: ProfileContentProps) {
+export function ProfileContent({ user, bookings, onProfileUpdate }: ProfileContentProps) {
   const isVendor = user.role === "HOTEL_OWNER";
   const [activeTab, setActiveTab] = useState<Tab>("profile");
 
@@ -226,6 +226,7 @@ export function ProfileContent({ user, bookings }: ProfileContentProps) {
               completedCount={completedCount}
               bookings={bookings}
               isVendor={isVendor}
+              onProfileUpdate={onProfileUpdate}
             />
           )}
           {activeTab === "bookings" && !isVendor && (

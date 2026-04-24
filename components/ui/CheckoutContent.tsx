@@ -184,21 +184,21 @@ export function CheckoutContent() {
             headers["Authorization"] = `Bearer ${token}`;
           }
 
+          const name = guestDetails.guestName || user?.name;
+          const phone = guestDetails.guestPhone || user?.phone;
+          const email = guestDetails.guestEmail || user?.email;
+
           const body: Record<string, unknown> = {
             roomId: item.roomId,
             checkIn: item.checkIn,
             checkOut: item.checkOut,
             guests: item.capacity,
             paymentMethod: paymentMethod.toUpperCase(),
+            guestName: name,
+            guestPhone: phone,
+            ...(email ? { guestEmail: email } : {}),
           };
-
-          if (!isAuthenticated) {
-            body.guestName = guestDetails.guestName;
-            body.guestPhone = guestDetails.guestPhone;
-            if (guestDetails.guestEmail) {
-              body.guestEmail = guestDetails.guestEmail;
-            }
-          }
+          console.log({ body });
 
           return fetch(`${API_BASE}/bookings`, {
             method: "POST",

@@ -224,10 +224,16 @@ Body (all fields optional)
   "phone": "01799887766",
   "email": "new@example.com",
   "address": "Dhaka, Bangladesh",
-  "avatar": "https://cdn.example.com/avatar.jpg"
+  "avatar": "https://cdn.example.com/avatar.jpg",
+  "fcmToken": "dLd8k2mN..."   // Firebase Cloud Messaging token for push notifications
 }
 
 Response 200 — updated user object (same shape as GET /users/me)
+
+Push Notification Setup
+  To receive Firebase push notifications (hotel owners / admins), send the FCM device token
+  obtained from the Firebase SDK on the frontend via PATCH /users/me with { "fcmToken": "..." }.
+  The token is stored per user account. Pass null to clear it.
 
 ---
 PATCH /users/me/password
@@ -1236,6 +1242,12 @@ Response 201
 
 ▎ Flow: After receiving this response, call POST /payments/stripe/intent or POST /payments/uddoktapay/init with the booking.id to get the payment URL / client secret.
 
+▎ Notifications: Immediately after the booking is created, background jobs are queued to:
+    • Send a confirmation email to the guest/user (if an email address is available)
+    • Send a new-booking notification email to the hotel owner, or to all admins if the hotel has no owner
+    • Send a Firebase push notification to the hotel owner / admins (requires fcmToken stored on their account)
+  Notifications are delivered asynchronously — the API response is not delayed.
+
 Error 409 — room not available for selected dates
 Error 400 — checkOut must be after checkIn
 Error 400 — guestName and guestPhone are required for guest bookings
@@ -1815,6 +1827,38 @@ Response 200
 
 cashouts.eligibleBookings — count of CONFIRMED bookings belonging to this vendor that have no cashout request filed yet.
 revenue fields are derived from CashoutRequest records (not raw payment sums).
+
+---
+Notifications (Background)
+
+Booking creation triggers two background notification jobs (via BullMQ + Redis):
+
+  1. Guest / User email  — sent to user.email (registered users) or guestEmail (guest bookings)
+  2. Owner / Admin email + push — sent to the hotel vendor's email and Firebase FCM token.
+     If the hotel has no vendor, ALL admin accounts (ADMIN + SUPER_ADMIN) receive the notification.
+
+Retry policy: 3 attempts with exponential backoff (5 s base delay).
+Both email and push are best-effort — a failure in one does not block the other.
+
+Environment variables required for notifications:
+
+  # Redis (required for queue)
+  REDIS_URL=redis://localhost:6379
+
+  # Email via SMTP
+  SMTP_HOST=smtp.gmail.com
+  SMTP_PORT=587
+  SMTP_SECURE=false           # true for port 465
+  SMTP_USER=your@gmail.com
+  SMTP_PASS=your-app-password
+  SMTP_FROM="Resortian <noreply@resortian.com>"
+
+  # Firebase Admin SDK (for push notifications)
+  FIREBASE_PROJECT_ID=your-project-id
+  FIREBASE_CLIENT_EMAIL=firebase-adminsdk@your-project.iam.gserviceaccount.com
+  FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+
+If SMTP or Firebase env vars are absent the service starts normally but skips that channel with a warning log.
 
 ---
 Common Error Shapes

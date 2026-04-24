@@ -6,6 +6,7 @@ import { BASE, labelCls, inputCls } from "@/utils";
 import { toast } from "react-hot-toast";
 import { Lock, Eye, EyeOff, Trash2 } from "lucide-react";
 import VendorBankInfoSection from "./vendor/VendorBankInfoSection";
+import PushNotificationSection from "./PushNotificationSection";
 import FieldError from "@/components/common/FieldError";
 import * as yup from "yup";
 
@@ -70,6 +71,8 @@ export default function SettingsSection({ isVendor }: { isVendor: boolean }) {
   return (
     <div className="space-y-5">
       {isVendor && <VendorBankInfoSection />}
+
+      <PushNotificationSection />
 
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-gray-800">
