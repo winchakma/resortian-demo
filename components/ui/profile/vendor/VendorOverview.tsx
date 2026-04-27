@@ -156,6 +156,13 @@ export default function VendorOverview() {
 
   const { hotels, rooms, bookings, cashouts, revenue, recentBookings } = stats;
 
+  // API returns either { room: { hotel, name } } (new) or { roomUnit: { room: { hotel, name } } } (old)
+  function resolveRoom(b: (typeof recentBookings)[number]) {
+    const direct = (b as any).room as { hotel: { name: string }; name: string } | undefined;
+    const nested = (b as any).roomUnit?.room as { hotel: { name: string }; name: string } | undefined;
+    return direct ?? nested ?? null;
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -337,6 +344,7 @@ export default function VendorOverview() {
               const sc = VENDOR_BOOKING_STATUS_CONFIG[b.status];
               const cr = b.cashoutRequest;
               const crCfg = cr ? CASHOUT_STATUS_CONFIG[cr.status] : null;
+              const room = resolveRoom(b);
               return (
                 <div
                   key={b.id}
@@ -361,11 +369,11 @@ export default function VendorOverview() {
                       )}
                     </div>
                     <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                      {b.room.hotel.name} · {b.room.name}
+                      {room?.hotel?.name} · {room?.name}
                     </p>
                     <p className="text-xs text-gray-400 dark:text-gray-500">
-                      {fmtDate(b.checkIn)} → {fmtDate(b.checkOut)} ·{" "}
-                      {b.nights} night{b.nights !== 1 ? "s" : ""}
+                      {fmtDate(b.checkIn)} → {fmtDate(b.checkOut)} · {b.nights}{" "}
+                      night{b.nights !== 1 ? "s" : ""}
                       {b.user ? ` · ${b.user.name}` : ""}
                     </p>
                   </div>

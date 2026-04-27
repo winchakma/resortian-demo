@@ -122,7 +122,38 @@ export interface SearchFormData {
 }
 
 export type Tab = "profile" | "bookings" | "hotels" | "settings";
-export type VendorView = "overview" | "hotels" | "destinations" | "bookings";
+export type VendorView = "overview" | "hotels" | "destinations" | "bookings" | "calendar";
+
+export interface CalendarBooking {
+  id: string;
+  reference: string;
+  checkIn: string;
+  checkOut: string;
+  status: VendorBookingStatus;
+  guestName: string;
+  guestPhone: string;
+}
+
+export interface CalendarUnit {
+  id: string;
+  unitIndex: number;
+  unitName: string;
+  floorNumber: number | null;
+  bookings: CalendarBooking[];
+}
+
+export interface CalendarRoom {
+  id: string;
+  name: string;
+  units: CalendarUnit[];
+}
+
+export interface CalendarData {
+  hotel: { id: string; name: string };
+  startDate: string;
+  endDate: string;
+  rooms: CalendarRoom[];
+}
 
 export interface VendorDashboardStats {
   hotels: { total: number; approved: number; pending: number };

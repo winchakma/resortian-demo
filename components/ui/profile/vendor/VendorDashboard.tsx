@@ -1,12 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { LayoutDashboard, Building2, Globe, CalendarDays } from "lucide-react";
+import {
+  LayoutDashboard,
+  Building2,
+  Globe,
+  CalendarDays,
+  CalendarRange,
+} from "lucide-react";
 import { VendorView } from "@/types";
 import VendorOverview from "./VendorOverview";
 import VendorHotelsList from "./VendorHotelsList";
 import VendorDestinationsList from "./VendorDestinationsList";
 import VendorBookingsList from "./VendorBookingsList";
+import VendorCalendar from "./VendorCalendar";
 
 export default function VendorDashboard() {
   const [view, setView] = useState<VendorView>("overview");
@@ -37,6 +44,11 @@ export default function VendorDashboard() {
               label: "Bookings",
               icon: <CalendarDays className="h-4 w-4" />,
             },
+            {
+              id: "calendar" as VendorView,
+              label: "Calendar",
+              icon: <CalendarRange className="h-4 w-4" />,
+            },
           ] as const
         ).map((tab) => {
           const active = view === tab.id;
@@ -62,6 +74,7 @@ export default function VendorDashboard() {
       {view === "hotels" && <VendorHotelsList />}
       {view === "destinations" && <VendorDestinationsList />}
       {view === "bookings" && <VendorBookingsList />}
+      {view === "calendar" && <VendorCalendar />}
     </div>
   );
 }

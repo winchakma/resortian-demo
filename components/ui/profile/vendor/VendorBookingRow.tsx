@@ -59,6 +59,12 @@ export default function VendorBookingRow({
     }
   }
   const guestPhone = booking.user?.phone ?? booking.guestPhone ?? "—";
+  // Handle both old (roomUnit.room) and new (room) API shapes
+  const room =
+    booking.room ??
+    ((booking as any).roomUnit?.room as typeof booking.room | undefined);
+  const hotelName = room?.hotel?.name ?? "—";
+  const roomName = room?.name ?? "—";
 
   return (
     <div className="px-5 py-4">
@@ -67,10 +73,10 @@ export default function VendorBookingRow({
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
               <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                {booking.room.hotel.name}
+                {hotelName}
               </p>
               <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                {booking.room.name}
+                {roomName}
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap items-center gap-1.5">
