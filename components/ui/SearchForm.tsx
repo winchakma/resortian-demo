@@ -86,7 +86,10 @@ interface SearchFormProps {
   searchParams?: FilterSearchParams;
 }
 
-export function SearchForm({ initialValues, searchParams }: SearchFormProps = {}) {
+export function SearchForm({
+  initialValues,
+  searchParams,
+}: SearchFormProps = {}) {
   const { formData, updateField, handleSubmit } = useSearchForm({
     initialValues,
   });
@@ -132,7 +135,9 @@ export function SearchForm({ initialValues, searchParams }: SearchFormProps = {}
   const initialFilterValues: Partial<FilterValues> = {
     priceMin: searchParams?.minPrice ?? "",
     priceMax: searchParams?.maxPrice ?? "",
-    selectedStars: searchParams?.minRating ? [Number(searchParams.minRating)] : [],
+    selectedStars: searchParams?.minRating
+      ? [Number(searchParams.minRating)]
+      : [],
     selectedAmenities: searchParams?.amenities
       ? searchParams.amenities.split(",").filter(Boolean)
       : [],
@@ -159,7 +164,7 @@ export function SearchForm({ initialValues, searchParams }: SearchFormProps = {}
           e.preventDefault();
           handleSubmit();
         }}
-        className="flex w-full flex-col gap-3 rounded-2xl bg-gray-100 p-4 shadow-lg dark:bg-gray-800/80 sm:p-6 lg:flex-row lg:items-end lg:gap-2 lg:rounded-full lg:p-2"
+        className="flex w-full flex-col gap-3 rounded-2xl bg-[#ff7373] p-4 shadow-lg sm:p-6 lg:flex-row lg:items-center lg:gap-2 lg:rounded-full lg:p-2"
       >
         {/* ── Location ───────────────────────────────────────────── */}
         <div className="flex flex-1 items-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 dark:border-gray-500 dark:bg-gray-700 lg:rounded-full">
