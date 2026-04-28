@@ -159,13 +159,13 @@ export function SearchForm({ initialValues, searchParams }: SearchFormProps = {}
           e.preventDefault();
           handleSubmit();
         }}
-        className="flex w-full flex-col gap-3 rounded-2xl bg-[#f5faf6] p-4 shadow-lg dark:bg-gray-800 sm:p-6 lg:flex-row lg:items-end lg:gap-2 lg:rounded-full lg:p-2"
+        className="flex w-full flex-col gap-3 rounded-2xl bg-gray-100 p-4 shadow-lg dark:bg-gray-800/80 sm:p-6 lg:flex-row lg:items-end lg:gap-2 lg:rounded-full lg:p-2"
       >
         {/* ── Location ───────────────────────────────────────────── */}
-        <div className="flex flex-1 items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-600 dark:bg-gray-700 lg:rounded-full lg:border-0">
+        <div className="flex flex-1 items-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 dark:border-gray-500 dark:bg-gray-700 lg:rounded-full">
           <MapPin className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
           <div className="flex-1">
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">
+            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300">
               Location
             </label>
             <input
@@ -173,7 +173,7 @@ export function SearchForm({ initialValues, searchParams }: SearchFormProps = {}
               placeholder="Where are you going?"
               value={formData.location}
               onChange={(e) => updateField("location", e.target.value)}
-              className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-500"
+              className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-400"
             />
           </div>
         </div>
@@ -197,11 +197,11 @@ export function SearchForm({ initialValues, searchParams }: SearchFormProps = {}
             aria-haspopup="dialog"
             aria-expanded={isGuestOpen}
             onClick={() => setIsGuestOpen((p) => !p)}
-            className="flex w-full items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left dark:border-gray-600 dark:bg-gray-700 lg:rounded-full lg:border-0"
+            className="flex w-full items-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 text-left dark:border-gray-500 dark:bg-gray-700 lg:rounded-full"
           >
             <Users className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
             <div className="min-w-0 flex-1 overflow-hidden">
-              <p className="whitespace-nowrap text-xs font-medium text-gray-500 dark:text-gray-400">
+              <p className="whitespace-nowrap text-xs font-semibold text-gray-600 dark:text-gray-300">
                 Guests &amp; Rooms
               </p>
               <p className="truncate whitespace-nowrap text-sm text-gray-900 dark:text-white">
