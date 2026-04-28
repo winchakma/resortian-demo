@@ -1,13 +1,12 @@
 "use client";
 
-import { memo, useState, useCallback, useRef, useEffect } from "react";
+import { memo, useState, useCallback, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Menu,
   User,
   ShoppingCart,
-  ChevronDown,
   Building2,
   LogOut,
 } from "lucide-react";
@@ -20,10 +19,8 @@ import toast from "react-hot-toast";
 import type { NavLink } from "@/types";
 
 const NAV_LINKS: NavLink[] = [
-  { label: "Home", href: "/" },
   { label: "Hotels", href: "/hotels" },
   { label: "Destinations", href: "/destinations" },
-  // { label: "Deals & Offers", href: "/deals" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -53,7 +50,14 @@ CartIndicator.displayName = "CartIndicator";
 
 // ─── Nav links ────────────────────────────────────────────────────────────────
 
-const NavLinks = memo(function NavLinks() {
+const navLinkCls =
+  "rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-primary-50 hover:text-primary-700 dark:text-gray-400 dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
+
+const NavLinks = memo(function NavLinks({
+  accountHref,
+}: {
+  accountHref: string;
+}) {
   return (
     <nav className="hidden lg:flex lg:items-center lg:gap-1">
       {NAV_LINKS.map((link) => (
@@ -61,87 +65,30 @@ const NavLinks = memo(function NavLinks() {
           key={link.href}
           href={link.href}
           prefetch={true}
-          className="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-primary-50 hover:text-primary-700 dark:text-gray-400 dark:hover:bg-primary-950/30 dark:hover:text-primary-400"
+          className={navLinkCls}
         >
           {link.label}
         </Link>
       ))}
+      <Link href={accountHref} prefetch={true} className={navLinkCls}>
+        My Account
+      </Link>
     </nav>
   );
 });
 
 NavLinks.displayName = "NavLinks";
 
-// ─── Sign In dropdown ─────────────────────────────────────────────────────────
+// ─── Sign Up button ───────────────────────────────────────────────────────────
 
-function SignInDropdown() {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handler(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
+function SignUpButton() {
   return (
-    <div ref={ref} className="relative">
-      {/* <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-      >
-        Sign In
-        <ChevronDown
-          className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`}
-        />
-      </button> */}
-      <Link href="/auth/customer">
-        <button
-          // onClick={() => setOpen((v) => !v)}
-          className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-        >
-          Sign In
-        </button>
-      </Link>
-
-      {open && (
-        <div className="absolute right-0 top-full mt-2 w-52 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-          <Link
-            href="/auth/customer"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-950/40">
-              <User className="h-4 w-4 text-primary-600 dark:text-primary-400" />
-            </div>
-            <div>
-              <p className="font-medium">As Customer</p>
-              <p className="text-xs text-gray-400">Book hotels & rooms</p>
-            </div>
-          </Link>
-
-          <div className="h-px bg-gray-100 dark:bg-gray-800" />
-
-          <Link
-            href="/auth/vendor"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 dark:bg-amber-900/20">
-              <Building2 className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div>
-              <p className="font-medium">As Hotel Owner</p>
-              <p className="text-xs text-gray-400">Manage your properties</p>
-            </div>
-          </Link>
-        </div>
-      )}
-    </div>
+    <Link
+      href="/auth/customer?tab=register"
+      className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+    >
+      Sign Up
+    </Link>
   );
 }
 
@@ -236,6 +183,13 @@ export function Header() {
   const { user, loading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const accountHref = user ? "/profile" : "/auth/customer";
+
+  const mobileLinks = useMemo(
+    () => [...NAV_LINKS, { label: "My Account", href: accountHref }],
+    [accountHref],
+  );
+
   const handleMobileMenuClose = useCallback(() => {
     setMobileMenuOpen(false);
   }, []);
@@ -249,7 +203,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
           <Logo />
-          <NavLinks />
+          <NavLinks accountHref={accountHref} />
         </div>
 
         <div className="flex items-center gap-1">
@@ -259,7 +213,7 @@ export function Header() {
           {/* Auth area — only render after hydration to avoid mismatch */}
           {!loading && (
             <div className="ml-1">
-              {user ? <UserMenu /> : <SignInDropdown />}
+              {user ? <UserMenu /> : <SignUpButton />}
             </div>
           )}
 
@@ -276,7 +230,7 @@ export function Header() {
       <MobileMenu
         isOpen={mobileMenuOpen}
         onClose={handleMobileMenuClose}
-        links={NAV_LINKS}
+        links={mobileLinks}
       />
     </header>
   );

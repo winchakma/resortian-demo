@@ -8,12 +8,20 @@ export const metadata: Metadata = {
   description: "Sign in or create a customer account on Resortian.",
 };
 
-export default function CustomerAuthPage() {
+export default async function CustomerAuthPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
+  const { tab } = await searchParams;
   return (
     <>
       <Header />
       <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        <AuthForm role="USER" />
+        <AuthForm
+          role="USER"
+          defaultTab={tab === "register" ? "register" : "login"}
+        />
       </main>
       <Footer />
     </>

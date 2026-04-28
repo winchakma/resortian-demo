@@ -328,10 +328,11 @@ function RegisterForm({
 
 interface AuthFormProps {
   role: "USER" | "HOTEL_OWNER";
+  defaultTab?: "login" | "register";
 }
 
-export function AuthForm({ role }: AuthFormProps) {
-  const [tab, setTab] = useState<"login" | "register">("login");
+export function AuthForm({ role, defaultTab = "login" }: AuthFormProps) {
+  const [tab, setTab] = useState<"login" | "register">(defaultTab);
   const router = useRouter();
 
   const isVendor = role === "HOTEL_OWNER";

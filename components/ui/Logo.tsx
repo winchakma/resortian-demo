@@ -6,10 +6,17 @@ export function Logo() {
     <Link href="/" className="flex items-center gap-2">
       <Image
         src="/images/logo.svg"
-        alt="Logo"
+        alt="Resortian"
         width={100}
         height={100}
-        className="rounded-lg"
+        className="rounded-lg dark:hidden"
+      />
+      <Image
+        src="/images/logoDark.svg"
+        alt="Resortian"
+        width={100}
+        height={100}
+        className="hidden rounded-lg dark:block"
       />
     </Link>
   );
