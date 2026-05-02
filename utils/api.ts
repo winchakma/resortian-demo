@@ -813,7 +813,6 @@ export async function getFooterData(): Promise<FooterColumn[]> {
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Terms of Service", href: "/terms" },
         { label: "Cookie Policy", href: "/cookies" },
-        { label: "Sitemap", href: "/sitemap" },
       ],
     },
   ];
