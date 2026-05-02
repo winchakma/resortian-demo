@@ -770,6 +770,40 @@ Public — returns destinations where isFeatured = true, ordered by propertyCoun
 Response 200 — array of destination objects (same shape as items in GET /destinations data array)
 
 ---
+GET /destinations/locations
+
+Public — returns a merged, deduplicated list of location strings sourced from approved destination names and active hotel locations. Intended for search dropdown / autocomplete.
+
+Query params (all optional)
+
+┌────────┬────────┬─────────┐
+│ Param  │  Type  │ Default │
+├────────┼────────┼─────────┤
+│ search │ string │ —       │
+├────────┼────────┼─────────┤
+│ page   │ number │ 1       │
+├────────┼────────┼─────────┤
+│ limit  │ number │ 30      │
+└────────┴────────┴─────────┘
+
+Search behaviour
+  ?search=cox         → case-insensitive contains match against destination names AND hotel location strings (both sides partial match)
+  No search param     → returns all locations
+
+Response 200
+{
+  "data": ["Cox's Bazar", "Bandarban", "Laboni Beach Area, Cox's Bazar"],
+  "meta": {
+    "total": 8,
+    "page": 1,
+    "limit": 30,
+    "totalPages": 1
+  }
+}
+
+data is a flat array of location strings, sorted alphabetically, deduplicated case-insensitively across destination names and hotel locations.
+
+---
 GET /destinations/:id
 
 Public

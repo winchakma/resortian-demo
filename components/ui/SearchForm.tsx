@@ -8,6 +8,7 @@ import {
   ChevronDown,
   Minus,
   Plus,
+  Loader2,
 } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -15,6 +16,13 @@ import { useSearchForm } from "@/hooks/useSearchForm";
 import { DateRangePicker } from "@/components/ui/DateRangePicker";
 import { FilterModal, type FilterValues } from "@/components/ui/FilterModal";
 import type { SearchFormData } from "@/types";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+interface LocationOption {
+  name: string;
+  type: "destination" | "hotel_location";
+}
 
 // ── Stepper row ───────────────────────────────────────────────────────────────
 interface StepperProps {
@@ -97,12 +105,95 @@ export function SearchForm({
   const [isGuestOpen, setIsGuestOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+  // ── Location search state ─────────────────────────────────────────────────
+  const [isLocationOpen, setIsLocationOpen] = useState(false);
+  const [locationQuery, setLocationQuery] = useState(
+    initialValues?.location ?? "",
+  );
+  const [locationResults, setLocationResults] = useState<LocationOption[]>([]);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationPage, setLocationPage] = useState(1);
+  const [locationTotalPages, setLocationTotalPages] = useState(1);
+  const [locationLoadingMore, setLocationLoadingMore] = useState(false);
+
+  const locationRef = useRef<HTMLDivElement>(null);
+  const locationListRef = useRef<HTMLUListElement>(null);
+  const locationDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+
+  const fetchLocations = useCallback(
+    async (query: string, page: number, append = false) => {
+      if (page === 1) setLocationLoading(true);
+      else setLocationLoadingMore(true);
+      try {
+        const qs = new URLSearchParams({ limit: "10", page: String(page) });
+        if (query) qs.set("search", query);
+        const res = await fetch(`${API_BASE}/destinations/locations?${qs}`);
+        if (!res.ok) return;
+        const json = await res.json();
+        const items: LocationOption[] = json.data ?? [];
+        setLocationResults((prev) => (append ? [...prev, ...items] : items));
+        setLocationTotalPages(json.meta?.totalPages ?? 1);
+        setLocationPage(page);
+      } catch {
+        // silently ignore network errors
+      } finally {
+        setLocationLoading(false);
+        setLocationLoadingMore(false);
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!isLocationOpen) return;
+    if (locationDebounceRef.current) clearTimeout(locationDebounceRef.current);
+    locationDebounceRef.current = setTimeout(() => {
+      fetchLocations(locationQuery, 1, false);
+    }, 250);
+    return () => {
+      if (locationDebounceRef.current)
+        clearTimeout(locationDebounceRef.current);
+    };
+  }, [locationQuery, isLocationOpen, fetchLocations]);
+
+  const handleLocationScroll = useCallback(() => {
+    const el = locationListRef.current;
+    if (!el || locationLoadingMore || locationPage >= locationTotalPages)
+      return;
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 40) {
+      fetchLocations(locationQuery, locationPage + 1, true);
+    }
+  }, [
+    locationLoadingMore,
+    locationPage,
+    locationTotalPages,
+    locationQuery,
+    fetchLocations,
+  ]);
+
+  const selectLocation = useCallback(
+    (name: string) => {
+      setLocationQuery(name);
+      updateField("location", name);
+      setIsLocationOpen(false);
+    },
+    [updateField],
+  );
+
   const guestRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function onOutside(e: MouseEvent) {
       if (guestRef.current && !guestRef.current.contains(e.target as Node)) {
         setIsGuestOpen(false);
+      }
+      if (
+        locationRef.current &&
+        !locationRef.current.contains(e.target as Node)
+      ) {
+        setIsLocationOpen(false);
       }
     }
     document.addEventListener("mousedown", onOutside);
@@ -167,20 +258,67 @@ export function SearchForm({
         className="flex w-full flex-col gap-3 rounded-2xl bg-[#ff7373] p-4 shadow-lg sm:p-6 lg:flex-row lg:items-center lg:gap-2 lg:rounded-full lg:p-2"
       >
         {/* ── Location ───────────────────────────────────────────── */}
-        <div className="flex flex-1 items-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 dark:border-gray-500 dark:bg-gray-700 lg:rounded-full">
-          <MapPin className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
-          <div className="flex-1">
-            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300">
-              Location
-            </label>
-            <input
-              type="text"
-              placeholder="Where are you going?"
-              value={formData.location}
-              onChange={(e) => updateField("location", e.target.value)}
-              className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-400"
-            />
+        <div ref={locationRef} className="relative flex-1">
+          <div className="flex items-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 dark:border-gray-500 dark:bg-gray-700 lg:rounded-full">
+            <MapPin className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
+            <div className="flex-1">
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300">
+                Location
+              </label>
+              <input
+                type="text"
+                placeholder="Where are you going?"
+                value={locationQuery}
+                onChange={(e) => {
+                  setLocationQuery(e.target.value);
+                  updateField("location", e.target.value);
+                }}
+                onFocus={() => setIsLocationOpen(true)}
+                className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-400"
+              />
+            </div>
+            {locationLoading && (
+              <Loader2 className="h-4 w-4 shrink-0 animate-spin text-gray-400" />
+            )}
           </div>
+
+          {isLocationOpen && (
+            <div
+              role="listbox"
+              aria-label="Location suggestions"
+              className="absolute left-0 top-full z-[200] mt-2 w-full rounded-2xl border border-gray-200 bg-white text-gray-900 shadow-2xl dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            >
+              <ul
+                ref={locationListRef}
+                onScroll={handleLocationScroll}
+                className="max-h-56 overflow-y-auto py-1"
+              >
+                {!locationLoading && locationResults.length === 0 && (
+                  <li className="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">
+                    No locations found
+                  </li>
+                )}
+                {locationResults.map((item, idx) => (
+                  <li key={`${item.name}-${idx}`}>
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => selectLocation(item.name)}
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-gray-800 transition-colors hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
+                    >
+                      <MapPin className="h-4 w-4 shrink-0 text-primary-500" />
+                      <span className="flex-1 text-sm">{item.name}</span>
+                    </button>
+                  </li>
+                ))}
+                {locationLoadingMore && (
+                  <li className="flex justify-center py-2">
+                    <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* ── Date range picker ───────────────────────────────────── */}

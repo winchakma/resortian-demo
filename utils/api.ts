@@ -788,14 +788,12 @@ export async function getFooterData(): Promise<FooterColumn[]> {
         { label: "About Us", href: "/about" },
         { label: "Careers", href: "/careers" },
         { label: "Blog", href: "/blog" },
-        { label: "Press", href: "/press" },
       ],
     },
     {
       title: "Support",
       links: [
         { label: "Help Center", href: "/help" },
-        { label: "Safety Information", href: "/safety" },
         { label: "Cancellation Options", href: "/cancellation" },
         { label: "Contact Us", href: "/contact" },
       ],

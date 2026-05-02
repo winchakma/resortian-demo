@@ -10,7 +10,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Resortian - Premium Hotel Booking in Bangladesh",
+  title: "Resortian - Premium Resort & Hotel Booking in Bangladesh",
   description:
     "Find and book premium hotels, resorts, and homestays across the most beautiful destinations in Bangladesh.",
 };
