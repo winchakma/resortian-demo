@@ -8,6 +8,8 @@ import type {
   Review,
   UserProfile,
   Booking,
+  BlogListItem,
+  BlogPost,
 } from "@/types";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -1078,4 +1080,77 @@ export async function getUserBookings(): Promise<Booking[]> {
       currency: "BDT",
     },
   ];
+}
+
+// ── Blog ──────────────────────────────────────────────────────────────────────
+
+interface ApiBlogListItem {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  coverImage: string;
+  category: string;
+  readTime: number;
+  tags: string[];
+  authorName: string;
+  authorTitle: string | null;
+  authorAvatar: string | null;
+  publishedAt: string;
+}
+
+interface ApiBlogPost extends ApiBlogListItem {
+  content: string;
+  youtubeUrl: string | null;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function normalizeBlogItem(b: ApiBlogListItem): BlogListItem {
+  return {
+    ...b,
+    coverImage: imageUrl(b.coverImage),
+    authorAvatar: b.authorAvatar ? imageUrl(b.authorAvatar) : null,
+  };
+}
+
+function normalizeBlogPost(b: ApiBlogPost): BlogPost {
+  return {
+    ...b,
+    coverImage: imageUrl(b.coverImage),
+    authorAvatar: b.authorAvatar ? imageUrl(b.authorAvatar) : null,
+  };
+}
+
+export async function getBlogs(params?: {
+  page?: number;
+  limit?: number;
+  category?: string;
+  tag?: string;
+  search?: string;
+}): Promise<{ data: BlogListItem[]; meta: { total: number; page: number; limit: number; totalPages: number } }> {
+  const qs = new URLSearchParams();
+  if (params?.page) qs.set("page", String(params.page));
+  if (params?.limit) qs.set("limit", String(params.limit));
+  if (params?.category) qs.set("category", params.category);
+  if (params?.tag) qs.set("tag", params.tag);
+  if (params?.search) qs.set("search", params.search);
+
+  const url = `${API_BASE}/blogs${qs.toString() ? `?${qs}` : ""}`;
+  const res = await fetch(url, { next: { revalidate: 60 } });
+  if (!res.ok) throw new Error(`Failed to fetch blogs: ${res.status}`);
+  const json = await res.json();
+  return {
+    data: (json.data as ApiBlogListItem[]).map(normalizeBlogItem),
+    meta: json.meta,
+  };
+}
+
+export async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
+  const res = await fetch(`${API_BASE}/blogs/${slug}`, { next: { revalidate: 60 } });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Failed to fetch blog: ${res.status}`);
+  const json: ApiBlogPost = await res.json();
+  return normalizeBlogPost(json);
 }

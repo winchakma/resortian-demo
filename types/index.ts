@@ -336,6 +336,29 @@ export interface ProfileContentProps {
   onProfileUpdate: (updated: UserProfile) => void;
 }
 
+export interface BlogListItem {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  coverImage: string;
+  category: string;
+  readTime: number;
+  tags: string[];
+  authorName: string;
+  authorTitle: string | null;
+  authorAvatar: string | null;
+  publishedAt: string;
+}
+
+export interface BlogPost extends BlogListItem {
+  content: string;
+  youtubeUrl: string | null;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface VendorDestination {
   id: string;
   name: string;

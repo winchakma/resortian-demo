@@ -1863,6 +1863,185 @@ cashouts.eligibleBookings — count of CONFIRMED bookings belonging to this vend
 revenue fields are derived from CashoutRequest records (not raw payment sums).
 
 ---
+Blogs
+
+GET /blogs
+
+Public — returns published blog posts only
+
+Query params (all optional)
+
+┌──────────┬────────┬─────────┐
+│  Param   │  Type  │ Default │
+├──────────┼────────┼─────────┤
+│ page     │ number │ 1       │
+├──────────┼────────┼─────────┤
+│ limit    │ number │ 10      │
+├──────────┼────────┼─────────┤
+│ category │ string │ —       │
+├──────────┼────────┼─────────┤
+│ tag      │ string │ —       │
+├──────────┼────────┼─────────┤
+│ search   │ string │ —       │
+└──────────┴────────┴─────────┘
+
+search — case-insensitive match against title and excerpt (OR)
+category — exact match (e.g. "Destination Guide")
+tag — matches any blog whose tags array contains this value
+
+Response 200
+{
+  "data": [
+    {
+      "id": "clx...",
+      "title": "Top 5 Beach Destinations in Bangladesh You Must Visit",
+      "slug": "top-5-beach-destinations-bangladesh",
+      "excerpt": "Bangladesh hides some of Southeast Asia's most breathtaking coastline...",
+      "coverImage": "/images/blogs/1714000000000-abc123.webp",
+      "category": "Destination Guide",
+      "readTime": 6,
+      "tags": ["beach", "travel", "bangladesh"],
+      "authorName": "Tasnim Hossain",
+      "authorTitle": "Travel Editor",
+      "authorAvatar": "/images/avatars/1714000000000-abc123.webp",
+      "publishedAt": "2026-04-18T00:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "total": 24,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 3
+  }
+}
+
+---
+GET /blogs/:slug
+
+Public — returns a single published blog post by slug
+
+Response 200
+{
+  "id": "clx...",
+  "title": "Top 5 Beach Destinations in Bangladesh You Must Visit",
+  "slug": "top-5-beach-destinations-bangladesh",
+  "excerpt": "Bangladesh hides some of Southeast Asia's most breathtaking coastline...",
+  "content": "Full HTML or Markdown content...",
+  "coverImage": "/images/blogs/1714000000000-abc123.webp",
+  "category": "Destination Guide",
+  "readTime": 6,
+  "youtubeUrl": "https://www.youtube.com/watch?v=...",
+  "tags": ["beach", "travel", "bangladesh"],
+  "authorId": "clx...",
+  "authorName": "Tasnim Hossain",
+  "authorTitle": "Travel Editor",
+  "authorAvatar": "/images/avatars/1714000000000-abc123.webp",
+  "isPublished": true,
+  "publishedAt": "2026-04-18T00:00:00.000Z",
+  "createdAt": "2026-04-15T10:00:00.000Z",
+  "updatedAt": "2026-04-17T12:00:00.000Z"
+}
+
+Response 404 — blog not found or not published
+
+---
+GET /blogs/admin/all
+
+Admin only (SUPER_ADMIN or ADMIN) — returns all blogs including drafts
+
+Query params (all optional)
+
+┌─────────────┬─────────────────┬─────────┐
+│    Param    │      Type       │ Default │
+├─────────────┼─────────────────┼─────────┤
+│ page        │ number          │ 1       │
+├─────────────┼─────────────────┼─────────┤
+│ limit       │ number          │ 10      │
+├─────────────┼─────────────────┼─────────┤
+│ category    │ string          │ —       │
+├─────────────┼─────────────────┼─────────┤
+│ isPublished │ boolean         │ —       │
+└─────────────┴─────────────────┴─────────┘
+
+Response 200 — same paginated shape as GET /blogs but includes isPublished, createdAt fields and returns drafts too
+
+---
+GET /blogs/admin/:id
+
+Admin only — returns a single blog by its ID (for editing, includes all fields regardless of publish state)
+
+Response 200 — full blog object (same shape as GET /blogs/:slug)
+Response 404 — blog not found
+
+---
+POST /blogs
+
+Admin only (SUPER_ADMIN or ADMIN)
+Content-Type: multipart/form-data
+
+Fields
+  title         string   (required)
+  excerpt       string   (required)
+  content       string   (required) — full blog body (HTML or Markdown)
+  coverImage    file     (required) — JPEG/PNG/WebP, max 10 MB
+                         Processed to WebP, served at /images/blogs/<name>.webp
+  slug          string   optional — auto-generated from title if omitted
+  category      string   optional — e.g. "Destination Guide"
+  readTime      number   (required) — estimated read time in minutes
+  youtubeUrl    string   optional — YouTube video URL
+  authorTitle   string   optional — e.g. "Travel Editor", shown below author name
+  tags          string   optional — comma-separated: "beach,travel,bangladesh"
+                         or repeated fields: tags=beach&tags=travel
+  isPublished   boolean  optional — "true" or "false" (default: false / draft)
+
+authorName and authorAvatar are denormalized automatically from the authenticated admin's account.
+If isPublished is true, publishedAt is set to the current timestamp.
+
+Response 201 — created blog object (full shape as GET /blogs/:slug)
+
+Error 400 — coverImage file is missing
+Error 409 — a blog with the same slug already exists
+
+---
+PATCH /blogs/:id
+
+Auth required — blog author or SUPER_ADMIN only
+Content-Type: multipart/form-data
+
+Fields (all optional)
+  title         string
+  slug          string
+  excerpt       string
+  content       string
+  coverImage    file     optional — replaces the existing cover image (old file is deleted from S3)
+  category      string
+  readTime      number
+  youtubeUrl    string
+  authorTitle   string
+  tags          string   comma-separated or repeated fields
+  isPublished   boolean  "true" or "false"
+
+If isPublished transitions from false → true, publishedAt is set to now.
+If isPublished transitions from true → false, publishedAt is cleared.
+If title is updated and slug is not provided, slug is auto-regenerated from the new title.
+
+Response 200 — updated blog object
+Error 403 — not the author or SUPER_ADMIN
+Error 404 — blog not found
+Error 409 — slug conflict with another blog
+
+---
+DELETE /blogs/:id
+
+Auth required — blog author or SUPER_ADMIN only
+
+Response 200
+{ "message": "Blog post deleted successfully" }
+
+Error 403 — not the author or SUPER_ADMIN
+Error 404 — blog not found
+
+---
 Notifications (Background)
 
 Booking creation triggers two background notification jobs (via BullMQ + Redis):
