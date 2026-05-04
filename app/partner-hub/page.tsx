@@ -13,18 +13,21 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Partner Hub | Resortian",
-  description:
-    "Resources, tools, and guidance for Resortian hotel partners.",
+  description: "Resources, tools, and guidance for Resortian hotel partners.",
 };
 
 const FEATURES = [
   {
-    icon: <BarChart2 className="h-6 w-6 text-primary-600 dark:text-primary-400" />,
+    icon: (
+      <BarChart2 className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+    ),
     title: "Booking Dashboard",
     body: "View all incoming and historical bookings for your properties in one place. Filter by date, status, or room type.",
   },
   {
-    icon: <DollarSign className="h-6 w-6 text-primary-600 dark:text-primary-400" />,
+    icon: (
+      <DollarSign className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+    ),
     title: "Revenue & Cashouts",
     body: "Track your advance payments, outstanding balances, and commission deductions. Request cashouts directly from the dashboard.",
   },
@@ -34,7 +37,9 @@ const FEATURES = [
     body: "Receive instant email and push notifications for new bookings, cancellations, and guest messages — even on mobile.",
   },
   {
-    icon: <Settings className="h-6 w-6 text-primary-600 dark:text-primary-400" />,
+    icon: (
+      <Settings className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+    ),
     title: "Property Management",
     body: "Update room details, pricing, availability, photos, and amenities. Changes go live immediately after admin review.",
   },
@@ -154,9 +159,9 @@ export default function PartnerHubPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-gray-900">
                   {[
-                    ["BDT 3,000 advance", "7% (default)", "BDT 2,790"],
+                    ["BDT 3,000 advance", "12% (default)", "BDT 2,640"],
                     ["BDT 3,000 advance", "10% (negotiated)", "BDT 2,700"],
-                    ["BDT 5,000 advance", "7% (default)", "BDT 4,650"],
+                    ["BDT 5,000 advance", "12% (default)", "BDT 4,400"],
                   ].map(([booking, rate, payout], i) => (
                     <tr key={i}>
                       <td className="px-6 py-4 text-gray-900 dark:text-white">
@@ -174,8 +179,8 @@ export default function PartnerHubPage() {
               </table>
             </div>
             <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-              Commission is deducted from the advance payment only. The
-              balance paid at check-in goes directly to you.
+              Commission is deducted from the advance payment only. The balance
+              paid at check-in goes directly to you.
             </p>
           </div>
         </section>
