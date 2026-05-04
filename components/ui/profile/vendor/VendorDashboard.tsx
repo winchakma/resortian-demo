@@ -4,14 +4,14 @@ import { useState } from "react";
 import {
   LayoutDashboard,
   Building2,
-  Globe,
+  // Globe,
   CalendarDays,
   CalendarRange,
 } from "lucide-react";
 import { VendorView } from "@/types";
 import VendorOverview from "./VendorOverview";
 import VendorHotelsList from "./VendorHotelsList";
-import VendorDestinationsList from "./VendorDestinationsList";
+// import VendorDestinationsList from "./VendorDestinationsList";
 import VendorBookingsList from "./VendorBookingsList";
 import VendorCalendar from "./VendorCalendar";
 
@@ -34,11 +34,11 @@ export default function VendorDashboard() {
               label: "Hotels & Rooms",
               icon: <Building2 className="h-4 w-4" />,
             },
-            {
-              id: "destinations" as VendorView,
-              label: "Destinations",
-              icon: <Globe className="h-4 w-4" />,
-            },
+            // {
+            //   id: "destinations" as VendorView,
+            //   label: "Destinations",
+            //   icon: <Globe className="h-4 w-4" />,
+            // },
             {
               id: "bookings" as VendorView,
               label: "Bookings",
@@ -72,7 +72,7 @@ export default function VendorDashboard() {
 
       {view === "overview" && <VendorOverview />}
       {view === "hotels" && <VendorHotelsList />}
-      {view === "destinations" && <VendorDestinationsList />}
+      {/* {view === "destinations" && <VendorDestinationsList />} */}
       {view === "bookings" && <VendorBookingsList />}
       {view === "calendar" && <VendorCalendar />}
     </div>

@@ -1,12 +1,15 @@
 import FieldError from "@/components/common/FieldError";
 import { useAuth } from "@/context/AuthContext";
-import { HotelFormValues, VendorDestination } from "@/types";
+import { HotelFormValues } from "@/types";
 import { BASE, inputCls, labelCls } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   AlertCircle,
+  Check,
+  ChevronDown,
   MapPin,
   Plus,
+  Search,
   Sparkles,
   Tag,
   Upload,
@@ -52,6 +55,23 @@ export default function CreateHotelForm({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageError, setImageError] = useState("");
 
+  // Destination combobox
+  const [destOpen, setDestOpen] = useState(false);
+  const [destQuery, setDestQuery] = useState("");
+  const [destLabel, setDestLabel] = useState("");
+  const destRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (destRef.current && !destRef.current.contains(e.target as Node)) {
+        setDestOpen(false);
+        setDestQuery("");
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -77,21 +97,15 @@ export default function CreateHotelForm({
     }
   }, [nameValue, setValue]);
 
-  // Load only the vendor's own approved destinations
+  // Load all public approved destinations
   useEffect(() => {
-    if (!token) return;
-    fetch(`${BASE}/destinations/mine?limit=100`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch(`${BASE}/destinations?limit=100`)
       .then((r) => r.json())
       .then((d) => {
-        const approved = (d.data ?? []).filter(
-          (dest: VendorDestination) => dest.approvalStatus === "APPROVED",
-        );
-        setDestinations(approved);
+        setDestinations(d.data ?? d ?? []);
       })
       .catch(() => {});
-  }, [token]);
+  }, []);
 
   async function onSubmit(data: HotelFormValues) {
     const file = imageRef.current?.files?.[0];
@@ -130,6 +144,7 @@ export default function CreateHotelForm({
       reset();
       if (imageRef.current) imageRef.current.value = "";
       setImagePreview(null);
+      setDestLabel("");
       onCreated(json.id, data.name);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Something went wrong.");
@@ -155,17 +170,96 @@ export default function CreateHotelForm({
           </div>
         ) : (
           <>
-            <select
-              {...register("destinationId")}
-              className={inputCls(!!errors.destinationId)}
-            >
-              <option value="">Select a destination…</option>
-              {destinations.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
+            {/* hidden field keeps react-hook-form in sync */}
+            <input type="hidden" {...register("destinationId")} />
+
+            <div ref={destRef} className="relative">
+              <button
+                type="button"
+                onClick={() => {
+                  setDestOpen((o) => !o);
+                  setDestQuery("");
+                }}
+                className={[
+                  inputCls(!!errors.destinationId),
+                  "flex items-center justify-between cursor-pointer text-left",
+                  destLabel ? "" : "text-gray-400 dark:text-gray-500",
+                ].join(" ")}
+              >
+                <span className={destLabel ? "text-gray-900 dark:text-white" : ""}>
+                  {destLabel || "Select a destination…"}
+                </span>
+                <ChevronDown
+                  className={`h-4 w-4 shrink-0 text-gray-400 transition-transform duration-150 ${destOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              {destOpen && (
+                <div className="absolute z-50 mt-1.5 w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                  {/* Search input */}
+                  <div className="flex items-center gap-2 border-b border-gray-100 px-3 py-2.5 dark:border-gray-800">
+                    <Search className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+                    <input
+                      autoFocus
+                      type="text"
+                      value={destQuery}
+                      onChange={(e) => setDestQuery(e.target.value)}
+                      placeholder="Search destinations…"
+                      className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-500"
+                    />
+                    {destQuery && (
+                      <button type="button" onClick={() => setDestQuery("")}>
+                        <X className="h-3.5 w-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Options list */}
+                  <ul className="max-h-52 overflow-y-auto py-1">
+                    {destinations
+                      .filter((d) =>
+                        d.name.toLowerCase().includes(destQuery.toLowerCase()),
+                      )
+                      .map((d) => {
+                        const selected = destLabel === d.name;
+                        return (
+                          <li key={d.id}>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setValue("destinationId", d.id, {
+                                  shouldValidate: true,
+                                });
+                                setDestLabel(d.name);
+                                setDestOpen(false);
+                                setDestQuery("");
+                              }}
+                              className={`flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm transition-colors ${
+                                selected
+                                  ? "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-300"
+                                  : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                              }`}
+                            >
+                              <MapPin className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+                              <span className="flex-1">{d.name}</span>
+                              {selected && (
+                                <Check className="h-3.5 w-3.5 text-primary-600 dark:text-primary-400" />
+                              )}
+                            </button>
+                          </li>
+                        );
+                      })}
+                    {destinations.filter((d) =>
+                      d.name.toLowerCase().includes(destQuery.toLowerCase()),
+                    ).length === 0 && (
+                      <li className="px-4 py-3 text-center text-sm text-gray-400 dark:text-gray-500">
+                        No destinations found
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
             <FieldError msg={errors.destinationId?.message} />
           </>
         )}
