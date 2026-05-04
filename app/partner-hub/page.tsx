@@ -136,7 +136,7 @@ export default function PartnerHubPage() {
         </section>
 
         {/* Commission breakdown */}
-        <section className="bg-white py-12 dark:bg-gray-900">
+        {/* <section className="bg-white py-12 dark:bg-gray-900">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               How the Commission Works
@@ -183,7 +183,7 @@ export default function PartnerHubPage() {
               paid at check-in goes directly to you.
             </p>
           </div>
-        </section>
+        </section> */}
 
         {/* Resources */}
         <section className="py-12">

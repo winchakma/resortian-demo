@@ -38,7 +38,7 @@ const CONTACT_CARDS = [
   {
     icon: Phone,
     title: "Call Us",
-    lines: ["+880 1700-000000", "+880 1800-000000"],
+    lines: ["+8801611422223"],
     sub: "Mon – Sat, 9 AM – 9 PM",
     color: "bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400",
   },

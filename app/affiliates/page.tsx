@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { Header } from "@/sections/Header";
 import { Footer } from "@/sections/Footer";
-import { Link2, DollarSign, BarChart2, Users, Mail, CheckCircle } from "lucide-react";
+import {
+  Link2,
+  DollarSign,
+  BarChart2,
+  Users,
+  Mail,
+  CheckCircle,
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Affiliates | Resortian",
@@ -37,19 +44,33 @@ const TIERS = [
     name: "Starter",
     bookings: "0–10 bookings/month",
     commission: "3%",
-    perks: ["Unique tracking link", "Monthly payout via bKash or bank transfer", "Basic analytics dashboard"],
+    perks: [
+      "Unique tracking link",
+      "Monthly payout via bKash or bank transfer",
+      "Basic analytics dashboard",
+    ],
   },
   {
     name: "Growth",
     bookings: "11–50 bookings/month",
     commission: "5%",
-    perks: ["Everything in Starter", "Priority support", "Custom banner assets", "Quarterly performance review"],
+    perks: [
+      "Everything in Starter",
+      "Priority support",
+      "Custom banner assets",
+      "Quarterly performance review",
+    ],
   },
   {
     name: "Pro",
     bookings: "51+ bookings/month",
     commission: "7%",
-    perks: ["Everything in Growth", "Dedicated affiliate manager", "Co-marketing opportunities", "Early access to new features"],
+    perks: [
+      "Everything in Growth",
+      "Dedicated affiliate manager",
+      "Co-marketing opportunities",
+      "Early access to new features",
+    ],
   },
 ];
 
@@ -128,7 +149,7 @@ export default function AffiliatesPage() {
         </section>
 
         {/* Commission tiers */}
-        <section className="bg-white py-12 dark:bg-gray-900">
+        {/* <section className="bg-white py-12 dark:bg-gray-900">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               Commission Tiers
@@ -170,7 +191,7 @@ export default function AffiliatesPage() {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Why Resortian */}
         <section className="py-12">
@@ -180,9 +201,27 @@ export default function AffiliatesPage() {
             </h2>
             <div className="mt-6 grid gap-6 sm:grid-cols-3">
               {[
-                { icon: <Link2 className="h-6 w-6 text-primary-600 dark:text-primary-400" />, title: "High Conversion", body: "Our optimised booking flow converts browsers into confirmed guests at above-industry-average rates." },
-                { icon: <DollarSign className="h-6 w-6 text-primary-600 dark:text-primary-400" />, title: "Competitive Payouts", body: "Up to 7% commission on advance payments, paid monthly with no minimum traffic requirement to start." },
-                { icon: <BarChart2 className="h-6 w-6 text-primary-600 dark:text-primary-400" />, title: "Real-Time Analytics", body: "Track clicks, conversions, and earnings in your dashboard — updated daily so you always know what's working." },
+                {
+                  icon: (
+                    <Link2 className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+                  ),
+                  title: "High Conversion",
+                  body: "Our optimised booking flow converts browsers into confirmed guests at above-industry-average rates.",
+                },
+                {
+                  icon: (
+                    <DollarSign className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+                  ),
+                  title: "Competitive Payouts",
+                  body: "Commission on advance payments, paid monthly with no minimum traffic requirement to start.",
+                },
+                {
+                  icon: (
+                    <BarChart2 className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+                  ),
+                  title: "Real-Time Analytics",
+                  body: "Track clicks, conversions, and earnings in your dashboard — updated daily so you always know what's working.",
+                },
               ].map((item) => (
                 <div
                   key={item.title}
@@ -191,8 +230,12 @@ export default function AffiliatesPage() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-900/30">
                     {item.icon}
                   </div>
-                  <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">{item.title}</h3>
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{item.body}</p>
+                  <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    {item.body}
+                  </p>
                 </div>
               ))}
             </div>
@@ -233,8 +276,8 @@ export default function AffiliatesPage() {
             </h2>
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Email us with a brief description of your platform, your monthly
-              audience size, and any questions. We typically respond within
-              2 business days.
+              audience size, and any questions. We typically respond within 2
+              business days.
             </p>
             <a
               href="mailto:affiliates@resortian.com"
