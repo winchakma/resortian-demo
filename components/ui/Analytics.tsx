@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { pageview } from "@/lib/gtag";
 
-export function Analytics() {
+function PageViewTracker() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const initialRender = useRef(true);
@@ -20,4 +20,12 @@ export function Analytics() {
   }, [pathname, searchParams]);
 
   return null;
+}
+
+export function Analytics() {
+  return (
+    <Suspense fallback={null}>
+      <PageViewTracker />
+    </Suspense>
+  );
 }
