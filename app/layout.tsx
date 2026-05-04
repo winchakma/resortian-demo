@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
+import Script from "next/script";
 import { Providers } from "./providers";
+import { Analytics } from "@/components/ui/Analytics";
+import { GA_ID } from "@/lib/gtag";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -27,7 +30,26 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full font-sans antialiased">
-        <Providers>{children}</Providers>
+        {GA_ID && process.env.NODE_ENV === "production" && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}', { send_page_view: true });
+              `}
+            </Script>
+          </>
+        )}
+        <Providers>
+          <Analytics />
+          {children}
+        </Providers>
       </body>
     </html>
   );

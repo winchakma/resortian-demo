@@ -25,6 +25,7 @@ import {
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { apiLogin } from "@/utils/auth";
+import { trackEvent } from "@/lib/gtag";
 import { useForm, type Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -145,6 +146,12 @@ export function CheckoutContent() {
   // ── Submit handlers ───────────────────────────────────────────────────────
   function handleGuestDetailsNext(data: GuestFormValues) {
     setSavedGuestDetails(data);
+    trackEvent("begin_booking", {
+      hotel_id: items[0]?.hotelId ?? "",
+      hotel_name: items[0]?.hotelName ?? "",
+      value: totalAmount,
+      currency: "BDT",
+    });
     setStep("payment");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -236,6 +243,13 @@ export function CheckoutContent() {
       setConfirmedReferences(references);
       setConfirmedAdvance(totalAdvance);
       setConfirmedBalance(totalBalance);
+      trackEvent("complete_booking", {
+        transaction_id: references[0] ?? "",
+        hotel_id: items[0]?.hotelId ?? "",
+        hotel_name: items[0]?.hotelName ?? "",
+        value: totalAdvance + totalBalance,
+        currency: "BDT",
+      });
       setStep("confirmed");
       clearCart();
       window.scrollTo({ top: 0, behavior: "smooth" });

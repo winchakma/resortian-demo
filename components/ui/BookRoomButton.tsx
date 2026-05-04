@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import type { Hotel, Room } from "@/types";
 import { BookingModal } from "@/components/ui/BookingModal";
+import { trackEvent } from "@/lib/gtag";
 
 interface BookRoomButtonProps {
   hotel: Hotel;
@@ -16,7 +17,16 @@ export function BookRoomButton({ hotel, room }: BookRoomButtonProps) {
   return (
     <>
       <button
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          trackEvent("select_room", {
+            hotel_id: hotel.id,
+            hotel_name: hotel.name,
+            room_id: room.id,
+            room_name: room.name,
+            price: room.price,
+          });
+          setIsModalOpen(true);
+        }}
         className="inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 active:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
       >
         <ShoppingCart className="h-3.5 w-3.5" />
