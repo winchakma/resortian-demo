@@ -94,6 +94,7 @@ export type BookingStatus = "upcoming" | "completed" | "cancelled";
 export interface Booking {
   id: string;
   reference: string;
+  hotelId: string;
   hotelName: string;
   hotelSlug: string;
   hotelImage: string;

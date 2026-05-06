@@ -1,19 +1,44 @@
 "use client";
 
 import { useState } from "react";
-import { Star } from "lucide-react";
+import { Star, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
+import Link from "next/link";
+import type { Review } from "@/types";
 
-export function ReviewForm() {
+const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3005";
+
+interface ReviewFormProps {
+  hotelId: string;
+  bookingId?: string;
+  onReviewPosted?: (review: Review) => void;
+}
+
+export function ReviewForm({ hotelId, bookingId, onReviewPosted }: ReviewFormProps) {
+  const { token } = useAuth();
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
   const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (rating === 0 || comment.trim() === "") return;
-    setSubmitted(true);
+  if (!token) {
+    return (
+      <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
+        <LogIn className="h-4 w-4 shrink-0 text-gray-400" />
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          <Link
+            href="/auth/login"
+            className="font-medium text-primary-600 hover:underline dark:text-primary-400"
+          >
+            Sign in
+          </Link>{" "}
+          to write a review.
+        </p>
+      </div>
+    );
   }
 
   if (submitted) {
@@ -27,6 +52,39 @@ export function ReviewForm() {
         </p>
       </div>
     );
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (rating === 0 || comment.trim() === "") return;
+    setLoading(true);
+    try {
+      const body: Record<string, unknown> = { hotelId, rating, comment };
+      if (bookingId) body.bookingId = bookingId;
+      const res = await fetch(`${BASE}/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to post review");
+      toast.success("Review posted!");
+      setSubmitted(true);
+      onReviewPosted?.({
+        id: json.id,
+        author: json.author,
+        rating: json.rating,
+        comment: json.comment,
+        createdAt: json.createdAt,
+      });
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Could not post review.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -78,9 +136,9 @@ export function ReviewForm() {
           type="submit"
           variant="primary"
           size="md"
-          disabled={rating === 0 || comment.trim() === ""}
+          disabled={rating === 0 || comment.trim() === "" || loading}
         >
-          Post Review
+          {loading ? "Posting…" : "Post Review"}
         </Button>
       </div>
     </form>

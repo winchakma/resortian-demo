@@ -956,6 +956,7 @@ export async function getUserBookings(): Promise<Booking[]> {
     {
       id: "b1",
       reference: "RST-A4F2E1",
+      hotelId: "",
       hotelName: "Saint Martin Island Resort",
       hotelSlug: "saint-martin-island-resort",
       hotelImage:
@@ -977,6 +978,7 @@ export async function getUserBookings(): Promise<Booking[]> {
     {
       id: "b2",
       reference: "RST-B9C3D7",
+      hotelId: "",
       hotelName: "The Royal Sylhet Resort & Spa",
       hotelSlug: "the-royal-sylhet-resort-spa",
       hotelImage:
@@ -998,6 +1000,7 @@ export async function getUserBookings(): Promise<Booking[]> {
     {
       id: "b3",
       reference: "RST-C1E5F8",
+      hotelId: "",
       hotelName: "Cox's Bazar Ocean Paradise",
       hotelSlug: "coxs-bazar-ocean-paradise",
       hotelImage:
@@ -1019,6 +1022,7 @@ export async function getUserBookings(): Promise<Booking[]> {
     {
       id: "b4",
       reference: "RST-D2G6H9",
+      hotelId: "",
       hotelName: "Sundarbans Eco Resort",
       hotelSlug: "sundarbans-eco-resort",
       hotelImage:
@@ -1040,6 +1044,7 @@ export async function getUserBookings(): Promise<Booking[]> {
     {
       id: "b5",
       reference: "RST-E7K2L4",
+      hotelId: "",
       hotelName: "Bandarban Hill Resort",
       hotelSlug: "bandarban-hill-resort",
       hotelImage:
@@ -1061,6 +1066,7 @@ export async function getUserBookings(): Promise<Booking[]> {
     {
       id: "b6",
       reference: "RST-F3M8N5",
+      hotelId: "",
       hotelName: "Rangamati Lake View Hotel",
       hotelSlug: "rangamati-lake-view-hotel",
       hotelImage:

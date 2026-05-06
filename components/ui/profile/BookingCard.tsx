@@ -13,10 +13,12 @@ import {
   Clock,
   CheckCircle2,
   XCircle,
+  Star,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ReviewForm } from "@/components/ui/ReviewForm";
 
 const STATUS_CONFIG: Record<
   BookingStatus,
@@ -41,6 +43,8 @@ const STATUS_CONFIG: Record<
 
 export default function BookingCard({ booking }: { booking: Booking }) {
   const [expanded, setExpanded] = useState(false);
+  const [showReview, setShowReview] = useState(false);
+  const [reviewed, setReviewed] = useState(false);
   const cfg = STATUS_CONFIG[booking.status];
 
   return (
@@ -175,6 +179,32 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                   </Link>
                 )}
               </div>
+
+              {booking.status === "completed" && !reviewed && (
+                <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
+                  {showReview ? (
+                    <div className="space-y-3">
+                      <p className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                        Review {booking.hotelName}
+                      </p>
+                      <ReviewForm
+                        hotelId={booking.hotelId}
+                        bookingId={booking.id}
+                        onReviewPosted={() => setReviewed(true)}
+                      />
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setShowReview(true)}
+                      className="flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-700 transition-colors hover:bg-amber-100 dark:border-amber-800/40 dark:bg-amber-950/20 dark:text-amber-400 dark:hover:bg-amber-950/40"
+                    >
+                      <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                      Write a Review
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>
