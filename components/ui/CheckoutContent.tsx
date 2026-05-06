@@ -16,11 +16,9 @@ import {
   ChevronRight,
   Eye,
   EyeOff,
-  Smartphone,
-  Banknote,
   Info,
-  Check,
   BadgeCheck,
+  ExternalLink,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
@@ -32,11 +30,10 @@ import * as yup from "yup";
 import toast from "react-hot-toast";
 
 type AuthMode = "login" | "guest";
-type PaymentMethod = "stripe" | "uddoktapay";
-type Step = "details" | "payment" | "confirmed";
+type Step = "details" | "payment";
 
 // ── BD phone regex: starts with +880 or 01, then 9 digits (operator prefix 1x)
-const BD_PHONE_REGEX = /^(?:\+?880|0)1[3-9]\d{8}$/;
+const BD_PHONE_REGEX = /^(?:\+?880|0)1[3-9]\d{8,9}$/;
 
 // ── Yup schemas ──────────────────────────────────────────────────────────────
 
@@ -111,17 +108,12 @@ export function CheckoutContent() {
 
   const [authMode, setAuthMode] = useState<AuthMode>("guest");
   const [step, setStep] = useState<Step>("details");
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("stripe");
   const [showPassword, setShowPassword] = useState(false);
   const [loginSubmitting, setLoginSubmitting] = useState(false);
   const [bookingSubmitting, setBookingSubmitting] = useState(false);
   // Guest details captured in step 1, used when submitting in step 2
   const [savedGuestDetails, setSavedGuestDetails] =
     useState<GuestFormValues | null>(null);
-  // Snapshot values shown on the confirmed screen (after cart is cleared)
-  const [confirmedAdvance, setConfirmedAdvance] = useState(0);
-  const [confirmedBalance, setConfirmedBalance] = useState(0);
-  const [confirmedReferences, setConfirmedReferences] = useState<string[]>([]);
 
   // ── Forms ─────────────────────────────────────────────────────────────────
   const loginForm = useForm<LoginFormValues>({
@@ -177,72 +169,53 @@ export function CheckoutContent() {
   async function handlePaymentConfirm() {
     setBookingSubmitting(true);
     try {
-      const isAuthenticated = !!token;
-
-      // For guest bookings, we need the details saved from step 1
       const guestDetails = savedGuestDetails ?? guestForm.getValues();
+      const name = guestDetails.guestName || user?.name || "";
+      const phone = guestDetails.guestPhone || user?.phone || "";
+      const email = guestDetails.guestEmail || user?.email;
 
-      const results = await Promise.all(
-        items.map((item) => {
-          const headers: Record<string, string> = {
-            "Content-Type": "application/json",
-          };
-          if (isAuthenticated) {
-            headers["Authorization"] = `Bearer ${token}`;
-          }
+      const origin = window.location.origin;
 
-          const name = guestDetails.guestName || user?.name;
-          const phone = guestDetails.guestPhone || user?.phone;
-          const email = guestDetails.guestEmail || user?.email;
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
 
-          const body: Record<string, unknown> = {
+      const res = await fetch(`${API_BASE}/payments/moneybag/init`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          items: items.map((item) => ({
             roomId: item.roomId,
             checkIn: item.checkIn,
             checkOut: item.checkOut,
             guests: item.capacity,
-            paymentMethod: paymentMethod.toUpperCase(),
-            guestName: name,
-            guestPhone: phone,
-            ...(email ? { guestEmail: email } : {}),
-          };
-          console.log({ body });
-
-          return fetch(`${API_BASE}/bookings`, {
-            method: "POST",
-            headers,
-            body: JSON.stringify(body),
-          }).then(async (res) => {
-            if (!res.ok) {
-              const err = await res.json().catch(() => ({}));
-              throw new Error(
-                (err as { message?: string }).message ?? `HTTP ${res.status}`,
-              );
-            }
-            return res.json() as Promise<{
-              booking: {
-                reference: string;
-                advancePaid: number;
-                balanceDue: number;
-              };
-            }>;
-          });
+          })),
+          guestName: name,
+          guestPhone: phone,
+          ...(email ? { guestEmail: email } : {}),
+          successUrl: `${origin}/payment/success`,
+          cancelUrl: `${origin}/payment/cancel`,
+          failUrl: `${origin}/payment/fail`,
         }),
-      );
-      console.log({ results });
+      });
 
-      const references = results.map((r) => r.booking.reference);
-      const totalAdvance = results.reduce(
-        (sum, r) => sum + r.booking.advancePaid,
-        0,
-      );
-      const totalBalance = results.reduce(
-        (sum, r) => sum + r.booking.balanceDue,
-        0,
-      );
+      const data = await res.json() as {
+        checkout_url?: string;
+        bookings?: { reference: string; advancePaid: number; balanceDue: number }[];
+        totalAdvance?: number;
+        totalBalance?: number;
+        message?: string;
+      };
 
-      setConfirmedReferences(references);
-      setConfirmedAdvance(totalAdvance);
-      setConfirmedBalance(totalBalance);
+      if (!res.ok || !data.checkout_url) {
+        throw new Error(data.message ?? "Failed to initiate payment");
+      }
+
+      const references = (data.bookings ?? []).map((b) => b.reference);
+      const totalAdvance = data.totalAdvance ?? (data.bookings ?? []).reduce((s, b) => s + b.advancePaid, 0);
+      const totalBalance = data.totalBalance ?? (data.bookings ?? []).reduce((s, b) => s + b.balanceDue, 0);
+
       trackEvent("complete_booking", {
         transaction_id: references[0] ?? "",
         hotel_id: items[0]?.hotelId ?? "",
@@ -250,127 +223,19 @@ export function CheckoutContent() {
         value: totalAdvance + totalBalance,
         currency: "BDT",
       });
-      setStep("confirmed");
+
       clearCart();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.location.href = data.checkout_url;
     } catch (err: unknown) {
       toast.error(
         err instanceof Error
           ? err.message
           : "Booking failed. Please try again.",
       );
-    } finally {
       setBookingSubmitting(false);
     }
   }
 
-  // ── Confirmed ─────────────────────────────────────────────────────────────
-  if (step === "confirmed") {
-    const primaryRef = confirmedReferences[0] ?? "—";
-    return (
-      <div className="flex min-h-[70vh] items-center justify-center py-16">
-        <div className="mx-auto w-full max-w-md px-4">
-          {/* Success icon */}
-          <div className="mb-6 flex justify-center">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-950/40">
-              <CheckCircle2 className="h-12 w-12 text-primary-600 dark:text-primary-400" />
-            </div>
-          </div>
-
-          <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-white">
-            Booking Confirmed!
-          </h1>
-          <p className="mt-3 text-center text-gray-500 dark:text-gray-400">
-            Your reservation is secured. A confirmation has been sent to your
-            inbox.
-          </p>
-
-          {/* Booking reference */}
-          <div className="mt-6 rounded-2xl border border-primary-100 bg-primary-50 p-5 dark:border-primary-900/30 dark:bg-primary-950/20">
-            <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
-              Booking Reference
-            </p>
-            <p className="mt-1 font-mono text-2xl font-bold text-gray-900 dark:text-white">
-              {primaryRef}
-            </p>
-            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-              Keep this reference for your records.
-            </p>
-          </div>
-
-          {/* Payment summary */}
-          <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
-            <div className="border-b border-gray-100 px-5 py-3 dark:border-gray-800">
-              <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                Payment Summary
-              </p>
-            </div>
-
-            {/* Paid now */}
-            <div className="flex items-center justify-between bg-primary-50 px-5 py-4 dark:bg-primary-950/30">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/50">
-                  <CreditCard className="h-4 w-4 text-primary-600 dark:text-primary-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-primary-700 dark:text-primary-300">
-                    Advance Paid
-                  </p>
-                  <p className="text-xs text-primary-600/70 dark:text-primary-500">
-                    20% — charged today
-                  </p>
-                </div>
-              </div>
-              <span className="text-lg font-bold text-primary-700 dark:text-primary-300">
-                ৳{confirmedAdvance.toLocaleString()}
-              </span>
-            </div>
-
-            {/* Due at hotel */}
-            <div className="flex items-center justify-between px-5 py-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-                  <Banknote className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Due at Hotel
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    80% — pay at check-in
-                  </p>
-                </div>
-              </div>
-              <span className="text-lg font-bold text-gray-600 dark:text-gray-300">
-                ৳{confirmedBalance.toLocaleString()}
-              </span>
-            </div>
-          </div>
-
-          {/* What to expect */}
-          <div className="mt-4 flex gap-3 rounded-2xl border border-amber-100 bg-amber-50 p-4 dark:border-amber-900/30 dark:bg-amber-950/20">
-            <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
-            <p className="text-xs leading-relaxed text-amber-700 dark:text-amber-300">
-              Please present your booking reference{" "}
-              <strong className="font-semibold">{primaryRef}</strong> at the
-              front desk. The remaining{" "}
-              <strong className="font-semibold">
-                ৳{confirmedBalance.toLocaleString()}
-              </strong>{" "}
-              will be collected when you check in.
-            </p>
-          </div>
-
-          <Link
-            href="/"
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 px-8 py-3.5 font-semibold text-white transition-colors hover:bg-primary-700"
-          >
-            Back to Home
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -688,150 +553,58 @@ export function CheckoutContent() {
           {/* ── STEP: payment ── */}
           {step === "payment" && (
             <div className="space-y-5">
-              {/* Payment method selector */}
+              {/* Moneybag payment card */}
               <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
                 <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
                   <h2 className="font-semibold text-gray-900 dark:text-white">
-                    Select Payment Method
+                    Secure Payment
                   </h2>
                   <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-                    You will be redirected to the payment gateway to complete
-                    your transaction securely.
+                    You will be redirected to Moneybag&apos;s secure checkout to
+                    complete your payment.
                   </p>
                 </div>
 
-                <div className="grid gap-3 p-5 sm:grid-cols-2">
-                  {/* ── Stripe / Card option ── */}
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("stripe")}
-                    className={`group flex flex-col gap-4 rounded-2xl border-2 p-5 text-left transition-all ${
-                      paymentMethod === "stripe"
-                        ? "border-primary-500 bg-primary-50 dark:border-primary-500 dark:bg-primary-950/30"
-                        : "border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:border-gray-600"
-                    }`}
-                  >
-                    {/* Top row: logo + check */}
-                    <div className="flex items-center justify-between gap-2">
-                      {/* Stripe wordmark on brand background */}
-                      <div className="flex h-9 items-center rounded-lg bg-[#635BFF] px-3">
-                        <svg
-                          viewBox="0 0 48 20"
-                          fill="none"
-                          className="h-4 w-auto"
-                          aria-label="Stripe"
-                          xmlns="http://www.w3.org/2000/svg"
+                <div className="p-5">
+                  {/* Moneybag branding */}
+                  <div className="flex items-center gap-4 rounded-2xl border-2 border-primary-200 bg-primary-50 p-5 dark:border-primary-800/50 dark:bg-primary-950/20">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white">
+                      <CreditCard className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900 dark:text-white">
+                        Moneybag Checkout
+                      </p>
+                      <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                        Cards · bKash · Nagad · Rocket · and more
+                      </p>
+                    </div>
+                    <ExternalLink className="h-4 w-4 shrink-0 text-primary-500 dark:text-primary-400" />
+                  </div>
+
+                  {/* Accepted methods */}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {["Visa", "Mastercard", "bKash", "Nagad", "Rocket"].map(
+                      (m) => (
+                        <span
+                          key={m}
+                          className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
                         >
-                          {/* Stripe "S" mark */}
-                          <path
-                            d="M4.2 7.8c0-.6.5-.8 1.3-.8 1.1 0 2.5.4 3.7 1V4.7C8 4.2 6.8 4 5.5 4 2.5 4 .4 5.5.4 8c0 3.5 4.8 3 4.8 4.4 0 .7-.6.9-1.4.9-1.2 0-2.8-.5-4-1.2v3.2c1.4.6 2.8.9 4 .9 3.1 0 5.1-1.5 5.1-3.8C8.9 9 4.2 9.5 4.2 7.8z"
-                            fill="white"
-                          />
-                          <path
-                            d="M12.4 2.2l-3.3.7v11.2l3.3-.7V2.2z"
-                            fill="white"
-                          />
-                          <path
-                            d="M21.2 5.8c-.6 0-1.1.2-1.5.5V2.2l-3.3.7v11.2h3.3V9.3c.4-.3.9-.5 1.4-.5 1 0 1.4.7 1.4 1.7v4.9h3.4V10c0-2.1-1.2-4.2-4.7-4.2z"
-                            fill="white"
-                          />
-                          <path
-                            d="M30.1 5.8c-2.4 0-4 1.8-4 4.5 0 2.9 1.6 4.3 4 4.3 1.1 0 2.1-.3 2.9-.9l.2.7h3V6h-3l-.3.9c-.8-.7-1.7-1.1-2.8-1.1zm1.1 6.4c-.5 0-.9-.2-1.2-.6V9.2c.3-.3.7-.5 1.2-.5.9 0 1.4.6 1.4 1.8 0 1.2-.5 1.7-1.4 1.7z"
-                            fill="white"
-                          />
-                          <path
-                            d="M37.2 5.9V14h3.3V5.9h-3.3zm1.7-4c-1.1 0-1.9.8-1.9 1.8s.8 1.8 1.9 1.8 1.9-.8 1.9-1.8-.8-1.8-1.9-1.8z"
-                            fill="white"
-                          />
-                          <path
-                            d="M46.8 6.1c-.5-.2-1.1-.3-1.7-.3-2.5 0-4.1 1.8-4.1 4.5 0 2.9 1.6 4.3 4.1 4.3.7 0 1.3-.1 1.7-.3v-2.5c-.3.2-.7.3-1.1.3-.9 0-1.5-.6-1.5-1.8 0-1.2.6-1.8 1.5-1.8.4 0 .8.1 1.1.3V6.1z"
-                            fill="white"
-                          />
-                        </svg>
-                      </div>
-                      {/* Check indicator — inside layout, no absolute */}
-                      <div
-                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
-                          paymentMethod === "stripe"
-                            ? "border-primary-600 bg-primary-600 dark:border-primary-400 dark:bg-primary-400"
-                            : "border-gray-300 dark:border-gray-600"
-                        }`}
-                      >
-                        {paymentMethod === "stripe" && (
-                          <Check
-                            className="h-3 w-3 text-white"
-                            strokeWidth={2.5}
-                          />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Labels */}
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                        Credit / Debit Card
-                      </p>
-                      <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-                        Visa · Mastercard · Amex
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* ── UddoktaPay / Mobile option ── */}
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("uddoktapay")}
-                    className={`group flex flex-col gap-4 rounded-2xl border-2 p-5 text-left transition-all ${
-                      paymentMethod === "uddoktapay"
-                        ? "border-primary-500 bg-primary-50 dark:border-primary-500 dark:bg-primary-950/30"
-                        : "border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:border-gray-600"
-                    }`}
-                  >
-                    {/* Top row: logo + check */}
-                    <div className="flex items-center justify-between gap-2">
-                      {/* UddoktaPay brand bar */}
-                      <div className="flex h-9 items-center gap-2 rounded-lg bg-gradient-to-r from-[#e2136e] via-[#f55f14] to-[#8b3fc7] px-3">
-                        <Smartphone className="h-4 w-4 text-white" />
-                        {/* <span className="text-xs font-bold tracking-wide text-white">
-                          UddoktaPay
-                        </span> */}
-                      </div>
-                      {/* Check indicator */}
-                      <div
-                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
-                          paymentMethod === "uddoktapay"
-                            ? "border-primary-600 bg-primary-600 dark:border-primary-400 dark:bg-primary-400"
-                            : "border-gray-300 dark:border-gray-600"
-                        }`}
-                      >
-                        {paymentMethod === "uddoktapay" && (
-                          <Check
-                            className="h-3 w-3 text-white"
-                            strokeWidth={2.5}
-                          />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Labels */}
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                        Mobile Banking
-                      </p>
-                      <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-                        bKash · Nagad · Rocket
-                      </p>
-                    </div>
-                  </button>
+                          {m}
+                        </span>
+                      ),
+                    )}
+                  </div>
                 </div>
 
-                {/* What-happens-next note */}
+                {/* What happens next */}
                 <div className="mx-5 mb-5 flex gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/60">
                   <Info className="mt-0.5 h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500" />
                   <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-                    {paymentMethod === "stripe"
-                      ? "Clicking the button below will redirect you to Stripe's secure checkout page to enter your card details."
-                      : "Clicking the button below will redirect you to UddoktaPay where you can complete payment via bKash, Nagad, or Rocket."}
+                    Clicking the button below will create your booking and
+                    redirect you to Moneybag&apos;s secure payment page. Your
+                    booking will be confirmed automatically after successful
+                    payment.
                   </p>
                 </div>
               </div>
@@ -845,7 +618,7 @@ export function CheckoutContent() {
                 </p>
               </div>
 
-              {/* Single submit */}
+              {/* Submit */}
               <button
                 type="button"
                 onClick={handlePaymentConfirm}
@@ -873,7 +646,7 @@ export function CheckoutContent() {
                         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                       />
                     </svg>
-                    Confirming Booking…
+                    Redirecting to Payment…
                   </>
                 ) : (
                   <>
