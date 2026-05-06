@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -28,6 +29,7 @@ import { useForm, type Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import toast from "react-hot-toast";
+import GoogleSignInButton from "@/components/ui/GoogleSignInButton";
 
 type AuthMode = "login" | "guest";
 type Step = "details" | "payment";
@@ -103,6 +105,8 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 export function CheckoutContent() {
   const { items, totalAmount, clearCart } = useCart();
   const { user, token, setAuth } = useAuth();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const advanceAmount = Math.round(totalAmount * ADVANCE_RATE);
   const balanceAmount = totalAmount - advanceAmount;
 
@@ -114,6 +118,17 @@ export function CheckoutContent() {
   // Guest details captured in step 1, used when submitting in step 2
   const [savedGuestDetails, setSavedGuestDetails] =
     useState<GuestFormValues | null>(null);
+
+  // Auto-advance to payment when returning from Google OAuth
+  const advancedRef = useRef(false);
+  useEffect(() => {
+    if (advancedRef.current) return;
+    if (user && searchParams.get("fromLogin") === "1") {
+      advancedRef.current = true;
+      setStep("payment");
+      router.replace("/checkout");
+    }
+  }, [user, searchParams, router]);
 
   // ── Forms ─────────────────────────────────────────────────────────────────
   const loginForm = useForm<LoginFormValues>({
@@ -433,6 +448,19 @@ export function CheckoutContent() {
                           Create one
                         </Link>
                       </p>
+
+                      <div className="flex items-center gap-3">
+                        <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
+                        <span className="text-xs text-gray-400 dark:text-gray-500">
+                          or
+                        </span>
+                        <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
+                      </div>
+
+                      <GoogleSignInButton
+                        label="Sign in with Google"
+                        redirectTo="/checkout?fromLogin=1"
+                      />
                     </form>
                   ) : (
                     <div className="px-6 pt-5 pb-2">

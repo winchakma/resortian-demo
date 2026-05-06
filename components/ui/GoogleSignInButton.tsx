@@ -4,13 +4,18 @@ import { BASE } from "@/utils";
 
 export default function GoogleSignInButton({
   label = "Continue with Google",
+  redirectTo,
 }: {
   label?: string;
+  redirectTo?: string;
 }) {
   return (
     <button
       type="button"
       onClick={() => {
+        if (redirectTo) {
+          sessionStorage.setItem("auth_redirect", redirectTo);
+        }
         window.location.href = `${BASE}/auth/google`;
       }}
       className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"

@@ -30,8 +30,9 @@ function CallbackHandler() {
       try {
         const user = await apiMe(accessToken);
         setAuth(user, accessToken);
-        // Clean the token from the URL before redirecting
-        router.replace("/");
+        const redirect = sessionStorage.getItem("auth_redirect") ?? "/";
+        sessionStorage.removeItem("auth_redirect");
+        router.replace(redirect);
         toast.success(`Welcome, ${user.name}!`);
       } catch {
         toast.error("Failed to complete sign-in. Please try again.");
