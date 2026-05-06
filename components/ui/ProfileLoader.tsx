@@ -93,12 +93,12 @@ export function ProfileLoader() {
           bookingsData?.data?.map((b) => ({
             id: b.id,
             reference: b.reference,
-            hotelName: b.room.hotel.name,
-            hotelSlug: b.room.hotel.slug,
+            hotelName: b.room?.hotel?.name ?? "",
+            hotelSlug: b.room?.hotel?.slug ?? "",
             hotelImage:
-              b.room.images?.length > 0 ? `${BASE}${b.room.images[0]}` : "",
-            hotelLocation: b.room.hotel.location,
-            roomName: b.room.name,
+              b.room?.images?.length > 0 ? `${BASE}${b.room.images[0]}` : "",
+            hotelLocation: b.room?.hotel?.location ?? "",
+            roomName: b.room?.name ?? "",
             checkIn: b.checkIn,
             checkOut: b.checkOut,
             nights: b.nights,

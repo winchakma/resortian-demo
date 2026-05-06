@@ -262,8 +262,8 @@ export default function VendorBookingRow({
               </div>
 
               {/* Cashout action */}
-              {/* {booking.status === "CONFIRMED" && !booking.cashoutRequest && ( */}
-              {!booking.cashoutRequest && (
+              {/* {!booking.cashoutRequest && ( */}
+              {booking.status === "CONFIRMED" && !booking.cashoutRequest && (
                 <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
                   {hasBankInfo ? (
                     <button
