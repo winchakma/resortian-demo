@@ -163,7 +163,8 @@ export function CartContent() {
                           {/* Full price row */}
                           <div className="flex items-baseline justify-between">
                             <span className="text-xs text-gray-400 dark:text-gray-500">
-                              ৳{item.price.toLocaleString()} × {item.nights} night{(item.nights ?? 0) !== 1 ? "s" : ""}
+                              ৳{item.price.toLocaleString()} × {item.nights}{" "}
+                              night{(item.nights ?? 0) !== 1 ? "s" : ""}
                             </span>
                             <span className="text-base font-semibold text-gray-700 dark:text-gray-300">
                               ৳{item.totalPrice.toLocaleString()}
@@ -177,23 +178,32 @@ export function CartContent() {
                                 Pay now (20%)
                               </div>
                               <p className="mt-0.5 text-sm font-bold text-primary-700 dark:text-primary-300">
-                                ৳{Math.round(item.totalPrice * ADVANCE_RATE).toLocaleString()}
+                                ৳
+                                {Math.round(
+                                  item.totalPrice * ADVANCE_RATE,
+                                ).toLocaleString()}
                               </p>
                             </div>
                             <div className="rounded-lg bg-gray-50 px-3 py-2 dark:bg-gray-800/60">
                               <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                                 <Banknote className="h-3 w-3" />
-                                At hotel (80%)
+                                At Property (80%)
                               </div>
                               <p className="mt-0.5 text-sm font-bold text-gray-700 dark:text-gray-300">
-                                ৳{(item.totalPrice - Math.round(item.totalPrice * ADVANCE_RATE)).toLocaleString()}
+                                ৳
+                                {(
+                                  item.totalPrice -
+                                  Math.round(item.totalPrice * ADVANCE_RATE)
+                                ).toLocaleString()}
                               </p>
                             </div>
                           </div>
                         </>
                       ) : (
                         <div className="flex items-end justify-between">
-                          <span className="text-xs text-gray-400 dark:text-gray-500">per night</span>
+                          <span className="text-xs text-gray-400 dark:text-gray-500">
+                            per night
+                          </span>
                           <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
                             ৳{item.price.toLocaleString()}
                           </span>
@@ -211,8 +221,9 @@ export function CartContent() {
               <div className="text-xs text-amber-800 dark:text-amber-300">
                 <p className="font-semibold">How advance payment works</p>
                 <p className="mt-1 leading-relaxed text-amber-700 dark:text-amber-400">
-                  You pay <strong>20% now</strong> to confirm your reservation. The remaining{" "}
-                  <strong>80% is collected at the hotel</strong> when you check in — no surprise charges.
+                  You pay <strong>20% now</strong> to confirm your reservation.
+                  The remaining <strong>80% is collected at the hotel</strong>{" "}
+                  when you check in — no surprise charges.
                 </p>
               </div>
             </div>
@@ -232,7 +243,9 @@ export function CartContent() {
                   className="flex items-start justify-between gap-3 text-sm"
                 >
                   <span className="text-gray-600 dark:text-gray-400">
-                    <span className="line-clamp-1 font-medium text-gray-800 dark:text-gray-200">{item.roomName}</span>
+                    <span className="line-clamp-1 font-medium text-gray-800 dark:text-gray-200">
+                      {item.roomName}
+                    </span>
                     <span className="block text-xs text-gray-400 dark:text-gray-500">
                       {item.hotelName}
                     </span>
@@ -256,11 +269,15 @@ export function CartContent() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between text-gray-500 dark:text-gray-400">
                 <span>Total booking value</span>
-                <span className="font-medium text-gray-700 dark:text-gray-300">৳{totalAmount.toLocaleString()}</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">
+                  ৳{totalAmount.toLocaleString()}
+                </span>
               </div>
               <div className="flex justify-between text-gray-500 dark:text-gray-400">
                 <span>Service fee</span>
-                <span className="text-primary-600 dark:text-primary-400">Free</span>
+                <span className="text-primary-600 dark:text-primary-400">
+                  Free
+                </span>
               </div>
             </div>
 
@@ -289,7 +306,7 @@ export function CartContent() {
                 <div>
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300">
                     <Banknote className="h-3.5 w-3.5" />
-                    Pay at hotel (80%)
+                    Pay at Property (80%)
                   </div>
                   <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
                     Due at check-in — cash or card
