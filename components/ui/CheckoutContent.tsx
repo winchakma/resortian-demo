@@ -215,9 +215,13 @@ export function CheckoutContent() {
         }),
       });
 
-      const data = await res.json() as {
+      const data = (await res.json()) as {
         checkout_url?: string;
-        bookings?: { reference: string; advancePaid: number; balanceDue: number }[];
+        bookings?: {
+          reference: string;
+          advancePaid: number;
+          balanceDue: number;
+        }[];
         totalAdvance?: number;
         totalBalance?: number;
         message?: string;
@@ -228,8 +232,12 @@ export function CheckoutContent() {
       }
 
       const references = (data.bookings ?? []).map((b) => b.reference);
-      const totalAdvance = data.totalAdvance ?? (data.bookings ?? []).reduce((s, b) => s + b.advancePaid, 0);
-      const totalBalance = data.totalBalance ?? (data.bookings ?? []).reduce((s, b) => s + b.balanceDue, 0);
+      const totalAdvance =
+        data.totalAdvance ??
+        (data.bookings ?? []).reduce((s, b) => s + b.advancePaid, 0);
+      const totalBalance =
+        data.totalBalance ??
+        (data.bookings ?? []).reduce((s, b) => s + b.balanceDue, 0);
 
       trackEvent("complete_booking", {
         transaction_id: references[0] ?? "",
@@ -250,7 +258,6 @@ export function CheckoutContent() {
       setBookingSubmitting(false);
     }
   }
-
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -679,7 +686,7 @@ export function CheckoutContent() {
                 ) : (
                   <>
                     <Lock className="h-4 w-4" />
-                    Pay ৳{advanceAmount.toLocaleString()} Advance &amp; Confirm
+                    Pay &amp; Confirm
                   </>
                 )}
               </button>

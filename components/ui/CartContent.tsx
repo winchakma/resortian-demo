@@ -322,7 +322,7 @@ export function CartContent() {
               href="/checkout"
               className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
             >
-              Pay ৳{advanceAmount.toLocaleString()} Advance
+              Checkout
               <ArrowRight className="h-4 w-4" />
             </Link>
 

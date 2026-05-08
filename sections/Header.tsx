@@ -185,10 +185,7 @@ export function Header() {
 
   const accountHref = user ? "/profile" : "/auth/customer";
 
-  const mobileLinks = useMemo(
-    () => [...NAV_LINKS, { label: "My Account", href: accountHref }],
-    [accountHref],
-  );
+  const mobileLinks = useMemo(() => NAV_LINKS, []);
 
   const handleMobileMenuClose = useCallback(() => {
     setMobileMenuOpen(false);

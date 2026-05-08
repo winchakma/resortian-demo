@@ -12,7 +12,8 @@ export function Logo() {
         className="rounded-lg dark:hidden"
       />
       <Image
-        src="/images/logoDark.svg"
+        // src="/images/logoDark.svg"
+        src="/images/logo.svg"
         alt="Resortian"
         width={100}
         height={100}

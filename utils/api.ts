@@ -805,7 +805,7 @@ export async function getFooterData(): Promise<FooterColumn[]> {
       links: [
         { label: "List Your Property", href: "/list-property" },
         { label: "Partner Hub", href: "/partner-hub" },
-        { label: "Advertise", href: "/advertise" },
+        // { label: "Advertise", href: "/advertise" },
         { label: "Affiliates", href: "/affiliates" },
       ],
     },
@@ -1135,7 +1135,10 @@ export async function getBlogs(params?: {
   category?: string;
   tag?: string;
   search?: string;
-}): Promise<{ data: BlogListItem[]; meta: { total: number; page: number; limit: number; totalPages: number } }> {
+}): Promise<{
+  data: BlogListItem[];
+  meta: { total: number; page: number; limit: number; totalPages: number };
+}> {
   const qs = new URLSearchParams();
   if (params?.page) qs.set("page", String(params.page));
   if (params?.limit) qs.set("limit", String(params.limit));
@@ -1154,7 +1157,9 @@ export async function getBlogs(params?: {
 }
 
 export async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
-  const res = await fetch(`${API_BASE}/blogs/${slug}`, { next: { revalidate: 60 } });
+  const res = await fetch(`${API_BASE}/blogs/${slug}`, {
+    next: { revalidate: 60 },
+  });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`Failed to fetch blog: ${res.status}`);
   const json: ApiBlogPost = await res.json();

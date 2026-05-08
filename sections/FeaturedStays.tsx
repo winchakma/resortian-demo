@@ -15,15 +15,14 @@ export async function FeaturedStays() {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
               Featured Stays
             </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            {/* <p className="mt-2 text-gray-600 dark:text-gray-400">
               Handpicked premium accommodations for an unforgettable experience
-            </p>
+            </p> */}
           </div>
 
-          {/* Visible on sm+ screens */}
           <Link
             href="/hotels"
-            className="hidden shrink-0 items-center gap-1.5 rounded-full border border-gray-300 px-5 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-primary-400 hover:bg-primary-50 hover:text-primary-700 dark:border-gray-600 dark:text-gray-300 dark:hover:border-primary-500 dark:hover:bg-primary-950/30 dark:hover:text-primary-400 sm:inline-flex"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
           >
             View All
             <ArrowRight className="h-4 w-4" />
@@ -37,13 +36,12 @@ export async function FeaturedStays() {
           ))}
         </div>
 
-        {/* View All button — mobile only, below cards */}
         <div className="mt-8 flex justify-center sm:hidden">
           <Link
             href="/hotels"
-            className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-6 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:border-primary-400 hover:bg-primary-50 hover:text-primary-700 dark:border-gray-600 dark:text-gray-300 dark:hover:border-primary-500 dark:hover:bg-primary-950/30 dark:hover:text-primary-400"
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700"
           >
-            View All
+            View All Properties
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
