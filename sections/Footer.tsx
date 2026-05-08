@@ -34,9 +34,9 @@ export async function Footer() {
           <div className="sm:col-span-2">
             <Logo />
             <p className="mt-4 max-w-xs text-sm text-gray-600 dark:text-gray-400">
-              Resortian is the leading hotel booking platform in Bangladesh,
-              connecting travelers with premium accommodations across the
-              country.
+              Resortian is the leading hotel and resort booking platform in
+              Bangladesh, connecting travelers with premium accommodations
+              across the country.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIAL_LINKS.map((social) => (

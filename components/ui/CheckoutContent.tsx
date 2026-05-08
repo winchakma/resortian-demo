@@ -769,7 +769,7 @@ export function CheckoutContent() {
             <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
               <div>
                 <p className="text-xs font-semibold text-gray-600 dark:text-gray-300">
-                  Pay at hotel — 80%
+                  Pay at property — 80%
                 </p>
                 <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
                   Due at check-in

@@ -36,6 +36,9 @@ const AMENITIES = [
 
 const STAR_RATINGS = [5, 4, 3, 2, 1];
 
+const SLIDER_MAX = 50000;
+const SLIDER_STEP = 500;
+
 export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterModalProps) {
   const [priceMin, setPriceMin] = useState(initialValues?.priceMin ?? "");
   const [priceMax, setPriceMax] = useState(initialValues?.priceMax ?? "");
@@ -182,6 +185,81 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
                 className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none transition-colors focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               />
             </div>
+
+            {/* Dual range slider */}
+            {(() => {
+              const minVal = priceMin === "" ? 0 : Math.min(Number(priceMin), SLIDER_MAX);
+              const maxVal = priceMax === "" ? SLIDER_MAX : Math.max(Number(priceMax), 0);
+              const minPct = (minVal / SLIDER_MAX) * 100;
+              const maxPct = (maxVal / SLIDER_MAX) * 100;
+              const thumbCls =
+                "absolute inset-0 h-full w-full cursor-pointer appearance-none bg-transparent " +
+                "[&::-webkit-slider-runnable-track]:h-0 [&::-webkit-slider-runnable-track]:bg-transparent " +
+                "[&::-webkit-slider-thumb]:mt-0 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 " +
+                "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full " +
+                "[&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white " +
+                "[&::-webkit-slider-thumb]:bg-primary-600 [&::-webkit-slider-thumb]:shadow-md " +
+                "[&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110 " +
+                "[&::-moz-range-track]:bg-transparent " +
+                "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full " +
+                "[&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white " +
+                "[&::-moz-range-thumb]:bg-primary-600 [&::-moz-range-thumb]:shadow-md";
+              return (
+                <div className="mt-5 mb-1">
+                  {/* Track + thumbs */}
+                  <div className="relative flex h-4 items-center">
+                    {/* Track background */}
+                    <div className="absolute left-0 right-0 h-1.5 rounded-full bg-gray-200 dark:bg-gray-600">
+                      {/* Active fill */}
+                      <div
+                        className="absolute h-1.5 rounded-full bg-primary-500"
+                        style={{ left: `${minPct}%`, right: `${100 - maxPct}%` }}
+                      />
+                    </div>
+
+                    {/* Min thumb */}
+                    <input
+                      type="range"
+                      min={0}
+                      max={SLIDER_MAX}
+                      step={SLIDER_STEP}
+                      value={minVal}
+                      onChange={(e) => {
+                        const v = Number(e.target.value);
+                        if (v <= maxVal - SLIDER_STEP) {
+                          setPriceMin(v === 0 ? "" : String(v));
+                        }
+                      }}
+                      className={thumbCls}
+                      style={{ zIndex: minVal >= maxVal - SLIDER_STEP ? 5 : 3 }}
+                    />
+
+                    {/* Max thumb */}
+                    <input
+                      type="range"
+                      min={0}
+                      max={SLIDER_MAX}
+                      step={SLIDER_STEP}
+                      value={maxVal}
+                      onChange={(e) => {
+                        const v = Number(e.target.value);
+                        if (v >= minVal + SLIDER_STEP) {
+                          setPriceMax(v === SLIDER_MAX ? "" : String(v));
+                        }
+                      }}
+                      className={thumbCls}
+                      style={{ zIndex: 4 }}
+                    />
+                  </div>
+
+                  {/* Min / max labels */}
+                  <div className="mt-2 flex justify-between text-xs text-gray-400 dark:text-gray-500">
+                    <span>৳0</span>
+                    <span>৳50,000</span>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Star Rating */}

@@ -167,10 +167,10 @@ export default function VendorBookingRow({
                   {
                     label:
                       booking.status === "COMPLETED"
-                        ? "Paid at Hotel"
+                        ? "Paid at Property"
                         : booking.status === "CANCELLED"
                           ? "Refunded"
-                          : "Due at Hotel",
+                          : "Due at Property",
                     value: `৳${booking.balanceDue.toLocaleString()}`,
                     sub:
                       booking.status === "COMPLETED"

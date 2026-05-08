@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 import type { NavLink } from "@/types";
 
 const NAV_LINKS: NavLink[] = [
-  { label: "Hotels", href: "/hotels" },
+  { label: "Hotels & Resorts", href: "/hotels" },
   { label: "Destinations", href: "/destinations" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -148,7 +148,7 @@ function UserMenu() {
             </p>
             {user?.role === "HOTEL_OWNER" && (
               <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
-                <Building2 className="h-2.5 w-2.5" /> Hotel Owner
+                <Building2 className="h-2.5 w-2.5" /> Property Owner
               </span>
             )}
           </div>

@@ -13,7 +13,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Partner Hub | Resortian",
-  description: "Resources, tools, and guidance for Resortian hotel partners.",
+  description: "Resources, tools, and guidance for Resortian hotel and resort partners.",
 };
 
 const FEATURES = [

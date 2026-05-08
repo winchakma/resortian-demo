@@ -13,7 +13,7 @@ import {
 
 const STATS = [
   { label: "Happy Travelers", value: "50,000+", icon: Users },
-  { label: "Partner Hotels", value: "300+", icon: MapPin },
+  { label: "Partner Properties", value: "300+", icon: MapPin },
   { label: "Destinations", value: "10+", icon: TrendingUp },
   { label: "5-Star Reviews", value: "12,000+", icon: Star },
 ];
@@ -35,7 +35,7 @@ const VALUES = [
     icon: Award,
     title: "Curated Quality",
     description:
-      "We personally vet every property on our platform. Only hotels that meet our standards for cleanliness, service, and hospitality make the cut.",
+      "We personally vet every property on our platform. Only hotels and resorts that meet our standards for cleanliness, service, and hospitality make the cut.",
   },
   {
     icon: Headphones,
@@ -81,13 +81,13 @@ const MILESTONES = [
     year: "2020",
     title: "Founded in Dhaka",
     description:
-      "Resortian was born out of frustration with fragmented hotel booking in Bangladesh. Two co-founders, one mission.",
+      "Resortian was born out of frustration with fragmented hotel and resort booking in Bangladesh. Two co-founders, one mission.",
   },
   {
     year: "2021",
-    title: "First 50 Hotels",
+    title: "First 50 Properties",
     description:
-      "Launched with properties in Cox's Bazar, Sylhet, and Bandarban. Word of mouth drove our first 1,000 bookings.",
+      "Launched with hotels and resorts in Cox's Bazar, Sylhet, and Bandarban. Word of mouth drove our first 1,000 bookings.",
   },
   {
     year: "2022",
@@ -109,9 +109,9 @@ const MILESTONES = [
   },
   {
     year: "2025",
-    title: "300+ Partner Hotels",
+    title: "300+ Partner Properties",
     description:
-      "Our network grew to over 300 verified properties, making us Bangladesh's largest hotel booking platform.",
+      "Our network grew to over 300 verified hotels and resorts, making us Bangladesh's largest hotel & resort booking platform.",
   },
 ];
 
@@ -135,7 +135,7 @@ export function AboutContent() {
               <span className="text-primary-200">One Stay at a Time</span>
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-primary-100">
-              Resortian is Bangladesh&apos;s leading hotel booking platform,
+              Resortian is Bangladesh&apos;s leading hotel &amp; resort booking platform,
               connecting travelers with premium accommodations across Cox&apos;s
               Bazar, Sylhet, Sundarbans, Bandarban, and beyond.
             </p>
@@ -144,7 +144,7 @@ export function AboutContent() {
                 href="/hotels"
                 className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-primary-700 transition-all hover:bg-primary-50 hover:shadow-lg"
               >
-                Explore Hotels
+                Explore Hotels & Resorts
               </Link>
               <Link
                 href="/contact"
@@ -233,9 +233,9 @@ export function AboutContent() {
                   #1
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Hotel booking platform
+                  Hotel & resort booking
                   <br />
-                  in Bangladesh
+                  platform in Bangladesh
                 </p>
               </div>
             </div>
@@ -373,7 +373,7 @@ export function AboutContent() {
               Ready to explore Bangladesh?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-primary-100">
-              Browse 300+ verified hotels across 10+ destinations. Book in
+              Browse 300+ verified hotels & resorts across 10+ destinations. Book in
               minutes with just 20% advance.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -381,7 +381,7 @@ export function AboutContent() {
                 href="/hotels"
                 className="rounded-xl bg-white px-8 py-3 text-sm font-semibold text-primary-700 transition-all hover:bg-primary-50 hover:shadow-lg"
               >
-                Browse Hotels
+                Browse Hotels & Resorts
               </Link>
               <Link
                 href="/destinations"

@@ -4,8 +4,8 @@ import { Footer } from "@/sections/Footer";
 import { AuthForm } from "@/components/ui/AuthForm";
 
 export const metadata: Metadata = {
-  title: "Hotel Owner Sign In | Resortian",
-  description: "Sign in or register as a hotel owner on Resortian.",
+  title: "Property Owner Sign In | Resortian",
+  description: "Sign in or register as a property owner on Resortian.",
 };
 
 export default function VendorAuthPage() {

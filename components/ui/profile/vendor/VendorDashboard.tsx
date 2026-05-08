@@ -31,7 +31,7 @@ export default function VendorDashboard() {
             },
             {
               id: "hotels" as VendorView,
-              label: "Hotels & Rooms",
+              label: "Properties & Rooms",
               icon: <Building2 className="h-4 w-4" />,
             },
             // {

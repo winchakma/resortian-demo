@@ -83,7 +83,7 @@ export default function VendorDestinationsList() {
               bg: "bg-emerald-50 dark:bg-emerald-950/30",
             },
             {
-              label: "Hotels Listed",
+              label: "Properties Listed",
               value: totalHotels,
               icon: (
                 <Building2 className="h-5 w-5 text-primary-600 dark:text-primary-400" />
@@ -153,7 +153,7 @@ export default function VendorDestinationsList() {
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
             <p className="text-xs text-amber-700 dark:text-amber-400">
               {totalPending} destination{totalPending !== 1 ? "s are" : " is"}{" "}
-              awaiting review. Once approved, they&apos;ll appear in your hotel
+              awaiting review. Once approved, they&apos;ll appear in your property
               creation form.
             </p>
           </div>
@@ -163,8 +163,8 @@ export default function VendorDestinationsList() {
         <div className="flex items-start gap-3 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 dark:border-blue-900/30 dark:bg-blue-950/20">
           <Globe className="mt-0.5 h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
           <p className="text-xs text-blue-700 dark:text-blue-400">
-            Approved destinations will appear in the hotel creation form when
-            you add a new hotel.
+            Approved destinations will appear in the property creation form when
+            you add a new property.
           </p>
         </div>
 

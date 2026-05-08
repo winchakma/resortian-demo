@@ -22,7 +22,7 @@ type UpdateHotelFormValues = {
 };
 
 const updateHotelSchema = yup.object({
-  name: yup.string().required("Hotel name is required"),
+  name: yup.string().required("Property name is required"),
   slug: yup
     .string()
     .required("Slug is required")
@@ -133,7 +133,7 @@ export default function EditHotelForm({
       {/* Name + Slug */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelCls()}>Hotel Name</label>
+          <label className={labelCls()}>Property Name</label>
           <input
             type="text"
             {...register("name")}

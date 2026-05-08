@@ -23,7 +23,7 @@ import * as yup from "yup";
 
 const hotelSchema = yup.object({
   destinationId: yup.string().required("Destination is required"),
-  name: yup.string().required("Hotel name is required"),
+  name: yup.string().required("Property name is required"),
   slug: yup
     .string()
     .required("Slug is required")
@@ -268,7 +268,7 @@ export default function CreateHotelForm({
       {/* Name + Slug */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className={labelCls()}>Hotel Name</label>
+          <label className={labelCls()}>Property Name</label>
           <input
             type="text"
             {...register("name")}
@@ -439,7 +439,7 @@ export default function CreateHotelForm({
         className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <Plus className="h-4 w-4" />
-        {isSubmitting ? "Submitting…" : "Submit Hotel for Approval"}
+        {isSubmitting ? "Submitting…" : "Submit Property for Approval"}
       </button>
     </form>
   );

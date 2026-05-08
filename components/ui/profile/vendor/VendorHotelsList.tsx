@@ -54,7 +54,7 @@ export default function VendorHotelsList() {
         const json = await res.json();
         throw new Error(json.message || "Failed to delete hotel");
       }
-      toast.success("Hotel deleted successfully.");
+      toast.success("Property deleted successfully.");
       setConfirm(null);
       loadHotels();
     } catch (err: unknown) {
@@ -121,7 +121,7 @@ export default function VendorHotelsList() {
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {[
             {
-              label: "Total Hotels",
+              label: "Total Properties",
               value: hotels.length,
               icon: (
                 <Building2 className="h-5 w-5 text-violet-600 dark:text-violet-400" />
@@ -178,12 +178,12 @@ export default function VendorHotelsList() {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white">
-              My Hotels
+              My Properties
             </h3>
             <p className="text-xs text-gray-400 dark:text-gray-500">
               {loading
                 ? "Loading…"
-                : `${hotels.length} hotel${hotels.length !== 1 ? "s" : ""} in your portfolio`}
+                : `${hotels.length} propert${hotels.length !== 1 ? "ies" : "y"} in your portfolio`}
             </p>
           </div>
           <div className="flex gap-2">
@@ -205,7 +205,7 @@ export default function VendorHotelsList() {
                 className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
               >
                 <Plus className="h-4 w-4" />
-                New Hotel
+                New Property
               </button>
             )}
           </div>
@@ -216,8 +216,8 @@ export default function VendorHotelsList() {
           <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/30 dark:bg-amber-950/20">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
             <p className="text-xs text-amber-700 dark:text-amber-400">
-              {totalPending} hotel{totalPending !== 1 ? "s are" : " is"} under
-              review. Hotels and rooms go live once approved by our team.
+              {totalPending} propert{totalPending !== 1 ? "ies are" : "y is"} under
+              review. Properties and rooms go live once approved by our team.
             </p>
           </div>
         )}
@@ -233,10 +233,10 @@ export default function VendorHotelsList() {
               <Building2 className="h-8 w-8 text-violet-400" />
             </div>
             <p className="font-semibold text-gray-700 dark:text-gray-300">
-              No hotels yet
+              No properties yet
             </p>
             <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
-              Create your first hotel to get started
+              Create your first property to get started
             </p>
             <button
               type="button"
@@ -244,7 +244,7 @@ export default function VendorHotelsList() {
               className="mt-5 flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-700"
             >
               <Plus className="h-4 w-4" />
-              Create Hotel
+              Create Property
             </button>
           </div>
         ) : (
@@ -290,12 +290,12 @@ export default function VendorHotelsList() {
 
       {/* Modals */}
       {modal === "create-hotel" && (
-        <FormModal title="Create New Hotel" onClose={() => setModal(null)}>
+        <FormModal title="Create New Property" onClose={() => setModal(null)}>
           <CreateHotelForm
             onCreated={(hotelId, hotelName) => {
               setModal(null);
               loadHotels();
-              toast.success("Hotel submitted for approval!");
+              toast.success("Property submitted for approval!");
               setTimeout(
                 () => setModal({ type: "add-room", hotelId, hotelName }),
                 400,
@@ -321,7 +321,7 @@ export default function VendorHotelsList() {
       )}
       {modal && typeof modal === "object" && modal.type === "edit-hotel" && (
         <FormModal
-          title={`Edit Hotel — ${modal.hotel.name}`}
+          title={`Edit Property — ${modal.hotel.name}`}
           onClose={() => setModal(null)}
         >
           <EditHotelForm
@@ -329,7 +329,7 @@ export default function VendorHotelsList() {
             onUpdated={() => {
               setModal(null);
               loadHotels();
-              toast.success("Hotel updated successfully!");
+              toast.success("Property updated successfully!");
             }}
           />
         </FormModal>

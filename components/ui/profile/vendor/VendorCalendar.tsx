@@ -193,7 +193,7 @@ export default function VendorCalendar() {
           <div>
             <label className={labelCls()}>
               <Building2 className="mr-1 inline h-3.5 w-3.5" />
-              Hotel
+              Property
             </label>
             {hotelsLoading ? (
               <div className="h-11 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />

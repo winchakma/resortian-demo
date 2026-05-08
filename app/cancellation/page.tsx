@@ -6,7 +6,7 @@ import { AlertCircle, CheckCircle, XCircle, Clock } from "lucide-react";
 export const metadata: Metadata = {
   title: "Cancellation Options | Resortian",
   description:
-    "Learn about Resortian's cancellation and refund policies for hotel bookings.",
+    "Learn about Resortian's cancellation and refund policies for hotel and resort bookings.",
 };
 
 const POLICIES = [
@@ -47,10 +47,10 @@ const POLICIES = [
     badgeColor:
       "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
     description:
-      "If you do not check in and have not cancelled, the advance payment is forfeited. The hotel reserves the right to charge the full booking amount.",
+      "If you do not check in and have not cancelled, the advance payment is forfeited. The property reserves the right to charge the full booking amount.",
     details: [
       "Advance payment forfeited",
-      "Hotel may charge full amount",
+      "Property may charge full amount",
       "Booking marked as no-show",
       "Contact support if circumstances were exceptional",
     ],

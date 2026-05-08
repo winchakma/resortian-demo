@@ -72,7 +72,7 @@ const SUBJECTS = [
   "Booking Inquiry",
   "Cancellation / Refund",
   "Payment Issue",
-  "Hotel Partnership",
+  "Hotel & Resort Partnership",
   "Technical Support",
   "General Question",
 ];
@@ -84,10 +84,10 @@ const FAQS = [
   },
   {
     q: "What is the 20% advance payment policy?",
-    a: "When you book through Resortian, you pay 20% of the total amount online to confirm your reservation. The remaining 80% is paid directly at the hotel on arrival.",
+    a: "When you book through Resortian, you pay 20% of the total amount online to confirm your reservation. The remaining 80% is paid directly at the property on arrival.",
   },
   {
-    q: "Are the hotels on Resortian verified?",
+    q: "Are the hotels and resorts on Resortian verified?",
     a: "Yes. Every property on our platform goes through a quality verification process before listing. We check for cleanliness standards, service quality, and accurate listing information.",
   },
   {
@@ -95,8 +95,8 @@ const FAQS = [
     a: "Currently we support a single advance payment (20%) at the time of booking. Installment plans are on our roadmap for a future release.",
   },
   {
-    q: "How do I list my hotel on Resortian?",
-    a: "We'd love to hear from you. Use the contact form above and select 'Hotel Partnership' as the subject. Our partnerships team will reach out within 2 business days.",
+    q: "How do I list my hotel or resort on Resortian?",
+    a: "We'd love to hear from you. Use the contact form above and select 'Hotel & Resort Partnership' as the subject. Our partnerships team will reach out within 2 business days.",
   },
 ];
 

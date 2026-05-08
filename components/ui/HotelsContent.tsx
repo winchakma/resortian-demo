@@ -340,7 +340,7 @@ export function HotelsContent({ hotels, meta, searchParams }: HotelsContentProps
               Home
             </Link>
             {" / "}
-            <span className="text-white">Hotels</span>
+            <span className="text-white">Hotels & Resorts</span>
           </p>
 
           {/* Title */}

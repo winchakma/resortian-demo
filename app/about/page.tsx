@@ -6,7 +6,7 @@ import { AboutContent } from "@/components/ui/AboutContent";
 export const metadata: Metadata = {
   title: "About Us | Resortian",
   description:
-    "Learn about Resortian — Bangladesh's leading hotel booking platform connecting travelers with premium accommodations across the country.",
+    "Learn about Resortian — Bangladesh's leading hotel & resort booking platform connecting travelers with premium accommodations across the country.",
 };
 
 export default function AboutPage() {

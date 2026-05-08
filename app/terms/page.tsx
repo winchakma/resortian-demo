@@ -5,7 +5,7 @@ import { Footer } from "@/sections/Footer";
 export const metadata: Metadata = {
   title: "Terms of Service | Resortian",
   description:
-    "The terms and conditions that govern your use of the Resortian hotel booking platform.",
+    "The terms and conditions that govern your use of the Resortian hotel & resort booking platform.",
 };
 
 const LAST_UPDATED = "1 April 2026";
@@ -102,12 +102,12 @@ export default function TermsPage() {
             <Section title="3. Booking and Payment">
               <Ul
                 items={[
-                  "All bookings are subject to availability and confirmation by the hotel",
+                  "All bookings are subject to availability and confirmation by the property",
                   "Prices displayed are in Bangladeshi Taka (BDT) and include applicable taxes",
                   "An advance payment (minimum 20% of total price) is collected at the time of booking via Stripe or UddoktaPay",
-                  "The remaining balance is payable directly to the hotel at check-in unless otherwise stated",
+                  "The remaining balance is payable directly to the property at check-in unless otherwise stated",
                   "Your booking is confirmed only once you receive a confirmation email with a reference number (RST-XXXXXX)",
-                  "Resortian acts as an intermediary; the accommodation contract is between you and the hotel",
+                  "Resortian acts as an intermediary; the accommodation contract is between you and the property",
                 ]}
               />
             </Section>
@@ -121,7 +121,7 @@ export default function TermsPage() {
                 items={[
                   "Cancellations made more than 72 hours before check-in: full refund of the advance payment",
                   "Cancellations within 72 hours of check-in: advance payment is non-refundable",
-                  "No-shows: the advance payment is forfeited; the hotel may charge the full booking value",
+                  "No-shows: the advance payment is forfeited; the property may charge the full booking value",
                   "Refunds are processed to the original payment method within 7–14 business days",
                 ]}
               />
@@ -151,9 +151,9 @@ export default function TermsPage() {
               />
             </Section>
 
-            <Section title="6. Hotel Owner Obligations">
+            <Section title="6. Property Owner Obligations">
               <p>
-                Hotel owners listing properties on Resortian agree to:
+                Property owners listing on Resortian agree to:
               </p>
               <Ul
                 items={[
@@ -172,7 +172,7 @@ export default function TermsPage() {
                 Reviews submitted on Resortian must be based on genuine
                 first-hand experiences. We reserve the right to remove reviews
                 that are fraudulent, abusive, or in violation of these Terms.
-                Hotels may not incentivise guests to write positive reviews or
+                Properties may not incentivise guests to write positive reviews or
                 pressure them to remove negative ones.
               </p>
             </Section>

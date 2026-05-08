@@ -88,8 +88,8 @@ const FAQS = [
     a: "Payouts are processed on the 15th of each month for commissions earned in the previous month. We pay via bKash, Nagad, or direct bank transfer. Minimum payout threshold is BDT 500.",
   },
   {
-    q: "Can I promote specific hotels or destinations?",
-    a: "Yes. You can generate deep links to any hotel listing or destination page on Resortian, making it easy to promote exactly what your audience is interested in.",
+    q: "Can I promote specific hotels, resorts, or destinations?",
+    a: "Yes. You can generate deep links to any hotel or resort listing or destination page on Resortian, making it easy to promote exactly what your audience is interested in.",
   },
 ];
 

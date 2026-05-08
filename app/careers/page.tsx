@@ -6,7 +6,7 @@ import { CareersContent } from "@/components/ui/CareersContent";
 export const metadata: Metadata = {
   title: "Careers | Resortian",
   description:
-    "Join the Resortian team and help us build Bangladesh's leading hotel booking platform.",
+    "Join the Resortian team and help us build Bangladesh's leading hotel & resort booking platform.",
 };
 
 export default function CareersPage() {

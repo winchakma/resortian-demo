@@ -7,7 +7,7 @@ import { CheckCircle } from "lucide-react";
 export const metadata: Metadata = {
   title: "List Your Property | Resortian",
   description:
-    "Join Resortian as a hotel owner and reach thousands of travellers across Bangladesh.",
+    "Join Resortian as a property owner and reach thousands of travellers across Bangladesh.",
 };
 
 const PERKS = [
@@ -29,13 +29,13 @@ export default function ListPropertyPage() {
             {/* Left — marketing copy */}
             <div className="lg:pt-8">
               <p className="text-xs font-semibold uppercase tracking-widest text-primary-600 dark:text-primary-400">
-                For Hotel Owners
+                For Property Owners
               </p>
               <h1 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
                 List Your Property on Resortian
               </h1>
               <p className="mt-4 text-gray-600 dark:text-gray-400">
-                Join Bangladesh&apos;s fastest-growing hotel booking platform
+                Join Bangladesh&apos;s fastest-growing hotel &amp; resort booking platform
                 and connect your property with thousands of verified travellers
                 every month — from Cox&apos;s Bazar beach resorts to Sylhet
                 tea-garden retreats.
@@ -55,7 +55,7 @@ export default function ListPropertyPage() {
               {/* Stats strip */}
               <div className="mt-10 grid grid-cols-3 gap-4">
                 {[
-                  { value: "42+", label: "Listed Hotels" },
+                  { value: "42+", label: "Listed Properties" },
                   { value: "580+", label: "Bookings Made" },
                   { value: "7%", label: "Base Commission" },
                 ].map((stat) => (

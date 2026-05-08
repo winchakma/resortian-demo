@@ -108,7 +108,7 @@ function LoginForm({
     try {
       const res = await apiLogin(data);
       if (role !== "USER" && res.user.role === "USER") {
-        toast.error("This account is not registered as a Hotel Owner.");
+        toast.error("This account is not registered as a Property Owner.");
         return;
       }
       setAuth(res.user, res.accessToken);
@@ -339,7 +339,7 @@ export function AuthForm({ role, defaultTab = "login" }: AuthFormProps) {
   const switchHref = isVendor ? "/auth/customer" : "/auth/vendor";
   const switchLabel = isVendor
     ? "Sign in as Customer"
-    : "Sign in as Hotel Owner";
+    : "Sign in as Property Owner";
 
   function handleSuccess() {
     router.push("/");
@@ -352,7 +352,7 @@ export function AuthForm({ role, defaultTab = "login" }: AuthFormProps) {
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             {isVendor
-              ? "Hotel Owner Portal"
+              ? "Property Owner Portal"
               : tab === "login"
                 ? "Welcome back"
                 : "Create an account"}

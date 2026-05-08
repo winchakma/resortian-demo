@@ -61,7 +61,7 @@ export default function PrivacyPage() {
             </p>
             <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
               Resortian (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;)
-              operates the Resortian hotel booking platform. This Privacy Policy
+              operates the Resortian hotel & resort booking platform. This Privacy Policy
               explains how we collect, use, disclose, and safeguard your
               information when you use our website and services. Please read it
               carefully. By using Resortian, you consent to the practices
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
                   "Booking data: check-in and check-out dates, number of guests, room selections, and payment method",
                   "Payment information: we do not store card numbers; payments are processed by Stripe and UddoktaPay under their own PCI-DSS compliance",
                   "Communications: messages you send to our support team or through the contact form",
-                  "Profile updates: avatar, address, and bank account details (hotel owners only)",
+                  "Profile updates: avatar, address, and bank account details (property owners only)",
                 ]}
               />
               <p className="mt-3">
@@ -98,7 +98,7 @@ export default function PrivacyPage() {
               <Ul
                 items={[
                   "Create and manage your account and authenticate your identity",
-                  "Process hotel reservations, handle payments, and send booking confirmations",
+                  "Process hotel & resort reservations, handle payments, and send booking confirmations",
                   "Send transactional emails and SMS messages related to your bookings",
                   "Provide customer support and respond to inquiries",
                   "Send promotional communications (you may opt out at any time)",
@@ -116,7 +116,7 @@ export default function PrivacyPage() {
               </p>
               <Ul
                 items={[
-                  "With hotels you book: your name, phone number, and booking details are shared with the property to fulfil your reservation",
+                  "With hotels or resorts you book: your name, phone number, and booking details are shared with the property to fulfil your reservation",
                   "With payment processors (Stripe, UddoktaPay) to process transactions",
                   "With cloud infrastructure providers (hosting, email, object storage) under strict data processing agreements",
                   "With law enforcement or regulators when required by Bangladeshi law",
@@ -190,7 +190,7 @@ export default function PrivacyPage() {
 
             <Section title="8. Third-Party Links">
               <p>
-                Our platform may contain links to third-party websites (hotel
+                Our platform may contain links to third-party websites (hotel and resort
                 websites, payment gateways, social media). We are not
                 responsible for the privacy practices of those sites and
                 encourage you to read their privacy policies before providing

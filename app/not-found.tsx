@@ -80,7 +80,7 @@ export default function NotFound() {
                     className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-primary-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-700"
                   >
                     <Search className="h-4 w-4" />
-                    Browse Hotels
+                    Browse Hotels & Resorts
                   </Link>
                   <Link
                     href="/destinations"
@@ -98,7 +98,7 @@ export default function NotFound() {
                   </p>
                   <div className="mt-3 flex flex-wrap justify-center gap-x-6 gap-y-2 lg:justify-start">
                     {[
-                      { label: "Featured Hotels", href: "/#featured" },
+                      { label: "Featured Stays", href: "/#featured" },
                       { label: "Cox's Bazar", href: "/hotels?location=cox" },
                       { label: "Contact Support", href: "/contact" },
                     ].map(({ label, href }) => (

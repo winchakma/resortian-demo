@@ -130,24 +130,24 @@ const CATEGORIES: Category[] = [
   },
   {
     id: "hotels",
-    label: "Hotels & Rooms",
+    label: "Hotels, Resorts & Rooms",
     icon: <Hotel className="h-5 w-5" />,
     faqs: [
       {
-        q: "Are the hotel photos accurate?",
-        a: "All photos on Resortian are submitted by hotel owners and subject to our content review. We require accurate representation of the property. If you find a significant discrepancy, please report it via the hotel page or contact support.",
+        q: "Are the hotel and resort photos accurate?",
+        a: "All photos on Resortian are submitted by property owners and subject to our content review. We require accurate representation of the property. If you find a significant discrepancy, please report it via the property page or contact support.",
       },
       {
         q: "What does the room capacity mean?",
-        a: "Room capacity is the maximum number of guests the room can comfortably accommodate according to the hotel. Exceeding capacity may incur an extra-person charge payable at the hotel.",
+        a: "Room capacity is the maximum number of guests the room can comfortably accommodate according to the property. Exceeding capacity may incur an extra-person charge payable at the property.",
       },
       {
         q: "Can I request an early check-in or late check-out?",
-        a: "These requests are handled directly by the hotel. You can mention your preference in the booking notes, but early check-in and late check-out are subject to availability and may incur additional charges.",
+        a: "These requests are handled directly by the property. You can mention your preference in the booking notes, but early check-in and late check-out are subject to availability and may incur additional charges.",
       },
       {
         q: "The room I booked is unavailable on arrival — what do I do?",
-        a: "This is a rare situation but if it occurs, the hotel is responsible for providing an equivalent or superior room. If they cannot, contact our support team immediately at support@resortian.com and we'll assist with relocation and a full refund if necessary.",
+        a: "This is a rare situation but if it occurs, the property is responsible for providing an equivalent or superior room. If they cannot, contact our support team immediately at support@resortian.com and we'll assist with relocation and a full refund if necessary.",
       },
     ],
   },
@@ -161,12 +161,12 @@ const CATEGORIES: Category[] = [
         a: "Reviews can be submitted by registered users. While a booking reference is optional, we encourage linking reviews to verified stays for greater credibility.",
       },
       {
-        q: "Can hotels delete negative reviews?",
-        a: "No. Hotels cannot delete or edit guest reviews. Only Resortian can remove a review, and only if it violates our content policy (e.g., contains false information, hate speech, or is demonstrably fraudulent).",
+        q: "Can hotels or resorts delete negative reviews?",
+        a: "No. Hotels and resorts cannot delete or edit guest reviews. Only Resortian can remove a review, and only if it violates our content policy (e.g., contains false information, hate speech, or is demonstrably fraudulent).",
       },
       {
-        q: "How is a hotel's rating calculated?",
-        a: "A hotel's displayed rating is the simple average of all visible reviews, recalculated in real time whenever a review is added or removed.",
+        q: "How is a property's rating calculated?",
+        a: "A property's displayed rating is the simple average of all visible reviews, recalculated in real time whenever a review is added or removed.",
       },
       {
         q: "I left an inaccurate review — can I edit or delete it?",

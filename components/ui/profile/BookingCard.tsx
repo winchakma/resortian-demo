@@ -135,10 +135,10 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                   {
                     label:
                       booking.status === "completed"
-                        ? "Paid at Hotel"
+                        ? "Paid at Property"
                         : booking.status === "cancelled"
                           ? "Refunded"
-                          : "Due at Hotel",
+                          : "Due at Property",
                     value: `৳${booking.balanceDue.toLocaleString()}`,
                     sub:
                       booking.status === "completed"
@@ -175,7 +175,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                     href={`/hotels/${booking.hotelSlug}`}
                     className="flex items-center gap-1 text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
                   >
-                    View Hotel <ChevronRight className="h-3 w-3" />
+                    View Property <ChevronRight className="h-3 w-3" />
                   </Link>
                 )}
               </div>

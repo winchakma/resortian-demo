@@ -19,7 +19,7 @@ const PACKAGES = [
       "Appear at the top of relevant search results and the homepage featured strip.",
     features: [
       "Priority placement in search results",
-      "Featured badge on your hotel card",
+      "Featured badge on your property card",
       "Homepage carousel inclusion",
       "Performance analytics dashboard",
     ],
@@ -83,7 +83,7 @@ export default function AdvertisePage() {
             </h1>
             <p className="mt-3 max-w-xl text-primary-100">
               Put your property in front of thousands of high-intent travellers
-              actively searching for hotels across Bangladesh.
+              actively searching for hotels and resorts across Bangladesh.
             </p>
           </div>
         </section>

@@ -130,10 +130,10 @@ export function ProfileContent({ user, bookings, onProfileUpdate }: ProfileConte
               {isVendor && (
                 <div className="mt-4 rounded-xl border border-violet-100 bg-violet-50 px-4 py-3 dark:border-violet-900/30 dark:bg-violet-950/20">
                   <p className="text-xs font-semibold text-violet-700 dark:text-violet-400">
-                    Hotel Owner Account
+                    Property Owner Account
                   </p>
                   <p className="mt-0.5 text-[11px] text-violet-500/80 dark:text-violet-400/60">
-                    Manage hotels, rooms & destinations
+                    Manage properties, rooms & destinations
                   </p>
                 </div>
               )}

@@ -364,7 +364,7 @@ export default function ProfileSection({
             </div>
             <div className="flex flex-col items-end">
               <Shield className="h-8 w-8 text-violet-300" />
-              <p className="mt-1 text-xs text-violet-200">Hotel Owner</p>
+              <p className="mt-1 text-xs text-violet-200">Property Owner</p>
             </div>
           </div>
         </div>
