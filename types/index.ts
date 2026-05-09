@@ -90,6 +90,7 @@ export interface UserProfile {
   memberSince: string;
   avatar?: string;
   role: "USER" | "ADMIN" | "HOTEL_OWNER" | "SUPER_ADMIN";
+  isAffiliateMember?: boolean;
 }
 
 export type BookingStatus = "upcoming" | "completed" | "cancelled";
@@ -125,7 +126,7 @@ export interface SearchFormData {
   rooms: number;
 }
 
-export type Tab = "profile" | "bookings" | "hotels" | "settings";
+export type Tab = "profile" | "bookings" | "hotels" | "settings" | "affiliates";
 export type VendorView = "overview" | "hotels" | "destinations" | "bookings" | "calendar";
 
 export interface CalendarBooking {
@@ -370,6 +371,36 @@ export interface BlogPost extends BlogListItem {
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface AffiliateBooking {
+  id: string;
+  reference: string;
+  totalPrice: number;
+  discountAmount: number;
+  bookedOn: string;
+  status: string;
+  earned: number;
+}
+
+export interface AffiliatePromoCode {
+  id: string;
+  code: string;
+  discountType: string;
+  discountValue: number;
+  maxDiscountAmount: number | null;
+  minBookingAmount: number | null;
+  affiliateCommission: number | null;
+  usedCount: number;
+  isActive: boolean;
+  validFrom: string | null;
+  validTo: string | null;
+}
+
+export interface AffiliateStats {
+  promoCode: AffiliatePromoCode | null;
+  bookings: AffiliateBooking[];
+  totalEarnings: number;
 }
 
 export interface VendorDestination {

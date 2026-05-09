@@ -132,6 +132,12 @@ export function CheckoutContent() {
   } | null>(null);
   const [promoError, setPromoError] = useState("");
 
+  // Derived totals — recomputed on every render so they stay in sync with appliedPromo
+  const promoDiscount = calcDiscount(appliedPromo, totalAmount);
+  const discountedTotal = Math.max(0, totalAmount - promoDiscount);
+  const advancePay = Math.round(discountedTotal * ADVANCE_RATE);
+  const balancePay = discountedTotal - advancePay;
+
   // Auto-advance to payment when returning from Google OAuth
   const advancedRef = useRef(false);
   useEffect(() => {
@@ -871,74 +877,64 @@ export function CheckoutContent() {
           <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
 
           {/* Totals */}
-          {(() => {
-            const discount = calcDiscount(appliedPromo, totalAmount);
-            const discountedTotal = Math.max(0, totalAmount - discount);
-            const advancePay = Math.round(discountedTotal * ADVANCE_RATE);
-            const balancePay = discountedTotal - advancePay;
-            return (
-              <>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between text-gray-500 dark:text-gray-400">
-                    <span>Total booking value</span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">
-                      ৳{totalAmount.toLocaleString()}
-                    </span>
-                  </div>
-                  {discount > 0 && (
-                    <div className="flex justify-between text-green-600 dark:text-green-400">
-                      <span className="flex items-center gap-1">
-                        <Tag className="h-3 w-3" />
-                        Promo discount
-                      </span>
-                      <span className="font-semibold">
-                        − ৳{discount.toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex justify-between text-gray-500 dark:text-gray-400">
-                    <span>Service fee</span>
-                    <span className="text-primary-600 dark:text-primary-400">
-                      Free
-                    </span>
-                  </div>
-                </div>
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between text-gray-500 dark:text-gray-400">
+              <span>Total booking value</span>
+              <span className="font-medium text-gray-700 dark:text-gray-300">
+                ৳{totalAmount.toLocaleString()}
+              </span>
+            </div>
+            {promoDiscount > 0 && (
+              <div className="flex justify-between text-green-600 dark:text-green-400">
+                <span className="flex items-center gap-1">
+                  <Tag className="h-3 w-3" />
+                  Promo discount
+                </span>
+                <span className="font-semibold">
+                  − ৳{promoDiscount.toLocaleString()}
+                </span>
+              </div>
+            )}
+            <div className="flex justify-between text-gray-500 dark:text-gray-400">
+              <span>Service fee</span>
+              <span className="text-primary-600 dark:text-primary-400">
+                Free
+              </span>
+            </div>
+          </div>
 
-                <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
+          <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
 
-                {/* Payment split */}
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between rounded-xl bg-primary-50 px-4 py-3 dark:bg-primary-950/30">
-                    <div>
-                      <p className="text-xs font-semibold text-primary-700 dark:text-primary-400">
-                        Pay now — 20% advance
-                      </p>
-                      <p className="mt-0.5 text-[10px] text-primary-600/70 dark:text-primary-500">
-                        Charged today to confirm
-                      </p>
-                    </div>
-                    <span className="text-xl font-bold text-primary-700 dark:text-primary-300">
-                      ৳{advancePay.toLocaleString()}
-                    </span>
-                  </div>
+          {/* Payment split */}
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between rounded-xl bg-primary-50 px-4 py-3 dark:bg-primary-950/30">
+              <div>
+                <p className="text-xs font-semibold text-primary-700 dark:text-primary-400">
+                  Pay now — 20% advance
+                </p>
+                <p className="mt-0.5 text-[10px] text-primary-600/70 dark:text-primary-500">
+                  Charged today to confirm
+                </p>
+              </div>
+              <span className="text-xl font-bold text-primary-700 dark:text-primary-300">
+                ৳{advancePay.toLocaleString()}
+              </span>
+            </div>
 
-                  <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
-                    <div>
-                      <p className="text-xs font-semibold text-gray-600 dark:text-gray-300">
-                        Pay at property — 80%
-                      </p>
-                      <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
-                        Due at check-in
-                      </p>
-                    </div>
-                    <span className="text-xl font-bold text-gray-500 dark:text-gray-400">
-                      ৳{balancePay.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-              </>
-            );
-          })()}
+            <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
+              <div>
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                  Pay at property — 80%
+                </p>
+                <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                  Due at check-in
+                </p>
+              </div>
+              <span className="text-xl font-bold text-gray-500 dark:text-gray-400">
+                ৳{balancePay.toLocaleString()}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

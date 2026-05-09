@@ -11,6 +11,7 @@ import {
   Building2,
   Star,
   Store,
+  Handshake,
 } from "lucide-react";
 import type { ProfileContentProps, Tab } from "@/types";
 import { initials } from "@/utils";
@@ -19,10 +20,17 @@ import ProfileSection from "./profile/ProfileSection";
 import BookingsSection from "./profile/BookingsSection";
 import VendorDashboard from "./profile/vendor/VendorDashboard";
 import SettingsSection from "./profile/SettingsSection";
+import AffiliatesSection from "./profile/AffiliatesSection";
 
-export function ProfileContent({ user, bookings, onProfileUpdate }: ProfileContentProps) {
+export function ProfileContent({
+  user,
+  bookings,
+  onProfileUpdate,
+}: ProfileContentProps) {
   const isVendor = user.role === "HOTEL_OWNER";
+  const isAffiliate = user.isAffiliateMember === true;
   const [activeTab, setActiveTab] = useState<Tab>("profile");
+  console.log({ isAffiliate, user });
 
   const upcomingCount = bookings.filter((b) => b.status === "upcoming").length;
   const completedCount = bookings.filter(
@@ -67,6 +75,15 @@ export function ProfileContent({ user, bookings, onProfileUpdate }: ProfileConte
           icon: <CalendarDays className="h-4 w-4" />,
           badge: upcomingCount || undefined,
         },
+        ...(isAffiliate
+          ? [
+              {
+                id: "affiliates" as Tab,
+                label: "Affiliates",
+                icon: <Handshake className="h-4 w-4" />,
+              },
+            ]
+          : []),
         {
           id: "settings",
           label: "Settings",
@@ -93,14 +110,22 @@ export function ProfileContent({ user, bookings, onProfileUpdate }: ProfileConte
                   </span>
                 </div>
                 <span
-                  className={`mb-1 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${isVendor ? "bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-400" : "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400"}`}
+                  className={`mb-1 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                    isVendor
+                      ? "bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-400"
+                      : isAffiliate
+                        ? "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400"
+                        : "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400"
+                  }`}
                 >
                   {isVendor ? (
                     <Store className="h-3 w-3" />
+                  ) : isAffiliate ? (
+                    <Handshake className="h-3 w-3" />
                   ) : (
                     <Star className="h-3 w-3 fill-current" />
                   )}
-                  {isVendor ? "Vendor" : "Member"}
+                  {isVendor ? "Vendor" : isAffiliate ? "Affiliate" : "Member"}
                 </span>
               </div>
               <h2 className="text-base font-bold text-gray-900 dark:text-white">
@@ -134,6 +159,16 @@ export function ProfileContent({ user, bookings, onProfileUpdate }: ProfileConte
                   </p>
                   <p className="mt-0.5 text-[11px] text-violet-500/80 dark:text-violet-400/60">
                     Manage properties, rooms & destinations
+                  </p>
+                </div>
+              )}
+              {!isVendor && isAffiliate && (
+                <div className="mt-4 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 dark:border-amber-900/30 dark:bg-amber-950/20">
+                  <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">
+                    Affiliate Member
+                  </p>
+                  <p className="mt-0.5 text-[11px] text-amber-600/70 dark:text-amber-500/60">
+                    Earn commissions from referral bookings
                   </p>
                 </div>
               )}
@@ -233,6 +268,7 @@ export function ProfileContent({ user, bookings, onProfileUpdate }: ProfileConte
             <BookingsSection bookings={bookings} />
           )}
           {activeTab === "hotels" && isVendor && <VendorDashboard />}
+          {activeTab === "affiliates" && isAffiliate && <AffiliatesSection />}
           {activeTab === "settings" && <SettingsSection isVendor={isVendor} />}
         </div>
       </div>

@@ -42,6 +42,7 @@ export function ProfileLoader() {
           avatar: string | null;
           memberSince: string;
           role: "USER" | "ADMIN" | "HOTEL_OWNER" | "SUPER_ADMIN";
+          isAffiliateMember?: boolean;
         }>("/users/me", token!);
 
         setProfile({
@@ -53,6 +54,7 @@ export function ProfileLoader() {
           memberSince: meData.memberSince,
           avatar: meData.avatar ?? undefined,
           role: meData.role,
+          isAffiliateMember: meData.isAffiliateMember ?? false,
         });
 
         // Hotel owners don't have guest bookings

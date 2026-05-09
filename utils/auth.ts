@@ -7,6 +7,7 @@ export interface AuthUser {
   email: string | null;
   role: "USER" | "ADMIN" | "HOTEL_OWNER";
   isVerified: boolean;
+  isAffiliateMember: boolean;
   avatar: string | null;
   address?: string | null;
   memberSince?: string;
