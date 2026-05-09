@@ -1,95 +1,89 @@
 import type { Metadata } from "next";
 import { Header } from "@/sections/Header";
 import { Footer } from "@/sections/Footer";
+import { AffiliateAuthForm } from "@/components/ui/AffiliateAuthForm";
 import {
-  Link2,
-  DollarSign,
-  BarChart2,
-  Users,
-  Mail,
+  Share2,
+  Tag,
+  BadgePercent,
+  Wallet,
   CheckCircle,
+  TrendingUp,
+  Users,
+  ShieldCheck,
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Affiliates | Resortian",
+  title: "Affiliate Programme | Resortian",
   description:
-    "Earn commission by referring travellers to Resortian. Join our affiliate programme and monetise your travel audience.",
+    "Join the Resortian affiliate programme. Get a unique promo code, share it with your audience and earn a commission on every booking made with your code.",
 };
 
 const HOW_IT_WORKS = [
   {
+    icon: <Users className="h-5 w-5 text-primary-600 dark:text-primary-400" />,
     step: "1",
-    title: "Apply & Get Approved",
-    body: "Submit a short application describing your platform (blog, YouTube channel, social media, travel app). Approval takes 2–3 business days.",
+    title: "Create Your Affiliate Account",
+    body: "Register below in under a minute. No application review — instant access.",
   },
   {
+    icon: <Tag className="h-5 w-5 text-primary-600 dark:text-primary-400" />,
     step: "2",
-    title: "Get Your Referral Link",
-    body: "Once approved, access your unique tracking link and optional embeddable widgets from your affiliate dashboard.",
+    title: "Receive Your Promo Code",
+    body: "A unique promo code is generated for you automatically and shown in your profile dashboard.",
   },
   {
+    icon: <Share2 className="h-5 w-5 text-primary-600 dark:text-primary-400" />,
     step: "3",
-    title: "Share with Your Audience",
-    body: "Place your link in blog posts, video descriptions, social bios, or email newsletters. Every click is tracked for 30 days.",
+    title: "Share Everywhere",
+    body: "Post your code on Instagram, Facebook, TikTok, YouTube, WhatsApp groups — anywhere your audience hangs out.",
   },
   {
+    icon: <Wallet className="h-5 w-5 text-primary-600 dark:text-primary-400" />,
     step: "4",
     title: "Earn on Every Booking",
-    body: "When a visitor you referred completes a booking on Resortian, you earn a commission on the advance payment collected.",
+    body: "Each time someone uses your promo code to complete a booking, you earn a percentage of the advance payment.",
   },
 ];
 
-const TIERS = [
+const BENEFITS = [
   {
-    name: "Starter",
-    bookings: "0–10 bookings/month",
-    commission: "3%",
-    perks: [
-      "Unique tracking link",
-      "Monthly payout via bKash or bank transfer",
-      "Basic analytics dashboard",
-    ],
+    icon: <BadgePercent className="h-6 w-6 text-primary-600 dark:text-primary-400" />,
+    title: "Competitive Commission",
+    body: "Earn a percentage on every advance payment made using your code. The more you promote, the more you earn.",
   },
   {
-    name: "Growth",
-    bookings: "11–50 bookings/month",
-    commission: "5%",
-    perks: [
-      "Everything in Starter",
-      "Priority support",
-      "Custom banner assets",
-      "Quarterly performance review",
-    ],
+    icon: <TrendingUp className="h-6 w-6 text-primary-600 dark:text-primary-400" />,
+    title: "Real-Time Tracking",
+    body: "See how many bookings your code has generated and your pending earnings — all from your profile dashboard.",
   },
   {
-    name: "Pro",
-    bookings: "51+ bookings/month",
-    commission: "7%",
-    perks: [
-      "Everything in Growth",
-      "Dedicated affiliate manager",
-      "Co-marketing opportunities",
-      "Early access to new features",
-    ],
+    icon: <ShieldCheck className="h-6 w-6 text-primary-600 dark:text-primary-400" />,
+    title: "Reliable Payouts",
+    body: "Commissions are paid out monthly via bKash, Nagad, or bank transfer once you hit the minimum threshold.",
   },
 ];
 
 const FAQS = [
   {
-    q: "Who can become an affiliate?",
-    a: "Anyone with an online platform — travel bloggers, YouTubers, Instagram creators, travel apps, comparison sites, or corporate travel managers. We review each application to ensure a good fit for our audience.",
+    q: "Is there a minimum audience requirement?",
+    a: "No. Anyone can join — whether you have 100 followers or 100,000. There's no traffic or follower minimum.",
   },
   {
-    q: "How long is the tracking cookie?",
-    a: "30 days. If someone clicks your link and books within 30 days, the referral is credited to your account.",
+    q: "How does the promo code work?",
+    a: "When a guest enters your unique promo code at checkout, the booking is attributed to you. You earn a commission on the advance payment collected for that booking.",
   },
   {
     q: "When and how do I get paid?",
-    a: "Payouts are processed on the 15th of each month for commissions earned in the previous month. We pay via bKash, Nagad, or direct bank transfer. Minimum payout threshold is BDT 500.",
+    a: "Commissions are processed on the 15th of each month for earnings from the previous month. We pay via bKash, Nagad, or direct bank transfer. Minimum payout threshold is BDT 500.",
   },
   {
-    q: "Can I promote specific hotels, resorts, or destinations?",
-    a: "Yes. You can generate deep links to any hotel or resort listing or destination page on Resortian, making it easy to promote exactly what your audience is interested in.",
+    q: "Can I share the code for specific hotels or destinations?",
+    a: "Yes — your promo code works site-wide. You can pair it with direct links to any hotel or destination page to maximise conversions.",
+  },
+  {
+    q: "I already have a Resortian account. Do I need a new one?",
+    a: "Sign in below with your existing credentials. If your account isn't already an affiliate account, contact us at affiliates@resortian.com and we'll upgrade it.",
   },
 ];
 
@@ -98,43 +92,60 @@ export default function AffiliatesPage() {
     <>
       <Header />
       <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        {/* Hero */}
+
+        {/* ── Hero ── */}
         <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500 py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <p className="text-xs font-semibold uppercase tracking-widest text-primary-100">
-              For Partners
+              Earn with Resortian
             </p>
-            <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
-              Affiliate Programme
+            <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+              Share. Book. Earn.
             </h1>
-            <p className="mt-3 max-w-xl text-primary-100">
-              Turn your travel content into income. Earn commission for every
-              Resortian booking you refer — no minimum audience required.
+            <p className="mt-3 max-w-xl text-base text-primary-100">
+              Get your personal promo code, share it with your audience, and
+              earn a commission every time someone books a stay using your code
+              — no experience required.
             </p>
-            <a
-              href="mailto:affiliates@resortian.com"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-primary-700 transition hover:bg-primary-50"
-            >
-              <Mail className="h-4 w-4" />
-              Apply via Email
-            </a>
+            <div className="mt-6 flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
+                <CheckCircle className="h-4 w-4 text-primary-200" />
+                Instant sign-up
+              </div>
+              <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
+                <CheckCircle className="h-4 w-4 text-primary-200" />
+                Unique promo code
+              </div>
+              <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
+                <CheckCircle className="h-4 w-4 text-primary-200" />
+                Monthly payouts
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* How it works */}
-        <section className="py-12">
+        {/* ── How it works ── */}
+        <section className="py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               How It Works
             </h2>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              From sign-up to your first payout in four simple steps.
+            </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {HOW_IT_WORKS.map((s) => (
                 <div
                   key={s.step}
-                  className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900"
+                  className="relative rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900"
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
-                    {s.step}
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-50 dark:bg-primary-950/40">
+                      {s.icon}
+                    </div>
+                    <span className="text-3xl font-black text-gray-100 dark:text-gray-800">
+                      {s.step}
+                    </span>
                   </div>
                   <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">
                     {s.title}
@@ -148,102 +159,74 @@ export default function AffiliatesPage() {
           </div>
         </section>
 
-        {/* Commission tiers */}
-        {/* <section className="bg-white py-12 dark:bg-gray-900">
+        {/* ── Join form + benefits ── */}
+        <section className="bg-white py-14 dark:bg-gray-900">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              Commission Tiers
-            </h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Commission is calculated on the advance payment collected per
-              booking. Tier upgrades happen automatically each month.
-            </p>
-            <div className="mt-6 grid gap-6 md:grid-cols-3">
-              {TIERS.map((tier, i) => (
-                <div
-                  key={tier.name}
-                  className={`rounded-2xl border p-6 ${
-                    i === 1
-                      ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20"
-                      : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-bold text-gray-900 dark:text-white">
-                      {tier.name}
-                    </h3>
-                    <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                      {tier.commission}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    {tier.bookings}
-                  </p>
-                  <ul className="mt-4 space-y-2">
-                    {tier.perks.map((p) => (
-                      <li key={p} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
-                        <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section> */}
+            <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
 
-        {/* Why Resortian */}
-        <section className="py-12">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              Why Promote Resortian?
-            </h2>
-            <div className="mt-6 grid gap-6 sm:grid-cols-3">
-              {[
-                {
-                  icon: (
-                    <Link2 className="h-6 w-6 text-primary-600 dark:text-primary-400" />
-                  ),
-                  title: "High Conversion",
-                  body: "Our optimised booking flow converts browsers into confirmed guests at above-industry-average rates.",
-                },
-                {
-                  icon: (
-                    <DollarSign className="h-6 w-6 text-primary-600 dark:text-primary-400" />
-                  ),
-                  title: "Competitive Payouts",
-                  body: "Commission on advance payments, paid monthly with no minimum traffic requirement to start.",
-                },
-                {
-                  icon: (
-                    <BarChart2 className="h-6 w-6 text-primary-600 dark:text-primary-400" />
-                  ),
-                  title: "Real-Time Analytics",
-                  body: "Track clicks, conversions, and earnings in your dashboard — updated daily so you always know what's working.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-900/30">
-                    {item.icon}
+              {/* Left: benefits */}
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  Why Join the Programme?
+                </h2>
+                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                  Monetise your travel content with zero upfront cost and no
+                  minimum audience.
+                </p>
+
+                <div className="mt-8 space-y-6">
+                  {BENEFITS.map((b) => (
+                    <div key={b.title} className="flex gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/40">
+                        {b.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                          {b.title}
+                        </h3>
+                        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                          {b.body}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Promo code preview */}
+                <div className="mt-10 rounded-2xl border border-dashed border-primary-300 bg-primary-50 p-5 dark:border-primary-800 dark:bg-primary-950/20">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-primary-600 dark:text-primary-400">
+                    Your promo code will look like this
+                  </p>
+                  <div className="mt-3 flex items-center gap-3">
+                    <span className="rounded-xl bg-white px-5 py-2.5 font-mono text-xl font-bold tracking-widest text-gray-900 shadow-sm dark:bg-gray-800 dark:text-white">
+                      RST-XXXXX
+                    </span>
+                    <Tag className="h-5 w-5 text-primary-500" />
                   </div>
-                  <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    {item.body}
+                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    Generated automatically after you join. Share it anywhere.
                   </p>
                 </div>
-              ))}
+              </div>
+
+              {/* Right: auth form */}
+              <div className="lg:sticky lg:top-8">
+                <div className="mb-5">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    Join as an Affiliate
+                  </h2>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Already a member? Sign in to access your dashboard.
+                  </p>
+                </div>
+                <AffiliateAuthForm />
+              </div>
             </div>
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="bg-white py-12 dark:bg-gray-900">
+        {/* ── FAQ ── */}
+        <section className="py-14">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               Common Questions
@@ -263,31 +246,6 @@ export default function AffiliatesPage() {
           </div>
         </section>
 
-        {/* Apply CTA */}
-        <section className="py-12">
-          <div className="mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
-            <div className="flex justify-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/40">
-                <Users className="h-7 w-7 text-primary-600 dark:text-primary-400" />
-              </div>
-            </div>
-            <h2 className="mt-4 text-xl font-bold text-gray-900 dark:text-white">
-              Ready to Join?
-            </h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Email us with a brief description of your platform, your monthly
-              audience size, and any questions. We typically respond within 2
-              business days.
-            </p>
-            <a
-              href="mailto:affiliates@resortian.com"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-            >
-              <Mail className="h-4 w-4" />
-              affiliates@resortian.com
-            </a>
-          </div>
-        </section>
       </main>
       <Footer />
     </>

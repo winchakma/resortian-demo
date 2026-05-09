@@ -47,6 +47,7 @@ export async function apiRegister(body: {
   password: string;
   email?: string;
   role?: "USER" | "HOTEL_OWNER";
+  isAffiliateMember?: boolean;
 }): Promise<AuthResponse> {
   return request<AuthResponse>("/auth/register", {
     method: "POST",

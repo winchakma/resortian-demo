@@ -20,6 +20,9 @@ import {
   Info,
   BadgeCheck,
   ExternalLink,
+  Tag,
+  X,
+  Loader2,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
@@ -107,8 +110,6 @@ export function CheckoutContent() {
   const { user, token, setAuth } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const advanceAmount = Math.round(totalAmount * ADVANCE_RATE);
-  const balanceAmount = totalAmount - advanceAmount;
 
   const [authMode, setAuthMode] = useState<AuthMode>("guest");
   const [step, setStep] = useState<Step>("details");
@@ -118,6 +119,18 @@ export function CheckoutContent() {
   // Guest details captured in step 1, used when submitting in step 2
   const [savedGuestDetails, setSavedGuestDetails] =
     useState<GuestFormValues | null>(null);
+
+  // Promo code state
+  const [promoCodeInput, setPromoCodeInput] = useState("");
+  const [promoValidating, setPromoValidating] = useState(false);
+  const [appliedPromo, setAppliedPromo] = useState<{
+    code: string;
+    discountType: string;
+    discountValue: number;
+    maxDiscountAmount: number | null;
+    minBookingAmount: number | null;
+  } | null>(null);
+  const [promoError, setPromoError] = useState("");
 
   // Auto-advance to payment when returning from Google OAuth
   const advancedRef = useRef(false);
@@ -181,6 +194,51 @@ export function CheckoutContent() {
     }
   }
 
+  function calcDiscount(
+    promo: typeof appliedPromo,
+    amount: number,
+  ): number {
+    if (!promo) return 0;
+    if (promo.minBookingAmount !== null && amount < promo.minBookingAmount)
+      return 0;
+    if (promo.discountType === "PERCENTAGE") {
+      const d = Math.round((amount * promo.discountValue) / 100);
+      return promo.maxDiscountAmount !== null
+        ? Math.min(d, promo.maxDiscountAmount)
+        : d;
+    }
+    return Math.min(promo.discountValue, amount);
+  }
+
+  async function handleApplyPromo() {
+    const code = promoCodeInput.trim().toUpperCase();
+    if (!code) return;
+    setPromoError("");
+    setPromoValidating(true);
+    try {
+      const res = await fetch(`${API_BASE}/promo-codes/validate/${code}`);
+      if (!res.ok) {
+        const err = (await res.json()) as { message?: string };
+        setPromoError(err.message ?? "Invalid promo code");
+        return;
+      }
+      const promo = (await res.json()) as typeof appliedPromo;
+      setAppliedPromo(promo);
+      setPromoCodeInput("");
+      toast.success("Promo code applied!");
+    } catch {
+      setPromoError("Could not validate promo code");
+    } finally {
+      setPromoValidating(false);
+    }
+  }
+
+  function removePromo() {
+    setAppliedPromo(null);
+    setPromoError("");
+    setPromoCodeInput("");
+  }
+
   async function handlePaymentConfirm() {
     setBookingSubmitting(true);
     try {
@@ -209,6 +267,7 @@ export function CheckoutContent() {
           guestName: name,
           guestPhone: phone,
           ...(email ? { guestEmail: email } : {}),
+          ...(appliedPromo ? { promoCode: appliedPromo.code } : {}),
           successUrl: `${origin}/payment/success`,
           cancelUrl: `${origin}/payment/cancel`,
           failUrl: `${origin}/payment/fail`,
@@ -644,6 +703,78 @@ export function CheckoutContent() {
                 </div>
               </div>
 
+              {/* Promo code */}
+              <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
+                  <h2 className="flex items-center gap-2 font-semibold text-gray-900 dark:text-white">
+                    <Tag className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+                    Promo Code
+                  </h2>
+                </div>
+                <div className="p-5">
+                  {appliedPromo ? (
+                    <div className="flex items-center justify-between rounded-xl border border-primary-200 bg-primary-50 px-4 py-3 dark:border-primary-800/50 dark:bg-primary-950/20">
+                      <div>
+                        <p className="text-sm font-bold text-primary-700 dark:text-primary-300 font-mono">
+                          {appliedPromo.code}
+                        </p>
+                        <p className="text-xs text-primary-600/80 dark:text-primary-500">
+                          {appliedPromo.discountType === "PERCENTAGE"
+                            ? `${appliedPromo.discountValue}% off`
+                            : `৳${appliedPromo.discountValue.toLocaleString()} off`}
+                          {appliedPromo.maxDiscountAmount
+                            ? ` (max ৳${appliedPromo.maxDiscountAmount.toLocaleString()})`
+                            : ""}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={removePromo}
+                        className="rounded-lg p-1.5 text-primary-500 hover:bg-primary-100 dark:hover:bg-primary-900/30"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={promoCodeInput}
+                        onChange={(e) => {
+                          setPromoCodeInput(e.target.value.toUpperCase());
+                          setPromoError("");
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            void handleApplyPromo();
+                          }
+                        }}
+                        placeholder="Enter promo code"
+                        className={`${inputCls(!!promoError)} flex-1 px-4 font-mono uppercase`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => void handleApplyPromo()}
+                        disabled={promoValidating || !promoCodeInput.trim()}
+                        className="flex shrink-0 items-center gap-1.5 rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
+                      >
+                        {promoValidating ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          "Apply"
+                        )}
+                      </button>
+                    </div>
+                  )}
+                  {promoError && (
+                    <p className="mt-2 text-xs font-medium text-red-500 dark:text-red-400">
+                      {promoError}
+                    </p>
+                  )}
+                </div>
+              </div>
+
               {/* Security notice */}
               <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white px-4 py-3 dark:border-gray-800 dark:bg-gray-900">
                 <Lock className="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" />
@@ -740,53 +871,74 @@ export function CheckoutContent() {
           <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
 
           {/* Totals */}
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between text-gray-500 dark:text-gray-400">
-              <span>Total booking value</span>
-              <span className="font-medium text-gray-700 dark:text-gray-300">
-                ৳{totalAmount.toLocaleString()}
-              </span>
-            </div>
-            <div className="flex justify-between text-gray-500 dark:text-gray-400">
-              <span>Service fee</span>
-              <span className="text-primary-600 dark:text-primary-400">
-                Free
-              </span>
-            </div>
-          </div>
+          {(() => {
+            const discount = calcDiscount(appliedPromo, totalAmount);
+            const discountedTotal = Math.max(0, totalAmount - discount);
+            const advancePay = Math.round(discountedTotal * ADVANCE_RATE);
+            const balancePay = discountedTotal - advancePay;
+            return (
+              <>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between text-gray-500 dark:text-gray-400">
+                    <span>Total booking value</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      ৳{totalAmount.toLocaleString()}
+                    </span>
+                  </div>
+                  {discount > 0 && (
+                    <div className="flex justify-between text-green-600 dark:text-green-400">
+                      <span className="flex items-center gap-1">
+                        <Tag className="h-3 w-3" />
+                        Promo discount
+                      </span>
+                      <span className="font-semibold">
+                        − ৳{discount.toLocaleString()}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-gray-500 dark:text-gray-400">
+                    <span>Service fee</span>
+                    <span className="text-primary-600 dark:text-primary-400">
+                      Free
+                    </span>
+                  </div>
+                </div>
 
-          <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
+                <div className="my-4 border-t border-gray-100 dark:border-gray-800" />
 
-          {/* Payment split */}
-          <div className="space-y-2.5">
-            <div className="flex items-center justify-between rounded-xl bg-primary-50 px-4 py-3 dark:bg-primary-950/30">
-              <div>
-                <p className="text-xs font-semibold text-primary-700 dark:text-primary-400">
-                  Pay now — 20% advance
-                </p>
-                <p className="mt-0.5 text-[10px] text-primary-600/70 dark:text-primary-500">
-                  Charged today to confirm
-                </p>
-              </div>
-              <span className="text-xl font-bold text-primary-700 dark:text-primary-300">
-                ৳{advanceAmount.toLocaleString()}
-              </span>
-            </div>
+                {/* Payment split */}
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between rounded-xl bg-primary-50 px-4 py-3 dark:bg-primary-950/30">
+                    <div>
+                      <p className="text-xs font-semibold text-primary-700 dark:text-primary-400">
+                        Pay now — 20% advance
+                      </p>
+                      <p className="mt-0.5 text-[10px] text-primary-600/70 dark:text-primary-500">
+                        Charged today to confirm
+                      </p>
+                    </div>
+                    <span className="text-xl font-bold text-primary-700 dark:text-primary-300">
+                      ৳{advancePay.toLocaleString()}
+                    </span>
+                  </div>
 
-            <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
-              <div>
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-300">
-                  Pay at property — 80%
-                </p>
-                <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
-                  Due at check-in
-                </p>
-              </div>
-              <span className="text-xl font-bold text-gray-500 dark:text-gray-400">
-                ৳{balanceAmount.toLocaleString()}
-              </span>
-            </div>
-          </div>
+                  <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
+                    <div>
+                      <p className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                        Pay at property — 80%
+                      </p>
+                      <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                        Due at check-in
+                      </p>
+                    </div>
+                    <span className="text-xl font-bold text-gray-500 dark:text-gray-400">
+                      ৳{balancePay.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              </>
+            );
+          })()}
         </div>
       </div>
     </div>
