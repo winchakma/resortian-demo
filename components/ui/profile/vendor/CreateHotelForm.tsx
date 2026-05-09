@@ -1,4 +1,5 @@
 import FieldError from "@/components/common/FieldError";
+import RichTextEditor from "@/components/ui/RichTextEditor";
 import { useAuth } from "@/context/AuthContext";
 import { HotelFormValues } from "@/types";
 import { BASE, inputCls, labelCls } from "@/utils";
@@ -7,6 +8,8 @@ import {
   AlertCircle,
   Check,
   ChevronDown,
+  Clock,
+  FileText,
   MapPin,
   Plus,
   Search,
@@ -17,7 +20,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as yup from "yup";
 
@@ -32,7 +35,7 @@ const hotelSchema = yup.object({
   description: yup
     .string()
     .required("Description is required")
-    .min(20, "At least 20 characters"),
+    .test("min-length", "At least 20 characters", (v) => (v?.replace(/<[^>]*>/g, "") ?? "").length >= 20),
   price: yup
     .number()
     .typeError("Must be a number")
@@ -40,6 +43,9 @@ const hotelSchema = yup.object({
     .min(1, "Must be positive"),
   tags: yup.string(),
   amenities: yup.string(),
+  checkinTime: yup.string().required("Check-in time is required"),
+  checkoutTime: yup.string().required("Check-out time is required"),
+  bookingConditions: yup.string(),
 });
 
 export default function CreateHotelForm({
@@ -78,6 +84,7 @@ export default function CreateHotelForm({
     setValue,
     watch,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<HotelFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -131,6 +138,9 @@ export default function CreateHotelForm({
       .map((a) => a.trim())
       .filter(Boolean)
       .forEach((a) => fd.append("amenities", a));
+    if (data.checkinTime) fd.append("checkinTime", data.checkinTime);
+    if (data.checkoutTime) fd.append("checkoutTime", data.checkoutTime);
+    if (data.bookingConditions) fd.append("bookingConditions", data.bookingConditions);
     fd.append("image", file);
 
     try {
@@ -328,11 +338,19 @@ export default function CreateHotelForm({
       {/* Description */}
       <div>
         <label className={labelCls()}>Description</label>
-        <textarea
-          {...register("description")}
-          rows={4}
-          placeholder="Describe your hotel — location, ambiance, what makes it special…"
-          className={inputCls(!!errors.description)}
+        <Controller
+          name="description"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <RichTextEditor
+              value={field.value ?? ""}
+              onChange={field.onChange}
+              placeholder="Describe your hotel — location, ambiance, what makes it special…"
+              hasError={!!errors.description}
+              minHeight={140}
+            />
+          )}
         />
         <FieldError msg={errors.description?.message} />
       </div>
@@ -371,6 +389,61 @@ export default function CreateHotelForm({
             className={inputCls()}
           />
         </div>
+      </div>
+
+      {/* Check-in / Check-out Time */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5" /> Check-in Time
+            </span>
+          </label>
+          <input
+            type="time"
+            {...register("checkinTime")}
+            className={inputCls(!!errors.checkinTime)}
+          />
+          <FieldError msg={errors.checkinTime?.message} />
+        </div>
+        <div>
+          <label className={labelCls()}>
+            <span className="flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5" /> Check-out Time
+            </span>
+          </label>
+          <input
+            type="time"
+            {...register("checkoutTime")}
+            className={inputCls(!!errors.checkoutTime)}
+          />
+          <FieldError msg={errors.checkoutTime?.message} />
+        </div>
+      </div>
+
+      {/* Booking Conditions */}
+      <div>
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <FileText className="h-3.5 w-3.5" /> Booking Conditions{" "}
+            <span className="font-normal text-gray-400">(optional)</span>
+          </span>
+        </label>
+        <Controller
+          name="bookingConditions"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <RichTextEditor
+              value={field.value ?? ""}
+              onChange={field.onChange}
+              placeholder="Cancellation policy, payment terms, house rules…"
+              hasError={!!errors.bookingConditions}
+              minHeight={120}
+            />
+          )}
+        />
+        <FieldError msg={errors.bookingConditions?.message} />
       </div>
 
       {/* Image */}

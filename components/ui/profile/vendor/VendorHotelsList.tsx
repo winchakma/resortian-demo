@@ -198,16 +198,16 @@ export default function VendorHotelsList() {
                 className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
               />
             </button>
-            {hotels.length === 0 && (
-              <button
-                type="button"
-                onClick={() => setModal("create-hotel")}
-                className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
-              >
-                <Plus className="h-4 w-4" />
-                New Property
-              </button>
-            )}
+            {/* {hotels.length === 0 && ( */}
+            <button
+              type="button"
+              onClick={() => setModal("create-hotel")}
+              className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
+            >
+              <Plus className="h-4 w-4" />
+              New Property
+            </button>
+            {/* )} */}
           </div>
         </div>
 
@@ -216,8 +216,9 @@ export default function VendorHotelsList() {
           <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/30 dark:bg-amber-950/20">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
             <p className="text-xs text-amber-700 dark:text-amber-400">
-              {totalPending} propert{totalPending !== 1 ? "ies are" : "y is"} under
-              review. Properties and rooms go live once approved by our team.
+              {totalPending} propert{totalPending !== 1 ? "ies are" : "y is"}{" "}
+              under review. Properties and rooms go live once approved by our
+              team.
             </p>
           </div>
         )}

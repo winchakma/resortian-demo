@@ -13,6 +13,9 @@ export interface Hotel {
   description: string;
   amenities: string[];
   rooms: Room[];
+  checkinTime?: string;
+  checkoutTime?: string;
+  bookingConditions?: string;
 }
 
 export interface Room {
@@ -216,6 +219,9 @@ export type HotelFormValues = {
   price: number;
   tags?: string;
   amenities?: string;
+  checkinTime: string;
+  checkoutTime: string;
+  bookingConditions?: string;
 };
 
 export interface VendorRoom {
@@ -240,9 +246,15 @@ export interface VendorHotel {
   name: string;
   slug: string;
   location: string;
+  description: string;
   image: string;
   price: number;
   rating: number;
+  tags: string[];
+  amenities: string[];
+  checkinTime?: string | null;
+  checkoutTime?: string | null;
+  bookingConditions?: string | null;
   approvalStatus: ApprovalStatus;
   rejectionReason: string | null;
   isActive: boolean;

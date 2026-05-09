@@ -15,6 +15,9 @@ import {
   Users,
   Maximize2,
   Eye,
+  LogIn,
+  LogOut,
+  FileText,
 } from "lucide-react";
 import { Header } from "@/sections/Header";
 import { Footer } from "@/sections/Footer";
@@ -118,9 +121,10 @@ export default async function HotelDetailsPage({
                 </div>
 
                 {/* Description */}
-                <p className="mt-5 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-                  {hotel.description}
-                </p>
+                <div
+                  className="prose prose-sm mt-5 max-w-none text-gray-600 dark:text-gray-400 [&_b]:font-semibold [&_strong]:font-semibold [&_ul]:ml-5 [&_ul]:list-disc [&_ol]:ml-5 [&_ol]:list-decimal"
+                  dangerouslySetInnerHTML={{ __html: hotel.description }}
+                />
 
                 {/* Amenities */}
                 <div className="mt-6">
@@ -154,6 +158,38 @@ export default async function HotelDetailsPage({
                     </span>
                   </div>
                 </div>
+
+                {/* Check-in / Check-out times */}
+                {(hotel.checkinTime || hotel.checkoutTime) && (
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    {hotel.checkinTime && (
+                      <div className="flex items-center gap-2.5 rounded-xl border border-gray-200 bg-white px-4 py-3 dark:border-gray-700 dark:bg-gray-800/60">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-950/40">
+                          <LogIn className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-400 dark:text-gray-500">Check-in</p>
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                            {hotel.checkinTime}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    {hotel.checkoutTime && (
+                      <div className="flex items-center gap-2.5 rounded-xl border border-gray-200 bg-white px-4 py-3 dark:border-gray-700 dark:bg-gray-800/60">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 dark:bg-amber-950/40">
+                          <LogOut className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-400 dark:text-gray-500">Check-out</p>
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                            {hotel.checkoutTime}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -172,6 +208,28 @@ export default async function HotelDetailsPage({
             </div>
           </div>
         </section>
+
+        {/* ── Booking Conditions ── */}
+        {hotel.bookingConditions && (
+          <section className="py-10">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900 sm:p-8">
+                <div className="mb-4 flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-950/40">
+                    <FileText className="h-4 w-4 text-violet-600 dark:text-violet-400" />
+                  </div>
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                    Booking Conditions
+                  </h2>
+                </div>
+                <div
+                  className="prose prose-sm max-w-none text-gray-600 dark:text-gray-400 [&_b]:font-semibold [&_strong]:font-semibold [&_ul]:ml-5 [&_ul]:list-disc [&_ol]:ml-5 [&_ol]:list-decimal"
+                  dangerouslySetInnerHTML={{ __html: hotel.bookingConditions }}
+                />
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ── Guest Reviews ── */}
         <section className="py-12">

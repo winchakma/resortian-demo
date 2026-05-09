@@ -57,6 +57,9 @@ interface ApiHotel {
   createdAt: string;
   destination?: { id: string; name: string; region: string };
   rooms?: ApiRoom[];
+  checkinTime?: string;
+  checkoutTime?: string;
+  bookingConditions?: string;
 }
 
 interface ApiReview {
@@ -112,6 +115,9 @@ function normalizeHotel(h: ApiHotel): Hotel {
     tags: h.tags,
     amenities: h.amenities,
     rooms: h.rooms ? h.rooms.map(normalizeRoom) : [],
+    checkinTime: h.checkinTime,
+    checkoutTime: h.checkoutTime,
+    bookingConditions: h.bookingConditions,
   };
 }
 
