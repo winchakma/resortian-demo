@@ -253,14 +253,18 @@ export function CheckoutContent() {
       const phone = guestDetails.guestPhone || user?.phone || "";
       const email = guestDetails.guestEmail || user?.email;
 
-      const origin = window.location.origin;
+      // NEXT_PUBLIC_SITE_URL overrides window.location.origin so redirect URLs
+      // work correctly in environments where UddoktaPay strips non-standard ports.
+      const origin =
+        process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+        window.location.origin;
 
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
       };
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      const res = await fetch(`${API_BASE}/payments/moneybag/init`, {
+      const res = await fetch(`${API_BASE}/payments/uddoktapay/init-cart`, {
         method: "POST",
         headers,
         body: JSON.stringify({
@@ -276,12 +280,11 @@ export function CheckoutContent() {
           ...(appliedPromo ? { promoCode: appliedPromo.code } : {}),
           successUrl: `${origin}/payment/success`,
           cancelUrl: `${origin}/payment/cancel`,
-          failUrl: `${origin}/payment/fail`,
         }),
       });
 
       const data = (await res.json()) as {
-        checkout_url?: string;
+        payment_url?: string;
         bookings?: {
           reference: string;
           advancePaid: number;
@@ -292,7 +295,7 @@ export function CheckoutContent() {
         message?: string;
       };
 
-      if (!res.ok || !data.checkout_url) {
+      if (!res.ok || !data.payment_url) {
         throw new Error(data.message ?? "Failed to initiate payment");
       }
 
@@ -313,7 +316,7 @@ export function CheckoutContent() {
       });
 
       clearCart();
-      window.location.href = data.checkout_url;
+      window.location.href = data.payment_url;
     } catch (err: unknown) {
       toast.error(
         err instanceof Error
@@ -653,30 +656,30 @@ export function CheckoutContent() {
           {/* ── STEP: payment ── */}
           {step === "payment" && (
             <div className="space-y-5">
-              {/* Moneybag payment card */}
+              {/* UddoktaPay payment card */}
               <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
                 <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
                   <h2 className="font-semibold text-gray-900 dark:text-white">
                     Secure Payment
                   </h2>
                   <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-                    You will be redirected to Moneybag&apos;s secure checkout to
-                    complete your payment.
+                    You will be redirected to UddoktaPay&apos;s secure checkout
+                    to complete your payment.
                   </p>
                 </div>
 
                 <div className="p-5">
-                  {/* Moneybag branding */}
+                  {/* UddoktaPay branding */}
                   <div className="flex items-center gap-4 rounded-2xl border-2 border-primary-200 bg-primary-50 p-5 dark:border-primary-800/50 dark:bg-primary-950/20">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white">
                       <CreditCard className="h-6 w-6" />
                     </div>
                     <div className="flex-1">
                       <p className="font-semibold text-gray-900 dark:text-white">
-                        Moneybag Checkout
+                        UddoktaPay Checkout
                       </p>
                       <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                        Cards · bKash · Nagad · Rocket · and more
+                        bKash · Nagad · Rocket · Cards · and more
                       </p>
                     </div>
                     <ExternalLink className="h-4 w-4 shrink-0 text-primary-500 dark:text-primary-400" />
@@ -684,7 +687,7 @@ export function CheckoutContent() {
 
                   {/* Accepted methods */}
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {["Visa", "Mastercard", "bKash", "Nagad", "Rocket"].map(
+                    {["bKash", "Nagad", "Rocket", "Visa", "Mastercard"].map(
                       (m) => (
                         <span
                           key={m}
@@ -702,12 +705,45 @@ export function CheckoutContent() {
                   <Info className="mt-0.5 h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500" />
                   <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
                     Clicking the button below will create your booking and
-                    redirect you to Moneybag&apos;s secure payment page. Your
+                    redirect you to UddoktaPay&apos;s secure payment page. Your
                     booking will be confirmed automatically after successful
                     payment.
                   </p>
                 </div>
               </div>
+
+              {/* Moneybag payment card — disabled */}
+              {/* <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
+                  <h2 className="font-semibold text-gray-900 dark:text-white">Secure Payment</h2>
+                  <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                    You will be redirected to Moneybag&apos;s secure checkout to complete your payment.
+                  </p>
+                </div>
+                <div className="p-5">
+                  <div className="flex items-center gap-4 rounded-2xl border-2 border-primary-200 bg-primary-50 p-5 dark:border-primary-800/50 dark:bg-primary-950/20">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white">
+                      <CreditCard className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900 dark:text-white">Moneybag Checkout</p>
+                      <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">Cards · bKash · Nagad · Rocket · and more</p>
+                    </div>
+                    <ExternalLink className="h-4 w-4 shrink-0 text-primary-500 dark:text-primary-400" />
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {["Visa", "Mastercard", "bKash", "Nagad", "Rocket"].map((m) => (
+                      <span key={m} className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{m}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="mx-5 mb-5 flex gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/60">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500" />
+                  <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                    Clicking the button below will create your booking and redirect you to Moneybag&apos;s secure payment page. Your booking will be confirmed automatically after successful payment.
+                  </p>
+                </div>
+              </div> */}
 
               {/* Promo code */}
               <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
