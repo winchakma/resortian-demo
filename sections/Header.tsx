@@ -3,13 +3,7 @@
 import { memo, useState, useCallback, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  Menu,
-  User,
-  ShoppingCart,
-  Building2,
-  LogOut,
-} from "lucide-react";
+import { Menu, User, ShoppingCart, Building2, LogOut } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { MobileMenu } from "@/components/ui/MobileMenu";
@@ -29,6 +23,11 @@ const NAV_LINKS: NavLink[] = [
 
 const CartIndicator = memo(function CartIndicator() {
   const { totalItems } = useCart();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <Link
@@ -37,7 +36,7 @@ const CartIndicator = memo(function CartIndicator() {
       className="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
     >
       <ShoppingCart className="h-5 w-5" />
-      {totalItems > 0 && (
+      {mounted && totalItems > 0 && (
         <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary-600 text-[10px] font-bold text-white">
           {totalItems > 9 ? "9+" : totalItems}
         </span>
@@ -70,7 +69,11 @@ const NavLinks = memo(function NavLinks({
           {link.label}
         </Link>
       ))}
-      <Link href={accountHref} prefetch={true} className={navLinkCls}>
+      <Link
+        href={accountHref}
+        prefetch={true}
+        className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+      >
         My Account
       </Link>
     </nav>
@@ -181,7 +184,12 @@ function UserMenu() {
 
 export function Header() {
   const { user, loading } = useAuth();
+  const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const accountHref = user ? "/profile" : "/auth/customer";
 
@@ -208,10 +216,8 @@ export function Header() {
           <CartIndicator />
 
           {/* Auth area — only render after hydration to avoid mismatch */}
-          {!loading && (
-            <div className="ml-1">
-              {user ? <UserMenu /> : <SignUpButton />}
-            </div>
+          {mounted && !loading && (
+            <div className="ml-1">{user ? <UserMenu /> : <SignUpButton />}</div>
           )}
 
           <button

@@ -29,7 +29,7 @@ export default function RootLayout({
       className={`${dmSans.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="min-h-full font-sans antialiased">
+      <body className="min-h-full font-sans antialiased" suppressHydrationWarning>
         {GA_ID && process.env.NODE_ENV === "production" && (
           <>
             <Script
