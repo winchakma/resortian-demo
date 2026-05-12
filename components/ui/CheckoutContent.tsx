@@ -203,10 +203,7 @@ export function CheckoutContent() {
     }
   }
 
-  function calcDiscount(
-    promo: typeof appliedPromo,
-    amount: number,
-  ): number {
+  function calcDiscount(promo: typeof appliedPromo, amount: number): number {
     if (!promo) return 0;
     if (promo.minBookingAmount !== null && amount < promo.minBookingAmount)
       return 0;
@@ -683,7 +680,7 @@ export function CheckoutContent() {
                         UddoktaPay Checkout
                       </p>
                       <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                        bKash · Nagad · Rocket · Cards · and more
+                        bKash · Nagad · Rocket · and more
                       </p>
                     </div>
                     <ExternalLink className="h-4 w-4 shrink-0 text-primary-500 dark:text-primary-400" />
@@ -691,16 +688,14 @@ export function CheckoutContent() {
 
                   {/* Accepted methods */}
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {["bKash", "Nagad", "Rocket", "Visa", "Mastercard"].map(
-                      (m) => (
-                        <span
-                          key={m}
-                          className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                        >
-                          {m}
-                        </span>
-                      ),
-                    )}
+                    {["bKash", "Nagad", "Rocket"].map((m) => (
+                      <span
+                        key={m}
+                        className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                      >
+                        {m}
+                      </span>
+                    ))}
                   </div>
                 </div>
 

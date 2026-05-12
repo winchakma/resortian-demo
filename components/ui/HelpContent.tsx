@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Search, BookOpen, CreditCard, XCircle, User, Hotel, Star } from "lucide-react";
+import {
+  ChevronDown,
+  Search,
+  CreditCard,
+  XCircle,
+  User,
+  MessageCircle,
+} from "lucide-react";
 
 interface FAQ {
   q: string;
@@ -17,60 +24,17 @@ interface Category {
 
 const CATEGORIES: Category[] = [
   {
-    id: "booking",
-    label: "Booking",
-    icon: <BookOpen className="h-5 w-5" />,
-    faqs: [
-      {
-        q: "How do I make a booking on Resortian?",
-        a: "Search for your destination and dates, browse available hotels, choose a room, and click 'Book Now'. You'll pay a minimum 20% advance online; the remaining balance is settled directly at the hotel on arrival.",
-      },
-      {
-        q: "Do I need an account to make a booking?",
-        a: "No — Resortian supports guest bookings. Simply provide your name and phone number at checkout. However, creating a free account lets you manage all your bookings in one place, receive personalised offers, and access your booking history.",
-      },
-      {
-        q: "How long does booking confirmation take?",
-        a: "Confirmation is instant for most properties. Once your advance payment is processed, you'll receive a confirmation email with your booking reference (RST-XXXXXX) within a few minutes.",
-      },
-      {
-        q: "Can I modify my booking after confirmation?",
-        a: "Date changes and room upgrades depend on the hotel's availability and policy. Contact our support team at support@resortian.com with your booking reference and the changes you need — we'll coordinate with the property on your behalf.",
-      },
-      {
-        q: "What is the advance payment and why is it required?",
-        a: "The advance payment (minimum 20% of the total booking value) secures your reservation and guarantees the hotel will hold the room for you. The remainder is payable at check-in. The advance rate may be higher for premium properties or peak dates.",
-      },
-      {
-        q: "Can I book for someone else?",
-        a: "Yes. During checkout you can enter the guest's name and contact details. The primary booker's payment method is charged, and the hotel will check in the named guest.",
-      },
-    ],
-  },
-  {
     id: "payments",
     label: "Payments",
     icon: <CreditCard className="h-5 w-5" />,
     faqs: [
       {
         q: "What payment methods are accepted?",
-        a: "We accept all major credit and debit cards via Stripe (Visa, Mastercard, Amex) and UddoktaPay, which supports bKash, Nagad, Rocket, and local Bangladeshi cards. Payment method availability may vary by property.",
+        a: "We accept UddoktaPay, which supports bKash, Nagad, Rocket, and local Bangladeshi banks.",
       },
       {
         q: "Is my payment information secure?",
-        a: "Yes. Resortian never stores your card number. All card transactions are processed by Stripe, which is PCI DSS Level 1 certified — the highest level of payment security. UddoktaPay is regulated by Bangladesh Bank.",
-      },
-      {
-        q: "Why was my payment declined?",
-        a: "Common reasons include: insufficient funds, card blocked for online transactions, or your bank flagging an unfamiliar payment. Try a different card or payment method, or contact your bank. If the issue persists, reach out to our support team.",
-      },
-      {
-        q: "Will I receive an invoice?",
-        a: "A booking confirmation email is sent immediately after payment. If you need a formal VAT invoice, contact support@resortian.com with your booking reference and company details.",
-      },
-      {
-        q: "Can I pay the full amount online instead of paying balance at the hotel?",
-        a: "Currently, Resortian collects the advance online and the balance is paid at the hotel. Full prepayment options may be available for select properties — this will be indicated on the booking page.",
+        a: "Yes. Resortian does not store your payment information. All payments are processed securely through UddoktaPay, which only facilitates the transaction and does not store your payment details. UddoktaPay is regulated by Bangladesh Bank.",
       },
     ],
   },
@@ -80,24 +44,16 @@ const CATEGORIES: Category[] = [
     icon: <XCircle className="h-5 w-5" />,
     faqs: [
       {
-        q: "How do I cancel a booking?",
-        a: "Sign in to your account, go to 'My Bookings', open the reservation, and click 'Cancel Booking'. Guest bookers can access their booking via the link in the confirmation email.",
-      },
-      {
-        q: "When will I receive my refund?",
-        a: "Refunds are processed within 7–14 business days for card payments and 1–7 days for mobile wallets. The exact timeline depends on your bank or payment provider.",
-      },
-      {
         q: "What is the free cancellation window?",
-        a: "Cancellations made more than 72 hours before check-in are fully refunded. Cancellations within 72 hours forfeit the advance payment. See our full Cancellation Options page for details.",
-      },
-      {
-        q: "Can I get a refund if the hotel cancels my booking?",
-        a: "Yes — if a hotel cancels a confirmed booking, you will receive a full refund of your advance payment, typically within 3–5 business days. We will also help you find an alternative property.",
+        a: "Cancellations made more than 48 hours before check-in are eligible for a full refund, excluding a 50 BDT service fee. Cancellations made between 24 and 48 hours before check-in will receive a 75% refund. Cancellations made within 24 hours of check-in will receive a 50% refund.",
       },
       {
         q: "I had an emergency — can I get an exception?",
-        a: "We review exceptional-circumstances requests (medical emergencies, natural disasters, government travel restrictions) on a case-by-case basis. Email support@resortian.com with your booking reference and supporting documentation.",
+        a: "We review exceptional-circumstances requests (natural disasters or government travel restrictions) on a case-by-case basis.",
+      },
+      {
+        q: "How do I cancel a booking?",
+        a: "To cancel a booking, please contact us directly on WhatsApp with your booking details. Our support team will assist you with the cancellation process.",
       },
     ],
   },
@@ -107,70 +63,23 @@ const CATEGORIES: Category[] = [
     icon: <User className="h-5 w-5" />,
     faqs: [
       {
-        q: "How do I reset my password?",
-        a: "On the login page, click 'Forgot password?' and enter your registered phone number or email. You'll receive a reset link. If you signed up with Google, you cannot set a password — use 'Sign in with Google' instead.",
-      },
-      {
-        q: "Can I link a Google account to my existing phone account?",
-        a: "Yes — if your Google email matches the email on file in your Resortian account, signing in with Google will automatically link both accounts.",
-      },
-      {
-        q: "How do I update my profile information?",
-        a: "Go to Profile → Account Settings. You can update your name, email, address, and profile photo. Phone number changes require re-verification.",
-      },
-      {
         q: "How do I delete my account?",
         a: "Email privacy@resortian.com from your registered email address with the subject 'Account Deletion Request'. We'll confirm and delete your personal data within 30 days, except where legal retention is required.",
       },
       {
         q: "I booked as a guest — how do I see my booking?",
-        a: "Check your confirmation email for a direct booking link. If you later create an account with the same phone number used for the guest booking, you can claim it under Profile → My Bookings → Claim Booking.",
+        a: "Check your confirmation email for a direct booking link.",
       },
     ],
   },
   {
-    id: "hotels",
-    label: "Hotels, Resorts & Rooms",
-    icon: <Hotel className="h-5 w-5" />,
+    id: "bookings",
+    label: "Bookings",
+    icon: <MessageCircle className="h-5 w-5" />,
     faqs: [
       {
-        q: "Are the hotel and resort photos accurate?",
-        a: "All photos on Resortian are submitted by property owners and subject to our content review. We require accurate representation of the property. If you find a significant discrepancy, please report it via the property page or contact support.",
-      },
-      {
-        q: "What does the room capacity mean?",
-        a: "Room capacity is the maximum number of guests the room can comfortably accommodate according to the property. Exceeding capacity may incur an extra-person charge payable at the property.",
-      },
-      {
-        q: "Can I request an early check-in or late check-out?",
-        a: "These requests are handled directly by the property. You can mention your preference in the booking notes, but early check-in and late check-out are subject to availability and may incur additional charges.",
-      },
-      {
-        q: "The room I booked is unavailable on arrival — what do I do?",
-        a: "This is a rare situation but if it occurs, the property is responsible for providing an equivalent or superior room. If they cannot, contact our support team immediately at support@resortian.com and we'll assist with relocation and a full refund if necessary.",
-      },
-    ],
-  },
-  {
-    id: "reviews",
-    label: "Reviews",
-    icon: <Star className="h-5 w-5" />,
-    faqs: [
-      {
-        q: "Can anyone leave a review?",
-        a: "Reviews can be submitted by registered users. While a booking reference is optional, we encourage linking reviews to verified stays for greater credibility.",
-      },
-      {
-        q: "Can hotels or resorts delete negative reviews?",
-        a: "No. Hotels and resorts cannot delete or edit guest reviews. Only Resortian can remove a review, and only if it violates our content policy (e.g., contains false information, hate speech, or is demonstrably fraudulent).",
-      },
-      {
-        q: "How is a property's rating calculated?",
-        a: "A property's displayed rating is the simple average of all visible reviews, recalculated in real time whenever a review is added or removed.",
-      },
-      {
-        q: "I left an inaccurate review — can I edit or delete it?",
-        a: "Contact support@resortian.com with your review details and the correction you'd like to make. We'll review your request and action it within 48 hours.",
+        q: "Can I modify my booking after confirmation?",
+        a: "Date changes and room upgrades depend on the hotel's availability and policy. Contact our support team through WhatsApp with your booking reference and the changes you need — we'll coordinate with the property on your behalf.",
       },
     ],
   },
@@ -201,7 +110,7 @@ function AccordionItem({ faq }: { faq: FAQ }) {
 }
 
 export function HelpContent() {
-  const [activeCategory, setActiveCategory] = useState("booking");
+  const [activeCategory, setActiveCategory] = useState("payments");
   const [query, setQuery] = useState("");
 
   const current = CATEGORIES.find((c) => c.id === activeCategory)!;
@@ -226,8 +135,8 @@ export function HelpContent() {
             Help Center
           </h1>
           <p className="mt-3 text-primary-100">
-            Find answers to the most common questions about booking,
-            payments, and more.
+            Find answers to the most common questions about booking, payments,
+            and more.
           </p>
 
           {/* Search */}

@@ -9,6 +9,7 @@ import {
   Headphones,
   TrendingUp,
   Heart,
+  CheckCircle,
 } from "lucide-react";
 
 const STATS = [
@@ -47,71 +48,44 @@ const VALUES = [
 
 const TEAM = [
   {
-    name: "Rafiq Hossain",
+    name: "Fahim Linkon",
     role: "Chief Executive Officer",
-    bio: "Former hospitality consultant with 12 years experience across Southeast Asian markets.",
-    initials: "RH",
+    initials: "FL",
     color: "from-primary-500 to-primary-700",
   },
   {
-    name: "Nusrat Jahan",
-    role: "Chief Product Officer",
-    bio: "Product leader obsessed with reducing friction in the travel booking experience.",
-    initials: "NJ",
+    name: "Saqlain Mustaq Durjoy",
+    role: "Chief Technical Officer",
+    initials: "SD",
     color: "from-violet-500 to-violet-700",
   },
   {
-    name: "Tamim Iqbal",
-    role: "Head of Partnerships",
-    bio: "Built our hotel network from the ground up, working directly with properties across Bangladesh.",
-    initials: "TI",
+    name: "Nusrat Jahan",
+    role: "Head of Partnerships and Communication",
+    initials: "NJ",
     color: "from-amber-500 to-amber-700",
   },
   {
-    name: "Shirin Akter",
+    name: "Abdullah Alvi",
     role: "Head of Customer Experience",
-    bio: "Dedicated to making sure every traveler leaves with a story worth telling.",
-    initials: "SA",
+    initials: "AA",
     color: "from-rose-500 to-rose-700",
   },
 ];
 
-const MILESTONES = [
+const SOLUTION_POINTS = [
   {
-    year: "2020",
-    title: "Founded in Dhaka",
-    description:
-      "Resortian was born out of frustration with fragmented hotel and resort booking in Bangladesh. Two co-founders, one mission.",
+    title: "Several Verified Properties",
+    description: "From green resorts to luxury hotels.",
   },
   {
-    year: "2021",
-    title: "First 50 Properties",
+    title: "Transparent Pricing",
     description:
-      "Launched with hotels and resorts in Cox's Bazar, Sylhet, and Bandarban. Word of mouth drove our first 1,000 bookings.",
+      "What you see is exactly what you pay—no surprises at checkout.",
   },
   {
-    year: "2022",
-    title: "Mobile App Launch",
-    description:
-      "Released our iOS and Android apps. Downloads crossed 25,000 in the first quarter.",
-  },
-  {
-    year: "2023",
-    title: "Expanded to 10 Regions",
-    description:
-      "Coverage expanded to include Sundarbans, Saint Martin's Island, Rangamati, and more.",
-  },
-  {
-    year: "2024",
-    title: "50,000 Travelers",
-    description:
-      "Crossed 50,000 satisfied travelers. Introduced advance-pay booking and flexible check-in options.",
-  },
-  {
-    year: "2025",
-    title: "300+ Partner Properties",
-    description:
-      "Our network grew to over 300 verified hotels and resorts, making us Bangladesh's largest hotel & resort booking platform.",
+    title: "Instant Confirmation",
+    description: "A booking process designed to take minutes, not days.",
   },
 ];
 
@@ -127,7 +101,7 @@ export function AboutContent() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-block rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
-              Our Story
+              About Us
             </span>
             <h1 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
               Bringing Bangladesh to the World,
@@ -135,9 +109,10 @@ export function AboutContent() {
               <span className="text-primary-200">One Stay at a Time</span>
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-primary-100">
-              Resortian is Bangladesh&apos;s leading hotel &amp; resort booking platform,
-              connecting travelers with premium accommodations across Cox&apos;s
-              Bazar, Sylhet, Sundarbans, Bandarban, and beyond.
+              Resortian is Bangladesh&apos;s fastest-growing hotel &amp; resort
+              booking platform, connecting travelers with premium accommodations
+              across Cox&apos;s Bazar, Sylhet, Sundarbans, Bandarban, and
+              beyond.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
@@ -178,28 +153,23 @@ export function AboutContent() {
         </div>
       </section>
 
-      {/* Mission */}
+      {/* The Problem */}
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <span className="text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
-                Our Mission
+                The Problem
               </span>
               <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                Making Bangladesh travel effortless
+                Travel Planning Shouldn&apos;t Be a Chore
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-gray-600 dark:text-gray-400">
-                We started Resortian because booking a hotel in Bangladesh was
-                needlessly hard — scattered listings, unclear pricing, zero
-                trust signals. We set out to fix that.
-              </p>
-              <p className="mt-4 text-lg leading-relaxed text-gray-600 dark:text-gray-400">
-                Today, we partner with over 300 properties to offer verified
-                listings, transparent pricing, and a booking experience that
-                takes minutes — not days. Whether you&apos;re planning a
-                weekend getaway to Cox&apos;s Bazar or a month-long retreat in
-                the Sundarbans, Resortian is your starting point.
+                We founded Resortian because we realized that booking a resort or
+                hotel in Bangladesh was unnecessarily complicated. For too long,
+                travelers had to navigate scattered listings, hidden fees, and a
+                complete lack of reliable information. We knew there was a better
+                way to explore our beautiful country.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 {[
@@ -243,8 +213,45 @@ export function AboutContent() {
         </div>
       </section>
 
-      {/* Values */}
+      {/* The Solution */}
       <section className="bg-gray-100/60 py-20 dark:bg-gray-900/60">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
+              The Solution
+            </span>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+              Bangladesh&apos;s Fastest-Growing Booking Platform
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-gray-600 dark:text-gray-400">
+              We didn&apos;t just want to create another website; we wanted to
+              build a bridge of trust. Today, Resortian is the leading travel
+              partner for thousands of explorers, offering:
+            </p>
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
+            {SOLUTION_POINTS.map(({ title, description }) => (
+              <div
+                key={title}
+                className="rounded-2xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/40">
+                  <CheckCircle className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                </div>
+                <h3 className="mt-4 text-base font-semibold text-gray-900 dark:text-white">
+                  {title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                  {description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
@@ -275,55 +282,6 @@ export function AboutContent() {
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
-              Our Journey
-            </span>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-              From idea to industry leader
-            </h2>
-          </div>
-          <div className="mt-12 mx-auto max-w-3xl">
-            <div className="relative">
-              <div className="absolute left-16 top-0 h-full w-px bg-gray-200 dark:bg-gray-800 sm:left-20" />
-              <div className="space-y-8">
-                {MILESTONES.map(({ year, title, description }, index) => (
-                  <div key={year} className="relative flex gap-6 sm:gap-8">
-                    <div className="relative flex w-10 shrink-0 flex-col items-center sm:w-12">
-                      <div
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold sm:h-12 sm:w-12 sm:text-sm ${
-                          index === MILESTONES.length - 1
-                            ? "border-primary-600 bg-primary-600 text-white"
-                            : "border-gray-300 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
-                        }`}
-                      >
-                        {year.slice(2)}
-                      </div>
-                    </div>
-                    <div className="rounded-2xl border border-gray-200 bg-white p-5 flex-1 dark:border-gray-700 dark:bg-gray-900">
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">
-                          {year}
-                        </span>
-                        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                          {title}
-                        </h3>
-                      </div>
-                      <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-                        {description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Team */}
       <section className="bg-gray-100/60 py-20 dark:bg-gray-900/60">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -332,15 +290,11 @@ export function AboutContent() {
               The People
             </span>
             <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-              Meet our team
+              Meet Our Team
             </h2>
-            <p className="mt-4 text-gray-500 dark:text-gray-400">
-              A small, passionate team obsessed with making Bangladesh travel
-              better.
-            </p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {TEAM.map(({ name, role, bio, initials, color }) => (
+            {TEAM.map(({ name, role, initials, color }) => (
               <div
                 key={name}
                 className="rounded-2xl border border-gray-200 bg-white p-6 text-center transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
@@ -356,25 +310,24 @@ export function AboutContent() {
                 <p className="text-sm font-medium text-primary-600 dark:text-primary-400">
                   {role}
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-                  {bio}
-                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* Your Journey Starts Here - CTA */}
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-primary-600 to-primary-800 px-8 py-16 text-center sm:px-16">
             <h2 className="text-3xl font-bold text-white sm:text-4xl">
-              Ready to explore Bangladesh?
+              Your Journey Starts Here
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-primary-100">
-              Browse 300+ verified hotels & resorts across 10+ destinations. Book in
-              minutes with just 20% advance.
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-primary-100">
+              If you&apos;re chasing the sunset on the shores of Cox&apos;s
+              Bazar, seeking the quiet mystery of the Sundarbans, or finding a
+              peaceful escape in Sylhet, Resortian is your ultimate starting
+              point. We handle the logistics so you can focus on the memories.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link

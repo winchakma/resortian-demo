@@ -54,8 +54,10 @@ const navLinkCls =
 
 const NavLinks = memo(function NavLinks({
   accountHref,
+  mounted,
 }: {
   accountHref: string;
+  mounted: boolean;
 }) {
   return (
     <nav className="hidden lg:flex lg:items-center lg:gap-1">
@@ -69,13 +71,15 @@ const NavLinks = memo(function NavLinks({
           {link.label}
         </Link>
       ))}
-      <Link
-        href={accountHref}
-        prefetch={true}
-        className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-      >
-        My Account
-      </Link>
+      {mounted && (
+        <Link
+          href={accountHref}
+          prefetch={true}
+          className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+        >
+          My Account
+        </Link>
+      )}
     </nav>
   );
 });
@@ -208,7 +212,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
           <Logo />
-          <NavLinks accountHref={accountHref} />
+          <NavLinks accountHref={accountHref} mounted={mounted} />
         </div>
 
         <div className="flex items-center gap-1">

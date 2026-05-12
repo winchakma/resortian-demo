@@ -35,10 +35,10 @@ export default function ListPropertyPage() {
                 List Your Property on Resortian
               </h1>
               <p className="mt-4 text-gray-600 dark:text-gray-400">
-                Join Bangladesh&apos;s fastest-growing hotel &amp; resort booking platform
-                and connect your property with thousands of verified travellers
-                every month — from Cox&apos;s Bazar beach resorts to Sylhet
-                tea-garden retreats.
+                Join Bangladesh&apos;s fastest-growing hotel &amp; resort
+                booking platform and connect your property with thousands of
+                verified travellers every month — from Cox&apos;s Bazar beach
+                resorts to Sylhet tea-garden retreats.
               </p>
 
               <ul className="mt-8 space-y-3">
@@ -57,7 +57,6 @@ export default function ListPropertyPage() {
                 {[
                   { value: "42+", label: "Listed Properties" },
                   { value: "580+", label: "Bookings Made" },
-                  { value: "7%", label: "Base Commission" },
                 ].map((stat) => (
                   <div
                     key={stat.label}

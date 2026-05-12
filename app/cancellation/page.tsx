@@ -1,82 +1,75 @@
 import type { Metadata } from "next";
 import { Header } from "@/sections/Header";
 import { Footer } from "@/sections/Footer";
-import { AlertCircle, CheckCircle, XCircle, Clock } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle,
+  Calculator,
+  CreditCard,
+  BookOpen,
+  CloudLightning,
+} from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Cancellation Options | Resortian",
+  title: "Cancellation & Refund Policy | Resortian",
   description:
-    "Learn about Resortian's cancellation and refund policies for hotel and resort bookings.",
+    "Learn about Resortian's cancellation and refund policies for hotel and resort bookings in Bangladesh.",
 };
 
-const POLICIES = [
+const REFUND_TABLE = [
   {
-    icon: <CheckCircle className="h-6 w-6 text-green-500" />,
-    title: "Free Cancellation",
-    badge: "Full Refund",
-    badgeColor:
-      "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
-    description:
-      "Cancel more than 72 hours before your check-in time and receive a 100% refund of your advance payment — no questions asked.",
-    details: [
-      "Advance payment refunded in full",
-      "Refund processed within 7–14 business days",
-      "No cancellation fee",
-      "Applies to all standard bookings",
-    ],
+    window: "More than 48 Hours before check-in",
+    refund: "Full Refund",
+    fee: "50 /=",
+    color: "text-green-600 dark:text-green-400",
+    bgColor: "bg-green-50 dark:bg-green-950/30",
   },
   {
-    icon: <Clock className="h-6 w-6 text-amber-500" />,
-    title: "Late Cancellation",
-    badge: "No Refund",
-    badgeColor:
-      "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
-    description:
-      "Cancellations within 72 hours of check-in: the advance payment (minimum 20% of total booking value) is non-refundable.",
-    details: [
-      "Advance payment is forfeited",
-      "No additional charges beyond advance",
-      "Balance due is waived",
-      "Property notified immediately",
-    ],
+    window: "Between 24 and 48 Hours before check-in",
+    refund: "75% Refund",
+    fee: "25% of the advance payment",
+    color: "text-amber-600 dark:text-amber-400",
+    bgColor: "bg-amber-50 dark:bg-amber-950/30",
   },
   {
-    icon: <XCircle className="h-6 w-6 text-red-500" />,
-    title: "No-Show",
-    badge: "Full Charge",
-    badgeColor:
-      "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
-    description:
-      "If you do not check in and have not cancelled, the advance payment is forfeited. The property reserves the right to charge the full booking amount.",
-    details: [
-      "Advance payment forfeited",
-      "Property may charge full amount",
-      "Booking marked as no-show",
-      "Contact support if circumstances were exceptional",
-    ],
+    window: "24 Hours or Less before check-in",
+    refund: "50% Refund",
+    fee: "50% of the advance payment",
+    color: "text-red-600 dark:text-red-400",
+    bgColor: "bg-red-50 dark:bg-red-950/30",
   },
 ];
 
-const STEPS = [
+const EXAMPLES = [
   {
-    step: "1",
-    title: "Go to My Bookings",
-    body: 'Sign in to your account and navigate to "My Bookings" from your profile menu.',
+    label: "Scenario A",
+    timing: "36 hours before check-in",
+    detail: "You receive a 75% refund of your 2,000 BDT advance.",
+    result: "Refund Amount: 1,500 BDT",
   },
   {
-    step: "2",
-    title: "Select the Booking",
-    body: "Find the reservation you wish to cancel and click on it to open the booking details.",
+    label: "Scenario B",
+    timing: "12 hours before check-in",
+    detail: "You receive a 50% refund of your 2,000 BDT advance.",
+    result: "Refund Amount: 1,000 BDT",
+  },
+];
+
+const REFUND_METHOD_DETAILS = [
+  {
+    title: "Payment Channels",
+    description:
+      "Refunds will be processed through the original payment method used (e.g., bKash, Nagad, Rocket, or Credit/Debit Cards).",
   },
   {
-    step: "3",
-    title: "Request Cancellation",
-    body: 'Click the "Cancel Booking" button and select an optional cancellation reason.',
+    title: "Timeframe",
+    description:
+      "Please allow 5–10 working days for the amount to reflect in your account.",
   },
   {
-    step: "4",
-    title: "Confirmation & Refund",
-    body: "You will receive a cancellation confirmation by email. If a refund applies, it will be processed automatically to your original payment method.",
+    title: "Gateway Fees",
+    description:
+      "Please note that any non-refundable service charges or transaction fees imposed by the payment gateway will be deducted from the final refund amount.",
   },
 ];
 
@@ -89,103 +82,65 @@ export default function CancellationPage() {
         <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500 py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <p className="text-xs font-semibold uppercase tracking-widest text-primary-100">
-              Support
+              Policy
             </p>
             <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
-              Cancellation Options
+              Cancellation &amp; Refund Policy
             </h1>
-            <p className="mt-3 max-w-xl text-primary-100">
-              We understand that plans change. Here is everything you need to
-              know about cancelling a Resortian booking.
+            <p className="mt-3 max-w-2xl text-primary-100">
+              In our platform, Resortian, we value your plans. However, because
+              rooms are held exclusively for you, cancellations impact our
+              partner resorts. Our refund policy applies to the 20% advance
+              payment made at the time of booking.
             </p>
           </div>
         </section>
 
-        {/* Policy cards */}
+        {/* 1. Refund Breakdown */}
         <section className="py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              Cancellation Policies
-            </h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              The policy that applies depends on when you cancel relative to
-              your check-in date.
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
+                1
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                Refund Breakdown
+              </h2>
+            </div>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              The amount refunded depends on when you notify us of your
+              cancellation relative to the standard check-in time.
             </p>
 
-            <div className="mt-6 grid gap-6 md:grid-cols-3">
-              {POLICIES.map((policy) => (
-                <div
-                  key={policy.title}
-                  className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    {policy.icon}
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${policy.badgeColor}`}
-                    >
-                      {policy.badge}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 font-bold text-gray-900 dark:text-white">
-                    {policy.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    {policy.description}
-                  </p>
-                  <ul className="mt-4 space-y-2">
-                    {policy.details.map((d, i) => (
-                      <li
-                        key={i}
-                        className="flex gap-2 text-sm text-gray-600 dark:text-gray-400"
-                      >
-                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500" />
-                        {d}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Refund timeline */}
-        <section className="bg-white py-12 dark:bg-gray-900">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              Refund Timeline
-            </h2>
             <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700">
               <table className="min-w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
-                    {["Payment Method", "Refund Timeline", "Notes"].map(
-                      (h) => (
-                        <th
-                          key={h}
-                          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400"
-                        >
-                          {h}
-                        </th>
-                      ),
-                    )}
+                    {[
+                      "Cancellation Window",
+                      "Refund Amount",
+                      "Cancellation Fee",
+                    ].map((h) => (
+                      <th
+                        key={h}
+                        className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400"
+                      >
+                        {h}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-gray-900">
-                  {[
-                    ["Stripe (Card)", "5–10 business days", "Subject to card issuer processing time"],
-                    ["UddoktaPay", "3–7 business days", "Refunded to original wallet or card"],
-                    ["bKash / Nagad", "1–3 business days", "Refunded to the originating mobile wallet"],
-                  ].map(([method, timeline, note]) => (
-                    <tr key={method}>
+                  {REFUND_TABLE.map(({ window: w, refund, fee, color }) => (
+                    <tr key={w}>
                       <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                        {method}
+                        {w}
+                      </td>
+                      <td className={`px-6 py-4 font-semibold ${color}`}>
+                        {refund}
                       </td>
                       <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
-                        {timeline}
-                      </td>
-                      <td className="px-6 py-4 text-gray-500 dark:text-gray-500">
-                        {note}
+                        {fee}
                       </td>
                     </tr>
                   ))}
@@ -195,26 +150,86 @@ export default function CancellationPage() {
           </div>
         </section>
 
-        {/* How to cancel */}
+        {/* 2. Calculation Examples */}
+        <section className="bg-white py-12 dark:bg-gray-900">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
+                2
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                Calculation Examples
+              </h2>
+            </div>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              To keep things transparent, here is how the math works if your
+              Total Booking is{" "}
+              <span className="font-semibold text-gray-700 dark:text-gray-300">
+                10,000 BDT
+              </span>{" "}
+              (Advance Paid:{" "}
+              <span className="font-semibold text-gray-700 dark:text-gray-300">
+                2,000 BDT
+              </span>
+              ):
+            </p>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {EXAMPLES.map(({ label, timing, detail, result }) => (
+                <div
+                  key={label}
+                  className="rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <div className="flex items-center gap-3">
+                    <Calculator className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                      {label}
+                    </h3>
+                    <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-semibold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
+                      {timing}
+                    </span>
+                  </div>
+                  <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                    {detail}
+                  </p>
+                  <div className="mt-3 flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <span className="text-sm font-bold text-green-700 dark:text-green-400">
+                      {result}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 3. Refund Method & Timeline */}
         <section className="py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              How to Cancel a Booking
-            </h2>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {STEPS.map((s) => (
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
+                3
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                Refund Method &amp; Timeline
+              </h2>
+            </div>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+              {REFUND_METHOD_DETAILS.map(({ title, description }) => (
                 <div
-                  key={s.step}
+                  key={title}
                   className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900"
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
-                    {s.step}
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/40">
+                    <CreditCard className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   </div>
                   <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">
-                    {s.title}
+                    {title}
                   </h3>
                   <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    {s.body}
+                    {description}
                   </p>
                 </div>
               ))}
@@ -222,30 +237,56 @@ export default function CancellationPage() {
           </div>
         </section>
 
-        {/* Exceptional circumstances */}
+        {/* 4. How to Cancel */}
         <section className="bg-white py-12 dark:bg-gray-900">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-900/50 dark:bg-amber-900/20">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
+                4
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                How to Cancel
+              </h2>
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
               <div className="flex items-start gap-4">
-                <AlertCircle className="mt-0.5 h-6 w-6 shrink-0 text-amber-500" />
+                <BookOpen className="mt-0.5 h-6 w-6 shrink-0 text-primary-600 dark:text-primary-400" />
+                <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                  To initiate a cancellation, please visit the{" "}
+                  <span className="font-semibold">&quot;My Bookings&quot;</span>{" "}
+                  section on the Resortian website or mobile app. For emergency
+                  assistance, you may contact our Dhaka-based support line.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. Special Circumstances */}
+        <section className="py-12">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
+                5
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                Special Circumstances
+              </h2>
+            </div>
+
+            <div className="mt-6 mx-auto max-w-3xl rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-900/50 dark:bg-amber-900/20">
+              <div className="flex items-start gap-4">
+                <CloudLightning className="mt-0.5 h-6 w-6 shrink-0 text-amber-500" />
                 <div>
                   <h3 className="font-semibold text-amber-800 dark:text-amber-200">
-                    Exceptional Circumstances
+                    Extreme Weather &amp; National Emergencies
                   </h3>
                   <p className="mt-2 text-sm text-amber-700 dark:text-amber-300">
-                    In cases of medical emergencies, natural disasters,
-                    government-imposed travel restrictions, or other
-                    circumstances beyond your control, we review refund
-                    requests on a case-by-case basis. Contact our support team
-                    at{" "}
-                    <a
-                      href="mailto:support@resortian.com"
-                      className="font-semibold underline"
-                    >
-                      support@resortian.com
-                    </a>{" "}
-                    with relevant documentation and we will do our best to
-                    assist you.
+                    In cases of extreme weather or national emergencies within
+                    Bangladesh, Resortian reserves the right to override these
+                    terms to facilitate a full refund or a free date change in
+                    coordination with the property management.
                   </p>
                 </div>
               </div>

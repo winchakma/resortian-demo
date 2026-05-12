@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 const WHATSAPP_URL =
@@ -10,7 +11,14 @@ const BOTTOM_BAR_PAGES = ["/cart", "/checkout"];
 
 export default function WhatsAppButton() {
   const pathname = usePathname();
-  const hasBottomBar = BOTTOM_BAR_PAGES.includes(pathname);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Only apply dynamic positioning after mount to avoid hydration mismatch
+  const hasBottomBar = mounted && BOTTOM_BAR_PAGES.includes(pathname);
 
   return (
     <a
@@ -18,8 +26,8 @@ export default function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className={`fixed right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-all duration-200 hover:scale-110 hover:shadow-xl ${
-        hasBottomBar ? "bottom-24 lg:bottom-6" : "bottom-6"
+      className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-all duration-200 hover:scale-110 hover:shadow-xl ${
+        hasBottomBar ? "max-lg:bottom-24" : ""
       }`}
     >
       <svg
@@ -33,3 +41,4 @@ export default function WhatsAppButton() {
     </a>
   );
 }
+
