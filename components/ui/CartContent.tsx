@@ -74,8 +74,9 @@ export function CartContent() {
           </Link>
         </div>
       ) : (
-        /* ── Cart layout ── */
-        <div className="grid gap-8 lg:grid-cols-[1fr_400px]">
+        <>
+          {/* ── Cart layout ── */}
+          <div className="grid gap-8 pb-28 lg:grid-cols-[1fr_400px] lg:pb-0">
           {/* Left — cart items */}
           <div className="space-y-4">
             {items.map((item) => (
@@ -320,7 +321,7 @@ export function CartContent() {
 
             <Link
               href="/checkout"
-              className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
+              className="mt-5 hidden w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 lg:flex"
             >
               Checkout
               <ArrowRight className="h-4 w-4" />
@@ -334,6 +335,28 @@ export function CartContent() {
             </Link>
           </div>
         </div>
+
+        {/* ── Mobile fixed bottom checkout bar ── */}
+        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/95 lg:hidden">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                Pay now (20%)
+              </p>
+              <p className="text-lg font-bold text-primary-700 dark:text-primary-300">
+                ৳{advanceAmount.toLocaleString()}
+              </p>
+            </div>
+            <Link
+              href="/checkout"
+              className="flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
+            >
+              Checkout
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+        </>
       )}
     </div>
   );

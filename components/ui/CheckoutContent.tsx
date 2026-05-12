@@ -132,6 +132,9 @@ export function CheckoutContent() {
   } | null>(null);
   const [promoError, setPromoError] = useState("");
 
+  // Ref for the guest details form so mobile fixed button can trigger submit
+  const guestFormRef = useRef<HTMLFormElement>(null);
+
   // Derived totals — recomputed on every render so they stay in sync with appliedPromo
   const promoDiscount = calcDiscount(appliedPromo, totalAmount);
   const discountedTotal = Math.max(0, totalAmount - promoDiscount);
@@ -380,7 +383,7 @@ export function CheckoutContent() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
         {/* ── Left column ── */}
-        <div className="space-y-6">
+        <div className="space-y-6 pb-28 lg:pb-0">
           {/* ── STEP: details ── */}
           {step === "details" && (
             <div className="space-y-6">
@@ -549,6 +552,7 @@ export function CheckoutContent() {
 
               {/* ── Guest info form ── */}
               <form
+                ref={guestFormRef}
                 onSubmit={guestForm.handleSubmit(handleGuestDetailsNext)}
                 className="space-y-6"
                 noValidate
@@ -644,7 +648,7 @@ export function CheckoutContent() {
 
                 <button
                   type="submit"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-4 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
+                  className="hidden w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-4 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 lg:flex"
                 >
                   Continue to Payment
                   <ChevronRight className="h-4 w-4" />
@@ -831,7 +835,7 @@ export function CheckoutContent() {
                 type="button"
                 onClick={handlePaymentConfirm}
                 disabled={bookingSubmitting}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-4 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="hidden w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-4 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60 lg:flex"
               >
                 {bookingSubmitting ? (
                   <>
@@ -973,6 +977,74 @@ export function CheckoutContent() {
           </div>
         </div>
       </div>
+
+      {/* ── Mobile fixed bottom bar ── */}
+      {items.length > 0 && (
+        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/95 lg:hidden">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                Pay now (20%)
+              </p>
+              <p className="text-lg font-bold text-primary-700 dark:text-primary-300">
+                ৳{advancePay.toLocaleString()}
+              </p>
+            </div>
+
+            {step === "details" ? (
+              <button
+                type="button"
+                onClick={() => {
+                  if (guestFormRef.current) {
+                    guestFormRef.current.requestSubmit();
+                  }
+                }}
+                className="flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800"
+              >
+                Continue to Payment
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handlePaymentConfirm}
+                disabled={bookingSubmitting}
+                className="flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {bookingSubmitting ? (
+                  <>
+                    <svg
+                      className="h-4 w-4 animate-spin"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      />
+                    </svg>
+                    Redirecting…
+                  </>
+                ) : (
+                  <>
+                    <Lock className="h-4 w-4" />
+                    Pay & Confirm
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
