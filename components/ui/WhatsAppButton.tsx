@@ -1,16 +1,26 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+
 const WHATSAPP_URL =
   "https://wa.me/8801611422223?text=Hi!%20I%20have%20a%20question%20about%20your%20services";
 
+// Pages that have a fixed bottom action bar on mobile
+const BOTTOM_BAR_PAGES = ["/cart", "/checkout"];
+
 export default function WhatsAppButton() {
+  const pathname = usePathname();
+  const hasBottomBar = BOTTOM_BAR_PAGES.includes(pathname);
+
   return (
     <a
       href={WHATSAPP_URL}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-transform duration-200 hover:scale-110 hover:shadow-xl"
+      className={`fixed right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition-all duration-200 hover:scale-110 hover:shadow-xl ${
+        hasBottomBar ? "bottom-24 lg:bottom-6" : "bottom-6"
+      }`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
