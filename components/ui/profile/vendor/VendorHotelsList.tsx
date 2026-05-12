@@ -198,16 +198,16 @@ export default function VendorHotelsList() {
                 className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
               />
             </button>
-            {/* {hotels.length === 0 && ( */}
-            <button
-              type="button"
-              onClick={() => setModal("create-hotel")}
-              className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
-            >
-              <Plus className="h-4 w-4" />
-              New Property
-            </button>
-            {/* )} */}
+            {hotels.length === 0 && (
+              <button
+                type="button"
+                onClick={() => setModal("create-hotel")}
+                className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
+              >
+                <Plus className="h-4 w-4" />
+                New Property
+              </button>
+            )}
           </div>
         </div>
 
