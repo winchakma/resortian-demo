@@ -54,10 +54,8 @@ const navLinkCls =
 
 const NavLinks = memo(function NavLinks({
   accountHref,
-  mounted,
 }: {
   accountHref: string;
-  mounted: boolean;
 }) {
   return (
     <nav className="hidden lg:flex lg:items-center lg:gap-1">
@@ -71,15 +69,13 @@ const NavLinks = memo(function NavLinks({
           {link.label}
         </Link>
       ))}
-      {mounted && (
-        <Link
-          href={accountHref}
-          prefetch={true}
-          className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-        >
-          My Account
-        </Link>
-      )}
+      <Link
+        href={accountHref}
+        prefetch={true}
+        className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+      >
+        My Account
+      </Link>
     </nav>
   );
 });
@@ -195,7 +191,8 @@ export function Header() {
     setMounted(true);
   }, []);
 
-  const accountHref = user ? "/profile" : "/auth/customer";
+  // Use a stable default during SSR and initial hydration to avoid mismatch
+  const accountHref = mounted && user ? "/profile" : "/auth/customer";
 
   const mobileLinks = useMemo(() => NAV_LINKS, []);
 
@@ -212,7 +209,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
           <Logo />
-          <NavLinks accountHref={accountHref} mounted={mounted} />
+          <NavLinks accountHref={accountHref} />
         </div>
 
         <div className="flex items-center gap-1">

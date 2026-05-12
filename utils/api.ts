@@ -794,7 +794,7 @@ export async function getFooterData(): Promise<FooterColumn[]> {
       title: "Company",
       links: [
         { label: "About Us", href: "/about" },
-        { label: "Careers", href: "/careers" },
+        // { label: "Careers", href: "/careers" },
         { label: "Blog", href: "/blog" },
       ],
     },
