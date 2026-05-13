@@ -48,17 +48,23 @@ const HOW_IT_WORKS = [
 
 const BENEFITS = [
   {
-    icon: <BadgePercent className="h-6 w-6 text-primary-600 dark:text-primary-400" />,
+    icon: (
+      <BadgePercent className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+    ),
     title: "Competitive Commission",
     body: "Earn a percentage on every advance payment made using your code. The more you promote, the more you earn.",
   },
   {
-    icon: <TrendingUp className="h-6 w-6 text-primary-600 dark:text-primary-400" />,
+    icon: (
+      <TrendingUp className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+    ),
     title: "Real-Time Tracking",
     body: "See how many bookings your code has generated and your pending earnings — all from your profile dashboard.",
   },
   {
-    icon: <ShieldCheck className="h-6 w-6 text-primary-600 dark:text-primary-400" />,
+    icon: (
+      <ShieldCheck className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+    ),
     title: "Reliable Payouts",
     body: "Commissions are paid out monthly via bKash, Nagad, or bank transfer once you hit the minimum threshold.",
   },
@@ -83,7 +89,7 @@ const FAQS = [
   },
   {
     q: "I already have a Resortian account. Do I need a new one?",
-    a: "Sign in below with your existing credentials. If your account isn't already an affiliate account, contact us at affiliates@resortian.com and we'll upgrade it.",
+    a: "Sign in below with your existing credentials. If your account isn't already an affiliate account, contact us at info@resortian.com and we'll upgrade it.",
   },
 ];
 
@@ -92,7 +98,6 @@ export default function AffiliatesPage() {
     <>
       <Header />
       <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
-
         {/* ── Hero ── */}
         <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500 py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -163,7 +168,6 @@ export default function AffiliatesPage() {
         <section className="bg-white py-14 dark:bg-gray-900">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
-
               {/* Left: benefits */}
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -245,7 +249,6 @@ export default function AffiliatesPage() {
             </div>
           </div>
         </section>
-
       </main>
       <Footer />
     </>

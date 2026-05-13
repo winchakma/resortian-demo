@@ -94,9 +94,9 @@ export default function CookiesPage() {
               Last updated: {LAST_UPDATED}
             </p>
             <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
-              This Cookie Policy explains how Resortian uses cookies and
-              similar technologies when you visit our platform. It should be
-              read alongside our{" "}
+              This Cookie Policy explains how Resortian uses cookies and similar
+              technologies when you visit our platform. It should be read
+              alongside our{" "}
               <a
                 href="/privacy"
                 className="font-medium text-primary-600 hover:underline dark:text-primary-400"
@@ -124,10 +124,10 @@ export default function CookiesPage() {
 
             <Section title="How We Use Cookies">
               <p>
-                Resortian uses cookies for four purposes: keeping you logged
-                in, remembering your preferences, understanding how the
-                platform is used, and personalising the marketing you see. The
-                table below breaks these down in detail.
+                Resortian uses cookies for four purposes: keeping you logged in,
+                remembering your preferences, understanding how the platform is
+                used, and personalising the marketing you see. The table below
+                breaks these down in detail.
               </p>
             </Section>
 
@@ -172,8 +172,8 @@ export default function CookiesPage() {
 
             <Section title="Third-Party Cookies">
               <p>
-                Some cookies on our platform are set by third-party services
-                we use:
+                Some cookies on our platform are set by third-party services we
+                use:
               </p>
               <ul className="ml-4 mt-2 space-y-1.5">
                 {[
@@ -189,15 +189,13 @@ export default function CookiesPage() {
                 ))}
               </ul>
               <p className="mt-3">
-                These third parties operate under their own privacy policies.
-                We encourage you to review them.
+                These third parties operate under their own privacy policies. We
+                encourage you to review them.
               </p>
             </Section>
 
             <Section title="Managing Your Cookie Preferences">
-              <p>
-                You can control cookies in several ways:
-              </p>
+              <p>You can control cookies in several ways:</p>
               <ul className="ml-4 mt-2 space-y-1.5">
                 {[
                   "Browser settings — most browsers allow you to block or delete cookies. Note that blocking all cookies will prevent login and some features from working",
@@ -215,8 +213,8 @@ export default function CookiesPage() {
             <Section title="Cookie Lifespans">
               <p>
                 Session cookies are deleted when you close your browser.
-                Persistent cookies remain on your device for a set period —
-                our authentication remember-me cookie lasts 7 days, analytics
+                Persistent cookies remain on your device for a set period — our
+                authentication remember-me cookie lasts 7 days, analytics
                 cookies typically expire after 13 months, and marketing cookies
                 after 90 days.
               </p>
@@ -224,10 +222,10 @@ export default function CookiesPage() {
 
             <Section title="Changes to This Policy">
               <p>
-                We may update this Cookie Policy as our use of cookies
-                evolves. We will notify you of significant changes via the
-                platform or by email. Continued use of Resortian after changes
-                take effect constitutes acceptance.
+                We may update this Cookie Policy as our use of cookies evolves.
+                We will notify you of significant changes via the platform or by
+                email. Continued use of Resortian after changes take effect
+                constitutes acceptance.
               </p>
             </Section>
 
@@ -235,10 +233,10 @@ export default function CookiesPage() {
               <p>
                 Questions about our use of cookies? Email{" "}
                 <a
-                  href="mailto:privacy@resortian.com"
+                  href="mailto:info@resortian.com"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-400"
                 >
-                  privacy@resortian.com
+                  info@resortian.com
                 </a>
                 .
               </p>

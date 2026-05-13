@@ -393,10 +393,10 @@ export function CareersContent() {
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Send a speculative application to{" "}
               <a
-                href="mailto:career@resortian.com"
+                href="mailto:info@resortian.com"
                 className="font-semibold text-primary-600 hover:underline dark:text-primary-400"
               >
-                career@resortian.com
+                info@resortian.com
               </a>{" "}
               and tell us how you can help.
             </p>
@@ -530,10 +530,10 @@ export function CareersContent() {
                   <p className="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
                     Email{" "}
                     <a
-                      href={`mailto:career@resortian.com?subject=${encodeURIComponent(`Application: ${selected.title}`)}`}
+                      href={`mailto:info@resortian.com?subject=${encodeURIComponent(`Application: ${selected.title}`)}`}
                       className="font-semibold text-primary-600 hover:underline dark:text-primary-400"
                     >
-                      career@resortian.com
+                      info@resortian.com
                     </a>{" "}
                     with your CV and a short note about why you are a great fit
                     for this role.

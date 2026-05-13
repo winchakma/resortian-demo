@@ -13,7 +13,8 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Partner Hub | Resortian",
-  description: "Resources, tools, and guidance for Resortian hotel and resort partners.",
+  description:
+    "Resources, tools, and guidance for Resortian hotel and resort partners.",
 };
 
 const FEATURES = [
@@ -229,7 +230,7 @@ export default function PartnerHubPage() {
                     href="mailto:partners@resortian.com"
                     className="font-medium text-primary-600 hover:underline dark:text-primary-400"
                   >
-                    partners@resortian.com
+                    info@resortian.com
                   </a>
                   .
                 </p>

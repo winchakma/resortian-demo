@@ -45,7 +45,7 @@ const CONTACT_CARDS = [
   {
     icon: Mail,
     title: "Email Us",
-    lines: ["support@resortian.com", "bookings@resortian.com"],
+    lines: ["support@resortian.com"],
     sub: "We reply within 24 hours",
     color:
       "bg-primary-50 text-primary-600 dark:bg-primary-950/40 dark:text-primary-400",

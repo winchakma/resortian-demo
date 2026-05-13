@@ -61,11 +61,11 @@ export default function PrivacyPage() {
             </p>
             <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
               Resortian (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;)
-              operates the Resortian hotel & resort booking platform. This Privacy Policy
-              explains how we collect, use, disclose, and safeguard your
-              information when you use our website and services. Please read it
-              carefully. By using Resortian, you consent to the practices
-              described here.
+              operates the Resortian hotel & resort booking platform. This
+              Privacy Policy explains how we collect, use, disclose, and
+              safeguard your information when you use our website and services.
+              Please read it carefully. By using Resortian, you consent to the
+              practices described here.
             </p>
           </div>
         </div>
@@ -74,7 +74,9 @@ export default function PrivacyPage() {
         <div className="mx-auto max-w-3xl px-4 pb-16 sm:px-6 lg:px-8">
           <div className="rounded-2xl border border-gray-200 bg-white px-6 py-8 dark:border-gray-700 dark:bg-gray-900 sm:px-10">
             <Section title="1. Information We Collect">
-              <p>We collect information you provide directly to us, including:</p>
+              <p>
+                We collect information you provide directly to us, including:
+              </p>
               <Ul
                 items={[
                   "Account registration data: name, phone number, email address, and password hash",
@@ -87,9 +89,8 @@ export default function PrivacyPage() {
               <p className="mt-3">
                 We also automatically collect certain technical information when
                 you use our platform: IP address, browser type, operating
-                system, referring URLs, pages visited, and timestamps. This
-                data is collected via server logs and standard web analytics
-                tools.
+                system, referring URLs, pages visited, and timestamps. This data
+                is collected via server logs and standard web analytics tools.
               </p>
             </Section>
 
@@ -131,8 +132,8 @@ export default function PrivacyPage() {
                 is active. Booking records are retained for seven years for
                 accounting and legal compliance purposes. You may request
                 deletion of your account at any time; we will anonymise or
-                delete your personal data within 30 days, except where
-                retention is required by law.
+                delete your personal data within 30 days, except where retention
+                is required by law.
               </p>
             </Section>
 
@@ -142,16 +143,14 @@ export default function PrivacyPage() {
                 TLS-encrypted data transmission, bcrypt password hashing, and
                 role-based access controls. No method of transmission over the
                 internet is 100% secure; we cannot guarantee absolute security
-                but we are committed to protecting your data and will notify
-                you promptly in the event of a breach that affects your
-                personal information.
+                but we are committed to protecting your data and will notify you
+                promptly in the event of a breach that affects your personal
+                information.
               </p>
             </Section>
 
             <Section title="6. Your Rights">
-              <p>
-                Subject to applicable law, you have the right to:
-              </p>
+              <p>Subject to applicable law, you have the right to:</p>
               <Ul
                 items={[
                   "Access the personal data we hold about you",
@@ -164,10 +163,10 @@ export default function PrivacyPage() {
               <p className="mt-3">
                 To exercise any of these rights, contact us at{" "}
                 <a
-                  href="mailto:privacy@resortian.com"
+                  href="mailto:info@resortian.com"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-400"
                 >
-                  privacy@resortian.com
+                  info@resortian.com
                 </a>
                 .
               </p>
@@ -190,8 +189,8 @@ export default function PrivacyPage() {
 
             <Section title="8. Third-Party Links">
               <p>
-                Our platform may contain links to third-party websites (hotel and resort
-                websites, payment gateways, social media). We are not
+                Our platform may contain links to third-party websites (hotel
+                and resort websites, payment gateways, social media). We are not
                 responsible for the privacy practices of those sites and
                 encourage you to read their privacy policies before providing
                 any personal information.
@@ -200,9 +199,9 @@ export default function PrivacyPage() {
 
             <Section title="9. Children's Privacy">
               <p>
-                Resortian is not directed at children under the age of 13. We
-                do not knowingly collect personal information from children. If
-                you believe a child has provided us with personal data, please
+                Resortian is not directed at children under the age of 13. We do
+                not knowingly collect personal information from children. If you
+                believe a child has provided us with personal data, please
                 contact us and we will delete it promptly.
               </p>
             </Section>
@@ -222,10 +221,10 @@ export default function PrivacyPage() {
                 If you have questions or concerns about this Privacy Policy,
                 please contact our Data Protection team at{" "}
                 <a
-                  href="mailto:privacy@resortian.com"
+                  href="mailto:info@resortian.com"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-400"
                 >
-                  privacy@resortian.com
+                  info@resortian.com
                 </a>{" "}
                 or write to us at: Resortian Ltd, Level 5, 42 Gulshan Avenue,
                 Dhaka 1212, Bangladesh.

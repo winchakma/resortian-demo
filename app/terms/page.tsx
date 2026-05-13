@@ -62,9 +62,9 @@ export default function TermsPage() {
             <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
               These Terms of Service (&quot;Terms&quot;) govern your access to
               and use of Resortian&apos;s website, mobile applications, and
-              booking services (collectively, the &quot;Platform&quot;).
-              Please read them carefully. By creating an account or making a
-              booking, you agree to be bound by these Terms.
+              booking services (collectively, the &quot;Platform&quot;). Please
+              read them carefully. By creating an account or making a booking,
+              you agree to be bound by these Terms.
             </p>
           </div>
         </div>
@@ -74,25 +74,25 @@ export default function TermsPage() {
           <div className="rounded-2xl border border-gray-200 bg-white px-6 py-8 dark:border-gray-700 dark:bg-gray-900 sm:px-10">
             <Section title="1. Eligibility">
               <p>
-                You must be at least 18 years old to create an account or make
-                a booking on Resortian. By using the Platform, you represent
-                that you are of legal age and have the capacity to enter into a
+                You must be at least 18 years old to create an account or make a
+                booking on Resortian. By using the Platform, you represent that
+                you are of legal age and have the capacity to enter into a
                 binding contract. If you are using the Platform on behalf of an
-                organisation, you represent that you have authority to bind
-                that organisation to these Terms.
+                organisation, you represent that you have authority to bind that
+                organisation to these Terms.
               </p>
             </Section>
 
             <Section title="2. Accounts">
               <p>
                 You are responsible for maintaining the confidentiality of your
-                account credentials and for all activities that occur under
-                your account. You must notify us immediately at{" "}
+                account credentials and for all activities that occur under your
+                account. You must notify us immediately at{" "}
                 <a
-                  href="mailto:support@resortian.com"
+                  href="mailto:info@resortian.com"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-400"
                 >
-                  support@resortian.com
+                  info@resortian.com
                 </a>{" "}
                 if you suspect unauthorised access. We reserve the right to
                 suspend or terminate accounts that violate these Terms.
@@ -114,26 +114,38 @@ export default function TermsPage() {
 
             <Section title="4. Cancellations and Refunds">
               <p>
-                Cancellation policies vary by property and are displayed at
-                the time of booking. In general:
+                Our refund policy applies to the 20% advance payment collected
+                at the time of booking. Because rooms are held exclusively for
+                you, cancellations impact our partner resorts. The refund amount
+                depends on when you notify us relative to the standard check-in
+                time:
               </p>
               <Ul
                 items={[
-                  "Cancellations made more than 72 hours before check-in: full refund of the advance payment",
-                  "Cancellations within 72 hours of check-in: advance payment is non-refundable",
+                  "More than 48 hours before check-in: full refund of the advance payment (a nominal processing fee of 50/= applies)",
+                  "Between 24 and 48 hours before check-in: 75% refund of the advance payment",
+                  "24 hours or less before check-in: 50% refund of the advance payment",
                   "No-shows: the advance payment is forfeited; the property may charge the full booking value",
-                  "Refunds are processed to the original payment method within 7–14 business days",
                 ]}
               />
               <p className="mt-3">
-                See our{" "}
+                Refunds are processed to the original payment method (bKash,
+                Nagad, Rocket, or Credit/Debit Card) within 5–10 working days.
+                Any non-refundable gateway or transaction fees will be deducted
+                from the final refund amount. In cases of extreme weather or
+                national emergencies, Resortian may override these terms to
+                facilitate a full refund or a free date change.
+              </p>
+              <p className="mt-3">
+                For complete details, calculation examples, and cancellation
+                instructions, please visit our{" "}
                 <a
                   href="/cancellation"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-400"
                 >
-                  Cancellation Options
+                  Cancellation &amp; Refund Policy
                 </a>{" "}
-                page for full details.
+                page.
               </p>
             </Section>
 
@@ -152,9 +164,7 @@ export default function TermsPage() {
             </Section>
 
             <Section title="6. Property Owner Obligations">
-              <p>
-                Property owners listing on Resortian agree to:
-              </p>
+              <p>Property owners listing on Resortian agree to:</p>
               <Ul
                 items={[
                   "Provide accurate and current property information, room descriptions, and photographs",
@@ -172,8 +182,8 @@ export default function TermsPage() {
                 Reviews submitted on Resortian must be based on genuine
                 first-hand experiences. We reserve the right to remove reviews
                 that are fraudulent, abusive, or in violation of these Terms.
-                Properties may not incentivise guests to write positive reviews or
-                pressure them to remove negative ones.
+                Properties may not incentivise guests to write positive reviews
+                or pressure them to remove negative ones.
               </p>
             </Section>
 
@@ -191,8 +201,8 @@ export default function TermsPage() {
               <p>
                 To the fullest extent permitted by law, Resortian shall not be
                 liable for any indirect, incidental, special, or consequential
-                damages arising from your use of the Platform, including but
-                not limited to loss of profit, data, or goodwill. Our total
+                damages arising from your use of the Platform, including but not
+                limited to loss of profit, data, or goodwill. Our total
                 liability for any claim arising from or relating to these Terms
                 shall not exceed the amount paid by you for the booking in
                 question.
@@ -213,9 +223,8 @@ export default function TermsPage() {
               <p>
                 We may modify these Terms at any time. We will provide at least
                 14 days&apos; notice of material changes via email or a
-                prominent platform notice. Your continued use of Resortian
-                after the effective date constitutes acceptance of the revised
-                Terms.
+                prominent platform notice. Your continued use of Resortian after
+                the effective date constitutes acceptance of the revised Terms.
               </p>
             </Section>
 
@@ -223,10 +232,10 @@ export default function TermsPage() {
               <p>
                 Questions about these Terms? Contact us at{" "}
                 <a
-                  href="mailto:legal@resortian.com"
+                  href="mailto:info@resortian.com"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-400"
                 >
-                  legal@resortian.com
+                  info@resortian.com
                 </a>
                 .
               </p>

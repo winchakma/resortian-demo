@@ -61,10 +61,26 @@ const PACKAGES = [
 ];
 
 const STATS = [
-  { icon: <Eye className="h-6 w-6" />, value: "120K+", label: "Monthly page views" },
-  { icon: <Target className="h-6 w-6" />, value: "78%", label: "Visitors actively planning a trip" },
-  { icon: <Star className="h-6 w-6" />, value: "4.8", label: "Average platform rating" },
-  { icon: <TrendingUp className="h-6 w-6" />, value: "38%", label: "YoY booking growth" },
+  {
+    icon: <Eye className="h-6 w-6" />,
+    value: "120K+",
+    label: "Monthly page views",
+  },
+  {
+    icon: <Target className="h-6 w-6" />,
+    value: "78%",
+    label: "Visitors actively planning a trip",
+  },
+  {
+    icon: <Star className="h-6 w-6" />,
+    value: "4.8",
+    label: "Average platform rating",
+  },
+  {
+    icon: <TrendingUp className="h-6 w-6" />,
+    value: "38%",
+    label: "YoY booking growth",
+  },
 ];
 
 export default function AdvertisePage() {
@@ -182,7 +198,7 @@ export default function AdvertisePage() {
                     ))}
                   </ul>
                   <a
-                    href="mailto:ads@resortian.com"
+                    href="mailto:info@resortian.com"
                     className={`mt-6 block rounded-xl py-2.5 text-center text-sm font-semibold transition-colors ${
                       pkg.highlight
                         ? "bg-white text-primary-700 hover:bg-primary-50"
@@ -214,11 +230,11 @@ export default function AdvertisePage() {
               a proposal tailored to your goals.
             </p>
             <a
-              href="mailto:ads@resortian.com"
+              href="mailto:info@resortian.com"
               className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
             >
               <Mail className="h-4 w-4" />
-              ads@resortian.com
+              info@resortian.com
             </a>
           </div>
         </section>

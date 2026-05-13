@@ -64,7 +64,7 @@ const CATEGORIES: Category[] = [
     faqs: [
       {
         q: "How do I delete my account?",
-        a: "Email privacy@resortian.com from your registered email address with the subject 'Account Deletion Request'. We'll confirm and delete your personal data within 30 days, except where legal retention is required.",
+        a: "Email info@resortian.com from your registered email address with the subject 'Account Deletion Request'. We'll confirm and delete your personal data within 30 days, except where legal retention is required.",
       },
       {
         q: "I booked as a guest — how do I see my booking?",
