@@ -101,6 +101,12 @@ export async function Footer() {
             >
               Terms of Service
             </a>
+            <a
+              href="/sitemap.xml"
+              className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            >
+              Sitemap
+            </a>
           </div>
         </div>
       </div>

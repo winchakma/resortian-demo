@@ -15,6 +15,7 @@ import type { NavLink } from "@/types";
 const NAV_LINKS: NavLink[] = [
   { label: "Hotels & Resorts", href: "/hotels" },
   { label: "Destinations", href: "/destinations" },
+  { label: "Blog", href: "/blog" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
