@@ -11,39 +11,114 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+const SITE_NAME = "Resortian";
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+const SITE_URL =
+  process.env.NODE_ENV === "production" &&
+  configuredSiteUrl?.includes("localhost")
+    ? "https://resortian.com"
+    : configuredSiteUrl || "https://resortian.com";
+const DEFAULT_OG_IMAGE = "/images/hotels/hotel1.jpg";
+
+function absoluteUrl(path?: string | null) {
+  if (!path) return `${SITE_URL}${DEFAULT_OG_IMAGE}`;
+  if (path.startsWith("//")) return `https:${path}`;
+
+  try {
+    return new URL(path, SITE_URL).toString();
+  } catch {
+    return `${SITE_URL}${DEFAULT_OG_IMAGE}`;
+  }
+}
+
+function cleanText(value: string) {
+  return value
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function seoDescription(excerpt: string) {
+  const description = cleanText(excerpt);
+  return description.length > 160
+    ? `${description.slice(0, 157).trim()}...`
+    : description;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogBySlug(slug);
-  if (!post) return { title: "Post Not Found | Resortian" };
+  if (!post || !post.isPublished) {
+    return {
+      title: "Post Not Found | Resortian",
+      robots: { index: false, follow: false },
+    };
+  }
 
-  const description = post.excerpt;
-  const image = post.coverImage;
+  const title = `${post.title} | Resortian Blog`;
+  const description = seoDescription(post.excerpt);
+  const canonicalUrl = absoluteUrl(`/blog/${post.slug}`);
+  const image = absoluteUrl(post.coverImage);
 
   return {
-    title: `${post.title} | Resortian Blog`,
+    metadataBase: new URL(SITE_URL),
+    title,
     description,
-    keywords: post.tags.join(", "),
-    authors: [{ name: post.authorName }],
+    applicationName: SITE_NAME,
+    authors: [{ name: post.authorName, url: canonicalUrl }],
+    creator: post.authorName,
+    publisher: SITE_NAME,
+    keywords: [
+      post.title,
+      post.category,
+      "Resortian blog",
+      "Bangladesh travel",
+      ...post.tags,
+    ],
+    category: post.category,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
     openGraph: {
-      title: post.title,
+      title,
       description,
+      url: canonicalUrl,
+      siteName: SITE_NAME,
       type: "article",
+      locale: "en_US",
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
       authors: [post.authorName],
+      section: post.category,
       tags: post.tags,
-      images: image
-        ? [{ url: image, width: 1280, height: 720, alt: post.title }]
-        : [],
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
+      title,
       description,
-      images: image ? [image] : [],
-    },
-    alternates: {
-      canonical: `/blog/${slug}`,
+      images: [image],
     },
   };
 }
@@ -148,33 +223,74 @@ function renderContent(html: string) {
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = await getBlogBySlug(slug);
-  if (!post) notFound();
+  if (!post || !post.isPublished) notFound();
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.excerpt,
-    image: post.coverImage || undefined,
-    datePublished: post.publishedAt,
-    dateModified: post.updatedAt,
-    author: {
-      "@type": "Person",
-      name: post.authorName,
-      jobTitle: post.authorTitle ?? undefined,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Resortian",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://resortian.com/favicon.ico",
+  const canonicalUrl = absoluteUrl(`/blog/${post.slug}`);
+  const imageUrl = absoluteUrl(post.coverImage);
+  const description = seoDescription(post.excerpt);
+  const articleBody = cleanText(post.content);
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": `${canonicalUrl}#article`,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonicalUrl,
       },
+      headline: post.title,
+      description,
+      image: [imageUrl],
+      datePublished: post.publishedAt,
+      dateModified: post.updatedAt,
+      author: {
+        "@type": "Person",
+        name: post.authorName,
+        jobTitle: post.authorTitle ?? undefined,
+        image: post.authorAvatar ? absoluteUrl(post.authorAvatar) : undefined,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: SITE_URL,
+        logo: {
+          "@type": "ImageObject",
+          url: absoluteUrl("/favicons/android-chrome-512x512.png"),
+        },
+      },
+      keywords: post.tags.join(", "),
+      articleSection: post.category,
+      articleBody,
+      wordCount: articleBody ? articleBody.split(/\s+/).length : undefined,
+      timeRequired: `PT${post.readTime}M`,
+      isAccessibleForFree: true,
+      url: canonicalUrl,
     },
-    keywords: post.tags.join(", "),
-    articleSection: post.category,
-    url: `https://resortian.com/blog/${post.slug}`,
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: SITE_URL,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Blog",
+          item: absoluteUrl("/blog"),
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: post.title,
+          item: canonicalUrl,
+        },
+      ],
+    },
+  ];
 
   return (
     <>
