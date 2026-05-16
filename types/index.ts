@@ -397,10 +397,26 @@ export interface AffiliatePromoCode {
   validTo: string | null;
 }
 
+export interface AffiliateCashout {
+  id: string;
+  amount: number;
+  totalEarnings: number;
+  paidAmount: number;
+  remainingBalance: number;
+  status: "PENDING" | "APPROVED" | "REJECTED" | "PAID";
+  rejectionReason: string | null;
+  note: string | null;
+  createdAt: string;
+  processedAt: string | null;
+}
+
 export interface AffiliateStats {
   promoCode: AffiliatePromoCode | null;
   bookings: AffiliateBooking[];
   totalEarnings: number;
+  availableBalance: number;
+  totalPaidOut: number;
+  cashouts: AffiliateCashout[];
 }
 
 export interface VendorDestination {

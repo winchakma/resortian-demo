@@ -12,9 +12,13 @@ import {
   AlertCircle,
   Calendar,
   BadgePercent,
+  CreditCard,
+  Clock,
+  ArrowDownCircle,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import type { AffiliateStats } from "@/types";
+import toast from "react-hot-toast";
+import type { AffiliateStats, AffiliateCashout } from "@/types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 
@@ -65,12 +69,47 @@ function StatCard({
   );
 }
 
+function CashoutStatusBadge({ status }: { status: AffiliateCashout["status"] }) {
+  const config: Record<
+    AffiliateCashout["status"],
+    { label: string; cls: string }
+  > = {
+    PENDING: {
+      label: "Pending",
+      cls: "bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400",
+    },
+    APPROVED: {
+      label: "Approved",
+      cls: "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400",
+    },
+    PAID: {
+      label: "Paid",
+      cls: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400",
+    },
+    REJECTED: {
+      label: "Rejected",
+      cls: "bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400",
+    },
+  };
+  const cfg = config[status];
+  return (
+    <span
+      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${cfg.cls}`}
+    >
+      {cfg.label}
+    </span>
+  );
+}
+
 export default function AffiliatesSection() {
   const { token } = useAuth();
   const [stats, setStats] = useState<AffiliateStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [cashoutLoading, setCashoutLoading] = useState(false);
+  const [hasBankInfo, setHasBankInfo] = useState(false);
+  const [bankInfoLoading, setBankInfoLoading] = useState(true);
 
   useEffect(() => {
     if (!token) return;
@@ -84,11 +123,69 @@ export default function AffiliatesSection() {
       .finally(() => setLoading(false));
   }, [token]);
 
+  // Check bank info
+  useEffect(() => {
+    if (!token) return;
+    setBankInfoLoading(true);
+    fetch(`${API_BASE}/users/bank-info`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => {
+        if (!r.ok) {
+          setHasBankInfo(false);
+          return null;
+        }
+        return r.json();
+      })
+      .then((data) => {
+        if (data) {
+          const hasAny =
+            data.bankName ||
+            data.bkashNumber ||
+            data.nagadNumber ||
+            data.rocketNumber;
+          setHasBankInfo(!!hasAny);
+        }
+      })
+      .catch(() => setHasBankInfo(false))
+      .finally(() => setBankInfoLoading(false));
+  }, [token]);
+
   function copyCode(code: string) {
     navigator.clipboard.writeText(code).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+  }
+
+  async function handleRequestCashout() {
+    if (!token) return;
+    setCashoutLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/cashout/affiliate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({}),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to request cashout");
+      toast.success("Cashout request submitted!");
+      // Refresh stats
+      const statsRes = await fetch(`${API_BASE}/promo-codes/my-stats`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const updated = await statsRes.json();
+      setStats(updated as AffiliateStats);
+    } catch (err: unknown) {
+      toast.error(
+        err instanceof Error ? err.message : "Could not request cashout.",
+      );
+    } finally {
+      setCashoutLoading(false);
+    }
   }
 
   if (loading) {
@@ -111,6 +208,13 @@ export default function AffiliatesSection() {
   const promo = stats?.promoCode ?? null;
   const bookings = stats?.bookings ?? [];
   const totalEarnings = stats?.totalEarnings ?? 0;
+  const availableBalance = stats?.availableBalance ?? 0;
+  const totalPaidOut = stats?.totalPaidOut ?? 0;
+  const cashouts = stats?.cashouts ?? [];
+
+  const hasPendingCashout = cashouts.some(
+    (c) => c.status === "PENDING" || c.status === "APPROVED",
+  );
 
   return (
     <div className="space-y-6">
@@ -242,7 +346,7 @@ export default function AffiliatesSection() {
           </div>
 
           {/* Stats row */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <StatCard
               icon={<Users className="h-5 w-5" />}
               label="Bookings via your code"
@@ -264,7 +368,146 @@ export default function AffiliatesSection() {
               }
               accent
             />
+            <StatCard
+              icon={<ArrowDownCircle className="h-5 w-5" />}
+              label="Available balance"
+              value={`৳${availableBalance.toLocaleString()}`}
+              sub={totalPaidOut > 0 ? `৳${totalPaidOut.toLocaleString()} paid out` : undefined}
+            />
           </div>
+
+          {/* Cashout Action Card */}
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
+              <h3 className="font-semibold text-gray-900 dark:text-white">
+                Request Cashout
+              </h3>
+              <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                Minimum balance of ৳100 required to request a cashout
+              </p>
+            </div>
+            <div className="p-6">
+              {availableBalance >= 100 && !hasPendingCashout ? (
+                !bankInfoLoading && hasBankInfo ? (
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        Available for cashout:{" "}
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                          ৳{availableBalance.toLocaleString()}
+                        </span>
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRequestCashout}
+                      disabled={cashoutLoading}
+                      className="flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {cashoutLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <CreditCard className="h-4 w-4" />
+                      )}
+                      {cashoutLoading ? "Requesting…" : "Request Cashout"}
+                    </button>
+                  </div>
+                ) : !bankInfoLoading ? (
+                  <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 dark:border-amber-800/40 dark:bg-amber-950/20">
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                    <p className="text-xs text-amber-700 dark:text-amber-400">
+                      Add your bank or mobile banking info in{" "}
+                      <span className="font-semibold">
+                        Settings → Bank & Payment Info
+                      </span>{" "}
+                      before requesting a cashout.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Checking bank info…
+                  </div>
+                )
+              ) : hasPendingCashout ? (
+                <div className="flex items-start gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2.5 dark:border-blue-800/40 dark:bg-blue-950/20">
+                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
+                  <p className="text-xs text-blue-700 dark:text-blue-400">
+                    You have a pending cashout request. Please wait for it to be processed before requesting another.
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-start gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 dark:border-gray-700 dark:bg-gray-800/40">
+                  <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Your available balance is ৳{availableBalance.toLocaleString()}. A minimum of ৳100 is required to request a cashout.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Cashout History */}
+          {cashouts.length > 0 && (
+            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+              <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  Cashout History
+                </h3>
+                <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                  Your commission cashout requests
+                </p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
+                      <th className="px-5 py-3">Date</th>
+                      <th className="px-5 py-3">Amount</th>
+                      <th className="px-5 py-3">Total Earned</th>
+                      <th className="px-5 py-3">Previously Paid</th>
+                      <th className="px-5 py-3">Remaining</th>
+                      <th className="px-5 py-3">Status</th>
+                      <th className="px-5 py-3">Note</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50 dark:divide-gray-800/50">
+                    {cashouts.map((c) => (
+                      <tr
+                        key={c.id}
+                        className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30"
+                      >
+                        <td className="px-5 py-3.5 text-gray-500 dark:text-gray-400">
+                          {new Date(c.createdAt).toLocaleDateString("en-BD", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </td>
+                        <td className="px-5 py-3.5 font-semibold text-emerald-600 dark:text-emerald-400">
+                          ৳{c.amount.toLocaleString()}
+                        </td>
+                        <td className="px-5 py-3.5 text-gray-700 dark:text-gray-300">
+                          ৳{c.totalEarnings.toLocaleString()}
+                        </td>
+                        <td className="px-5 py-3.5 text-gray-500 dark:text-gray-400">
+                          ৳{c.paidAmount.toLocaleString()}
+                        </td>
+                        <td className="px-5 py-3.5 text-gray-700 dark:text-gray-300">
+                          ৳{c.remainingBalance.toLocaleString()}
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <CashoutStatusBadge status={c.status} />
+                        </td>
+                        <td className="max-w-[200px] truncate px-5 py-3.5 text-xs text-gray-400 dark:text-gray-500">
+                          {c.rejectionReason || c.note || "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
           {/* Bookings table */}
           <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">

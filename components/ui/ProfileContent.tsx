@@ -30,7 +30,6 @@ export function ProfileContent({
   const isVendor = user.role === "HOTEL_OWNER";
   const isAffiliate = user.isAffiliateMember === true;
   const [activeTab, setActiveTab] = useState<Tab>("profile");
-  console.log({ isAffiliate, user });
 
   const upcomingCount = bookings.filter((b) => b.status === "upcoming").length;
   const completedCount = bookings.filter(
@@ -269,7 +268,9 @@ export function ProfileContent({
           )}
           {activeTab === "hotels" && isVendor && <VendorDashboard />}
           {activeTab === "affiliates" && isAffiliate && <AffiliatesSection />}
-          {activeTab === "settings" && <SettingsSection isVendor={isVendor} />}
+          {activeTab === "settings" && (
+            <SettingsSection isVendor={isVendor || isAffiliate} />
+          )}
         </div>
       </div>
     </div>
