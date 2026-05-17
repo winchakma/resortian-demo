@@ -34,7 +34,7 @@ const CartIndicator = memo(function CartIndicator() {
     <Link
       href="/cart"
       aria-label={`Cart (${totalItems} items)`}
-      className="relative flex h-9 w-9 items-center justify-center rounded-lg text-white transition-colors hover:bg-white/20 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+      className="relative flex h-9 w-9 items-center justify-center rounded-lg text-white transition-colors hover:bg-black/10 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
     >
       <ShoppingCart className="h-5 w-5" />
       {mounted && totalItems > 0 && (
@@ -51,7 +51,7 @@ CartIndicator.displayName = "CartIndicator";
 // ─── Nav links ────────────────────────────────────────────────────────────────
 
 const navLinkCls =
-  "rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20 hover:text-white dark:text-gray-400 dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
+  "rounded-lg px-3 py-2 text-sm font-medium text-white bg-black/10 transition-colors hover:bg-black/20 dark:text-gray-400 dark:bg-transparent dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
 
 const NavLinks = memo(function NavLinks({
   accountHref,
@@ -126,7 +126,7 @@ function UserMenu() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label="My account"
-        className="flex h-9 w-9 items-center justify-center rounded-lg text-white transition-colors hover:bg-white/20 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+        className="flex h-9 w-9 items-center justify-center rounded-lg text-white transition-colors hover:bg-black/10 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
       >
         {user?.avatar ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -224,7 +224,7 @@ export function Header() {
 
           <button
             onClick={handleMobileMenuOpen}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-white transition-colors hover:bg-black/10 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800"
             aria-label="Open menu"
           >
             <Menu className="h-5 w-5" />

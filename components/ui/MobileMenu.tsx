@@ -4,8 +4,8 @@ import { X, User, LogOut } from "lucide-react";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import Image from "next/image";
 import type { NavLink } from "@/types";
-import { Logo } from "./Logo";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -69,7 +69,12 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
       <div className="fixed inset-y-0 right-0 flex w-72 flex-col bg-white shadow-xl dark:bg-gray-900">
         {/* Logo + close */}
         <div className="flex items-center justify-between px-5 py-4">
-          <Logo />
+          <Image
+            src="/images/logoBlack.svg"
+            alt="Resortian"
+            width={100}
+            height={100}
+          />
           <button
             onClick={onClose}
             className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
