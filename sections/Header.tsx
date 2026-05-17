@@ -73,7 +73,7 @@ const NavLinks = memo(function NavLinks({
       <Link
         href={accountHref}
         prefetch={true}
-        className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+        className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
       >
         My Account
       </Link>
