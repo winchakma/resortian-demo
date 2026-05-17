@@ -30,7 +30,7 @@ const FEATURES = [
 
 export function WhyChooseUs() {
   return (
-    <section className="bg-white py-16 dark:bg-gray-900 sm:py-20">
+    <section className="bg-[#F7FDF8] py-16 dark:bg-gray-900 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Why Choose Resortian"

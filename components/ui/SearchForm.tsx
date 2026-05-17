@@ -255,7 +255,7 @@ export function SearchForm({
           e.preventDefault();
           handleSubmit();
         }}
-        className="flex w-full flex-col gap-3 rounded-2xl bg-[#ff7373] p-4 shadow-lg sm:p-6 lg:flex-row lg:items-center lg:gap-2 lg:rounded-full lg:p-2"
+        className="flex w-full flex-col gap-3 rounded-2xl bg-gradient-to-r from-[#DE6054] to-[#F5A09A] p-4 shadow-lg sm:p-6 lg:flex-row lg:items-center lg:gap-2 lg:rounded-full lg:p-2"
       >
         {/* ── Location ───────────────────────────────────────────── */}
         <div ref={locationRef} className="relative flex-1">

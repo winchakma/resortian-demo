@@ -34,7 +34,7 @@ const CartIndicator = memo(function CartIndicator() {
     <Link
       href="/cart"
       aria-label={`Cart (${totalItems} items)`}
-      className="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+      className="relative flex h-9 w-9 items-center justify-center rounded-lg text-white transition-colors hover:bg-white/20 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
     >
       <ShoppingCart className="h-5 w-5" />
       {mounted && totalItems > 0 && (
@@ -51,7 +51,7 @@ CartIndicator.displayName = "CartIndicator";
 // ─── Nav links ────────────────────────────────────────────────────────────────
 
 const navLinkCls =
-  "rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-primary-50 hover:text-primary-700 dark:text-gray-400 dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
+  "rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20 hover:text-white dark:text-gray-400 dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
 
 const NavLinks = memo(function NavLinks({
   accountHref,
@@ -126,7 +126,7 @@ function UserMenu() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label="My account"
-        className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+        className="flex h-9 w-9 items-center justify-center rounded-lg text-white transition-colors hover:bg-white/20 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
       >
         {user?.avatar ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -206,7 +206,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-primary-300 bg-gradient-to-r from-white/80 via-primary-50/30 to-white/80 backdrop-blur-md dark:border-primary-900/40 dark:from-gray-950/80 dark:via-primary-950/20 dark:to-gray-950/80">
+    <header className="sticky top-0 z-40 border-b border-[#0AB37A]/30 bg-gradient-to-l from-[#DE6054] to-[#0AB37A] backdrop-blur-md dark:border-primary-900/40 dark:bg-gradient-to-b dark:from-gray-950/90 dark:to-gray-900/90">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
           <Logo />

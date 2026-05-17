@@ -7,7 +7,7 @@ export async function FeaturedStays() {
   const hotels = await getFeaturedStays();
 
   return (
-    <section className="bg-gray-50 py-16 dark:bg-gray-950 sm:py-20">
+    <section className="bg-[#F7FDF8] py-16 dark:bg-gray-950 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header row: heading + View All (desktop/tablet only) */}
         <div className="mb-8 flex items-center justify-between gap-4">

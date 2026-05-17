@@ -4,7 +4,7 @@
 // Scoped overrides live in globals.css under .resortian-cal (higher specificity).
 import "react-calendar/dist/Calendar.css";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import Calendar from "react-calendar";
 import { Calendar as CalendarIcon, X, ChevronRight } from "lucide-react";
 
@@ -39,13 +39,21 @@ export function DateRangePicker({
   onChange,
 }: DateRangePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Date bounds: today → today + 30 days
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const maxDate = new Date(today);
-  maxDate.setDate(today.getDate() + 30);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Computed once on mount so server and client agree on the same date object.
+  const { today, maxDate } = useMemo(() => {
+    const t = new Date();
+    t.setHours(0, 0, 0, 0);
+    const max = new Date(t);
+    max.setDate(t.getDate() + 30);
+    return { today: t, maxDate: max };
+  }, []);
 
   const checkInDate = checkIn ? parseLocal(checkIn) : null;
   const checkOutDate = checkOut ? parseLocal(checkOut) : null;
@@ -191,29 +199,36 @@ export function DateRangePicker({
         </div>
       </div>
 
-      {/* Calendar */}
+      {/* Calendar — only rendered client-side to avoid new Date() SSR mismatch */}
       <div className="resortian-cal p-4">
-        <Calendar
-          onChange={handleCalendarChange}
-          value={calendarValue}
-          selectRange
-          allowPartialRange
-          minDate={today}
-          maxDate={maxDate}
-          showNeighboringMonth={false}
-          prev2Label={null}
-          next2Label={null}
-        />
+        {mounted && (
+          <Calendar
+            onChange={handleCalendarChange}
+            value={calendarValue}
+            selectRange
+            allowPartialRange
+            minDate={today}
+            maxDate={maxDate}
+            showNeighboringMonth={false}
+            prev2Label={null}
+            next2Label={null}
+          />
+        )}
       </div>
 
       {/* Footer */}
       <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3 dark:border-gray-800">
-        <p className="text-xs text-gray-400 dark:text-gray-500">
+        <p
+          className="text-xs text-gray-400 dark:text-gray-500"
+          suppressHydrationWarning
+        >
           Available up to{" "}
-          {maxDate.toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "short",
-          })}
+          {mounted
+            ? maxDate.toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+              })
+            : ""}
         </p>
         <div className="flex gap-2">
           {(checkInDate || checkOutDate) && (

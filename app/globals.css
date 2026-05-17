@@ -8,17 +8,17 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-dm-sans);
 
-  --color-primary-50: #f0fdf4;
-  --color-primary-100: #dcfce7;
-  --color-primary-200: #bbf7d0;
-  --color-primary-300: #86efac;
-  --color-primary-400: #4ade80;
-  --color-primary-500: #3cc85f;
-  --color-primary-600: #34a853;
-  --color-primary-700: #2b8c45;
-  --color-primary-800: #236f38;
-  --color-primary-900: #1a5c2d;
-  --color-primary-950: #0f3a1c;
+  --color-primary-50: #f5f5f5;
+  --color-primary-100: #e8e8e8;
+  --color-primary-200: #d0d0d0;
+  --color-primary-300: #b0b0b0;
+  --color-primary-400: #888888;
+  --color-primary-500: #555555;
+  --color-primary-600: #222222;
+  --color-primary-700: #111111;
+  --color-primary-800: #0a0a0a;
+  --color-primary-900: #050505;
+  --color-primary-950: #020202;
 }
 
 :root {
@@ -41,7 +41,7 @@ body {
 }
 
 ::selection {
-  background-color: #34a853;
+  background-color: #222222;
   color: #ffffff;
 }
 
@@ -168,28 +168,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .resortian-cal .react-calendar__tile:enabled:hover,
 .resortian-cal .react-calendar__tile:enabled:focus {
-  background: #dcfce7;
-  color: #166534;
+  background: #e8e8e8;
+  color: #111111;
   border-radius: 9999px;
 }
 
 /* ── Today ─────────────────────────────────────────────────────────────── */
 .resortian-cal .react-calendar__tile--now {
-  background: #f0fdf4;
-  color: #15803d;
+  background: #f5f5f5;
+  color: #222222;
   font-weight: 700;
   border-radius: 9999px;
 }
 
 .resortian-cal .react-calendar__tile--now:enabled:hover,
 .resortian-cal .react-calendar__tile--now:enabled:focus {
-  background: #bbf7d0;
-  color: #166534;
+  background: #d0d0d0;
+  color: #111111;
 }
 
 /* ── Active (single pick or partial range) ─────────────────────────────── */
 .resortian-cal .react-calendar__tile--active {
-  background: #34a853;
+  background: #222222;
   color: #fff;
   font-weight: 600;
   border-radius: 9999px;
@@ -197,7 +197,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .resortian-cal .react-calendar__tile--active:enabled:hover,
 .resortian-cal .react-calendar__tile--active:enabled:focus {
-  background: #2b8c45;
+  background: #111111;
   color: #fff;
 }
 
@@ -213,20 +213,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 */
 
 .resortian-cal .react-calendar__tile--range {
-  background: #dcfce7 !important;
-  color: #166534 !important;
+  background: #e8e8e8 !important;
+  color: #111111 !important;
   border-radius: 0 !important; /* flat edges → continuous band */
 }
 
 .resortian-cal .react-calendar__tile--rangeStart {
-  background: #34a853 !important;
+  background: #222222 !important;
   color: #fff !important;
   font-weight: 600;
   border-radius: 9999px 0 0 9999px !important; /* round left cap */
 }
 
 .resortian-cal .react-calendar__tile--rangeEnd {
-  background: #34a853 !important;
+  background: #222222 !important;
   color: #fff !important;
   font-weight: 600;
   border-radius: 0 9999px 9999px 0 !important; /* round right cap */
@@ -239,7 +239,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* Hover-preview band while user is dragging to pick end date */
 .resortian-cal .react-calendar--selectRange .react-calendar__tile--hover {
-  background: #bbf7d0 !important;
+  background: #d0d0d0 !important;
   border-radius: 0 !important;
 }
 
@@ -299,38 +299,38 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .dark .resortian-cal .react-calendar__tile:enabled:hover,
 .dark .resortian-cal .react-calendar__tile:enabled:focus {
-  background: #14532d;
-  color: #86efac;
+  background: #333333;
+  color: #f5f5f5;
   border-radius: 9999px;
 }
 
 .dark .resortian-cal .react-calendar__tile--now {
-  background: #052e16;
-  color: #4ade80;
+  background: #2a2a2a;
+  color: #e8e8e8;
 }
 
 .dark .resortian-cal .react-calendar__tile--now:enabled:hover {
-  background: #14532d;
+  background: #333333;
 }
 
 .dark .resortian-cal .react-calendar__tile--active {
-  background: #34a853;
-  color: #fff;
+  background: #f5f5f5;
+  color: #111111;
 }
 
 .dark .resortian-cal .react-calendar__tile--range {
-  background: #052e16 !important;
-  color: #86efac !important;
+  background: #2a2a2a !important;
+  color: #d0d0d0 !important;
 }
 
 .dark .resortian-cal .react-calendar__tile--rangeStart,
 .dark .resortian-cal .react-calendar__tile--rangeEnd {
-  background: #34a853 !important;
-  color: #fff !important;
+  background: #f5f5f5 !important;
+  color: #111111 !important;
 }
 
 .dark .resortian-cal .react-calendar--selectRange .react-calendar__tile--hover {
-  background: #14532d !important;
+  background: #333333 !important;
 }
 
 .dark .resortian-cal .react-calendar__tile:disabled {
