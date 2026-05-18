@@ -1,5 +1,6 @@
 import { Logo } from "@/components/ui/Logo";
 import { getFooterData } from "@/utils/api";
+import Image from "next/image";
 
 const SOCIAL_LINKS = [
   {
@@ -32,7 +33,20 @@ export async function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-6">
           <div className="sm:col-span-2">
-            <Logo />
+            <Image
+              src="/images/logoBlack.svg"
+              alt="Resortian"
+              width={100}
+              height={100}
+              className="rounded-lg dark:hidden"
+            />
+            <Image
+              src="/images/logo.svg"
+              alt="Resortian"
+              width={100}
+              height={100}
+              className="hidden rounded-lg dark:block"
+            />
             <p className="mt-4 max-w-xs text-sm text-gray-600 dark:text-gray-400">
               Resortian is the leading hotel and resort booking platform in
               Bangladesh, connecting travelers with premium accommodations

@@ -74,6 +74,14 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
             alt="Resortian"
             width={100}
             height={100}
+            className="rounded-lg dark:hidden"
+          />
+          <Image
+            src="/images/logo.svg"
+            alt="Resortian"
+            width={100}
+            height={100}
+            className="hidden rounded-lg dark:block"
           />
           <button
             onClick={onClose}
