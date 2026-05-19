@@ -14,7 +14,7 @@ export default async function PaymentFailPage({
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="min-h-screen bg-[#f0fff0] dark:bg-gray-950">
         <div className="flex min-h-[70vh] items-center justify-center py-16">
           <div className="mx-auto w-full max-w-md px-4 text-center">
             <div className="mb-6 flex justify-center">

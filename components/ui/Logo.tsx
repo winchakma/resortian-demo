@@ -7,16 +7,16 @@ export function Logo() {
       <Image
         src="/images/logo.svg"
         alt="Resortian"
-        width={100}
-        height={100}
+        width={110}
+        height={110}
         className="rounded-lg dark:hidden"
       />
       <Image
         src="/images/logoDark.svg"
         // src="/images/logo.svg"
         alt="Resortian"
-        width={100}
-        height={100}
+        width={110}
+        height={110}
         className="hidden rounded-lg dark:block"
       />
     </Link>

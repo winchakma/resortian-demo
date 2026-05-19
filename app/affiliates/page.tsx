@@ -97,7 +97,7 @@ export default function AffiliatesPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="min-h-screen bg-[#f0fff0] dark:bg-gray-950">
         {/* ── Hero ── */}
         <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500 py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

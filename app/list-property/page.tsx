@@ -23,7 +23,7 @@ export default function ListPropertyPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="min-h-screen bg-[#f0fff0] dark:bg-gray-950">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
             {/* Left — marketing copy */}

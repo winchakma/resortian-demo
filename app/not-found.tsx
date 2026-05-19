@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="min-h-screen bg-[#f0fff0] dark:bg-gray-950">
         <section className="relative overflow-hidden py-24 lg:py-32">
           {/* Background blobs */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">

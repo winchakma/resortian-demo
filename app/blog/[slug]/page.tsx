@@ -299,7 +299,7 @@ export default async function BlogPostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Header />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="min-h-screen bg-[#f0fff0] dark:bg-gray-950">
         {/* Cover image */}
         <div className="relative h-72 w-full overflow-hidden sm:h-96 lg:h-[480px]">
           {post.coverImage ? (

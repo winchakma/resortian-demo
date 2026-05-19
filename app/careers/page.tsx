@@ -13,7 +13,7 @@ export default function CareersPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="min-h-screen bg-[#f0fff0] dark:bg-gray-950">
         <CareersContent />
       </main>
       <Footer />

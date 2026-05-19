@@ -12,7 +12,7 @@ export default function VendorAuthPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="min-h-screen bg-[#f0fff0] dark:bg-gray-950">
         <AuthForm role="HOTEL_OWNER" />
       </main>
       <Footer />

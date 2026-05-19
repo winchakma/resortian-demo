@@ -10,7 +10,7 @@ const FEATURES = [
 
 export function GetTheApp() {
   return (
-    <section className="bg-gray-50 py-16 dark:bg-gray-950 sm:py-20">
+    <section className="bg-[#f0fff0] py-16 dark:bg-gray-950 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-primary-600 to-primary-500 dark:from-primary-700 dark:to-primary-600">
           <div className="grid items-center gap-8 p-8 sm:p-12 lg:grid-cols-2 lg:gap-12">

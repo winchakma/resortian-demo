@@ -17,7 +17,7 @@ export default async function CustomerAuthPage({
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="min-h-screen bg-[#f0fff0] dark:bg-gray-950">
         <AuthForm
           role="USER"
           defaultTab={tab === "register" ? "register" : "login"}
