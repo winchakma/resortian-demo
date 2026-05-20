@@ -117,6 +117,8 @@ export interface Booking {
   currency: string;
   actualCheckinAt: string | null;
   guestCheckedOutAt: string | null;
+  earlyCheckoutRequestedAt: string | null;
+  earlyCheckoutSavedDays: number | null;
 }
 
 export interface SearchFormData {
@@ -293,6 +295,8 @@ export interface VendorBooking {
   bookedOn: string;
   actualCheckinAt: string | null;
   guestCheckedOutAt: string | null;
+  earlyCheckoutRequestedAt: string | null;
+  earlyCheckoutSavedDays: number | null;
   cancelledAt: string | null;
   cancelReason: string | null;
   user: {

@@ -47,20 +47,39 @@ const STATUS_CONFIG: Record<
   },
 };
 
+// Compute early checkout eligibility from a checkOut date string
+function calcEarlyCheckoutDays(checkOut: string): number {
+  const midnight = new Date(checkOut);
+  midnight.setHours(0, 0, 0, 0);
+  const hours = (midnight.getTime() - Date.now()) / (1000 * 60 * 60);
+  return Math.floor(hours / 24); // ≥1 means eligible
+}
+
 export default function BookingCard({ booking }: { booking: Booking }) {
   const { token } = useAuth();
   const [expanded, setExpanded] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [reviewed, setReviewed] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  // Local optimistic state for checkin/checkout timestamps
+  const [earlyLoading, setEarlyLoading] = useState(false);
+  const [showEarlyConfirm, setShowEarlyConfirm] = useState(false);
+
+  // Local optimistic state
   const [localCheckinAt] = useState(booking.actualCheckinAt);
-  const [localGuestCheckedOut, setLocalGuestCheckedOut] = useState(
-    booking.guestCheckedOutAt,
-  );
+  const [localGuestCheckedOut, setLocalGuestCheckedOut] = useState(booking.guestCheckedOutAt);
+  const [localEarlyDays, setLocalEarlyDays] = useState(booking.earlyCheckoutSavedDays);
+  const [localEarlyAt, setLocalEarlyAt] = useState(booking.earlyCheckoutRequestedAt);
   const [localStatus] = useState(booking.status);
 
   const cfg = STATUS_CONFIG[localStatus];
+
+  // Eligible for early checkout: checked in, not yet checked out, ≥24h remain
+  const earlyDaysPreview = calcEarlyCheckoutDays(booking.checkOut);
+  const canEarlyCheckout =
+    !!localCheckinAt &&
+    !localGuestCheckedOut &&
+    localStatus === "upcoming" &&
+    earlyDaysPreview >= 1;
 
   async function handleGuestCheckout() {
     if (!token) return;
@@ -73,13 +92,34 @@ export default function BookingCard({ booking }: { booking: Booking }) {
       const json = await res.json();
       if (!res.ok) throw new Error(json.message || "Checkout failed");
       setLocalGuestCheckedOut(new Date().toISOString());
-      toast.success(
-        "Checked out successfully! The hotel will confirm shortly.",
-      );
+      toast.success("Checked out successfully! The hotel will confirm shortly.");
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Could not check out.");
     } finally {
       setCheckoutLoading(false);
+    }
+  }
+
+  async function handleEarlyCheckout() {
+    if (!token) return;
+    setEarlyLoading(true);
+    setShowEarlyConfirm(false);
+    try {
+      const res = await fetch(`${BASE}/bookings/${booking.id}/early-checkout`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Early checkout failed");
+      const now = new Date().toISOString();
+      setLocalGuestCheckedOut(now);
+      setLocalEarlyAt(now);
+      setLocalEarlyDays(json.earlyCheckoutSavedDays ?? earlyDaysPreview);
+      toast.success(`Early checkout requested — ${json.earlyCheckoutSavedDays ?? earlyDaysPreview} day(s) saved. Awaiting hotel confirmation.`);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Could not request early checkout.");
+    } finally {
+      setEarlyLoading(false);
     }
   }
 
@@ -152,14 +192,54 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                     Checked In
                   </span>
                 )}
-              {localGuestCheckedOut && localStatus === "upcoming" && (
+              {localGuestCheckedOut && !localEarlyAt && localStatus === "upcoming" && (
                 <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:bg-amber-950/30 dark:text-amber-400">
                   <LogOut className="h-3 w-3" />
                   Awaiting Hotel Confirmation
                 </span>
               )}
+              {localEarlyAt && localStatus === "upcoming" && (
+                <span className="flex items-center gap-1 rounded-lg bg-orange-50 px-2.5 py-1 text-[11px] font-semibold text-orange-700 dark:bg-orange-950/30 dark:text-orange-400">
+                  <LogOut className="h-3 w-3" />
+                  Early Checkout — {localEarlyDays ?? 0}d saved
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-2">
+              {canEarlyCheckout && !showEarlyConfirm && (
+                <button
+                  type="button"
+                  onClick={() => setShowEarlyConfirm(true)}
+                  disabled={earlyLoading}
+                  className="flex items-center gap-1.5 rounded-xl border border-orange-300 bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-700 transition-colors hover:bg-orange-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-orange-700/40 dark:bg-orange-950/20 dark:text-orange-400 dark:hover:bg-orange-950/40"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                  Early Checkout ({earlyDaysPreview}d early)
+                </button>
+              )}
+              {showEarlyConfirm && (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                    Save {earlyDaysPreview} day{earlyDaysPreview !== 1 ? "s" : ""}?
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleEarlyCheckout}
+                    disabled={earlyLoading}
+                    className="flex items-center gap-1 rounded-lg bg-orange-600 px-2.5 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-orange-700 disabled:opacity-60"
+                  >
+                    {earlyLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : null}
+                    Confirm
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowEarlyConfirm(false)}
+                    className="rounded-lg border border-gray-200 px-2.5 py-1 text-[11px] font-medium text-gray-500 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
               {localCheckinAt &&
                 !localGuestCheckedOut &&
                 localStatus === "upcoming" && (
@@ -235,6 +315,19 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                   </div>
                 ))}
               </div>
+              {localEarlyAt && localEarlyDays && (
+                <div className="flex items-start gap-2 border-t border-orange-100 bg-orange-50/60 px-4 py-3 dark:border-orange-900/30 dark:bg-orange-950/10">
+                  <LogOut className="mt-0.5 h-3.5 w-3.5 shrink-0 text-orange-500" />
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-semibold text-orange-700 dark:text-orange-400">
+                      Early Checkout Requested — {localEarlyDays} day{localEarlyDays !== 1 ? "s" : ""} early
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-orange-600/80 dark:text-orange-500/80">
+                      Requested on {fmtDate(localEarlyAt)} · Awaiting hotel confirmation to adjust booking dates &amp; balance
+                    </p>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center justify-between border-t border-gray-100 px-4 py-2 dark:border-gray-800">
                 <p className="text-xs text-gray-400 dark:text-gray-500">
                   Booked on {fmtDate(booking.bookedOn)}

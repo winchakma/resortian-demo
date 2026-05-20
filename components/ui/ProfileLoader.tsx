@@ -77,6 +77,8 @@ export function ProfileLoader() {
             bookedOn: string;
             actualCheckinAt: string | null;
             guestCheckedOutAt: string | null;
+            earlyCheckoutRequestedAt: string | null;
+            earlyCheckoutSavedDays: number | null;
             room: {
               id: string;
               name: string;
@@ -118,6 +120,8 @@ export function ProfileLoader() {
             currency: "BDT",
             actualCheckinAt: b.actualCheckinAt ?? null,
             guestCheckedOutAt: b.guestCheckedOutAt ?? null,
+            earlyCheckoutRequestedAt: b.earlyCheckoutRequestedAt ?? null,
+            earlyCheckoutSavedDays: b.earlyCheckoutSavedDays ?? null,
           })),
         );
       } catch (error) {

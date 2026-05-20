@@ -982,6 +982,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       currency: "BDT",
       actualCheckinAt: null,
       guestCheckedOutAt: null,
+      earlyCheckoutRequestedAt: null,
+      earlyCheckoutSavedDays: null,
     },
     {
       id: "b2",
@@ -1006,6 +1008,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       currency: "BDT",
       actualCheckinAt: null,
       guestCheckedOutAt: null,
+      earlyCheckoutRequestedAt: null,
+      earlyCheckoutSavedDays: null,
     },
     {
       id: "b3",
@@ -1030,6 +1034,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       currency: "BDT",
       actualCheckinAt: null,
       guestCheckedOutAt: null,
+      earlyCheckoutRequestedAt: null,
+      earlyCheckoutSavedDays: null,
     },
     {
       id: "b4",
@@ -1054,6 +1060,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       currency: "BDT",
       actualCheckinAt: null,
       guestCheckedOutAt: null,
+      earlyCheckoutRequestedAt: null,
+      earlyCheckoutSavedDays: null,
     },
     {
       id: "b5",
@@ -1078,6 +1086,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       currency: "BDT",
       actualCheckinAt: null,
       guestCheckedOutAt: null,
+      earlyCheckoutRequestedAt: null,
+      earlyCheckoutSavedDays: null,
     },
     {
       id: "b6",
@@ -1102,6 +1112,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       currency: "BDT",
       actualCheckinAt: null,
       guestCheckedOutAt: null,
+      earlyCheckoutRequestedAt: null,
+      earlyCheckoutSavedDays: null,
     },
   ];
 }

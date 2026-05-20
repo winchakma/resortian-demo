@@ -42,6 +42,8 @@ export default function VendorBookingRow({
   const [localCheckinAt, setLocalCheckinAt] = useState(booking.actualCheckinAt);
   const [localGuestCheckedOut, setLocalGuestCheckedOut] = useState(booking.guestCheckedOutAt);
   const [localStatus, setLocalStatus] = useState<VendorBookingStatus>(booking.status);
+  const earlyDays = booking.earlyCheckoutSavedDays ?? 0;
+  const isEarlyCheckout = earlyDays > 0 && !!booking.earlyCheckoutRequestedAt;
 
   const cfg = VENDOR_BOOKING_STATUS_CONFIG[localStatus];
   const guestName = booking.user?.name ?? booking.guestName ?? "Guest";
@@ -144,10 +146,16 @@ export default function VendorBookingRow({
                   Checked In
                 </span>
               )}
-              {localGuestCheckedOut && localStatus === "CONFIRMED" && (
+              {localGuestCheckedOut && localStatus === "CONFIRMED" && !isEarlyCheckout && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-950/30 dark:text-blue-400">
                   <LogOut className="h-3 w-3" />
                   Guest Checked Out
+                </span>
+              )}
+              {isEarlyCheckout && localStatus === "CONFIRMED" && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-700 dark:bg-orange-950/30 dark:text-orange-400">
+                  <LogOut className="h-3 w-3" />
+                  Early Checkout — {earlyDays}d early
                 </span>
               )}
               {booking.cashoutRequest && (
@@ -344,6 +352,21 @@ export default function VendorBookingRow({
                 </div>
               )}
 
+              {/* Early checkout info */}
+              {isEarlyCheckout && localStatus === "CONFIRMED" && (
+                <div className="flex items-start gap-2 border-t border-orange-100 bg-orange-50/60 px-4 py-3 dark:border-orange-900/30 dark:bg-orange-950/10">
+                  <LogOut className="mt-0.5 h-3.5 w-3.5 shrink-0 text-orange-500" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] font-semibold text-orange-700 dark:text-orange-400">
+                      Guest requested early checkout — {earlyDays} day{earlyDays !== 1 ? "s" : ""} early
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-orange-600/80 dark:text-orange-500/80">
+                      Confirming will shorten the booking by {earlyDays} day{earlyDays !== 1 ? "s" : ""} and reduce the balance due accordingly.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Vendor checkout action — only after guest has checked out */}
               {localStatus === "CONFIRMED" && localGuestCheckedOut && (
                 <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
@@ -358,7 +381,11 @@ export default function VendorBookingRow({
                     ) : (
                       <LogOut className="h-4 w-4" />
                     )}
-                    {checkoutLoading ? "Completing…" : "Confirm Checkout & Complete"}
+                    {checkoutLoading
+                      ? "Completing…"
+                      : isEarlyCheckout
+                        ? `Confirm Early Checkout & Complete (${earlyDays}d shorter)`
+                        : "Confirm Checkout & Complete"}
                   </button>
                 </div>
               )}
