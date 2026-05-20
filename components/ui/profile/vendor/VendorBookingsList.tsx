@@ -195,9 +195,8 @@ export default function VendorBookingsList() {
                 key={b.id}
                 booking={b}
                 hasBankInfo={hasBankInfo}
-                onCashoutRequested={() =>
-                  loadBookings(page, statusFilter, query)
-                }
+                onCashoutRequested={() => loadBookings(page, statusFilter, query)}
+                onUpdated={() => loadBookings(page, statusFilter, query)}
               />
             ))}
           </div>

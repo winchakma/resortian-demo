@@ -13,8 +13,11 @@ import {
   Moon,
   User,
   Phone,
+  LogIn,
+  LogOut,
+  CheckCircle2,
 } from "lucide-react";
-import type { VendorBooking } from "@/types";
+import type { VendorBooking, VendorBookingStatus } from "@/types";
 import { fmtDate, VENDOR_BOOKING_STATUS_CONFIG } from "@/utils";
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3005";
@@ -23,15 +26,24 @@ export default function VendorBookingRow({
   booking,
   hasBankInfo,
   onCashoutRequested,
+  onUpdated,
 }: {
   booking: VendorBooking;
   hasBankInfo: boolean;
   onCashoutRequested: () => void;
+  onUpdated?: () => void;
 }) {
   const { token } = useAuth();
   const [expanded, setExpanded] = useState(false);
   const [cashoutLoading, setCashoutLoading] = useState(false);
-  const cfg = VENDOR_BOOKING_STATUS_CONFIG[booking.status];
+  const [checkinLoading, setCheckinLoading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  // Local optimistic state
+  const [localCheckinAt, setLocalCheckinAt] = useState(booking.actualCheckinAt);
+  const [localGuestCheckedOut, setLocalGuestCheckedOut] = useState(booking.guestCheckedOutAt);
+  const [localStatus, setLocalStatus] = useState<VendorBookingStatus>(booking.status);
+
+  const cfg = VENDOR_BOOKING_STATUS_CONFIG[localStatus];
   const guestName = booking.user?.name ?? booking.guestName ?? "Guest";
 
   async function handleRequestCashout() {
@@ -58,6 +70,46 @@ export default function VendorBookingRow({
       setCashoutLoading(false);
     }
   }
+  async function handleCheckIn() {
+    if (!token) return;
+    setCheckinLoading(true);
+    try {
+      const res = await fetch(`${BASE}/bookings/${booking.id}/checkin`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Check-in failed");
+      setLocalCheckinAt(new Date().toISOString());
+      toast.success("Guest checked in successfully!");
+      onUpdated?.();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Could not check in guest.");
+    } finally {
+      setCheckinLoading(false);
+    }
+  }
+
+  async function handleVendorCheckout() {
+    if (!token) return;
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch(`${BASE}/bookings/${booking.id}/vendor-checkout`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Checkout confirmation failed");
+      setLocalStatus("COMPLETED");
+      toast.success("Booking completed!");
+      onUpdated?.();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Could not complete booking.");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  }
+
   const guestPhone = booking.user?.phone ?? booking.guestPhone ?? "—";
   // Handle both old (roomUnit.room) and new (room) API shapes
   const room =
@@ -86,6 +138,18 @@ export default function VendorBookingRow({
                 <span className={`h-1.5 w-1.5 rounded-full ${cfg.dot}`} />
                 {cfg.label}
               </span>
+              {localCheckinAt && localStatus === "CONFIRMED" && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
+                  <CheckCircle2 className="h-3 w-3" />
+                  Checked In
+                </span>
+              )}
+              {localGuestCheckedOut && localStatus === "CONFIRMED" && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-950/30 dark:text-blue-400">
+                  <LogOut className="h-3 w-3" />
+                  Guest Checked Out
+                </span>
+              )}
               {booking.cashoutRequest && (
                 <span
                   className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
@@ -166,16 +230,16 @@ export default function VendorBookingRow({
                   },
                   {
                     label:
-                      booking.status === "COMPLETED"
+                      localStatus === "COMPLETED"
                         ? "Paid at Property"
-                        : booking.status === "CANCELLED"
+                        : localStatus === "CANCELLED"
                           ? "Refunded"
                           : "Due at Property",
                     value: `৳${booking.balanceDue.toLocaleString()}`,
                     sub:
-                      booking.status === "COMPLETED"
+                      localStatus === "COMPLETED"
                         ? "At check-in"
-                        : booking.status === "CANCELLED"
+                        : localStatus === "CANCELLED"
                           ? "7–10 days"
                           : "On arrival",
                     highlight: false,
@@ -261,9 +325,46 @@ export default function VendorBookingRow({
                 </span>
               </div>
 
+              {/* Check-in action */}
+              {localStatus === "CONFIRMED" && !localCheckinAt && (
+                <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
+                  <button
+                    type="button"
+                    onClick={handleCheckIn}
+                    disabled={checkinLoading}
+                    className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {checkinLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <LogIn className="h-4 w-4" />
+                    )}
+                    {checkinLoading ? "Checking in…" : "Check In Guest"}
+                  </button>
+                </div>
+              )}
+
+              {/* Vendor checkout action — only after guest has checked out */}
+              {localStatus === "CONFIRMED" && localGuestCheckedOut && (
+                <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
+                  <button
+                    type="button"
+                    onClick={handleVendorCheckout}
+                    disabled={checkoutLoading}
+                    className="flex items-center gap-2 rounded-xl bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {checkoutLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <LogOut className="h-4 w-4" />
+                    )}
+                    {checkoutLoading ? "Completing…" : "Confirm Checkout & Complete"}
+                  </button>
+                </div>
+              )}
+
               {/* Cashout action */}
-              {/* {!booking.cashoutRequest && ( */}
-              {booking.status === "CONFIRMED" && !booking.cashoutRequest && (
+              {localStatus === "CONFIRMED" && !booking.cashoutRequest && (
                 <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
                   {hasBankInfo ? (
                     <button

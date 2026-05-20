@@ -980,6 +980,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       bookedOn: "2026-04-10",
       paymentMethod: "stripe",
       currency: "BDT",
+      actualCheckinAt: null,
+      guestCheckedOutAt: null,
     },
     {
       id: "b2",
@@ -1002,6 +1004,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       bookedOn: "2026-04-08",
       paymentMethod: "uddoktapay",
       currency: "BDT",
+      actualCheckinAt: null,
+      guestCheckedOutAt: null,
     },
     {
       id: "b3",
@@ -1024,6 +1028,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       bookedOn: "2026-03-05",
       paymentMethod: "stripe",
       currency: "BDT",
+      actualCheckinAt: null,
+      guestCheckedOutAt: null,
     },
     {
       id: "b4",
@@ -1046,6 +1052,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       bookedOn: "2026-01-30",
       paymentMethod: "stripe",
       currency: "BDT",
+      actualCheckinAt: null,
+      guestCheckedOutAt: null,
     },
     {
       id: "b5",
@@ -1068,6 +1076,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       bookedOn: "2026-01-10",
       paymentMethod: "uddoktapay",
       currency: "BDT",
+      actualCheckinAt: null,
+      guestCheckedOutAt: null,
     },
     {
       id: "b6",
@@ -1090,6 +1100,8 @@ export async function getUserBookings(): Promise<Booking[]> {
       bookedOn: "2025-12-08",
       paymentMethod: "stripe",
       currency: "BDT",
+      actualCheckinAt: null,
+      guestCheckedOutAt: null,
     },
   ];
 }

@@ -75,6 +75,8 @@ export function ProfileLoader() {
             status: string;
             paymentMethod: string;
             bookedOn: string;
+            actualCheckinAt: string | null;
+            guestCheckedOutAt: string | null;
             room: {
               id: string;
               name: string;
@@ -114,6 +116,8 @@ export function ProfileLoader() {
             paymentMethod:
               b.paymentMethod === "STRIPE" ? "stripe" : "uddoktapay",
             currency: "BDT",
+            actualCheckinAt: b.actualCheckinAt ?? null,
+            guestCheckedOutAt: b.guestCheckedOutAt ?? null,
           })),
         );
       } catch (error) {

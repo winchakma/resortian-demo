@@ -115,6 +115,8 @@ export interface Booking {
   bookedOn: string;
   paymentMethod: "stripe" | "uddoktapay";
   currency: string;
+  actualCheckinAt: string | null;
+  guestCheckedOutAt: string | null;
 }
 
 export interface SearchFormData {
@@ -289,6 +291,8 @@ export interface VendorBooking {
   status: VendorBookingStatus;
   paymentMethod: "STRIPE" | "UDDOKTAPAY";
   bookedOn: string;
+  actualCheckinAt: string | null;
+  guestCheckedOutAt: string | null;
   cancelledAt: string | null;
   cancelReason: string | null;
   user: {

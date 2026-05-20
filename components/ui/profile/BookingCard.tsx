@@ -2,6 +2,7 @@
 
 import { Booking, BookingStatus } from "@/types";
 import { fmtDate } from "@/utils";
+import { useAuth } from "@/context/AuthContext";
 import {
   Building2,
   CalendarDays,
@@ -14,11 +15,16 @@ import {
   CheckCircle2,
   XCircle,
   Star,
+  LogOut,
+  Loader2,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { ReviewForm } from "@/components/ui/ReviewForm";
+import toast from "react-hot-toast";
+
+const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3005";
 
 const STATUS_CONFIG: Record<
   BookingStatus,
@@ -42,10 +48,40 @@ const STATUS_CONFIG: Record<
 };
 
 export default function BookingCard({ booking }: { booking: Booking }) {
+  const { token } = useAuth();
   const [expanded, setExpanded] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [reviewed, setReviewed] = useState(false);
-  const cfg = STATUS_CONFIG[booking.status];
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  // Local optimistic state for checkin/checkout timestamps
+  const [localCheckinAt] = useState(booking.actualCheckinAt);
+  const [localGuestCheckedOut, setLocalGuestCheckedOut] = useState(
+    booking.guestCheckedOutAt,
+  );
+  const [localStatus] = useState(booking.status);
+
+  const cfg = STATUS_CONFIG[localStatus];
+
+  async function handleGuestCheckout() {
+    if (!token) return;
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch(`${BASE}/bookings/${booking.id}/guest-checkout`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Checkout failed");
+      setLocalGuestCheckedOut(new Date().toISOString());
+      toast.success(
+        "Checked out successfully! The hotel will confirm shortly.",
+      );
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Could not check out.");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  }
 
   return (
     <div className="px-5 py-4">
@@ -108,14 +144,47 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                 )}
                 {booking.paymentMethod === "stripe" ? "Card" : "Mobile Banking"}
               </span>
+              {localCheckinAt &&
+                !localGuestCheckedOut &&
+                localStatus === "upcoming" && (
+                  <span className="flex items-center gap-1 rounded-lg bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
+                    <CheckCircle2 className="h-3 w-3" />
+                    Checked In
+                  </span>
+                )}
+              {localGuestCheckedOut && localStatus === "upcoming" && (
+                <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:bg-amber-950/30 dark:text-amber-400">
+                  <LogOut className="h-3 w-3" />
+                  Awaiting Hotel Confirmation
+                </span>
+              )}
             </div>
-            <button
-              type="button"
-              onClick={() => setExpanded((p) => !p)}
-              className="text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
-            >
-              {expanded ? "Hide details" : "View details"}
-            </button>
+            <div className="flex items-center gap-2">
+              {localCheckinAt &&
+                !localGuestCheckedOut &&
+                localStatus === "upcoming" && (
+                  <button
+                    type="button"
+                    onClick={handleGuestCheckout}
+                    disabled={checkoutLoading}
+                    className="flex items-center gap-1.5 rounded-xl bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {checkoutLoading ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <LogOut className="h-3.5 w-3.5" />
+                    )}
+                    {checkoutLoading ? "Checking out…" : "Check Out"}
+                  </button>
+                )}
+              <button
+                type="button"
+                onClick={() => setExpanded((p) => !p)}
+                className="text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
+              >
+                {expanded ? "Hide details" : "View details"}
+              </button>
+            </div>
           </div>
           {expanded && (
             <div className="mt-3 overflow-hidden rounded-xl border border-gray-100 dark:border-gray-800">
@@ -134,16 +203,16 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                   },
                   {
                     label:
-                      booking.status === "completed"
+                      localStatus === "completed"
                         ? "Paid at Property"
-                        : booking.status === "cancelled"
+                        : localStatus === "cancelled"
                           ? "Refunded"
                           : "Due at Property",
                     value: `৳${booking.balanceDue.toLocaleString()}`,
                     sub:
-                      booking.status === "completed"
+                      localStatus === "completed"
                         ? "At check-in"
-                        : booking.status === "cancelled"
+                        : localStatus === "cancelled"
                           ? "7–10 days"
                           : "On arrival",
                   },
@@ -170,7 +239,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                 <p className="text-xs text-gray-400 dark:text-gray-500">
                   Booked on {fmtDate(booking.bookedOn)}
                 </p>
-                {booking.status === "upcoming" && (
+                {localStatus === "upcoming" && (
                   <Link
                     href={`/hotels/${booking.hotelSlug}`}
                     className="flex items-center gap-1 text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
@@ -180,7 +249,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                 )}
               </div>
 
-              {booking.status === "completed" && !reviewed && (
+              {localStatus === "completed" && !reviewed && (
                 <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
                   {showReview ? (
                     <div className="space-y-3">
