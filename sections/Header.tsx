@@ -7,6 +7,7 @@ import { Menu, User, ShoppingCart, Building2, LogOut } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { MobileMenu } from "@/components/ui/MobileMenu";
+import { NotificationBell } from "@/components/ui/NotificationBell";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
@@ -216,6 +217,7 @@ export function Header() {
         <div className="flex items-center gap-1">
           <ThemeToggle />
           <CartIndicator />
+          {mounted && user && <NotificationBell />}
 
           {/* Auth area — only render after hydration to avoid mismatch */}
           {mounted && !loading && (
