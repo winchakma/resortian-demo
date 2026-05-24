@@ -330,7 +330,7 @@ export default function EditHotelForm({
             className="sr-only peer"
             {...register("isActive")}
           />
-          <div className="h-6 w-11 rounded-full bg-gray-200 transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all after:content-[''] peer-checked:bg-violet-600 peer-checked:after:translate-x-full dark:bg-gray-600" />
+          <div className="h-6 w-11 rounded-full bg-gray-200 transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-full dark:bg-gray-600" />
         </label>
       </div>
 
@@ -344,7 +344,7 @@ export default function EditHotelForm({
             </span>
           </span>
         </label>
-        <div className="relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 px-6 py-8 transition-colors hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50">
+        <div className="relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 px-6 py-8 transition-colors hover:border-green-400 dark:border-gray-700 dark:bg-gray-800/50">
           {imagePreview ? (
             <div className="relative w-full">
               <div className="relative mx-auto h-40 max-w-xs overflow-hidden rounded-xl">
@@ -407,7 +407,7 @@ export default function EditHotelForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <Pencil className="h-4 w-4" />
         {isSubmitting ? "Saving…" : "Save Changes"}

@@ -51,17 +51,17 @@ function StatCard({
   label,
   value,
   sub,
-  accent = "violet",
+  accent = "green",
 }: {
   icon: React.ReactNode;
   label: string;
   value: string | number;
   sub?: string;
-  accent?: "violet" | "emerald" | "blue" | "amber";
+  accent?: "green" | "emerald" | "blue" | "amber";
 }) {
   const iconBg: Record<string, string> = {
-    violet:
-      "bg-violet-100 text-violet-700 dark:bg-violet-950/50 dark:text-violet-400",
+    green:
+      "bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-400",
     emerald:
       "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400",
     blue: "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400",
@@ -147,7 +147,7 @@ export default function VendorOverview() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="h-9 w-9 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600" />
+        <div className="h-9 w-9 animate-spin rounded-full border-4 border-green-200 border-t-green-600" />
       </div>
     );
   }
@@ -193,14 +193,14 @@ export default function VendorOverview() {
           label="Properties"
           value={hotels.total}
           sub={`${hotels.approved} approved · ${hotels.pending} pending`}
-          accent="violet"
+          accent="green"
         />
         <StatCard
           icon={<BedDouble className="h-5 w-5" />}
           label="Rooms"
           value={rooms.total}
           sub={`${rooms.active} active · ${rooms.pending} pending`}
-          accent="violet"
+          accent="green"
         />
         <StatCard
           icon={<CalendarDays className="h-5 w-5" />}
@@ -223,7 +223,7 @@ export default function VendorOverview() {
         {/* Booking breakdown */}
         <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-violet-600 dark:text-violet-400" />
+            <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
             <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
               Booking Breakdown
             </h4>
@@ -272,7 +272,7 @@ export default function VendorOverview() {
                 value: cashouts.eligibleBookings,
                 unit: "bookings",
                 icon: <ArrowRight className="h-3.5 w-3.5" />,
-                cls: "text-violet-600 dark:text-violet-400",
+                cls: "text-green-600 dark:text-green-400",
               },
               {
                 label: "Pending Payout",
@@ -333,7 +333,7 @@ export default function VendorOverview() {
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
             <div className="flex items-center gap-2">
-              <Hotel className="h-4 w-4 text-violet-600 dark:text-violet-400" />
+              <Hotel className="h-4 w-4 text-green-600 dark:text-green-400" />
               <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
                 Recent Bookings
               </h4>

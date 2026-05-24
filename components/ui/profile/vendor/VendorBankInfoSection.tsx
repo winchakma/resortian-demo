@@ -83,8 +83,8 @@ export default function VendorBankInfoSection() {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-950/30">
-          <CreditCard className="h-4 w-4 text-violet-600 dark:text-violet-400" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-50 dark:bg-green-950/30">
+          <CreditCard className="h-4 w-4 text-green-600 dark:text-green-400" />
         </div>
         <div>
           <h3 className="font-semibold text-gray-900 dark:text-white">
@@ -98,7 +98,7 @@ export default function VendorBankInfoSection() {
 
       {loadingInfo ? (
         <div className="flex items-center justify-center py-10">
-          <div className="h-6 w-6 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600" />
+          <div className="h-6 w-6 animate-spin rounded-full border-4 border-green-200 border-t-green-600" />
         </div>
       ) : (
         <form
@@ -184,7 +184,7 @@ export default function VendorBankInfoSection() {
               <div>
                 <label className={labelCls()}>Rocket Number</label>
                 <div className="relative">
-                  <Smartphone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-violet-500" />
+                  <Smartphone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-green-500" />
                   <input
                     {...register("rocketNumber")}
                     placeholder="01XXXXXXXXX"
@@ -199,7 +199,7 @@ export default function VendorBankInfoSection() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex items-center gap-2 rounded-xl bg-green-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <CreditCard className="h-4 w-4" />
             {isSubmitting ? "Saving…" : "Save Payment Info"}

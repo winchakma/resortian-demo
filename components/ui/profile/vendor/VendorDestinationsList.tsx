@@ -70,9 +70,9 @@ export default function VendorDestinationsList() {
               label: "Total Destinations",
               value: destinations.length,
               icon: (
-                <Globe className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+                <Globe className="h-5 w-5 text-green-600 dark:text-green-400" />
               ),
-              bg: "bg-violet-50 dark:bg-violet-950/30",
+              bg: "bg-green-50 dark:bg-green-950/30",
             },
             {
               label: "Approved",
@@ -139,7 +139,7 @@ export default function VendorDestinationsList() {
             <button
               type="button"
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
+              className="flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-700 active:bg-green-800"
             >
               <Plus className="h-4 w-4" />
               New Destination
@@ -171,12 +171,12 @@ export default function VendorDestinationsList() {
         {/* Destination list */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600" />
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-200 border-t-green-600" />
           </div>
         ) : destinations.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white py-16 text-center dark:border-gray-700 dark:bg-gray-900">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-50 dark:bg-violet-950/30">
-              <Globe className="h-8 w-8 text-violet-400" />
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-green-50 dark:bg-green-950/30">
+              <Globe className="h-8 w-8 text-green-400" />
             </div>
             <p className="font-semibold text-gray-700 dark:text-gray-300">
               No destinations yet
@@ -187,7 +187,7 @@ export default function VendorDestinationsList() {
             <button
               type="button"
               onClick={() => setShowCreateModal(true)}
-              className="mt-5 flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-700"
+              className="mt-5 flex items-center gap-2 rounded-xl bg-green-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700"
             >
               <Plus className="h-4 w-4" />
               Create Destination

@@ -16,9 +16,16 @@ import {
   Plus,
   ImageIcon,
   BedDouble,
+  Layers,
+  Trash2,
 } from "lucide-react";
 import FieldError from "@/components/common/FieldError";
 import Image from "next/image";
+
+type UnitSpec = {
+  unitName: string;
+  floorNumber: string;
+};
 
 type RoomFormValues = {
   hotelId: string;
@@ -67,6 +74,10 @@ export default function CreateRoomForm({
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [imagesError, setImagesError] = useState("");
+  const [units, setUnits] = useState<UnitSpec[]>([
+    { unitName: "", floorNumber: "" },
+  ]);
+  const [unitsError, setUnitsError] = useState("");
 
   const {
     register,
@@ -89,9 +100,37 @@ export default function CreateRoomForm({
     setImagePreviews(arr.map((f) => URL.createObjectURL(f)));
   }
 
+  function addUnit() {
+    setUnits((prev) => [...prev, { unitName: "", floorNumber: "" }]);
+  }
+
+  function removeUnit(index: number) {
+    if (units.length <= 1) {
+      setUnitsError("At least one unit is required");
+      return;
+    }
+    setUnits((prev) => prev.filter((_, i) => i !== index));
+    setUnitsError("");
+  }
+
+  function updateUnit(
+    index: number,
+    field: keyof UnitSpec,
+    value: string,
+  ) {
+    setUnits((prev) =>
+      prev.map((u, i) => (i === index ? { ...u, [field]: value } : u)),
+    );
+    setUnitsError("");
+  }
+
   async function onSubmit(data: RoomFormValues) {
     if (selectedFiles.length === 0) {
       setImagesError("Please select at least one image");
+      return;
+    }
+    if (units.length === 0) {
+      setUnitsError("At least one unit is required");
       return;
     }
 
@@ -111,6 +150,15 @@ export default function CreateRoomForm({
     if (data.badge) fd.append("badge", data.badge);
     selectedFiles.forEach((f) => fd.append("images", f));
 
+    // Build units JSON
+    const unitSpecs = units.map((u) => ({
+      ...(u.unitName.trim() ? { unitName: u.unitName.trim() } : {}),
+      ...(u.floorNumber.trim()
+        ? { floorNumber: parseInt(u.floorNumber, 10) }
+        : {}),
+    }));
+    fd.append("units", JSON.stringify(unitSpecs));
+
     try {
       const res = await fetch(`${BASE}/rooms`, {
         method: "POST",
@@ -123,6 +171,7 @@ export default function CreateRoomForm({
       if (imagesRef.current) imagesRef.current.value = "";
       setImagePreviews([]);
       setSelectedFiles([]);
+      setUnits([{ unitName: "", floorNumber: "" }]);
       onCreated();
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Something went wrong.");
@@ -263,6 +312,77 @@ export default function CreateRoomForm({
         <FieldError msg={errors.amenities?.message} />
       </div>
 
+      {/* Room Units */}
+      <div>
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <Layers className="h-3.5 w-3.5" /> Room Units{" "}
+            <span className="font-normal text-gray-400">
+              (at least 1 required)
+            </span>
+          </span>
+        </label>
+        <p className="mb-3 text-xs text-gray-400 dark:text-gray-500">
+          Each unit represents a physical room of this type. Add multiple units
+          if you have more than one identical room.
+        </p>
+        <div className="space-y-3">
+          {units.map((unit, index) => (
+            <div
+              key={index}
+              className="flex items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50"
+            >
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-green-100 text-xs font-bold text-green-700 dark:bg-green-900/40 dark:text-green-400">
+                {index + 1}
+              </div>
+              <div className="grid flex-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <input
+                    type="text"
+                    value={unit.unitName}
+                    onChange={(e) =>
+                      updateUnit(index, "unitName", e.target.value)
+                    }
+                    placeholder="Unit name (e.g. Room 101)"
+                    className={inputCls()}
+                  />
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    value={unit.floorNumber}
+                    onChange={(e) =>
+                      updateUnit(index, "floorNumber", e.target.value)
+                    }
+                    placeholder="Floor number (optional)"
+                    min={0}
+                    className={inputCls()}
+                  />
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => removeUnit(index)}
+                disabled={units.length <= 1}
+                className="mt-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-30 dark:hover:bg-red-950/30"
+                title="Remove unit"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={addUnit}
+          className="mt-3 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-green-600 transition-colors hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-950/30"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Add Another Unit
+        </button>
+        <FieldError msg={unitsError} />
+      </div>
+
       {/* Room images */}
       <div>
         <label className={labelCls()}>
@@ -272,7 +392,7 @@ export default function CreateRoomForm({
           </span>
         </label>
         <div
-          className={`relative rounded-xl border-2 border-dashed transition-colors ${imagesError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-violet-400 dark:border-gray-700 dark:bg-gray-800/50"}`}
+          className={`relative rounded-xl border-2 border-dashed transition-colors ${imagesError ? "border-red-400 bg-red-50 dark:bg-red-950/20" : "border-gray-200 bg-gray-50 hover:border-green-400 dark:border-gray-700 dark:bg-gray-800/50"}`}
         >
           {imagePreviews.length > 0 ? (
             <div className="grid grid-cols-4 gap-2 p-3 sm:grid-cols-5">
@@ -290,7 +410,7 @@ export default function CreateRoomForm({
                   />
                 </div>
               ))}
-              <label className="flex aspect-square cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-300 transition-colors hover:border-violet-400 dark:border-gray-600">
+              <label className="flex aspect-square cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-gray-300 transition-colors hover:border-green-400 dark:border-gray-600">
                 <Plus className="h-5 w-5 text-gray-300" />
                 <input
                   ref={imagesRef}
@@ -330,7 +450,7 @@ export default function CreateRoomForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <BedDouble className="h-4 w-4" />
         {isSubmitting ? "Submitting…" : "Submit Room for Approval"}

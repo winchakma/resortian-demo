@@ -97,12 +97,12 @@ export function ProfileContent({
         <aside className="w-full shrink-0 lg:w-72">
           <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
             <div
-              className={`h-20 ${isVendor ? "bg-gradient-to-br from-violet-700 via-violet-600 to-purple-500" : "bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500"}`}
+              className={`h-20 ${isVendor ? "bg-gradient-to-br from-green-700 via-green-600 to-emerald-500" : "bg-gradient-to-br from-primary-700 via-primary-600 to-primary-500"}`}
             />
             <div className="-mt-10 px-5 pb-5">
               <div className="mb-3 flex items-end justify-between">
                 <div
-                  className={`flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-white shadow-lg dark:border-gray-900 ${isVendor ? "bg-gradient-to-br from-violet-700 to-violet-500" : "bg-gradient-to-br from-primary-700 to-primary-500"}`}
+                  className={`flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-white shadow-lg dark:border-gray-900 ${isVendor ? "bg-gradient-to-br from-green-700 to-green-500" : "bg-gradient-to-br from-primary-700 to-primary-500"}`}
                 >
                   <span className="text-2xl font-bold tracking-tight text-white">
                     {initials(user.name)}
@@ -111,7 +111,7 @@ export function ProfileContent({
                 <span
                   className={`mb-1 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
                     isVendor
-                      ? "bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-400"
+                      ? "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400"
                       : isAffiliate
                         ? "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400"
                         : "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400"
@@ -152,11 +152,11 @@ export function ProfileContent({
                 </div>
               )}
               {isVendor && (
-                <div className="mt-4 rounded-xl border border-violet-100 bg-violet-50 px-4 py-3 dark:border-violet-900/30 dark:bg-violet-950/20">
-                  <p className="text-xs font-semibold text-violet-700 dark:text-violet-400">
+                <div className="mt-4 rounded-xl border border-green-100 bg-green-50 px-4 py-3 dark:border-green-900/30 dark:bg-green-950/20">
+                  <p className="text-xs font-semibold text-green-700 dark:text-green-400">
                     Property Owner Account
                   </p>
-                  <p className="mt-0.5 text-[11px] text-violet-500/80 dark:text-violet-400/60">
+                  <p className="mt-0.5 text-[11px] text-green-500/80 dark:text-green-400/60">
                     Manage properties, rooms & destinations
                   </p>
                 </div>
@@ -177,10 +177,10 @@ export function ProfileContent({
               {NAV.map((item) => {
                 const active = activeTab === item.id;
                 const activeClass = isVendor
-                  ? "bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-400"
+                  ? "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400"
                   : "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-400";
                 const activeIcon = isVendor
-                  ? "text-violet-600 dark:text-violet-400"
+                  ? "text-green-600 dark:text-green-400"
                   : "text-primary-600 dark:text-primary-400";
                 return (
                   <button
@@ -236,7 +236,7 @@ export function ProfileContent({
                   className={`relative flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-2.5 text-xs font-semibold transition-colors ${
                     active
                       ? isVendor
-                        ? "bg-violet-600 text-white shadow-sm"
+                        ? "bg-green-600 text-white shadow-sm"
                         : "bg-primary-600 text-white shadow-sm"
                       : "text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
                   }`}

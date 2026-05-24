@@ -178,7 +178,7 @@ export default function VendorCalendar() {
       {/* Search form card */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center gap-2">
-          <CalendarRange className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+          <CalendarRange className="h-5 w-5 text-green-600 dark:text-green-400" />
           <h2 className="text-base font-bold text-gray-900 dark:text-white">
             Schedule &amp; Calendar
           </h2>
@@ -298,7 +298,7 @@ export default function VendorCalendar() {
             type="button"
             onClick={handleSearch}
             disabled={loading || !selectedHotelId}
-            className="flex shrink-0 items-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:opacity-50"
+            className="flex shrink-0 items-center gap-2 rounded-xl bg-green-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-50"
           >
             {loading ? (
               <RefreshCw className="h-4 w-4 animate-spin" />
@@ -407,12 +407,12 @@ function CalendarMatrix({ hotel, dates, rows }: MatrixProps) {
                     style={{ width: COL_WIDTH, minWidth: COL_WIDTH }}
                   >
                     <span
-                      className={`block text-[10px] font-semibold ${today ? "text-violet-500 dark:text-violet-400" : "text-gray-400 dark:text-gray-500"}`}
+                      className={`block text-[10px] font-semibold ${today ? "text-green-500 dark:text-green-400" : "text-gray-400 dark:text-gray-500"}`}
                     >
                       {day}
                     </span>
                     <span
-                      className={`mt-0.5 block text-sm font-bold ${today ? "text-violet-600 dark:text-violet-400" : "text-gray-700 dark:text-gray-200"}`}
+                      className={`mt-0.5 block text-sm font-bold ${today ? "text-green-600 dark:text-green-400" : "text-gray-700 dark:text-gray-200"}`}
                     >
                       {num}
                     </span>

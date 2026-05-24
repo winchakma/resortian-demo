@@ -213,7 +213,7 @@ export default function VendorBookingRow({
             <button
               type="button"
               onClick={() => setExpanded((p) => !p)}
-              className="text-xs font-medium text-violet-600 hover:underline dark:text-violet-400"
+              className="text-xs font-medium text-green-600 hover:underline dark:text-green-400"
             >
               {expanded ? "Hide details" : "View details"}
             </button>
@@ -255,13 +255,13 @@ export default function VendorBookingRow({
                 ].map((col) => (
                   <div
                     key={col.label}
-                    className={`px-4 py-3 ${col.highlight ? "bg-violet-50/60 dark:bg-violet-950/20" : "bg-gray-50/60 dark:bg-gray-800/30"}`}
+                    className={`px-4 py-3 ${col.highlight ? "bg-green-50/60 dark:bg-green-950/20" : "bg-gray-50/60 dark:bg-gray-800/30"}`}
                   >
                     <p className="text-[10px] text-gray-400 dark:text-gray-500">
                       {col.label}
                     </p>
                     <p
-                      className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-violet-700 dark:text-violet-400" : "text-gray-800 dark:text-gray-200"}`}
+                      className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-green-700 dark:text-green-400" : "text-gray-800 dark:text-gray-200"}`}
                     >
                       {col.value}
                     </p>
@@ -340,7 +340,7 @@ export default function VendorBookingRow({
                     type="button"
                     onClick={handleCheckIn}
                     disabled={checkinLoading}
-                    className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {checkinLoading ? (
                       <Loader2 className="h-4 w-4 animate-spin" />

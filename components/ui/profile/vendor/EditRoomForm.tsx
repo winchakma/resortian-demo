@@ -370,7 +370,7 @@ export default function EditRoomForm({
             className="sr-only peer"
             {...register("isActive")}
           />
-          <div className="h-6 w-11 rounded-full bg-gray-200 transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all after:content-[''] peer-checked:bg-violet-600 peer-checked:after:translate-x-full dark:bg-gray-600" />
+          <div className="h-6 w-11 rounded-full bg-gray-200 transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-full dark:bg-gray-600" />
         </label>
       </div>
 
@@ -438,7 +438,7 @@ export default function EditRoomForm({
             ))}
             {imagePreviews.length < MAX_ROOM_IMAGES && (
               <label
-                className={`flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800/50 ${fetchingImages ? "cursor-wait opacity-60" : "hover:border-violet-400 hover:bg-violet-50/30 dark:hover:border-violet-600"}`}
+                className={`flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800/50 ${fetchingImages ? "cursor-wait opacity-60" : "hover:border-green-400 hover:bg-green-50/30 dark:hover:border-green-600"}`}
               >
                 {fetchingImages ? (
                   <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
@@ -461,7 +461,7 @@ export default function EditRoomForm({
           </div>
         ) : (
           <label
-            className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors hover:border-violet-400 hover:bg-violet-50/30 dark:hover:border-violet-600 ${imageError ? "border-red-400 bg-red-50/20 dark:border-red-700" : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50"}`}
+            className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors hover:border-green-400 hover:bg-green-50/30 dark:hover:border-green-600 ${imageError ? "border-red-400 bg-red-50/20 dark:border-red-700" : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50"}`}
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
               <Upload className="h-5 w-5 text-gray-400" />
@@ -494,7 +494,7 @@ export default function EditRoomForm({
       <button
         type="submit"
         disabled={busy}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {busy ? (
           <Loader2 className="h-4 w-4 animate-spin" />

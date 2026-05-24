@@ -344,27 +344,27 @@ export default function ProfileSection({
       </div>
 
       {isVendor ? (
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-700 via-violet-600 to-purple-500 p-6 shadow-sm">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-700 via-green-600 to-emerald-500 p-6 shadow-sm">
           <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
           <div className="pointer-events-none absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/10" />
           <div className="relative flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2">
-                <Store className="h-5 w-5 text-violet-200" />
-                <span className="text-xs font-semibold uppercase tracking-widest text-violet-200">
+                <Store className="h-5 w-5 text-green-200" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-green-200">
                   Resortian Vendor
                 </span>
               </div>
               <h3 className="mt-2 text-2xl font-bold text-white">
                 {user.name}
               </h3>
-              <p className="mt-1 text-sm text-violet-100">
+              <p className="mt-1 text-sm text-green-100">
                 Partner since {fmtDate(user.memberSince)}
               </p>
             </div>
             <div className="flex flex-col items-end">
-              <Shield className="h-8 w-8 text-violet-300" />
-              <p className="mt-1 text-xs text-violet-200">Property Owner</p>
+              <Shield className="h-8 w-8 text-green-300" />
+              <p className="mt-1 text-xs text-green-200">Property Owner</p>
             </div>
           </div>
         </div>
