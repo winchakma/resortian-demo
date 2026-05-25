@@ -1,6 +1,5 @@
 import { Logo } from "@/components/ui/Logo";
 import { getFooterData } from "@/utils/api";
-import Image from "next/image";
 
 const SOCIAL_LINKS = [
   {
@@ -49,9 +48,13 @@ export async function Footer() {
               className="hidden rounded-lg dark:block"
             /> */}
             <p className="mt-4 max-w-xs text-sm text-gray-600 dark:text-gray-400">
-              Resortian is the leading hotel and resort booking platform in
-              Bangladesh, connecting travelers with premium accommodations
-              across the country.
+              Resortian.com is trademark of{" "}
+              <strong>Resortian Tourism Services</strong>, officially registered
+              under Dhaka North City Corporation.
+            </p>
+            <p className="mt-2 max-w-xs text-sm text-gray-600 dark:text-gray-400">
+              Our Office: Army Building, Dorji Bari, Uttarpara, Khilkhet,
+              Dhaka 1229
             </p>
             <div className="mt-6 flex items-center gap-3">
               {SOCIAL_LINKS.map((social) => (

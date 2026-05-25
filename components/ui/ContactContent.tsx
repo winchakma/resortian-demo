@@ -53,7 +53,7 @@ const CONTACT_CARDS = [
   {
     icon: MapPin,
     title: "Visit Us",
-    lines: ["House 12, Road 7, Banani", "Dhaka 1213, Bangladesh"],
+    lines: ["Army Building, Dorji Bari, Uttarpara", "Khilkhet, Dhaka 1229"],
     sub: "By appointment only",
     color:
       "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
@@ -381,10 +381,10 @@ export function ContactContent() {
                     <MapPin className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   </div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    House 12, Road 7, Banani
+                    Army Building, Dorji Bari, Uttarpara
                   </p>
                   <p className="text-xs text-gray-400 dark:text-gray-500">
-                    Dhaka 1213, Bangladesh
+                    Khilkhet, Dhaka 1229
                   </p>
                 </div>
                 {/* Grid lines for map feel */}
