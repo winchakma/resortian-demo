@@ -1141,6 +1141,19 @@ interface ApiBlogPost extends ApiBlogListItem {
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
+
+  authorDetails: string | null;
+
+  metaTitle: string | null;
+  metaDescription: string | null;
+  metaKeywords: string[] | null;
+  canonicalUrl: string | null;
+  ogTitle: string | null;
+  ogDescription: string | null;
+  ogImage: string | null;
+  twitterTitle: string | null;
+  twitterDescription: string | null;
+  noIndex: boolean | null;
 }
 
 function normalizeBlogItem(b: ApiBlogListItem): BlogListItem {
@@ -1156,6 +1169,9 @@ function normalizeBlogPost(b: ApiBlogPost): BlogPost {
     ...b,
     coverImage: imageUrl(b.coverImage),
     authorAvatar: b.authorAvatar ? imageUrl(b.authorAvatar) : null,
+    ogImage: b.ogImage ? imageUrl(b.ogImage) : null,
+    metaKeywords: b.metaKeywords ?? [],
+    noIndex: b.noIndex ?? false,
   };
 }
 

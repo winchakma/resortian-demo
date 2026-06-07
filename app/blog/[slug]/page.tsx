@@ -58,10 +58,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const title = `${post.title} | Resortian Blog`;
-  const description = seoDescription(post.excerpt);
-  const canonicalUrl = absoluteUrl(`/blog/${post.slug}`);
-  const image = absoluteUrl(post.coverImage);
+  // Custom overrides from CMS, falling back to sensible defaults
+  const title = post.metaTitle?.trim() || `${post.title} | Resortian Blog`;
+  const description = post.metaDescription?.trim()
+    ? post.metaDescription.trim()
+    : seoDescription(post.excerpt);
+  const canonicalUrl = post.canonicalUrl?.trim() || absoluteUrl(`/blog/${post.slug}`);
+  const image = absoluteUrl(post.ogImage || post.coverImage);
+
+  const ogTitle = post.ogTitle?.trim() || title;
+  const ogDescription = post.ogDescription?.trim() || description;
+  const twitterTitle = post.twitterTitle?.trim() || ogTitle;
+  const twitterDescription = post.twitterDescription?.trim() || ogDescription;
+
+  const keywords =
+    post.metaKeywords.length > 0
+      ? post.metaKeywords
+      : [
+          post.title,
+          post.category,
+          "Resortian blog",
+          "Bangladesh travel",
+          ...post.tags,
+        ];
+
+  const indexable = !post.noIndex;
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -71,31 +92,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     authors: [{ name: post.authorName, url: canonicalUrl }],
     creator: post.authorName,
     publisher: SITE_NAME,
-    keywords: [
-      post.title,
-      post.category,
-      "Resortian blog",
-      "Bangladesh travel",
-      ...post.tags,
-    ],
+    keywords,
     category: post.category,
     alternates: {
       canonical: canonicalUrl,
     },
     robots: {
-      index: true,
-      follow: true,
+      index: indexable,
+      follow: indexable,
       googleBot: {
-        index: true,
-        follow: true,
+        index: indexable,
+        follow: indexable,
         "max-image-preview": "large",
         "max-snippet": -1,
         "max-video-preview": -1,
       },
     },
     openGraph: {
-      title,
-      description,
+      title: ogTitle,
+      description: ogDescription,
       url: canonicalUrl,
       siteName: SITE_NAME,
       type: "article",
@@ -116,8 +131,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: twitterTitle,
+      description: twitterDescription,
       images: [image],
     },
   };
@@ -225,10 +240,14 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getBlogBySlug(slug);
   if (!post || !post.isPublished) notFound();
 
-  const canonicalUrl = absoluteUrl(`/blog/${post.slug}`);
-  const imageUrl = absoluteUrl(post.coverImage);
-  const description = seoDescription(post.excerpt);
+  const canonicalUrl = post.canonicalUrl?.trim() || absoluteUrl(`/blog/${post.slug}`);
+  const imageUrl = absoluteUrl(post.ogImage || post.coverImage);
+  const description = post.metaDescription?.trim()
+    ? post.metaDescription.trim()
+    : seoDescription(post.excerpt);
   const articleBody = cleanText(post.content);
+  const keywordsForJsonLd =
+    post.metaKeywords.length > 0 ? post.metaKeywords : post.tags;
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -258,7 +277,7 @@ export default async function BlogPostPage({ params }: Props) {
           url: absoluteUrl("/favicons/android-chrome-512x512.png"),
         },
       },
-      keywords: post.tags.join(", "),
+      keywords: keywordsForJsonLd.join(", "),
       articleSection: post.category,
       articleBody,
       wordCount: articleBody ? articleBody.split(/\s+/).length : undefined,
@@ -413,6 +432,45 @@ export default async function BlogPostPage({ params }: Props) {
                   allowFullScreen
                   className="h-full w-full"
                 />
+              </div>
+            </div>
+          )}
+
+          {/* About the author */}
+          {post.authorDetails && (
+            <div className="mt-10 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+              <div className="flex items-start gap-4">
+                {post.authorAvatar ? (
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full">
+                    <Image
+                      src={post.authorAvatar}
+                      alt={post.authorName}
+                      fill
+                      className="object-cover"
+                      sizes="56px"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/40">
+                    <User className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                    About the Author
+                  </p>
+                  <p className="mt-1 text-base font-semibold text-gray-900 dark:text-white">
+                    {post.authorName}
+                  </p>
+                  {post.authorTitle && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {post.authorTitle}
+                    </p>
+                  )}
+                  <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                    {post.authorDetails}
+                  </p>
+                </div>
               </div>
             </div>
           )}

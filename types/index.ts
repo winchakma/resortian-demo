@@ -379,6 +379,19 @@ export interface BlogPost extends BlogListItem {
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
+
+  authorDetails: string | null;
+
+  metaTitle: string | null;
+  metaDescription: string | null;
+  metaKeywords: string[];
+  canonicalUrl: string | null;
+  ogTitle: string | null;
+  ogDescription: string | null;
+  ogImage: string | null;
+  twitterTitle: string | null;
+  twitterDescription: string | null;
+  noIndex: boolean;
 }
 
 export interface AffiliateBooking {
