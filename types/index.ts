@@ -130,7 +130,36 @@ export interface SearchFormData {
   rooms: number;
 }
 
-export type Tab = "profile" | "bookings" | "hotels" | "settings" | "affiliates";
+export type Tab =
+  | "profile"
+  | "bookings"
+  | "hotels"
+  | "settings"
+  | "affiliates"
+  | "blogs";
+
+export interface AffiliateBlog {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  coverImage: string;
+  category: string | null;
+  readTime: number;
+  tags: string[];
+  isPublished: boolean;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AffiliateBlogDetail extends AffiliateBlog {
+  content: string;
+  youtubeUrl: string | null;
+  authorName: string;
+  authorTitle: string | null;
+  authorDetails: string | null;
+}
 export type VendorView = "overview" | "hotels" | "destinations" | "bookings" | "calendar";
 
 export interface CalendarBooking {

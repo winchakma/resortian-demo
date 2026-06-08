@@ -12,6 +12,7 @@ import {
   Star,
   Store,
   Handshake,
+  BookOpen,
 } from "lucide-react";
 import type { ProfileContentProps, Tab } from "@/types";
 import { initials } from "@/utils";
@@ -21,6 +22,7 @@ import BookingsSection from "./profile/BookingsSection";
 import VendorDashboard from "./profile/vendor/VendorDashboard";
 import SettingsSection from "./profile/SettingsSection";
 import AffiliatesSection from "./profile/AffiliatesSection";
+import MyBlogsSection from "./profile/MyBlogsSection";
 
 export function ProfileContent({
   user,
@@ -38,6 +40,7 @@ export function ProfileContent({
   const totalNights = bookings
     .filter((b) => b.status === "completed")
     .reduce((s, b) => s + b.nights, 0);
+  console.log({ isAffiliate });
 
   const NAV: {
     id: Tab;
@@ -80,6 +83,11 @@ export function ProfileContent({
                 id: "affiliates" as Tab,
                 label: "Affiliates",
                 icon: <Handshake className="h-4 w-4" />,
+              },
+              {
+                id: "blogs" as Tab,
+                label: "My Blogs",
+                icon: <BookOpen className="h-4 w-4" />,
               },
             ]
           : []),
@@ -268,6 +276,7 @@ export function ProfileContent({
           )}
           {activeTab === "hotels" && isVendor && <VendorDashboard />}
           {activeTab === "affiliates" && isAffiliate && <AffiliatesSection />}
+          {activeTab === "blogs" && isAffiliate && <MyBlogsSection />}
           {activeTab === "settings" && (
             <SettingsSection isVendor={isVendor || isAffiliate} />
           )}
