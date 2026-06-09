@@ -28,6 +28,13 @@ const nextConfig: NextConfig = {
         port: "3005",
         pathname: "/images/**",
       },
+      // Google profile pictures (OAuth sign-in). Avatars are served from
+      // lh3-lh6.googleusercontent.com today, but the subdomain rotates —
+      // whitelist the whole zone to avoid breakage on rotation.
+      {
+        protocol: "https",
+        hostname: "**.googleusercontent.com",
+      },
     ],
   },
 };

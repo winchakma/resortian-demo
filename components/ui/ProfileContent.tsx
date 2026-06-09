@@ -86,7 +86,7 @@ export function ProfileContent({
               },
               {
                 id: "blogs" as Tab,
-                label: "My Blogs",
+                label: "My Blog",
                 icon: <BookOpen className="h-4 w-4" />,
               },
             ]
