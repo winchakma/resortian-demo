@@ -85,7 +85,23 @@ export default function BlogRichEditor({
   const [linkUrl, setLinkUrl] = useState("");
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Exit fullscreen on ESC + lock body scroll while in fullscreen.
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsFullscreen(false);
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [isFullscreen]);
 
   const editor = useEditor({
     // SSR-safe — Tiptap mounts on the client only.
@@ -161,11 +177,15 @@ export default function BlogRichEditor({
 
   return (
     <div
-      className={`overflow-hidden rounded-xl border bg-white shadow-sm transition-colors focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 dark:bg-gray-900 ${
-        hasError
-          ? "border-red-400"
-          : "border-gray-200 dark:border-gray-700"
-      }`}
+      className={
+        isFullscreen
+          ? "fixed inset-0 z-50 flex flex-col bg-white dark:bg-gray-900"
+          : `overflow-hidden rounded-xl border bg-white shadow-sm transition-colors focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 dark:bg-gray-900 ${
+              hasError
+                ? "border-red-400"
+                : "border-gray-200 dark:border-gray-700"
+            }`
+      }
     >
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-0.5 border-b border-gray-100 bg-gray-50 px-2 py-1.5 dark:border-gray-800 dark:bg-gray-800/50">
@@ -325,6 +345,16 @@ export default function BlogRichEditor({
           className="hidden"
           onChange={handleFileSelected}
         />
+
+        {/* Fullscreen toggle — pushed to the right edge */}
+        <span className="ml-auto" />
+        <ToolbarButton
+          onClick={() => setIsFullscreen((v) => !v)}
+          active={isFullscreen}
+          title={isFullscreen ? "Exit fullscreen (Esc)" : "Fullscreen"}
+        >
+          {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+        </ToolbarButton>
       </div>
 
       {/* Link URL input */}
@@ -371,7 +401,15 @@ export default function BlogRichEditor({
       {/* Editor area */}
       <EditorContent
         editor={editor}
-        className="prose prose-sm max-w-none px-4 py-3 dark:prose-invert focus:outline-none [&_.tiptap]:min-h-48 [&_.tiptap]:focus:outline-none"
+        className={
+          // `prose` adds large margins to <p>/<h*>/<ul>/<ol>; override them so
+          // pressing Enter feels like a regular line break instead of a full
+          // paragraph gap.
+          (isFullscreen
+            ? "prose prose-sm max-w-none flex-1 overflow-y-auto px-6 py-6 dark:prose-invert focus:outline-none [&_.tiptap]:min-h-full [&_.tiptap]:focus:outline-none"
+            : "prose prose-sm max-w-none px-4 py-3 dark:prose-invert focus:outline-none [&_.tiptap]:min-h-48 [&_.tiptap]:focus:outline-none") +
+          " [&_p]:my-1 [&_h1]:my-3 [&_h2]:my-2.5 [&_h3]:my-2 [&_ul]:my-2 [&_ol]:my-2 [&_blockquote]:my-2"
+        }
       />
     </div>
   );
