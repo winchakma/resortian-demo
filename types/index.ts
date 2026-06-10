@@ -273,6 +273,7 @@ export interface VendorRoom {
   approvalStatus: ApprovalStatus;
   rejectionReason: string | null;
   createdAt: string;
+  units?: { id: string; unitName: string; floorNumber: number | null }[];
 }
 
 export interface VendorHotel {

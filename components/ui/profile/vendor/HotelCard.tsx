@@ -1,3 +1,5 @@
+"use client";
+
 import { VendorHotel, VendorRoom } from "@/types";
 import RoomRow from "./RoomRow";
 import Image from "next/image";
@@ -14,6 +16,9 @@ import {
 } from "lucide-react";
 import ApprovalBadge from "./ApprovalBadge";
 import { BASE } from "@/utils";
+import { useState } from "react";
+import HotelDetailModal from "./HotelDetailModal";
+import RoomDetailModal from "./RoomDetailModal";
 
 export default function HotelCard({
   hotel,
@@ -34,7 +39,10 @@ export default function HotelCard({
   onEditRoom: (room: VendorRoom) => void;
   onDeleteRoom: (room: VendorRoom) => void;
 }) {
+  const [showHotelDetail, setShowHotelDetail] = useState(false);
+  const [detailRoom, setDetailRoom] = useState<VendorRoom | null>(null);
   return (
+    <>
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900">
       {/* Hotel header */}
       <div className="flex gap-4 p-5">
@@ -60,7 +68,10 @@ export default function HotelCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
-              <h4 className="font-semibold text-gray-900 dark:text-white">
+              <h4
+                className="cursor-pointer font-semibold text-gray-900 underline-offset-2 hover:underline dark:text-white"
+                onClick={() => setShowHotelDetail(true)}
+              >
                 {hotel.name}
               </h4>
               <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
@@ -170,6 +181,7 @@ export default function HotelCard({
                   room={room}
                   onEdit={() => onEditRoom(room)}
                   onDelete={() => onDeleteRoom(room)}
+                  onViewDetail={() => setDetailRoom(room)}
                 />
               ))}
             </div>
@@ -177,5 +189,13 @@ export default function HotelCard({
         </div>
       )}
     </div>
+
+      {showHotelDetail && (
+        <HotelDetailModal hotel={hotel} onClose={() => setShowHotelDetail(false)} />
+      )}
+      {detailRoom && (
+        <RoomDetailModal room={detailRoom} onClose={() => setDetailRoom(null)} />
+      )}
+    </>
   );
 }

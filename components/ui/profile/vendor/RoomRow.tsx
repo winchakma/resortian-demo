@@ -8,10 +8,12 @@ export default function RoomRow({
   room,
   onEdit,
   onDelete,
+  onViewDetail,
 }: {
   room: VendorRoom;
   onEdit: () => void;
   onDelete: () => void;
+  onViewDetail: () => void;
 }) {
   return (
     <div className="flex items-start gap-4 px-5 py-4">
@@ -37,7 +39,10 @@ export default function RoomRow({
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold text-gray-900 dark:text-white">
+            <p
+              className="cursor-pointer text-sm font-semibold text-gray-900 underline-offset-2 hover:underline dark:text-white"
+              onClick={onViewDetail}
+            >
               {room.name}
             </p>
             {room.badge && (
