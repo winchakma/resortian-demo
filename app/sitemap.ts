@@ -15,7 +15,7 @@ import type { MetadataRoute } from "next";
 export const revalidate = 3600; // 1 hour
 
 const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://resortian.com"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.resortian.com"
 ).replace(/\/$/, "");
 
 const API_BASE =
