@@ -307,7 +307,7 @@ export default function VendorHotelsList() {
       )}
       {modal && typeof modal === "object" && modal.type === "add-room" && (
         <FormModal
-          title={`Add Room — ${modal.hotelName}`}
+          title={`Add Room Type — ${modal.hotelName}`}
           onClose={() => setModal(null)}
         >
           <CreateRoomForm
