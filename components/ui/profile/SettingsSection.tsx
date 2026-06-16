@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { BASE, labelCls, inputCls } from "@/utils";
 import { toast } from "react-hot-toast";
 import { Lock, Eye, EyeOff, Trash2 } from "lucide-react";
-import VendorBankInfoSection from "./vendor/VendorBankInfoSection";
 import PushNotificationSection from "./PushNotificationSection";
 import FieldError from "@/components/common/FieldError";
 import * as yup from "yup";
@@ -26,7 +25,7 @@ const passwordSchema = yup.object({
 
 type PasswordFormValues = yup.InferType<typeof passwordSchema>;
 
-export default function SettingsSection({ isVendor }: { isVendor: boolean }) {
+export default function SettingsSection() {
   const { token } = useAuth();
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -70,8 +69,6 @@ export default function SettingsSection({ isVendor }: { isVendor: boolean }) {
 
   return (
     <div className="space-y-5">
-      {isVendor && <VendorBankInfoSection />}
-
       <PushNotificationSection />
 
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">

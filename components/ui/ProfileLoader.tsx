@@ -39,6 +39,7 @@ export function ProfileLoader() {
           phone: string;
           email: string | null;
           address: string | null;
+          designation: string | null;
           avatar: string | null;
           memberSince: string;
           role: "USER" | "ADMIN" | "HOTEL_OWNER" | "SUPER_ADMIN";
@@ -51,6 +52,7 @@ export function ProfileLoader() {
           phone: meData.phone,
           email: meData.email ?? "",
           address: meData.address ?? "",
+          designation: meData.designation ?? "",
           memberSince: meData.memberSince,
           avatar: meData.avatar ?? undefined,
           role: meData.role,

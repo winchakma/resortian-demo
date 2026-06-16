@@ -13,6 +13,7 @@ import {
   Store,
   Handshake,
   BookOpen,
+  Wallet,
 } from "lucide-react";
 import type { ProfileContentProps, Tab } from "@/types";
 import { initials } from "@/utils";
@@ -20,6 +21,7 @@ import SignOutButton from "./profile/SignOutButton";
 import ProfileSection from "./profile/ProfileSection";
 import BookingsSection from "./profile/BookingsSection";
 import VendorDashboard from "./profile/vendor/VendorDashboard";
+import VendorFinance from "./profile/vendor/VendorFinance";
 import SettingsSection from "./profile/SettingsSection";
 import AffiliatesSection from "./profile/AffiliatesSection";
 import MyBlogsSection from "./profile/MyBlogsSection";
@@ -58,6 +60,11 @@ export function ProfileContent({
           id: "hotels",
           label: "My Properties",
           icon: <Building2 className="h-4 w-4" />,
+        },
+        {
+          id: "finance",
+          label: "Finance",
+          icon: <Wallet className="h-4 w-4" />,
         },
         {
           id: "settings",
@@ -275,11 +282,10 @@ export function ProfileContent({
             <BookingsSection bookings={bookings} />
           )}
           {activeTab === "hotels" && isVendor && <VendorDashboard />}
+          {activeTab === "finance" && isVendor && <VendorFinance />}
           {activeTab === "affiliates" && isAffiliate && <AffiliatesSection />}
           {activeTab === "blogs" && isAffiliate && <MyBlogsSection />}
-          {activeTab === "settings" && (
-            <SettingsSection isVendor={isVendor || isAffiliate} />
-          )}
+          {activeTab === "settings" && <SettingsSection />}
         </div>
       </div>
     </div>

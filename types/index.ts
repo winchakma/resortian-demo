@@ -87,6 +87,7 @@ export interface UserProfile {
   email: string;
   phone: string;
   address: string;
+  designation?: string;
   memberSince: string;
   avatar?: string;
   role: "USER" | "ADMIN" | "HOTEL_OWNER" | "SUPER_ADMIN";
@@ -134,6 +135,7 @@ export type Tab =
   | "profile"
   | "bookings"
   | "hotels"
+  | "finance"
   | "settings"
   | "affiliates"
   | "blogs";
@@ -481,4 +483,124 @@ export interface VendorDestination {
   rejectionReason: string | null;
   _count: { hotels: number };
   createdAt: string;
+}
+
+// ─── Vendor Finance ──────────────────────────────────────────────────────────
+
+export type CashoutStatusKey = "PENDING" | "APPROVED" | "PAID" | "REJECTED";
+
+export interface VendorFinanceBookingRow {
+  id: string;
+  reference: string;
+  status: VendorBookingStatus;
+  totalPrice: number;
+  discountAmount: number;
+  advancePaid: number;
+  balanceDue: number;
+  nights: number;
+  bookedOn: string;
+  checkIn: string;
+  checkOut: string;
+  paymentMethod?: string;
+  commissionRate: number;
+  commissionAmount: number;
+  earning: number;
+  cashoutRequest: {
+    id: string;
+    status: CashoutStatusKey;
+    amount: number;
+    commissionAmount: number;
+    commissionRate: number;
+  } | null;
+  guest: { name: string | null; phone: string | null };
+  room: {
+    id: string;
+    name: string;
+    hotel: { id: string; name: string; slug: string };
+  };
+}
+
+export interface VendorFinancePerHotel {
+  hotelId: string;
+  hotelName: string;
+  hotelSlug: string;
+  bookings: number;
+  gross: number;
+  discount: number;
+  advance: number;
+  balanceDue: number;
+  estimatedCommission?: number;
+  estimatedEarning: number;
+}
+
+export interface VendorFinanceMonthly {
+  month: string;
+  bookings: number;
+  gross: number;
+  discount: number;
+  advance: number;
+  estimatedEarning: number;
+}
+
+export interface VendorFinanceOverview {
+  bookings: {
+    total: number;
+    cancelled: number;
+    confirmed: number;
+    completed: number;
+    pending: number;
+    thisMonth: number;
+    prevMonth: number;
+  };
+  revenue: {
+    grossBookingValue: number;
+    discountGiven: number;
+    netBookingRevenue: number;
+    advanceCollected: number;
+    balanceDueTotal: number;
+    estimatedCommission: number;
+    estimatedNetEarnings: number;
+    defaultCommissionRate: number;
+  };
+  thisMonth: { bookings: number; gross: number; discount: number; advance: number };
+  prevMonth: { bookings: number; gross: number; discount: number; advance: number };
+  cashouts: {
+    eligibleBookings: number;
+    countsByStatus: Record<CashoutStatusKey, number>;
+    amountsByStatus: Record<CashoutStatusKey, { payout: number; commission: number }>;
+  };
+  perHotel: VendorFinancePerHotel[];
+  monthlyFinance: VendorFinanceMonthly[];
+  recentEarnings: VendorFinanceBookingRow[];
+}
+
+export interface VendorFinanceReport {
+  range: { from: string; to: string };
+  summary: {
+    totalBookings: number;
+    gross: number;
+    discount: number;
+    netRevenue: number;
+    advance: number;
+    balanceDue: number;
+    estimatedCommission: number;
+    estimatedNetEarning: number;
+    defaultCommissionRate: number;
+  };
+  statusSummary: {
+    status: VendorBookingStatus;
+    count: number;
+    gross: number;
+    discount: number;
+    advance: number;
+    balanceDue: number;
+  }[];
+  perHotel: VendorFinancePerHotel[];
+  cashouts: {
+    total: number;
+    totalPayout: number;
+    totalCommission: number;
+    byStatus: Record<string, { count: number; payout: number; commission: number }>;
+  };
+  bookings: VendorFinanceBookingRow[];
 }

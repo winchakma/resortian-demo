@@ -24,12 +24,14 @@ import {
   Edit2,
   X,
   Save,
+  Briefcase,
 } from "lucide-react";
 
 const profileSchema = yup.object({
   name: yup.string().required("Name is required").min(2, "Name is too short"),
   email: yup.string().email("Invalid email address").default(""),
   address: yup.string().default(""),
+  designation: yup.string().default(""),
 });
 
 type ProfileFormValues = yup.InferType<typeof profileSchema>;
@@ -67,6 +69,7 @@ export default function ProfileSection({
       name: user.name,
       email: user.email || "",
       address: user.address || "",
+      designation: user.designation || "",
     },
     mode: "onTouched",
   });
@@ -76,6 +79,7 @@ export default function ProfileSection({
       name: user.name,
       email: user.email || "",
       address: user.address || "",
+      designation: user.designation || "",
     });
     setIsEditing(true);
   }
@@ -101,6 +105,7 @@ export default function ProfileSection({
           name: data.name,
           email: data.email || undefined,
           address: data.address || undefined,
+          designation: isVendor ? data.designation || undefined : undefined,
         }),
       });
       const json = await res.json();
@@ -110,6 +115,9 @@ export default function ProfileSection({
         name: json.name ?? data.name,
         email: json.email ?? data.email ?? "",
         address: json.address ?? data.address ?? "",
+        designation: isVendor
+          ? (json.designation ?? data.designation ?? "")
+          : user.designation,
       } as UserProfile);
       toast.success("Profile updated successfully!");
       setIsEditing(false);
@@ -277,6 +285,21 @@ export default function ProfileSection({
               />
               <FieldError msg={errors.address?.message} />
             </div>
+            {isVendor && (
+              <div>
+                <label className={labelCls()}>
+                  <Briefcase className="mr-1.5 inline h-3.5 w-3.5 text-gray-400" />
+                  Designation
+                </label>
+                <input
+                  type="text"
+                  {...register("designation")}
+                  placeholder="e.g. General Manager (optional)"
+                  className={inputCls(!!errors.designation)}
+                />
+                <FieldError msg={errors.designation?.message} />
+              </div>
+            )}
             <div className="flex items-center gap-3 pt-1">
               <button
                 type="submit"
@@ -319,6 +342,15 @@ export default function ProfileSection({
                 label: "Address",
                 value: user.address || "—",
               },
+              ...(isVendor
+                ? [
+                    {
+                      icon: <Briefcase className="h-4 w-4 text-gray-400" />,
+                      label: "Designation",
+                      value: user.designation || "—",
+                    },
+                  ]
+                : []),
               {
                 icon: <Star className="h-4 w-4 text-gray-400" />,
                 label: "Member Since",
