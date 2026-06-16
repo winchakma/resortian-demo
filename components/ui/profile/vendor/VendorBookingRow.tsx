@@ -16,8 +16,16 @@ import {
   LogIn,
   LogOut,
   CheckCircle2,
+  DoorOpen,
+  Repeat,
+  X,
+  Check,
 } from "lucide-react";
-import type { VendorBooking, VendorBookingStatus } from "@/types";
+import type {
+  BookingAvailableUnit,
+  VendorBooking,
+  VendorBookingStatus,
+} from "@/types";
 import { fmtDate, VENDOR_BOOKING_STATUS_CONFIG } from "@/utils";
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3005";
@@ -42,6 +50,75 @@ export default function VendorBookingRow({
   const [localCheckinAt, setLocalCheckinAt] = useState(booking.actualCheckinAt);
   const [localGuestCheckedOut, setLocalGuestCheckedOut] = useState(booking.guestCheckedOutAt);
   const [localStatus, setLocalStatus] = useState<VendorBookingStatus>(booking.status);
+  const [localUnit, setLocalUnit] = useState(booking.unit ?? null);
+
+  // Change-unit picker state
+  const [showUnitPicker, setShowUnitPicker] = useState(false);
+  const [availableUnits, setAvailableUnits] = useState<BookingAvailableUnit[] | null>(null);
+  const [unitsLoading, setUnitsLoading] = useState(false);
+  const [swapLoadingId, setSwapLoadingId] = useState<string | null>(null);
+
+  async function loadAvailableUnits() {
+    if (!token) return;
+    setUnitsLoading(true);
+    try {
+      const res = await fetch(`${BASE}/bookings/${booking.id}/available-units`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error();
+      setAvailableUnits(await res.json());
+    } catch {
+      toast.error("Could not load available units.");
+    } finally {
+      setUnitsLoading(false);
+    }
+  }
+
+  function openUnitPicker() {
+    setShowUnitPicker(true);
+    if (availableUnits === null) loadAvailableUnits();
+  }
+
+  async function handleChangeUnit(unitId: string) {
+    if (!token) return;
+    setSwapLoadingId(unitId);
+    try {
+      const res = await fetch(`${BASE}/bookings/${booking.id}/room-unit`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ roomUnitId: unitId }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Failed to change unit");
+      setLocalUnit({
+        id: json.roomUnit?.id ?? unitId,
+        unitName: json.roomUnit?.unitName ?? null,
+        floorNumber: json.roomUnit?.floorNumber ?? null,
+      });
+      toast.success("Room unit updated.");
+      setShowUnitPicker(false);
+      setAvailableUnits(null);
+      onUpdated?.();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Could not change unit.");
+    } finally {
+      setSwapLoadingId(null);
+    }
+  }
+
+  function unitLabel(u: { unitName: string | null; floorNumber: number | null } | null) {
+    if (!u) return "—";
+    const parts: string[] = [];
+    if (u.unitName) parts.push(u.unitName);
+    if (u.floorNumber != null) parts.push(`Floor ${u.floorNumber}`);
+    return parts.join(" · ") || "Unit";
+  }
+
+  const canChangeUnit =
+    localStatus !== "CANCELLED" && localStatus !== "COMPLETED";
   const earlyDays = booking.earlyCheckoutSavedDays ?? 0;
   const isEarlyCheckout = earlyDays > 0 && !!booking.earlyCheckoutRequestedAt;
 
@@ -129,8 +206,14 @@ export default function VendorBookingRow({
               <p className="text-sm font-semibold text-gray-900 dark:text-white">
                 {hotelName}
               </p>
-              <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                {roomName}
+              <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-gray-500 dark:text-gray-400">
+                <span>{roomName}</span>
+                {localUnit && (
+                  <span className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                    <DoorOpen className="h-3 w-3" />
+                    {unitLabel(localUnit)}
+                  </span>
+                )}
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap items-center gap-1.5">
@@ -332,6 +415,118 @@ export default function VendorBookingRow({
                     : "Mobile Banking"}
                 </span>
               </div>
+
+              {/* Change unit */}
+              {canChangeUnit && (
+                <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <DoorOpen className="h-4 w-4 text-gray-400" />
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Current unit:{" "}
+                        <span className="font-semibold text-gray-700 dark:text-gray-200">
+                          {unitLabel(localUnit)}
+                        </span>
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={openUnitPicker}
+                      className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-gray-700 dark:text-gray-400 dark:hover:border-green-700 dark:hover:bg-green-950/30 dark:hover:text-green-400"
+                    >
+                      <Repeat className="h-3.5 w-3.5" />
+                      Change Unit
+                    </button>
+                  </div>
+
+                  {showUnitPicker && (
+                    <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
+                      <div className="mb-2 flex items-center justify-between">
+                        <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                          Select a unit for {fmtDate(booking.checkIn)} →{" "}
+                          {fmtDate(booking.checkOut)}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setShowUnitPicker(false)}
+                          className="rounded p-0.5 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-gray-700"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+
+                      {unitsLoading && (
+                        <div className="flex items-center justify-center py-4">
+                          <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                        </div>
+                      )}
+
+                      {!unitsLoading && availableUnits && (
+                        <div className="flex flex-col gap-1.5">
+                          {availableUnits.length === 0 && (
+                            <p className="py-2 text-center text-xs text-gray-400">
+                              No other units exist for this room.
+                            </p>
+                          )}
+                          {availableUnits.map((u) => {
+                            const disabled =
+                              u.isCurrent || !u.isAvailable || swapLoadingId !== null;
+                            return (
+                              <button
+                                key={u.id}
+                                type="button"
+                                disabled={disabled}
+                                onClick={() => handleChangeUnit(u.id)}
+                                className={`flex items-center justify-between rounded-lg border px-3 py-2 text-left text-xs transition-colors ${
+                                  u.isCurrent
+                                    ? "border-green-300 bg-green-50 dark:border-green-700 dark:bg-green-950/30"
+                                    : u.isAvailable
+                                      ? "border-gray-200 bg-white hover:border-green-300 hover:bg-green-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-green-700 dark:hover:bg-green-950/30"
+                                      : "cursor-not-allowed border-gray-200 bg-gray-100 opacity-60 dark:border-gray-700 dark:bg-gray-800"
+                                } ${swapLoadingId !== null && !u.isCurrent ? "opacity-60" : ""}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <DoorOpen
+                                    className={`h-3.5 w-3.5 ${
+                                      u.isAvailable
+                                        ? "text-green-600 dark:text-green-400"
+                                        : "text-gray-400"
+                                    }`}
+                                  />
+                                  <span className="font-semibold text-gray-700 dark:text-gray-200">
+                                    {unitLabel(u)}
+                                  </span>
+                                  {!u.isActive && (
+                                    <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[9px] font-semibold uppercase text-gray-500 dark:bg-gray-700">
+                                      Inactive
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="flex items-center gap-1.5">
+                                  {u.isCurrent && (
+                                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-green-700 dark:text-green-400">
+                                      <Check className="h-3 w-3" />
+                                      Current
+                                    </span>
+                                  )}
+                                  {!u.isCurrent && u.isAvailable && swapLoadingId === u.id && (
+                                    <Loader2 className="h-3 w-3 animate-spin text-green-600" />
+                                  )}
+                                  {!u.isCurrent && !u.isAvailable && u.isActive && (
+                                    <span className="text-[10px] font-semibold text-red-500">
+                                      Conflict ({u.conflicts.length})
+                                    </span>
+                                  )}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Check-in action */}
               {localStatus === "CONFIRMED" && !localCheckinAt && (

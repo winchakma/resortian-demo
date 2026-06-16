@@ -61,6 +61,11 @@ export default function RoomRow({
           </span>
           <span>{room.view}</span>
           <span>{room.size}</span>
+          {room.units && (
+            <span>
+              {room.units.length} unit{room.units.length !== 1 ? "s" : ""}
+            </span>
+          )}
         </div>
 
         {room.approvalStatus === "REJECTED" && room.rejectionReason && (

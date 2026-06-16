@@ -10,10 +10,14 @@ import FieldError from "@/components/common/FieldError";
 import {
   Hash,
   ImageIcon,
+  Layers,
   Loader2,
   Maximize2,
   Pencil,
+  Plus,
   Sparkles,
+  Trash2,
+  Undo2,
   Upload,
   Users,
   X,
@@ -21,6 +25,20 @@ import {
 import Image from "next/image";
 
 const MAX_ROOM_IMAGES = 10;
+
+type ExistingUnit = {
+  id: string;
+  unitName: string;
+  floorNumber: string;
+  initialUnitName: string;
+  initialFloorNumber: string;
+  deleted: boolean;
+};
+
+type NewUnit = {
+  unitName: string;
+  floorNumber: string;
+};
 
 const updateRoomSchema = yup.object({
   name: yup.string().required("Room name is required"),
@@ -77,6 +95,11 @@ export default function EditRoomForm({
   // True when user removed an existing URL without adding new files
   const [existingModified, setExistingModified] = useState(false);
 
+  // Units state
+  const [existingUnits, setExistingUnits] = useState<ExistingUnit[]>([]);
+  const [newUnits, setNewUnits] = useState<NewUnit[]>([]);
+  const [unitsError, setUnitsError] = useState("");
+
   // Init existing images from room prop
   useEffect(() => {
     const previews = (room.images ?? []).map((img) =>
@@ -86,7 +109,56 @@ export default function EditRoomForm({
     setImagePreviews(previews);
     setExistingModified(false);
     setImageFiles([]);
+    setExistingUnits(
+      (room.units ?? []).map((u) => ({
+        id: u.id,
+        unitName: u.unitName ?? "",
+        floorNumber: u.floorNumber != null ? String(u.floorNumber) : "",
+        initialUnitName: u.unitName ?? "",
+        initialFloorNumber: u.floorNumber != null ? String(u.floorNumber) : "",
+        deleted: false,
+      })),
+    );
+    setNewUnits([]);
+    setUnitsError("");
   }, [room.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function updateExistingUnit(
+    index: number,
+    field: "unitName" | "floorNumber",
+    value: string,
+  ) {
+    setExistingUnits((prev) =>
+      prev.map((u, i) => (i === index ? { ...u, [field]: value } : u)),
+    );
+    setUnitsError("");
+  }
+
+  function toggleDeleteExistingUnit(index: number) {
+    setExistingUnits((prev) =>
+      prev.map((u, i) => (i === index ? { ...u, deleted: !u.deleted } : u)),
+    );
+    setUnitsError("");
+  }
+
+  function addNewUnitRow() {
+    setNewUnits((prev) => [...prev, { unitName: "", floorNumber: "" }]);
+    setUnitsError("");
+  }
+
+  function removeNewUnitRow(index: number) {
+    setNewUnits((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function updateNewUnit(
+    index: number,
+    field: "unitName" | "floorNumber",
+    value: string,
+  ) {
+    setNewUnits((prev) =>
+      prev.map((u, i) => (i === index ? { ...u, [field]: value } : u)),
+    );
+  }
 
   const {
     register,
@@ -168,6 +240,14 @@ export default function EditRoomForm({
   }
 
   async function onSubmit(data: UpdateRoomFormValues) {
+    // Validate at least one unit will remain
+    const remainingExisting = existingUnits.filter((u) => !u.deleted).length;
+    const totalAfter = remainingExisting + newUnits.length;
+    if (totalAfter < 1) {
+      setUnitsError("At least one unit is required");
+      return;
+    }
+
     const fd = new FormData();
     fd.append("name", data.name);
     fd.append("description", data.description);
@@ -182,6 +262,17 @@ export default function EditRoomForm({
       .forEach((a) => fd.append("amenities", a));
     if (data.badge) fd.append("badge", data.badge);
     fd.append("isActive", data.isActive ? "true" : "false");
+
+    // Build newUnits JSON for the room PATCH (server creates them in tx)
+    const newUnitSpecs = newUnits.map((u) => ({
+      ...(u.unitName.trim() ? { unitName: u.unitName.trim() } : {}),
+      ...(u.floorNumber.trim()
+        ? { floorNumber: parseInt(u.floorNumber, 10) }
+        : {}),
+    }));
+    if (newUnitSpecs.length > 0) {
+      fd.append("newUnits", JSON.stringify(newUnitSpecs));
+    }
 
     let filesToSend = [...imageFiles];
 
@@ -210,6 +301,52 @@ export default function EditRoomForm({
     }
 
     try {
+      // 1) Apply per-unit updates and deletions in parallel
+      const unitOps: Promise<Response>[] = [];
+      for (const u of existingUnits) {
+        if (u.deleted) {
+          unitOps.push(
+            fetch(`${BASE}/rooms/units/${u.id}`, {
+              method: "DELETE",
+              headers: { Authorization: `Bearer ${token}` },
+            }),
+          );
+          continue;
+        }
+        const nameChanged = u.unitName.trim() !== u.initialUnitName.trim();
+        const floorChanged =
+          u.floorNumber.trim() !== u.initialFloorNumber.trim();
+        if (nameChanged || floorChanged) {
+          const body: Record<string, unknown> = {};
+          if (nameChanged) body.unitName = u.unitName.trim();
+          if (floorChanged) {
+            body.floorNumber = u.floorNumber.trim()
+              ? parseInt(u.floorNumber, 10)
+              : null;
+          }
+          unitOps.push(
+            fetch(`${BASE}/rooms/units/${u.id}`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(body),
+            }),
+          );
+        }
+      }
+
+      if (unitOps.length > 0) {
+        const results = await Promise.all(unitOps);
+        const failed = results.find((r) => !r.ok);
+        if (failed) {
+          const json = await failed.json().catch(() => ({}));
+          throw new Error(json.message || "Failed to update one or more units");
+        }
+      }
+
+      // 2) Update the room itself (and create new units in the same tx)
       const res = await fetch(`${BASE}/rooms/${room.id}`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
@@ -352,6 +489,142 @@ export default function EditRoomForm({
           className={inputCls(!!errors.amenities)}
         />
         <FieldError msg={errors.amenities?.message} />
+      </div>
+
+      {/* Room Units */}
+      <div>
+        <label className={labelCls()}>
+          <span className="flex items-center gap-1.5">
+            <Layers className="h-3.5 w-3.5" /> Room Units{" "}
+            <span className="font-normal text-gray-400">
+              (at least 1 required)
+            </span>
+          </span>
+        </label>
+        <p className="mb-3 text-xs text-gray-400 dark:text-gray-500">
+          Each unit is a physical room of this type. Edit, remove or add units
+          below.
+        </p>
+
+        <div className="space-y-3">
+          {existingUnits.map((unit, index) => (
+            <div
+              key={unit.id}
+              className={`flex items-start gap-3 rounded-xl border bg-gray-50 p-3 transition-colors dark:bg-gray-800/50 ${
+                unit.deleted
+                  ? "border-red-200 bg-red-50/60 dark:border-red-900/40 dark:bg-red-950/20"
+                  : "border-gray-200 dark:border-gray-700"
+              }`}
+            >
+              <div
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
+                  unit.deleted
+                    ? "bg-red-100 text-red-700 line-through dark:bg-red-900/40 dark:text-red-400"
+                    : "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400"
+                }`}
+              >
+                {index + 1}
+              </div>
+              <div className="grid flex-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <input
+                    type="text"
+                    value={unit.unitName}
+                    onChange={(e) =>
+                      updateExistingUnit(index, "unitName", e.target.value)
+                    }
+                    placeholder="Unit name (e.g. Room 101)"
+                    className={inputCls()}
+                    disabled={unit.deleted}
+                  />
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    value={unit.floorNumber}
+                    onChange={(e) =>
+                      updateExistingUnit(index, "floorNumber", e.target.value)
+                    }
+                    placeholder="Floor number (optional)"
+                    min={0}
+                    className={inputCls()}
+                    disabled={unit.deleted}
+                  />
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => toggleDeleteExistingUnit(index)}
+                className={`mt-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                  unit.deleted
+                    ? "text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800"
+                    : "text-gray-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
+                }`}
+                title={unit.deleted ? "Undo remove" : "Remove unit"}
+              >
+                {unit.deleted ? (
+                  <Undo2 className="h-3.5 w-3.5" />
+                ) : (
+                  <Trash2 className="h-3.5 w-3.5" />
+                )}
+              </button>
+            </div>
+          ))}
+
+          {newUnits.map((unit, index) => (
+            <div
+              key={`new-${index}`}
+              className="flex items-start gap-3 rounded-xl border border-dashed border-green-300 bg-green-50/40 p-3 dark:border-green-800 dark:bg-green-950/20"
+            >
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-green-600 text-xs font-bold text-white">
+                +
+              </div>
+              <div className="grid flex-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <input
+                    type="text"
+                    value={unit.unitName}
+                    onChange={(e) =>
+                      updateNewUnit(index, "unitName", e.target.value)
+                    }
+                    placeholder="Unit name (e.g. Room 305)"
+                    className={inputCls()}
+                  />
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    value={unit.floorNumber}
+                    onChange={(e) =>
+                      updateNewUnit(index, "floorNumber", e.target.value)
+                    }
+                    placeholder="Floor number (optional)"
+                    min={0}
+                    className={inputCls()}
+                  />
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => removeNewUnitRow(index)}
+                className="mt-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
+                title="Discard new unit"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={addNewUnitRow}
+          className="mt-3 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-green-600 transition-colors hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-950/30"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Add Another Unit
+        </button>
+        <FieldError msg={unitsError} />
       </div>
 
       {/* Active toggle */}

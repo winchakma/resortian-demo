@@ -18,6 +18,7 @@ import {
   Building2,
   CalendarDays,
   BarChart3,
+  DoorOpen,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { BASE, fmtDate, VENDOR_BOOKING_STATUS_CONFIG } from "@/utils";
@@ -28,6 +29,16 @@ import type {
 
 function fmtBDT(n: number) {
   return `৳${n.toLocaleString("en-BD")}`;
+}
+
+function unitLabel(
+  u: { unitName: string | null; floorNumber: number | null } | null | undefined,
+) {
+  if (!u) return null;
+  const parts: string[] = [];
+  if (u.unitName) parts.push(u.unitName);
+  if (u.floorNumber != null) parts.push(`Floor ${u.floorNumber}`);
+  return parts.join(" · ") || null;
 }
 
 const CASHOUT_STATUS_CONFIG: Record<CashoutStatusKey, { label: string; cls: string }> = {
@@ -474,9 +485,17 @@ export default function FinanceOverview() {
                         </span>
                       )}
                     </div>
-                    <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                      {b.room.hotel.name} · {b.room.name}
-                      {b.guest.name ? ` · ${b.guest.name}` : ""}
+                    <p className="flex flex-wrap items-center gap-x-1.5 truncate text-xs text-gray-500 dark:text-gray-400">
+                      <span>
+                        {b.room.hotel.name} · {b.room.name}
+                      </span>
+                      {unitLabel(b.unit) && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                          <DoorOpen className="h-3 w-3" />
+                          {unitLabel(b.unit)}
+                        </span>
+                      )}
+                      {b.guest.name && <span>· {b.guest.name}</span>}
                     </p>
                     <p className="text-xs text-gray-400 dark:text-gray-500">
                       {fmtDate(b.checkIn)} → {fmtDate(b.checkOut)} · {b.nights} night

@@ -26,6 +26,16 @@ function fmtBDT(n: number) {
   return `৳${n.toLocaleString("en-BD")}`;
 }
 
+function unitLabel(
+  u: { unitName: string | null; floorNumber: number | null } | null | undefined,
+) {
+  if (!u) return null;
+  const parts: string[] = [];
+  if (u.unitName) parts.push(u.unitName);
+  if (u.floorNumber != null) parts.push(`F${u.floorNumber}`);
+  return parts.join(" · ") || null;
+}
+
 function isoDate(d: Date) {
   return d.toISOString().slice(0, 10);
 }
@@ -151,6 +161,7 @@ export default function FinanceReports() {
       "Status",
       "Hotel",
       "Room",
+      "Unit",
       "Guest",
       "Check-in",
       "Check-out",
@@ -170,6 +181,7 @@ export default function FinanceReports() {
       b.status,
       b.room.hotel.name,
       b.room.name,
+      unitLabel(b.unit) ?? "",
       b.guest.name ?? "",
       isoDate(new Date(b.checkIn)),
       isoDate(new Date(b.checkOut)),
@@ -526,7 +538,14 @@ export default function FinanceReports() {
                             <p className="text-xs font-medium text-gray-900 dark:text-white">
                               {b.room.hotel.name}
                             </p>
-                            <p className="text-[11px] text-gray-400">{b.room.name}</p>
+                            <p className="text-[11px] text-gray-400">
+                              {b.room.name}
+                              {unitLabel(b.unit) && (
+                                <span className="ml-1 text-[10px] font-semibold text-gray-500 dark:text-gray-400">
+                                  · {unitLabel(b.unit)}
+                                </span>
+                              )}
+                            </p>
                           </td>
                           <td className="px-3 py-3">
                             <p className="text-xs text-gray-900 dark:text-white">

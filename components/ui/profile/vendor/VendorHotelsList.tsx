@@ -41,7 +41,7 @@ export default function VendorHotelsList() {
   const [modal, setModal] = useState<VendorModal>(null);
   const [confirm, setConfirm] = useState<ConfirmState>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [collapsedIds, setCollapsedIds] = useState<Set<string>>(new Set());
 
   async function handleDeleteHotel(id: string) {
     setDeleteLoading(true);
@@ -254,9 +254,14 @@ export default function VendorHotelsList() {
               <HotelCard
                 key={hotel.id}
                 hotel={hotel}
-                expanded={expandedId === hotel.id}
+                expanded={!collapsedIds.has(hotel.id)}
                 onToggle={() =>
-                  setExpandedId((p) => (p === hotel.id ? null : hotel.id))
+                  setCollapsedIds((prev) => {
+                    const next = new Set(prev);
+                    if (next.has(hotel.id)) next.delete(hotel.id);
+                    else next.add(hotel.id);
+                    return next;
+                  })
                 }
                 onAddRoom={() =>
                   setModal({

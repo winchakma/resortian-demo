@@ -338,6 +338,11 @@ export interface VendorBooking {
     email: string | null;
     avatar: string | null;
   } | null;
+  unit?: {
+    id: string;
+    unitName: string | null;
+    floorNumber: number | null;
+  } | null;
   room: {
     id: string;
     name: string;
@@ -485,6 +490,24 @@ export interface VendorDestination {
   createdAt: string;
 }
 
+// ─── Booking unit swap ───────────────────────────────────────────────────────
+
+export interface BookingAvailableUnit {
+  id: string;
+  unitName: string | null;
+  floorNumber: number | null;
+  isActive: boolean;
+  isCurrent: boolean;
+  isAvailable: boolean;
+  conflicts: {
+    id: string;
+    reference: string;
+    checkIn: string;
+    checkOut: string;
+    status: "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED";
+  }[];
+}
+
 // ─── Vendor Finance ──────────────────────────────────────────────────────────
 
 export type CashoutStatusKey = "PENDING" | "APPROVED" | "PAID" | "REJECTED";
@@ -513,6 +536,11 @@ export interface VendorFinanceBookingRow {
     commissionRate: number;
   } | null;
   guest: { name: string | null; phone: string | null };
+  unit?: {
+    id: string;
+    unitName: string | null;
+    floorNumber: number | null;
+  } | null;
   room: {
     id: string;
     name: string;
