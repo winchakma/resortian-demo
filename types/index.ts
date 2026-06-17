@@ -136,9 +136,33 @@ export type Tab =
   | "bookings"
   | "hotels"
   | "finance"
+  | "documents"
   | "settings"
   | "affiliates"
   | "blogs";
+
+export type DocumentCategory =
+  | "ANNOUNCEMENT"
+  | "NOTICE"
+  | "PAYMENT_PROOF"
+  | "RULES"
+  | "OTHER";
+
+export type DocumentRecipientType = "USER" | "ALL_VENDORS";
+
+export type DocumentFileType = "IMAGE" | "PDF";
+
+export interface VendorDocument {
+  id: string;
+  title: string;
+  description: string | null;
+  category: DocumentCategory;
+  fileUrl: string;
+  fileType: DocumentFileType;
+  recipientType: DocumentRecipientType;
+  createdAt: string;
+  uploadedBy: { id: string; name: string } | null;
+}
 
 export interface AffiliateBlog {
   id: string;

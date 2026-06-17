@@ -14,6 +14,7 @@ import {
   Handshake,
   BookOpen,
   Wallet,
+  FolderOpen,
 } from "lucide-react";
 import type { ProfileContentProps, Tab } from "@/types";
 import { initials } from "@/utils";
@@ -22,6 +23,7 @@ import ProfileSection from "./profile/ProfileSection";
 import BookingsSection from "./profile/BookingsSection";
 import VendorDashboard from "./profile/vendor/VendorDashboard";
 import VendorFinance from "./profile/vendor/VendorFinance";
+import VendorDocumentsSection from "./profile/vendor/VendorDocumentsSection";
 import SettingsSection from "./profile/SettingsSection";
 import AffiliatesSection from "./profile/AffiliatesSection";
 import MyBlogsSection from "./profile/MyBlogsSection";
@@ -65,6 +67,11 @@ export function ProfileContent({
           id: "finance",
           label: "Finance",
           icon: <Wallet className="h-4 w-4" />,
+        },
+        {
+          id: "documents",
+          label: "Documents",
+          icon: <FolderOpen className="h-4 w-4" />,
         },
         {
           id: "settings",
@@ -283,6 +290,7 @@ export function ProfileContent({
           )}
           {activeTab === "hotels" && isVendor && <VendorDashboard />}
           {activeTab === "finance" && isVendor && <VendorFinance />}
+          {activeTab === "documents" && isVendor && <VendorDocumentsSection />}
           {activeTab === "affiliates" && isAffiliate && <AffiliatesSection />}
           {activeTab === "blogs" && isAffiliate && <MyBlogsSection />}
           {activeTab === "settings" && <SettingsSection />}
