@@ -19,6 +19,19 @@
   --color-primary-800: #2a2a2a;
   --color-primary-900: #1a1a1a;
   --color-primary-950: #0f0f0f;
+
+  /* Hotel-owner (vendor) brand — #61aa74 mapped to green-600. */
+  --color-green-50: #f1f8f3;
+  --color-green-100: #dceee2;
+  --color-green-200: #bbdfc6;
+  --color-green-300: #92c8a5;
+  --color-green-400: #74b785;
+  --color-green-500: #65ad77;
+  --color-green-600: #61aa74;
+  --color-green-700: #4d8d5e;
+  --color-green-800: #3f7048;
+  --color-green-900: #335b3c;
+  --color-green-950: #1c351f;
 }
 
 :root {
