@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   User,
   CalendarDays,
@@ -15,7 +16,10 @@ import {
   BookOpen,
   Wallet,
   FolderOpen,
+  MessageCircle,
 } from "lucide-react";
+import { useSocketOptional } from "@/context/SocketContext";
+import MessagesPanel from "./messages/MessagesPanel";
 import type { ProfileContentProps, Tab } from "@/types";
 import { initials } from "@/utils";
 import SignOutButton from "./profile/SignOutButton";
@@ -35,7 +39,14 @@ export function ProfileContent({
 }: ProfileContentProps) {
   const isVendor = user.role === "HOTEL_OWNER";
   const isAffiliate = user.isAffiliateMember === true;
-  const [activeTab, setActiveTab] = useState<Tab>("profile");
+  const searchParams = useSearchParams();
+  const urlTab = searchParams.get("tab") as Tab | null;
+  // Manual selections override the URL until the URL changes again.
+  const [override, setOverride] = useState<Tab | null>(null);
+  const activeTab: Tab = override ?? urlTab ?? "profile";
+  const setActiveTab = (t: Tab) => setOverride(t);
+  const socketCtx = useSocketOptional();
+  const messagesBadge = socketCtx?.totalUnread || undefined;
 
   const upcomingCount = bookings.filter((b) => b.status === "upcoming").length;
   const completedCount = bookings.filter(
@@ -74,6 +85,12 @@ export function ProfileContent({
           icon: <FolderOpen className="h-4 w-4" />,
         },
         {
+          id: "messages",
+          label: "Messages",
+          icon: <MessageCircle className="h-4 w-4" />,
+          badge: messagesBadge,
+        },
+        {
           id: "settings",
           label: "Settings",
           icon: <Settings className="h-4 w-4" />,
@@ -105,6 +122,12 @@ export function ProfileContent({
               },
             ]
           : []),
+        {
+          id: "messages",
+          label: "Messages",
+          icon: <MessageCircle className="h-4 w-4" />,
+          badge: messagesBadge,
+        },
         {
           id: "settings",
           label: "Settings",
@@ -293,6 +316,7 @@ export function ProfileContent({
           {activeTab === "documents" && isVendor && <VendorDocumentsSection />}
           {activeTab === "affiliates" && isAffiliate && <AffiliatesSection />}
           {activeTab === "blogs" && isAffiliate && <MyBlogsSection />}
+          {activeTab === "messages" && <MessagesPanel />}
           {activeTab === "settings" && <SettingsSection />}
         </div>
       </div>

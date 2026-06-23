@@ -8,6 +8,7 @@ import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { MobileMenu } from "@/components/ui/MobileMenu";
 import { NotificationBell } from "@/components/ui/NotificationBell";
+import { MessagesIcon } from "@/components/ui/MessagesIcon";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
@@ -218,6 +219,7 @@ export function Header() {
           <ThemeToggle />
           <CartIndicator />
           {mounted && user && <NotificationBell />}
+          {mounted && user && <MessagesIcon />}
 
           {/* Auth area — only render after hydration to avoid mismatch */}
           {mounted && !loading && (

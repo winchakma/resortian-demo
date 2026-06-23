@@ -137,9 +137,56 @@ export type Tab =
   | "hotels"
   | "finance"
   | "documents"
+  | "messages"
   | "settings"
   | "affiliates"
   | "blogs";
+
+export type ChatSide = "CUSTOMER" | "VENDOR" | "SUPPORT_ADMIN" | "SYSTEM";
+export type ChatKind = "BOOKING" | "SUPPORT";
+export type SupportStatus = "OPEN" | "ASSIGNED" | "RESOLVED";
+
+export interface ChatMessage {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  senderRole: ChatSide;
+  type: "TEXT" | "IMAGE" | "SYSTEM";
+  body: string | null;
+  attachments: string[];
+  readAt: string | null;
+  createdAt: string;
+  sender?: { id: string; name: string; avatar: string | null } | null;
+}
+
+export interface ChatConversation {
+  id: string;
+  kind: ChatKind;
+  bookingId: string | null;
+  status: "ACTIVE" | "ARCHIVED";
+  supportStatus: SupportStatus | null;
+  assignedAdminId: string | null;
+  assignedAt: string | null;
+  resolvedAt: string | null;
+  lastMessage: string | null;
+  lastMessageAt: string | null;
+  unread: number;
+  viewerSide: "CUSTOMER" | "VENDOR" | "SUPPORT_ADMIN";
+  hotel: { id: string; name: string; slug: string; image?: string | null } | null;
+  customer: { id: string; name: string; avatar: string | null } | null;
+  vendor: { id: string; name: string; avatar: string | null } | null;
+  assignedAdmin: { id: string; name: string; avatar: string | null } | null;
+  booking: {
+    id: string;
+    reference: string;
+    checkIn: string;
+    checkOut: string;
+    status?: string;
+    totalPrice?: number;
+  } | null;
+  counterpart: { id: string; name: string; avatar: string | null } | null;
+  createdAt: string;
+}
 
 export type DocumentCategory =
   | "ANNOUNCEMENT"

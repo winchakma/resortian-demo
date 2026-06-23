@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import type { ReactNode } from "react";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { SocketProvider } from "@/context/SocketContext";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { NavigationProgress } from "@/components/ui/NavigationProgress";
 
@@ -13,6 +14,7 @@ export function Providers({ children }: { children: ReactNode }) {
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <NavigationProgress />
       <AuthProvider>
+      <SocketProvider>
       <CartProvider>
         {children}
         <WhatsAppButton />
@@ -40,6 +42,7 @@ export function Providers({ children }: { children: ReactNode }) {
           }}
         />
       </CartProvider>
+      </SocketProvider>
       </AuthProvider>
     </ThemeProvider>
   );
