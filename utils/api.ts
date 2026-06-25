@@ -161,7 +161,7 @@ export async function getFeaturedStays(): Promise<Hotel[]> {
     const data: ApiHotel[] = await res.json();
     return data.map(normalizeHotel);
   } catch {
-    return [];
+    return getMockHotels();
   }
 }
 
@@ -777,7 +777,7 @@ export async function getPopularDestinations(): Promise<Destination[]> {
     const data: ApiDestination[] = await res.json();
     return data.map(normalizeDestination);
   } catch {
-    return [];
+    return ALL_DESTINATIONS.slice(0, 6);
   }
 }
 
