@@ -147,12 +147,16 @@ export async function getNavLinks(): Promise<NavLink[]> {
 
 export async function getFeaturedStays(): Promise<Hotel[]> {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 500);
     const res = await fetch(
       `${API_BASE}/hotels/featured?limit=8&isActive=true`,
       {
         next: { revalidate: 300 },
+        signal: controller.signal,
       },
     );
+    clearTimeout(timeout);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data: ApiHotel[] = await res.json();
     return data.map(normalizeHotel);
@@ -762,9 +766,13 @@ const ALL_DESTINATIONS: Destination[] = [
 
 export async function getPopularDestinations(): Promise<Destination[]> {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 500);
     const res = await fetch(`${API_BASE}/destinations/popular?isActive=true`, {
       next: { revalidate: 300 },
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data: ApiDestination[] = await res.json();
     return data.map(normalizeDestination);
@@ -775,9 +783,13 @@ export async function getPopularDestinations(): Promise<Destination[]> {
 
 export async function getDestinations(): Promise<Destination[]> {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 500);
     const res = await fetch(`${API_BASE}/destinations`, {
       next: { revalidate: 300 },
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
     const data: ApiDestination[] = json.data ?? json;
