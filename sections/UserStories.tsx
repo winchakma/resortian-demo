@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
@@ -58,6 +58,17 @@ export function UserStories() {
     }
   };
 
+  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
+
+  const toggleFavorite = (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFavorites((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   return (
     <section className="bg-gray-50 py-4 dark:bg-gray-900/40 sm:py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -85,33 +96,40 @@ export function UserStories() {
             className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {STORIES.map((story) => (
-              <div
-                key={story.id}
-                className="w-[240px] sm:w-[270px] shrink-0 snap-start snap-always"
-              >
-                <div className="group/card relative aspect-[3/4] w-full overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-350 hover:-translate-y-1">
-                  {/* Background Image */}
-                  <Image
-                    src={story.image}
-                    alt="Travel Story"
-                    fill
-                    unoptimized
-                    className="object-cover transition-transform duration-500 group-hover/card:scale-105"
-                    sizes="(max-width: 640px) 240px, 270px"
-                  />
-                  
-                  {/* Dark Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+            {STORIES.map((story) => {
+              const isFav = !!favorites[story.id];
+              return (
+                <div
+                  key={story.id}
+                  className="w-[240px] sm:w-[270px] shrink-0 snap-start snap-always"
+                >
+                  <div className="group/card relative aspect-[3/4] w-full overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-350 hover:-translate-y-1">
+                    {/* Background Image */}
+                    <Image
+                      src={story.image}
+                      alt="Travel Story"
+                      fill
+                      unoptimized
+                      className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+                      sizes="(max-width: 640px) 240px, 270px"
+                    />
+                    
+                    {/* Dark Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-                  {/* Favorite Heart Button (Top Right) */}
-                  <button
-                    type="button"
-                    aria-label="Like story"
-                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-rose-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-rose-450 dark:hover:bg-slate-900"
-                  >
-                    <Heart className="h-4 w-4 fill-current" />
-                  </button>
+                    {/* Favorite Heart Button (Top Right) */}
+                    <button
+                      type="button"
+                      onClick={(e) => toggleFavorite(story.id, e)}
+                      aria-label="Like story"
+                      className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
+                    >
+                      <Heart
+                        className={`h-4 w-4 transition-colors ${
+                          isFav ? "fill-red-500 text-red-500" : "text-gray-500 dark:text-gray-400"
+                        }`}
+                      />
+                    </button>
 
                   {/* Bottom Text Overlay */}
                   <div className="absolute bottom-4 left-4 right-4 text-white flex flex-col gap-3">
@@ -138,8 +156,9 @@ export function UserStories() {
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
+        </div>
 
           {/* Navigation Buttons */}
           <button

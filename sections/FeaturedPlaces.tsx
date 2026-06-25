@@ -27,6 +27,17 @@ export function FeaturedPlaces() {
     }
   };
 
+  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
+
+  const toggleFavorite = (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFavorites((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   const reviewsData = [
     { rating: "4.8", count: "12,450" },
     { rating: "4.7", count: "8,920" },
@@ -65,12 +76,13 @@ export function FeaturedPlaces() {
           >
             {places.map((place, index) => {
               const reviews = reviewsData[index % reviewsData.length];
+              const isFav = !!favorites[place.id];
               return (
                 <div
                   key={place.id}
                   className="w-[280px] sm:w-[300px] shrink-0 snap-start snap-always"
                 >
-                  <div className="group/card relative flex flex-col overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-350 hover:-translate-y-1 h-full">
+                  <div className="group/card relative flex flex-col overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-355 hover:-translate-y-1 h-full">
                     {/* Image Container */}
                     <div className="relative aspect-[4/3] w-full overflow-hidden">
                       <Image
@@ -90,10 +102,15 @@ export function FeaturedPlaces() {
                       {/* Favorite Heart Button */}
                       <button
                         type="button"
+                        onClick={(e) => toggleFavorite(place.id, e)}
                         aria-label="Add to favorites"
-                        className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-rose-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-rose-450 dark:hover:bg-slate-900"
+                        className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
                       >
-                        <Heart className="h-4 w-4 fill-current" />
+                        <Heart
+                          className={`h-4 w-4 transition-colors ${
+                            isFav ? "fill-red-500 text-red-500" : "text-gray-500 dark:text-gray-400"
+                          }`}
+                        />
                       </button>
                     </div>
 
