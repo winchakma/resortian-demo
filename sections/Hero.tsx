@@ -3,7 +3,7 @@ import { SearchForm } from "@/components/ui/SearchForm";
 
 export function Hero() {
   return (
-    <section className="relative z-10 py-12 bg-white dark:bg-gray-950 sm:py-16">
+    <section className="relative z-10 py-8 bg-white dark:bg-gray-950 sm:py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Search bar at the top */}
@@ -16,7 +16,7 @@ export function Hero() {
           </p>
         </div>
 
-        <div className="w-full mb-12">
+        <div className="w-full mb-8">
           <SearchForm />
         </div>
 
@@ -40,7 +40,7 @@ export function Hero() {
 
 export function BangladeshStaysWithYou() {
   return (
-    <section className="bg-white py-16 dark:bg-gray-950 sm:py-20">
+    <section className="bg-white py-8 dark:bg-gray-950 sm:py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl flex items-center gap-2">

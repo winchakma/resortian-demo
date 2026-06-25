@@ -35,7 +35,7 @@ export function Destinations() {
   }
 
   return (
-    <section className="bg-gray-50 py-16 dark:bg-gray-900/40 sm:py-20">
+    <section className="bg-gray-50 py-8 dark:bg-gray-900/40 sm:py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="mb-8">

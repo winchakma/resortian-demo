@@ -41,7 +41,7 @@ export function FeaturedPlaces() {
   }
 
   return (
-    <section className="bg-white py-16 dark:bg-gray-950 sm:py-20">
+    <section className="bg-white py-8 dark:bg-gray-950 sm:py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="mb-10 flex items-center justify-between gap-4">
