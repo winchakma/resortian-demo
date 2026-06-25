@@ -14,7 +14,7 @@ export async function FeaturedStays() {
         {/* Header row: heading + See more deals */}
         <div className="mb-8 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
               Hot hotel deals right now
             </h2>
           </div>

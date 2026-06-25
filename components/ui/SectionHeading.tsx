@@ -15,11 +15,11 @@ export function SectionHeading({
         align === "center" ? "text-center" : ""
       }`}
     >
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+      <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-2 text-gray-600 dark:text-gray-400">{subtitle}</p>
+        <p className="mt-2 text-base font-medium text-gray-700 dark:text-gray-300">{subtitle}</p>
       )}
     </div>
   );

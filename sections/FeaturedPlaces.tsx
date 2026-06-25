@@ -58,10 +58,10 @@ export function FeaturedPlaces() {
         
         <div className="mb-10 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
               Places you may like
             </h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-base font-medium text-gray-700 dark:text-gray-300">
               Highly-rated stays and hot spots recommended for you
             </p>
           </div>
