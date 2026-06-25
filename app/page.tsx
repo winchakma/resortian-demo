@@ -1,23 +1,21 @@
 import { Header } from "@/sections/Header";
 import { Hero } from "@/sections/Hero";
+import { Destinations } from "@/sections/Destinations";
+import { FeaturedPlaces } from "@/sections/FeaturedPlaces";
+import { UserStories } from "@/sections/UserStories";
 import { FeaturedStays } from "@/sections/FeaturedStays";
-import { BestTimeToBook } from "@/sections/BestTimeToBook";
-import { PopularDestinations } from "@/sections/PopularDestinations";
-import { WhyChooseUs } from "@/sections/WhyChooseUs";
-import { GetTheApp } from "@/sections/GetTheApp";
 import { Footer } from "@/sections/Footer";
 
 export default function Home() {
   return (
     <>
       <Header />
-      <main>
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Hero />
+        <Destinations />
+        <FeaturedPlaces />
+        <UserStories />
         <FeaturedStays />
-        <BestTimeToBook />
-        <PopularDestinations />
-        <WhyChooseUs />
-        {/* <GetTheApp /> */}
       </main>
       <Footer />
     </>
