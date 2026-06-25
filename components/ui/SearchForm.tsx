@@ -412,7 +412,7 @@ export function SearchForm({
           <button
             type="button"
             onClick={() => setIsFilterOpen(true)}
-            className="flex h-11 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 text-gray-750 transition-colors hover:bg-gray-50 active:bg-gray-100 dark:border-gray-650 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-650 lg:h-11 lg:w-11 lg:rounded-full lg:border-0 lg:bg-gray-100 lg:px-0 lg:dark:bg-gray-700"
+            className="flex h-11 items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-gray-700 transition-colors hover:bg-gray-50 active:bg-gray-100 dark:border-gray-650 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-650 lg:h-11 lg:w-11 lg:border-0 lg:bg-gray-100 lg:px-0 lg:dark:bg-gray-700"
             aria-label="Filters"
           >
             <SlidersHorizontal className="h-5 w-5" />
@@ -422,10 +422,10 @@ export function SearchForm({
           {/* Search */}
           <button
             type="submit"
-            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 lg:h-11 lg:px-6 lg:rounded-full"
+            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-r-lg bg-[#007fcd] px-8 font-semibold text-white transition-colors hover:bg-[#006bb0] active:bg-[#00578c] lg:h-11 lg:px-8 lg:-mr-3 lg:-my-2 lg:rounded-l-none lg:rounded-r-lg"
             aria-label="Search"
           >
-            <Search className="h-5 w-5 animate-pulse" />
+            <Search className="h-5 w-5" />
             <span className="font-bold text-sm">Search</span>
           </button>
         </div>
