@@ -8,7 +8,7 @@ export async function PopularDestinations() {
   const destinations = await getPopularDestinations();
 
   return (
-    <section className="bg-[#F7FDF8] py-16 dark:bg-gray-900 sm:py-20">
+    <section className="bg-gray-50 py-16 dark:bg-gray-900/40 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center justify-between gap-4">
           <div>

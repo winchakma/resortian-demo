@@ -261,11 +261,11 @@ export function DateRangePicker({
       <button
         type="button"
         onClick={() => setIsOpen((p) => !p)}
-        className="flex w-full items-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 text-left transition-colors hover:border-primary-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-gray-500 dark:bg-gray-700 lg:rounded-full"
+        className="flex w-full items-center gap-3 rounded-xl border border-gray-150 bg-gray-50/50 px-4 py-3 text-left transition-colors hover:border-primary-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-gray-700 dark:bg-gray-900/40 lg:rounded-full"
       >
         <CalendarIcon className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
         <div className="min-w-0 flex-1">
-          <p className="whitespace-nowrap text-xs font-semibold text-gray-600 dark:text-gray-300">
+          <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
             Check-in / Check-out
           </p>
           <p

@@ -6,25 +6,22 @@ const playfair = Playfair_Display({ subsets: ["latin"] });
 
 export function Hero() {
   return (
-    <section className="relative z-10 py-10 sm:py-14">
-      <Image
-        src="/images/heroBg.jpeg"
-        alt=""
-        fill
-        className="object-cover"
-        priority
-      />
+    <section className="relative z-10 py-16 sm:py-24 overflow-hidden bg-gradient-to-b from-primary-50/50 via-white to-transparent dark:from-primary-950/20 dark:via-gray-950">
       <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        {/* Search container card */}
-        <div className="relative overflow-visible rounded-2xl border border-white/30 bg-gradient-to-br from-[#F7FDF8] to-[#E2F5E7] p-4 shadow-lg shadow-black/20 backdrop-blur-sm dark:border-white/10 dark:from-gray-900/90 dark:to-gray-800/90 sm:p-6">
-          {/* Top accent bar */}
-          {/* <div className="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-primary-400 via-primary-500 to-primary-300" /> */}
-
-          {/* Optional label */}
-          <p className={`mb-4 text-xl font-semibold italic text-primary-600 dark:text-primary-400 sm:text-2xl ${playfair.className}`}>
-            Find your perfect stay
+        <div className="text-center mb-10">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-primary-700 bg-primary-100 dark:bg-primary-950/60 dark:text-primary-400 uppercase mb-4">
+            Bangladesh's Premium Booking Agency
+          </span>
+          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+            Find & Book Your Next Stay
+          </h1>
+          <p className="mt-3 text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto sm:text-lg">
+            Compare prices across Cox's Bazar, Sylhet, Sundarbans, and more.
           </p>
+        </div>
 
+        {/* Search container card */}
+        <div className="relative overflow-visible rounded-3xl border border-gray-200/80 bg-white/80 p-5 shadow-2xl shadow-gray-200/50 backdrop-blur-md dark:border-gray-800/80 dark:bg-gray-900/90 dark:shadow-none sm:p-8">
           <SearchForm />
         </div>
       </div>

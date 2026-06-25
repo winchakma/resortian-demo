@@ -255,14 +255,14 @@ export function SearchForm({
           e.preventDefault();
           handleSubmit();
         }}
-        className="flex w-full flex-col gap-3 rounded-2xl bg-gradient-to-r from-[#DE6054] to-[#F5A09A] p-4 shadow-lg sm:p-6 lg:flex-row lg:items-center lg:gap-2 lg:rounded-full lg:p-2"
+        className="flex w-full flex-col gap-3 rounded-2xl bg-white p-2 border border-gray-200 shadow-md sm:p-3 lg:flex-row lg:items-center lg:gap-2 lg:rounded-full dark:bg-gray-800 dark:border-gray-700"
       >
         {/* ── Location ───────────────────────────────────────────── */}
         <div ref={locationRef} className="relative flex-1">
-          <div className="flex items-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 dark:border-gray-500 dark:bg-gray-700 lg:rounded-full">
+          <div className="flex items-center gap-3 rounded-xl border border-gray-150 bg-gray-50/50 px-4 py-3 dark:border-gray-700 dark:bg-gray-900/40 lg:rounded-full">
             <MapPin className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
             <div className="flex-1">
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300">
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                 Location
               </label>
               <input
@@ -340,11 +340,11 @@ export function SearchForm({
             aria-haspopup="dialog"
             aria-expanded={isGuestOpen}
             onClick={() => setIsGuestOpen((p) => !p)}
-            className="flex w-full items-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 text-left dark:border-gray-500 dark:bg-gray-700 lg:rounded-full"
+            className="flex w-full items-center gap-3 rounded-xl border border-gray-150 bg-gray-50/50 px-4 py-3 text-left dark:border-gray-700 dark:bg-gray-900/40 lg:rounded-full"
           >
             <Users className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
             <div className="min-w-0 flex-1 overflow-hidden">
-              <p className="whitespace-nowrap text-xs font-semibold text-gray-600 dark:text-gray-300">
+              <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                 Guests &amp; Rooms
               </p>
               <p className="truncate whitespace-nowrap text-sm text-gray-900 dark:text-white">
