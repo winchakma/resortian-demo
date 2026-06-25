@@ -104,10 +104,10 @@ export function FeaturedPlaces() {
                         type="button"
                         onClick={(e) => toggleFavorite(place.id, e)}
                         aria-label="Add to favorites"
-                        className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
+                        className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
                       >
                         <Heart
-                          className={`h-4 w-4 transition-colors ${
+                          className={`h-4 w-4 transition-colors pointer-events-none ${
                             isFav ? "fill-red-500 text-red-500" : "text-gray-500 dark:text-gray-400"
                           }`}
                         />
