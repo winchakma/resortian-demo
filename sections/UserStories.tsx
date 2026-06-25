@@ -143,7 +143,7 @@ export function UserStories() {
 
                       {/* Content Panel — below image, same as FeaturedPlaces */}
                       <div className="p-4 flex flex-col gap-3">
-                        <p className="text-sm font-bold leading-snug text-gray-900 dark:text-white line-clamp-2 group-hover/card:text-primary-600 transition-colors">
+                        <p className="text-[14px] font-extrabold leading-snug text-gray-900 dark:text-white line-clamp-2 group-hover/card:text-primary-600 transition-colors">
                           {story.quote}
                         </p>
                         {/* Author */}
@@ -158,7 +158,7 @@ export function UserStories() {
                               sizes="24px"
                             />
                           </div>
-                          <span className="text-[11px] text-gray-500 dark:text-gray-400 font-semibold truncate">
+                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 truncate">
                             {story.author}
                           </span>
                         </div>

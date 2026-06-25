@@ -121,23 +121,23 @@ export function FeaturedPlaces() {
                       </div>
 
                       {/* Content Panel */}
-                      <div className="p-4 flex flex-col justify-between flex-1">
+                      <div className="p-4 flex flex-col gap-3">
                         <div>
-                          <h3 className="font-extrabold text-base text-gray-900 dark:text-white group-hover/card:text-primary-600 transition-colors">
+                          <h3 className="text-[15px] font-extrabold text-gray-900 dark:text-white group-hover/card:text-primary-600 transition-colors leading-tight">
                             {place.name}
                           </h3>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">
+                          <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-1 line-clamp-1">
                             {place.region}
                           </p>
                         </div>
 
                         {/* Ratings and Reviews */}
-                        <div className="mt-4 flex items-center gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
-                          <span className="flex items-center gap-0.5 rounded bg-amber-50 px-1.5 py-0.5 text-xs font-extrabold text-amber-750 dark:bg-amber-950/20 dark:text-amber-400">
+                        <div className="mt-3 flex items-center gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
+                          <span className="flex items-center gap-0.5 rounded bg-amber-50 px-1.5 py-0.5 text-xs font-extrabold text-amber-700 dark:bg-amber-950/20 dark:text-amber-400">
                             <Star className="h-3 w-3 fill-current text-amber-500" />
                             {reviews.rating}
                           </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
                             {reviews.count} reviews
                           </span>
                         </div>
