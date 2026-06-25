@@ -103,63 +103,68 @@ export function UserStories() {
                   key={story.id}
                   className="w-[240px] sm:w-[270px] shrink-0 snap-start snap-always"
                 >
-                  <div className="group/card relative aspect-[3/4] w-full overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-350 hover:-translate-y-1">
-                    {/* Background Image */}
-                    <Image
-                      src={story.image}
-                      alt="Travel Story"
-                      fill
-                      unoptimized
-                      className="object-cover transition-transform duration-500 group-hover/card:scale-105"
-                      sizes="(max-width: 640px) 240px, 270px"
-                    />
-                    
-                    {/* Dark Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-
-                    {/* Favorite Heart Button (Top Right) */}
-                    <button
-                      type="button"
-                      onClick={(e) => toggleFavorite(story.id, e)}
-                      aria-label="Like story"
-                      className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
-                    >
-                      <Heart
-                        fill={isFav ? "currentColor" : "none"}
-                        className={`h-4 w-4 transition-colors pointer-events-none ${
-                          isFav ? "text-red-500" : "text-gray-500 dark:text-gray-400"
-                        }`}
+                  <Link
+                    href={`/stories`}
+                    className="block h-full cursor-pointer"
+                  >
+                    <div className="group/card relative aspect-[3/4] w-full overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-350 hover:-translate-y-1">
+                      {/* Background Image */}
+                      <Image
+                        src={story.image}
+                        alt="Travel Story"
+                        fill
+                        unoptimized
+                        className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+                        sizes="(max-width: 640px) 240px, 270px"
                       />
-                    </button>
+                      
+                      {/* Dark Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-                  {/* Bottom Text Overlay */}
-                  <div className="absolute bottom-4 left-4 right-4 text-white flex flex-col gap-3">
-                    <p className="text-sm font-bold leading-snug text-gray-100 line-clamp-2">
-                      {story.quote}
-                    </p>
-
-                    {/* Author Avatar & Handle */}
-                    <div className="flex items-center gap-2">
-                      <div className="relative h-6 w-6 overflow-hidden rounded-full border border-white/20">
-                        <Image
-                          src={story.avatar}
-                          alt={story.author}
-                          fill
-                          unoptimized
-                          className="object-cover"
-                          sizes="24px"
+                      {/* Favorite Heart Button (Top Right) */}
+                      <button
+                        type="button"
+                        onClick={(e) => toggleFavorite(story.id, e)}
+                        aria-label="Like story"
+                        className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
+                      >
+                        <Heart
+                          fill={isFav ? "currentColor" : "none"}
+                          className={`h-4 w-4 transition-colors pointer-events-none ${
+                            isFav ? "text-red-500" : "text-gray-500 dark:text-gray-400"
+                          }`}
                         />
+                      </button>
+
+                      {/* Bottom Text Overlay */}
+                      <div className="absolute bottom-4 left-4 right-4 text-white flex flex-col gap-3">
+                        <p className="text-sm font-bold leading-snug text-gray-100 line-clamp-2">
+                          {story.quote}
+                        </p>
+
+                        {/* Author Avatar & Handle */}
+                        <div className="flex items-center gap-2">
+                          <div className="relative h-6 w-6 overflow-hidden rounded-full border border-white/20">
+                            <Image
+                              src={story.avatar}
+                              alt={story.author}
+                              fill
+                              unoptimized
+                              className="object-cover"
+                              sizes="24px"
+                            />
+                          </div>
+                          <span className="text-[11px] text-gray-300 font-semibold truncate">
+                            {story.author}
+                          </span>
+                        </div>
                       </div>
-                      <span className="text-[11px] text-gray-300 font-semibold truncate">
-                        {story.author}
-                      </span>
                     </div>
-                  </div>
+                  </Link>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
           {/* Navigation Buttons */}
           <button

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Star, Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { getPopularDestinations } from "@/utils/api";
 import type { Destination } from "@/types";
@@ -82,62 +83,67 @@ export function FeaturedPlaces() {
                   key={place.id}
                   className="w-[280px] sm:w-[300px] shrink-0 snap-start snap-always"
                 >
-                  <div className="group/card relative flex flex-col overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-355 hover:-translate-y-1 h-full">
-                    {/* Image Container */}
-                    <div className="relative aspect-[4/3] w-full overflow-hidden">
-                      <Image
-                        src={place.image}
-                        alt={place.name}
-                        fill
-                        unoptimized
-                        className="object-cover transition-transform duration-500 group-hover/card:scale-105"
-                        sizes="(max-width: 640px) 280px, 300px"
-                      />
-                      
-                      {/* Trip Best Badge */}
-                      <div className="absolute left-3 top-3 rounded bg-gradient-to-r from-amber-500 to-orange-600 px-2 py-0.5 text-[9px] font-extrabold text-white uppercase tracking-wider shadow-sm">
-                        Trip.Best
-                      </div>
-
-                      {/* Favorite Heart Button */}
-                      <button
-                        type="button"
-                        onClick={(e) => toggleFavorite(place.id, e)}
-                        aria-label="Add to favorites"
-                        className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
-                      >
-                        <Heart
-                          fill={isFav ? "currentColor" : "none"}
-                          className={`h-4 w-4 transition-colors pointer-events-none ${
-                            isFav ? "text-red-500" : "text-gray-500 dark:text-gray-400"
-                          }`}
+                  <Link
+                    href={`/hotels?location=${encodeURIComponent(place.name)}`}
+                    className="block h-full cursor-pointer"
+                  >
+                    <div className="group/card relative flex flex-col overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-355 hover:-translate-y-1 h-full">
+                      {/* Image Container */}
+                      <div className="relative aspect-[4/3] w-full overflow-hidden">
+                        <Image
+                          src={place.image}
+                          alt={place.name}
+                          fill
+                          unoptimized
+                          className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+                          sizes="(max-width: 640px) 280px, 300px"
                         />
-                      </button>
-                    </div>
+                        
+                        {/* Trip Best Badge */}
+                        <div className="absolute left-3 top-3 rounded bg-gradient-to-r from-amber-500 to-orange-600 px-2 py-0.5 text-[9px] font-extrabold text-white uppercase tracking-wider shadow-sm">
+                          Trip.Best
+                        </div>
 
-                    {/* Content Panel */}
-                    <div className="p-4 flex flex-col justify-between flex-1">
-                      <div>
-                        <h3 className="font-extrabold text-base text-gray-900 dark:text-white group-hover/card:text-primary-600 transition-colors">
-                          {place.name}
-                        </h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">
-                          {place.region}
-                        </p>
+                        {/* Favorite Heart Button */}
+                        <button
+                          type="button"
+                          onClick={(e) => toggleFavorite(place.id, e)}
+                          aria-label="Add to favorites"
+                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
+                        >
+                          <Heart
+                            fill={isFav ? "currentColor" : "none"}
+                            className={`h-4 w-4 transition-colors pointer-events-none ${
+                              isFav ? "text-red-500" : "text-gray-500 dark:text-gray-400"
+                            }`}
+                          />
+                        </button>
                       </div>
 
-                      {/* Ratings and Reviews */}
-                      <div className="mt-4 flex items-center gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
-                        <span className="flex items-center gap-0.5 rounded bg-amber-50 px-1.5 py-0.5 text-xs font-extrabold text-amber-750 dark:bg-amber-950/20 dark:text-amber-400">
-                          <Star className="h-3 w-3 fill-current text-amber-500" />
-                          {reviews.rating}
-                        </span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                          {reviews.count} reviews
-                        </span>
+                      {/* Content Panel */}
+                      <div className="p-4 flex flex-col justify-between flex-1">
+                        <div>
+                          <h3 className="font-extrabold text-base text-gray-900 dark:text-white group-hover/card:text-primary-600 transition-colors">
+                            {place.name}
+                          </h3>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">
+                            {place.region}
+                          </p>
+                        </div>
+
+                        {/* Ratings and Reviews */}
+                        <div className="mt-4 flex items-center gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
+                          <span className="flex items-center gap-0.5 rounded bg-amber-50 px-1.5 py-0.5 text-xs font-extrabold text-amber-750 dark:bg-amber-950/20 dark:text-amber-400">
+                            <Star className="h-3 w-3 fill-current text-amber-500" />
+                            {reviews.rating}
+                          </span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                            {reviews.count} reviews
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               );
             })}

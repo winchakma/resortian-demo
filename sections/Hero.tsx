@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { SearchForm } from "@/components/ui/SearchForm";
 
 export function Hero() {
@@ -54,7 +55,10 @@ export function BangladeshStaysWithYou() {
 
         <div className="grid gap-6 lg:grid-cols-12">
           {/* Left: Large Hero Image Card */}
-          <div className="relative overflow-hidden rounded-3xl shadow-lg lg:col-span-7 group aspect-[16/10] lg:aspect-auto min-h-[320px]">
+          <Link
+            href="/hotels?location=Cox's%20Bazar"
+            className="relative overflow-hidden rounded-3xl shadow-lg lg:col-span-7 group aspect-[16/10] lg:aspect-auto min-h-[320px] block cursor-pointer"
+          >
             <Image
               src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=800&fit=crop"
               alt="Cox's Bazar beach"
@@ -73,12 +77,15 @@ export function BangladeshStaysWithYou() {
                 Experience the world&apos;s longest sandy beach, fresh seafood delicacies, and warm coastal hospitality.
               </p>
             </div>
-          </div>
+          </Link>
 
           {/* Right: Stacked Cards */}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1 lg:col-span-5">
             {/* Card 1 */}
-            <div className="relative overflow-hidden rounded-3xl shadow-md group aspect-[16/10] lg:aspect-auto min-h-[160px]">
+            <Link
+              href="/hotels?location=Sylhet"
+              className="relative overflow-hidden rounded-3xl shadow-md group aspect-[16/10] lg:aspect-auto min-h-[160px] block cursor-pointer"
+            >
               <Image
                 src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=400&fit=crop"
                 alt="Tea gardens in Sylhet"
@@ -92,10 +99,13 @@ export function BangladeshStaysWithYou() {
                 <h4 className="font-bold text-lg">Sylhet Tea Gardens</h4>
                 <p className="text-xs text-gray-200 mt-0.5">Explore lush green hills and spiritual shrines.</p>
               </div>
-            </div>
+            </Link>
 
             {/* Card 2 */}
-            <div className="relative overflow-hidden rounded-3xl shadow-md group aspect-[16/10] lg:aspect-auto min-h-[160px]">
+            <Link
+              href="/hotels?location=Bandarban"
+              className="relative overflow-hidden rounded-3xl shadow-md group aspect-[16/10] lg:aspect-auto min-h-[160px] block cursor-pointer"
+            >
               <Image
                 src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop"
                 alt="Bandarban hills"
@@ -109,7 +119,7 @@ export function BangladeshStaysWithYou() {
                 <h4 className="font-bold text-lg">Bandarban Adventures</h4>
                 <p className="text-xs text-gray-200 mt-0.5">Trek high peaks and witness majestic waterfalls.</p>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
