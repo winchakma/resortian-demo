@@ -3,11 +3,11 @@ import { SearchForm } from "@/components/ui/SearchForm";
 
 export function Hero() {
   return (
-    <section className="relative z-10 py-8 bg-white dark:bg-gray-950 sm:py-10">
+    <section className="relative z-10 py-4 bg-white dark:bg-gray-950 sm:py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Search bar at the top */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
             Save up to 40% on your next hotel stay
           </h1>
@@ -16,12 +16,12 @@ export function Hero() {
           </p>
         </div>
 
-        <div className="w-full mb-8">
+        <div className="w-full mb-6">
           <SearchForm />
         </div>
 
         {/* Partner logo bar */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 border-t border-gray-100 pt-6 text-sm font-semibold text-gray-400 dark:border-gray-900">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 border-t border-gray-100 pt-6 text-sm font-semibold text-gray-400 dark:border-gray-900">
           <span className="hover:text-gray-600 transition-colors">Booking.com</span>
           <span className="hover:text-gray-600 transition-colors">Expedia</span>
           <span className="hover:text-gray-600 transition-colors">Hotels.com</span>
@@ -40,7 +40,7 @@ export function Hero() {
 
 export function BangladeshStaysWithYou() {
   return (
-    <section className="bg-white py-8 dark:bg-gray-950 sm:py-10">
+    <section className="bg-white py-4 dark:bg-gray-950 sm:py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl flex items-center gap-2">
