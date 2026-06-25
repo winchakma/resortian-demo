@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
@@ -60,40 +60,46 @@ const STORIES: Story[] = [
 
 export function UserStories() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
+
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    checkScroll();
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    return () => el.removeEventListener("scroll", checkScroll);
+  }, [checkScroll]);
 
   const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollTo =
-        direction === "left"
-          ? scrollLeft - clientWidth * 0.75
-          : scrollLeft + clientWidth * 0.75;
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
-    }
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = 270 + 24; // card width + gap
+    el.scrollBy({ left: direction === "left" ? -cardWidth * 2 : cardWidth * 2, behavior: "smooth" });
   };
-
-  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
 
   const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setFavorites((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
     <section className="bg-gray-50 py-4 dark:bg-gray-900/40 sm:py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        
-        <div className="mb-10 flex items-center justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-              Magical trip moments that last
-            </h2>
-          </div>
 
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+            Magical trip moments that last
+          </h2>
           <Link
             href="/stories"
             className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white"
@@ -104,10 +110,20 @@ export function UserStories() {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative group">
+        <div className="relative">
+          {/* Left fade edge — only when scrolled */}
+          {canScrollLeft && (
+            <div className="pointer-events-none absolute left-0 top-0 bottom-4 w-16 z-10 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent" />
+          )}
+          {/* Right fade edge — only when more cards exist */}
+          {canScrollRight && (
+            <div className="pointer-events-none absolute right-0 top-0 bottom-4 w-16 z-10 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent" />
+          )}
+
+          {/* Scrollable track */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
+            className="flex gap-6 overflow-x-auto pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {STORIES.map((story) => {
@@ -115,13 +131,10 @@ export function UserStories() {
               return (
                 <div
                   key={story.id}
-                  className="w-[240px] sm:w-[270px] shrink-0 snap-start snap-always"
+                  className="w-[240px] sm:w-[270px] shrink-0"
                 >
-                  <Link
-                    href={`/stories`}
-                    className="block h-full cursor-pointer"
-                  >
-                    <div className="group/card relative aspect-[3/4] w-full overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-350 hover:-translate-y-1">
+                  <Link href="/stories" className="block h-full cursor-pointer">
+                    <div className="group/card relative aspect-[3/4] w-full overflow-hidden rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       {/* Background Image */}
                       <Image
                         src={story.image}
@@ -131,16 +144,16 @@ export function UserStories() {
                         className="object-cover transition-transform duration-500 group-hover/card:scale-105"
                         sizes="(max-width: 640px) 240px, 270px"
                       />
-                      
+
                       {/* Dark Overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-                      {/* Favorite Heart Button (Top Right) */}
+                      {/* Favorite Heart Button */}
                       <button
                         type="button"
                         onClick={(e) => toggleFavorite(story.id, e)}
                         aria-label="Like story"
-                        className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
+                        className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition-all hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300"
                       >
                         <Heart
                           fill={isFav ? "currentColor" : "none"}
@@ -150,15 +163,13 @@ export function UserStories() {
                         />
                       </button>
 
-                      {/* Bottom Text Overlay */}
+                      {/* Bottom Text */}
                       <div className="absolute bottom-4 left-4 right-4 text-white flex flex-col gap-3">
                         <p className="text-sm font-bold leading-snug text-gray-100 line-clamp-2">
                           {story.quote}
                         </p>
-
-                        {/* Author Avatar & Handle */}
                         <div className="flex items-center gap-2">
-                          <div className="relative h-6 w-6 overflow-hidden rounded-full border border-white/20">
+                          <div className="relative h-6 w-6 overflow-hidden rounded-full border border-white/20 shrink-0">
                             <Image
                               src={story.avatar}
                               alt={story.author}
@@ -180,22 +191,27 @@ export function UserStories() {
             })}
           </div>
 
-          {/* Navigation Buttons */}
-          <button
-            onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
-            aria-label="Scroll left"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
+          {/* Left Arrow — hidden at start position */}
+          {canScrollLeft && (
+            <button
+              onClick={() => scroll("left")}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-700 shadow-lg border border-gray-200 transition-all hover:bg-gray-50 hover:scale-105 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-800"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+          )}
 
-          <button
-            onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
-            aria-label="Scroll right"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
+          {/* Right Arrow — hidden at end position */}
+          {canScrollRight && (
+            <button
+              onClick={() => scroll("right")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-700 shadow-lg border border-gray-200 transition-all hover:bg-gray-50 hover:scale-105 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-800"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          )}
         </div>
 
       </div>
