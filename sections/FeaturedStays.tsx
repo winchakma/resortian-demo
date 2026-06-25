@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { HotelCard } from "@/components/ui/HotelCard";
 import { getFeaturedStays } from "@/utils/api";
-import { FeaturedStaysSlider } from "@/components/ui/FeaturedStaysSlider";
 
 export async function FeaturedStays() {
   const hotels = await getFeaturedStays();
-  // Show up to 8 hotels in the slider
+  // Show up to 8 hotels in two rows of 4
   const deals = hotels.slice(0, 8);
 
   return (
@@ -28,8 +28,14 @@ export async function FeaturedStays() {
           </Link>
         </div>
 
-        {/* Sliding Carousel with arrows */}
-        <FeaturedStaysSlider hotels={deals} />
+        {/* 2 rows of 4 — all 8 visible on same page */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {deals.map((hotel) => (
+            <div key={hotel.id}>
+              <HotelCard hotel={hotel} />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
