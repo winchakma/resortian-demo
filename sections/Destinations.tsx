@@ -39,7 +39,7 @@ export function Destinations() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
             Get inspired for your next trip
           </h2>
         </div>

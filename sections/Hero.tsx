@@ -38,11 +38,11 @@ export function BangladeshStaysWithYou() {
     <section className="bg-white py-4 dark:bg-gray-950 sm:py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl flex items-center gap-2">
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl flex items-center gap-2">
             <span className="h-6 w-1.5 rounded-full bg-primary-600"></span>
             Bangladesh Stays With You
           </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-base font-medium text-gray-700 dark:text-gray-300 mt-1">
             Discover how Bangladesh leaves its mark on you through adventure, food, culture, and leisure.
           </p>
         </div>
@@ -90,8 +90,8 @@ export function BangladeshStaysWithYou() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h4 className="font-bold text-lg">Sylhet Tea Gardens</h4>
-                <p className="text-xs text-gray-200 mt-0.5">Explore lush green hills and spiritual shrines.</p>
+                <h4 className="font-extrabold text-xl">Sylhet Tea Gardens</h4>
+                <p className="text-sm text-gray-200 mt-0.5">Explore lush green hills and spiritual shrines.</p>
               </div>
             </Link>
 
@@ -110,8 +110,8 @@ export function BangladeshStaysWithYou() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h4 className="font-bold text-lg">Bandarban Adventures</h4>
-                <p className="text-xs text-gray-200 mt-0.5">Trek high peaks and witness majestic waterfalls.</p>
+                <h4 className="font-extrabold text-xl">Bandarban Adventures</h4>
+                <p className="text-sm text-gray-200 mt-0.5">Trek high peaks and witness majestic waterfalls.</p>
               </div>
             </Link>
           </div>
