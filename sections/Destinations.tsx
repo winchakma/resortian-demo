@@ -34,17 +34,17 @@ export async function Destinations() {
         {/* Carousel Scroll Wrapper */}
         <div className="relative">
           <div
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {destinations.map((d, index) => (
               <div
                 key={d.id}
-                className="w-[200px] sm:w-[240px] shrink-0 snap-start snap-always"
+                className="w-[130px] sm:w-[150px] shrink-0 snap-start snap-always"
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}
-                  className="group relative block aspect-[4/5] overflow-hidden rounded-3xl shadow-md transition-shadow hover:shadow-lg"
+                  className="group relative block aspect-[3/4] overflow-hidden rounded-2xl shadow-sm transition-shadow hover:shadow-md"
                 >
                   <Image
                     src={d.image}
@@ -52,23 +52,23 @@ export async function Destinations() {
                     fill
                     unoptimized
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 200px, 240px"
+                    sizes="(max-width: 640px) 130px, 150px"
                   />
                   
                   {/* Dark Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
 
                   {/* Category Badge */}
-                  <div className="absolute left-4 top-4 rounded-lg bg-white/10 px-2.5 py-1 text-[10px] font-bold text-white uppercase tracking-wider backdrop-blur-md border border-white/15">
+                  <div className="absolute left-2 top-2 rounded bg-white/10 px-1.5 py-0.5 text-[8px] font-extrabold text-white uppercase tracking-wider backdrop-blur-md border border-white/10">
                     {categories[index % categories.length]}
                   </div>
 
                   {/* Text Overlay */}
-                  <div className="absolute bottom-5 left-5 right-5 text-white">
-                    <h3 className="font-bold text-lg leading-tight truncate group-hover:text-primary-300 transition-colors">
+                  <div className="absolute bottom-3 left-3 right-3 text-white">
+                    <h3 className="font-bold text-xs sm:text-sm leading-tight truncate group-hover:text-primary-300 transition-colors">
                       {d.name}
                     </h3>
-                    <p className="text-[11px] text-gray-300 mt-0.5">
+                    <p className="text-[9px] text-gray-300 mt-0.5">
                       {d.propertyCount} properties
                     </p>
                   </div>

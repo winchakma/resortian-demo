@@ -1,5 +1,5 @@
 import { Header } from "@/sections/Header";
-import { Hero } from "@/sections/Hero";
+import { Hero, BangladeshStaysWithYou } from "@/sections/Hero";
 import { Destinations } from "@/sections/Destinations";
 import { FeaturedPlaces } from "@/sections/FeaturedPlaces";
 import { UserStories } from "@/sections/UserStories";
@@ -13,9 +13,10 @@ export default function Home() {
       <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Hero />
         <Destinations />
+        <FeaturedStays />
         <FeaturedPlaces />
         <UserStories />
-        <FeaturedStays />
+        <BangladeshStaysWithYou />
       </main>
       <Footer />
     </>
