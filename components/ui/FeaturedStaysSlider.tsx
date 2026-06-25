@@ -24,7 +24,7 @@ export function FeaturedStaysSlider({ hotels }: FeaturedStaysSliderProps) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative group">
       {/* Scroll container */}
       <div
         ref={scrollRef}
@@ -41,21 +41,21 @@ export function FeaturedStaysSlider({ hotels }: FeaturedStaysSliderProps) {
         ))}
       </div>
 
-      {/* Navigation Buttons */}
+      {/* Navigation Buttons — same style as FeaturedPlaces */}
       <button
         onClick={() => scroll("left")}
-        className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
         aria-label="Scroll left"
       >
-        <ChevronLeft className="h-6 w-6" />
+        <ChevronLeft className="h-5 w-5" />
       </button>
 
       <button
         onClick={() => scroll("right")}
-        className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
         aria-label="Scroll right"
       >
-        <ChevronRight className="h-6 w-6" />
+        <ChevronRight className="h-5 w-5" />
       </button>
     </div>
   );

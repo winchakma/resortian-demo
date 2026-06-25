@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { HotelCard } from "@/components/ui/HotelCard";
 import { getFeaturedStays } from "@/utils/api";
+import { FeaturedStaysSlider } from "@/components/ui/FeaturedStaysSlider";
 
 export async function FeaturedStays() {
   const hotels = await getFeaturedStays();
-  // Display top 4 deals in the grid
-  const deals = hotels.slice(0, 4);
+  // Show up to 8 hotels in the slider
+  const deals = hotels.slice(0, 8);
 
   return (
     <section className="bg-white py-4 dark:bg-gray-950 sm:py-6">
@@ -28,14 +28,8 @@ export async function FeaturedStays() {
           </Link>
         </div>
 
-        {/* 4-Column Grid of Hotel Cards */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {deals.map((hotel) => (
-            <div key={hotel.id}>
-              <HotelCard hotel={hotel} />
-            </div>
-          ))}
-        </div>
+        {/* Sliding Carousel with arrows */}
+        <FeaturedStaysSlider hotels={deals} />
       </div>
     </section>
   );
