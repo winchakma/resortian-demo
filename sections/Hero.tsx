@@ -4,36 +4,30 @@ import { SearchForm } from "@/components/ui/SearchForm";
 
 export function Hero() {
   return (
-    <section className="relative z-10 py-4 bg-white dark:bg-gray-950 sm:py-6">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        
-        {/* Search bar at the top */}
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-            Save up to 40% on your next hotel stay
+    <section className="relative flex min-h-[500px] flex-col items-center justify-center pt-20 pb-16 lg:pt-28 lg:pb-24">
+      {/* Background Image */}
+      <Image
+        src="https://images.unsplash.com/photo-1542296332-2e4473faf563?w=1600&h=900&fit=crop"
+        alt="Beautiful landscape"
+        fill
+        priority
+        unoptimized
+        className="object-cover"
+        sizes="100vw"
+      />
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/40" />
+
+      <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl drop-shadow-lg">
+            The one place you go to go places
           </h1>
-          <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
-            We compare hotel prices from hundreds of sites
-          </p>
         </div>
 
-        <div className="w-full mb-6">
+        <div className="mx-auto w-full max-w-5xl">
           <SearchForm />
         </div>
-
-        {/* Partner logo bar */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 border-t border-gray-100 pt-6 text-sm font-semibold text-gray-400 dark:border-gray-900">
-          <span className="hover:text-gray-600 transition-colors">Booking.com</span>
-          <span className="hover:text-gray-600 transition-colors">Expedia</span>
-          <span className="hover:text-gray-600 transition-colors">Hotels.com</span>
-          <span className="hover:text-gray-600 transition-colors">Vrbo</span>
-          <span className="hover:text-gray-600 transition-colors">ALL</span>
-          <span className="hover:text-gray-600 transition-colors">Trip.com</span>
-          <span className="hover:text-gray-600 transition-colors">priceline</span>
-          <span className="text-xs font-normal text-gray-300 dark:text-gray-700">|</span>
-          <span className="text-xs text-gray-400 hover:text-gray-600 transition-colors">+100 more</span>
-        </div>
-
       </div>
     </section>
   );

@@ -261,15 +261,15 @@ export function DateRangePicker({
       <button
         type="button"
         onClick={() => setIsOpen((p) => !p)}
-        className="flex w-full items-center gap-3 bg-transparent px-4 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+        className="flex w-full items-center gap-3 bg-transparent px-4 py-2 h-[58px] text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
       >
         <CalendarIcon className="h-5 w-5 shrink-0 text-gray-500 dark:text-gray-400" />
         <div className="min-w-0 flex-1">
-          <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-            Check-in / Check-out
+          <p className="whitespace-nowrap text-[11px] font-semibold text-gray-900 dark:text-white">
+            Dates
           </p>
           <p
-            className={`truncate text-sm ${checkInDate ? "font-medium text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500"}`}
+            className={`truncate text-sm ${checkInDate ? "font-medium text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400"}`}
           >
             {triggerLabel}
           </p>

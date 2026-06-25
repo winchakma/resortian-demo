@@ -4,17 +4,21 @@ import {
   MapPin,
   Users,
   Search,
-  SlidersHorizontal,
   ChevronDown,
   Minus,
   Plus,
   Loader2,
+  Bed,
+  Plane,
+  Car,
+  Briefcase,
+  Ticket,
+  Ship
 } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import { DateRangePicker } from "@/components/ui/DateRangePicker";
-import { FilterModal, type FilterValues } from "@/components/ui/FilterModal";
 import type { SearchFormData } from "@/types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
@@ -94,6 +98,15 @@ interface SearchFormProps {
   searchParams?: FilterSearchParams;
 }
 
+const TABS = [
+  { id: "stays", label: "Stays", icon: Bed },
+  { id: "flights", label: "Flights", icon: Plane },
+  { id: "cars", label: "Cars", icon: Car },
+  { id: "packages", label: "Packages", icon: Briefcase },
+  { id: "things-to-do", label: "Things to do", icon: Ticket },
+  { id: "cruises", label: "Cruises", icon: Ship },
+];
+
 export function SearchForm({
   initialValues,
   searchParams,
@@ -103,7 +116,8 @@ export function SearchForm({
   });
   const router = useRouter();
   const [isGuestOpen, setIsGuestOpen] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  
+  const [activeTab, setActiveTab] = useState("stays");
 
   // ── Location search state ─────────────────────────────────────────────────
   const [isLocationOpen, setIsLocationOpen] = useState(false);
@@ -200,243 +214,211 @@ export function SearchForm({
     return () => document.removeEventListener("mousedown", onOutside);
   }, []);
 
-  const handleFilterApply = useCallback(
-    (values: FilterValues) => {
-      const params = new URLSearchParams();
-      if (formData.location) params.set("location", formData.location);
-      if (formData.checkIn) params.set("checkIn", formData.checkIn);
-      if (formData.checkOut) params.set("checkOut", formData.checkOut);
-      params.set("adults", String(formData.adults));
-      params.set("children", String(formData.children));
-      params.set("rooms", String(formData.rooms));
-      if (values.priceMin) params.set("minPrice", values.priceMin);
-      if (values.priceMax) params.set("maxPrice", values.priceMax);
-      if (values.selectedStars.length > 0) {
-        params.set("minRating", String(Math.min(...values.selectedStars)));
-      }
-      if (values.selectedAmenities.length > 0) {
-        params.set("amenities", values.selectedAmenities.join(","));
-      }
-      if (values.sortBy) params.set("sortBy", values.sortBy);
-      router.push(`/hotels?${params.toString()}`);
-    },
-    [formData, router],
-  );
-
-  const initialFilterValues: Partial<FilterValues> = {
-    priceMin: searchParams?.minPrice ?? "",
-    priceMax: searchParams?.maxPrice ?? "",
-    selectedStars: searchParams?.minRating
-      ? [Number(searchParams.minRating)]
-      : [],
-    selectedAmenities: searchParams?.amenities
-      ? searchParams.amenities.split(",").filter(Boolean)
-      : [],
-    sortBy: searchParams?.sortBy ?? "",
-  };
-
   const guestSummary = useCallback(() => {
     const parts: string[] = [];
     if (formData.adults > 0)
-      parts.push(`${formData.adults} Adult${formData.adults > 1 ? "s" : ""}`);
-    if (formData.children > 0)
-      parts.push(
-        `${formData.children} Child${formData.children > 1 ? "ren" : ""}`,
-      );
+      parts.push(`${formData.adults} traveler${formData.adults > 1 ? "s" : ""}`);
     if (formData.rooms > 0)
-      parts.push(`${formData.rooms} Room${formData.rooms > 1 ? "s" : ""}`);
-    return parts.join(", ") || "Add guests";
-  }, [formData.adults, formData.children, formData.rooms]);
+      parts.push(`${formData.rooms} room${formData.rooms > 1 ? "s" : ""}`);
+    return parts.join(", ") || "Add travelers";
+  }, [formData.adults, formData.rooms]);
 
   return (
-    <>
+    <div className="w-full rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 relative mt-8 lg:mt-12">
+      
+      {/* Tabs */}
+      <div className="flex overflow-x-auto hide-scrollbar items-center gap-6 border-b border-gray-200 dark:border-gray-800 mb-6">
+        {TABS.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 pb-3 text-sm font-semibold transition-colors whitespace-nowrap relative ${
+                isActive
+                  ? "text-primary-600 dark:text-primary-500"
+                  : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+              }`}
+            >
+              <Icon className="h-5 w-5" />
+              {tab.label}
+              {isActive && (
+                <span className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-primary-600 dark:bg-primary-500" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
         }}
-        className="flex w-full flex-col gap-3 rounded-full border border-gray-200 bg-white p-1.5 shadow-md lg:flex-row lg:items-center lg:gap-0 dark:border-gray-700 dark:bg-gray-800"
+        className="flex flex-col gap-4"
       >
-        {/* ── Location ───────────────────────────────────────────── */}
-        <div ref={locationRef} className="relative flex-1">
-          <div className="flex items-center gap-3 bg-transparent px-4 py-2 lg:border-r lg:border-gray-200 lg:dark:border-gray-700">
-            <MapPin className="h-5 w-5 shrink-0 text-gray-450 dark:text-gray-400" />
-            <div className="flex-1">
-              <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Location
-              </label>
-              <input
-                type="text"
-                placeholder="Where are you going?"
-                value={locationQuery}
-                onChange={(e) => {
-                  setLocationQuery(e.target.value);
-                  updateField("location", e.target.value);
-                }}
-                onFocus={() => setIsLocationOpen(true)}
-                className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-400"
-              />
+        {/* Input Row */}
+        <div className="flex flex-col lg:flex-row rounded-lg border border-gray-300 dark:border-gray-700 divide-y lg:divide-y-0 lg:divide-x divide-gray-300 dark:divide-gray-700 overflow-visible">
+          
+          {/* Location */}
+          <div ref={locationRef} className="relative flex-[1.5] hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors rounded-t-lg lg:rounded-l-lg lg:rounded-tr-none">
+            <div className="flex items-center gap-3 px-4 py-2 h-[58px]">
+              <MapPin className="h-5 w-5 shrink-0 text-gray-500 dark:text-gray-400" />
+              <div className="flex-1 min-w-0">
+                <label className="block text-[11px] font-semibold text-gray-900 dark:text-white">
+                  Going to
+                </label>
+                <input
+                  type="text"
+                  placeholder="Destination or property"
+                  value={locationQuery}
+                  onChange={(e) => {
+                    setLocationQuery(e.target.value);
+                    updateField("location", e.target.value);
+                  }}
+                  onFocus={() => setIsLocationOpen(true)}
+                  className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-500 outline-none dark:text-white dark:placeholder-gray-400 truncate font-medium"
+                />
+              </div>
+              {locationLoading && (
+                <Loader2 className="h-4 w-4 shrink-0 animate-spin text-gray-400" />
+              )}
             </div>
-            {locationLoading && (
-              <Loader2 className="h-4 w-4 shrink-0 animate-spin text-gray-400" />
+
+            {isLocationOpen && (
+              <div
+                role="listbox"
+                aria-label="Location suggestions"
+                className="absolute left-0 top-[calc(100%+8px)] z-[200] w-full lg:w-[400px] rounded-2xl border border-gray-200 bg-white text-gray-900 shadow-2xl dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              >
+                <ul
+                  ref={locationListRef}
+                  onScroll={handleLocationScroll}
+                  className="max-h-64 overflow-y-auto py-2"
+                >
+                  {!locationLoading && locationResults.length === 0 && (
+                    <li className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+                      No locations found
+                    </li>
+                  )}
+                  {locationResults.map((item, idx) => (
+                    <li key={`${item.name}-${idx}`}>
+                      <button
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => selectLocation(item.name)}
+                        className="flex w-full items-center gap-4 px-5 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700"
+                      >
+                        <MapPin className="h-5 w-5 shrink-0 text-gray-400" />
+                        <span className="flex-1 text-sm font-medium">{item.name}</span>
+                      </button>
+                    </li>
+                  ))}
+                  {locationLoadingMore && (
+                    <li className="flex justify-center py-3">
+                      <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                    </li>
+                  )}
+                </ul>
+              </div>
             )}
           </div>
 
-          {isLocationOpen && (
-            <div
-              role="listbox"
-              aria-label="Location suggestions"
-              className="absolute left-0 top-full z-[200] mt-2 w-full rounded-2xl border border-gray-200 bg-white text-gray-900 shadow-2xl dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            >
-              <ul
-                ref={locationListRef}
-                onScroll={handleLocationScroll}
-                className="max-h-56 overflow-y-auto py-1"
-              >
-                {!locationLoading && locationResults.length === 0 && (
-                  <li className="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">
-                    No locations found
-                  </li>
-                )}
-                {locationResults.map((item, idx) => (
-                  <li key={`${item.name}-${idx}`}>
-                    <button
-                      type="button"
-                      onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => selectLocation(item.name)}
-                      className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-gray-800 transition-colors hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
-                    >
-                      <MapPin className="h-4 w-4 shrink-0 text-primary-500" />
-                      <span className="flex-1 text-sm">{item.name}</span>
-                    </button>
-                  </li>
-                ))}
-                {locationLoadingMore && (
-                  <li className="flex justify-center py-2">
-                    <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-                  </li>
-                )}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        {/* ── Date range picker ───────────────────────────────────── */}
-        <div className="flex-[1.4] lg:border-r lg:border-gray-200 lg:dark:border-gray-700">
-          <DateRangePicker
-            checkIn={formData.checkIn}
-            checkOut={formData.checkOut}
-            onChange={(ci, co) => {
-              updateField("checkIn", ci);
-              updateField("checkOut", co);
-            }}
-          />
-        </div>
-
-        {/* ── Guests & Rooms ──────────────────────────────────────── */}
-        <div ref={guestRef} className="relative flex-1">
-          <button
-            type="button"
-            aria-haspopup="dialog"
-            aria-expanded={isGuestOpen}
-            onClick={() => setIsGuestOpen((p) => !p)}
-            className="flex w-full items-center gap-3 bg-transparent px-4 py-2 text-left lg:border-r lg:border-gray-200 lg:dark:border-gray-700"
-          >
-            <Users className="h-5 w-5 shrink-0 text-gray-450 dark:text-gray-400" />
-            <div className="min-w-0 flex-1 overflow-hidden">
-              <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Guests &amp; Rooms
-              </p>
-              <p className="truncate whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                {guestSummary()}
-              </p>
-            </div>
-            <ChevronDown
-              className={`h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200 ${
-                isGuestOpen ? "rotate-180" : ""
-              }`}
+          {/* Dates */}
+          <div className="flex-1 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors z-[100] relative lg:static">
+            <DateRangePicker
+              checkIn={formData.checkIn}
+              checkOut={formData.checkOut}
+              onChange={(ci, co) => {
+                updateField("checkIn", ci);
+                updateField("checkOut", co);
+              }}
             />
-          </button>
+          </div>
 
-          {/* Guest popover */}
-          {isGuestOpen && (
-            <div
-              role="dialog"
-              aria-label="Guests and rooms selector"
-              className="absolute right-0 top-full z-[200] mt-2 w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:w-80"
+          {/* Guests */}
+          <div ref={guestRef} className="relative flex-1 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors rounded-b-lg lg:rounded-r-lg lg:rounded-bl-none z-[90]">
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded={isGuestOpen}
+              onClick={() => setIsGuestOpen((p) => !p)}
+              className="flex w-full items-center gap-3 bg-transparent px-4 py-2 h-[58px] text-left"
             >
-              <div className="mb-1 border-b border-gray-100 pb-3 dark:border-gray-700">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                  Guests &amp; Rooms
+              <Users className="h-5 w-5 shrink-0 text-gray-500 dark:text-gray-400" />
+              <div className="min-w-0 flex-1 overflow-hidden">
+                <p className="whitespace-nowrap text-[11px] font-semibold text-gray-900 dark:text-white">
+                  Travelers
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Manage occupancy
+                <p className="truncate whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  {guestSummary()}
                 </p>
               </div>
-              <div className="divide-y divide-gray-100 dark:divide-gray-700">
-                <Stepper
-                  label="Adults"
-                  sublabel="Age 13+"
-                  value={formData.adults}
-                  min={1}
-                  onChange={(v) => updateField("adults", v)}
-                />
-                <Stepper
-                  label="Children"
-                  sublabel="Ages 2–12"
-                  value={formData.children}
-                  min={0}
-                  onChange={(v) => updateField("children", v)}
-                />
-                <Stepper
-                  label="Rooms"
-                  value={formData.rooms}
-                  min={1}
-                  onChange={(v) => updateField("rooms", v)}
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsGuestOpen(false)}
-                className="mt-4 w-full rounded-xl bg-primary-600 py-2 text-sm font-semibold text-white transition hover:bg-primary-700 active:bg-primary-800"
+            </button>
+
+            {/* Guest popover */}
+            {isGuestOpen && (
+              <div
+                role="dialog"
+                aria-label="Guests and rooms selector"
+                className="absolute right-0 top-[calc(100%+8px)] z-[200] w-full lg:w-[320px] rounded-2xl border border-gray-200 bg-white p-5 shadow-2xl dark:border-gray-700 dark:bg-gray-800"
               >
-                Done
-              </button>
-            </div>
-          )}
+                <div className="mb-2 border-b border-gray-100 pb-4 dark:border-gray-700">
+                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                    Travelers
+                  </p>
+                </div>
+                <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                  <Stepper
+                    label="Adults"
+                    sublabel="Age 13+"
+                    value={formData.adults}
+                    min={1}
+                    onChange={(v) => updateField("adults", v)}
+                  />
+                  <Stepper
+                    label="Children"
+                    sublabel="Ages 2–12"
+                    value={formData.children}
+                    min={0}
+                    onChange={(v) => updateField("children", v)}
+                  />
+                  <Stepper
+                    label="Rooms"
+                    value={formData.rooms}
+                    min={1}
+                    onChange={(v) => updateField("rooms", v)}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsGuestOpen(false)}
+                  className="mt-6 w-full rounded-xl bg-primary-600 py-3 text-sm font-bold text-white transition hover:bg-primary-700 active:bg-primary-800"
+                >
+                  Done
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* ── Action buttons ──────────────────────────────────────── */}
-        <div className="flex gap-2 px-4 py-2 lg:px-2 lg:py-0 shrink-0">
-          {/* Filter */}
-          <button
-            type="button"
-            onClick={() => setIsFilterOpen(true)}
-            className="flex h-11 items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-gray-700 transition-colors hover:bg-gray-50 active:bg-gray-100 dark:border-gray-650 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-650 lg:h-11 lg:w-11 lg:border-0 lg:bg-gray-100 lg:px-0 lg:dark:bg-gray-700"
-            aria-label="Filters"
-          >
-            <SlidersHorizontal className="h-5 w-5" />
-            <span className="text-sm font-medium lg:hidden">Filters</span>
-          </button>
-
-          {/* Search */}
+        {/* Checkbox & Search Button Row */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+            <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+            Add a flight to Bundle &amp; Save*
+          </label>
           <button
             type="submit"
-            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-r-lg bg-[#007fcd] px-8 font-semibold text-white transition-colors hover:bg-[#006bb0] active:bg-[#00578c] lg:h-11 lg:px-8 lg:-mr-3 lg:-my-2 lg:rounded-l-none lg:rounded-r-lg"
+            className="w-full sm:w-auto rounded-full bg-[#007cc2] px-12 py-3.5 font-bold text-white transition-colors hover:bg-[#005a8f] shadow-sm flex items-center justify-center text-base"
             aria-label="Search"
           >
-            <Search className="h-5 w-5" />
-            <span className="font-bold text-sm">Search</span>
+            Search
           </button>
         </div>
       </form>
-
-      <FilterModal
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
-        initialValues={initialFilterValues}
-        onApply={handleFilterApply}
-      />
-    </>
+    </div>
   );
 }
