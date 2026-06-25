@@ -921,9 +921,13 @@ export async function searchHotels(query: SearchFormData): Promise<Hotel[]> {
 
 export async function getHotelBySlug(slug: string): Promise<Hotel | null> {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 500);
     const res = await fetch(`${API_BASE}/hotels/${slug}?isActive=true`, {
       next: { revalidate: 60 },
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
     if (res.status === 404) return null;
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data: ApiHotel = await res.json();
@@ -936,9 +940,13 @@ export async function getHotelBySlug(slug: string): Promise<Hotel | null> {
 
 export async function getHotelReviews(hotelId: string): Promise<Review[]> {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 500);
     const res = await fetch(`${API_BASE}/hotels/${hotelId}/reviews?limit=20`, {
       next: { revalidate: 60 },
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
     return (json.data as ApiReview[]).map((r) => ({
