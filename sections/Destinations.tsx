@@ -55,7 +55,7 @@ export function Destinations() {
             <div className="w-[150px] sm:w-[170px] shrink-0 snap-start snap-always">
               <Link
                 href="/hotels"
-                className="group relative block aspect-[1.5] overflow-visible rounded-2xl bg-blue-700 shadow-md transition-shadow hover:shadow-lg"
+                className="group relative block aspect-[1.5] overflow-visible rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-primary-600 shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5"
               >
                 <div className="relative w-full h-full overflow-hidden rounded-2xl">
                   <Image
@@ -63,18 +63,18 @@ export function Destinations() {
                     alt="Globe"
                     fill
                     unoptimized
-                    className="object-cover opacity-60 transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover opacity-40 transition-transform duration-550 group-hover:scale-105"
                     sizes="170px"
                   />
-                  <div className="absolute inset-0 bg-blue-900/30" />
+                  <div className="absolute inset-0 bg-blue-900/10" />
                   <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="font-extrabold text-base leading-tight">
+                    <h3 className="font-extrabold text-base leading-tight tracking-wide drop-shadow-sm">
                       Anywhere
                     </h3>
                   </div>
                 </div>
                 {/* Speech bubble pointer */}
-                <div className="absolute bottom-[-6px] left-[25%] w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-blue-700 z-10" />
+                <div className="absolute bottom-[-6px] left-[25%] w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-indigo-600 z-10" />
               </Link>
             </div>
 
@@ -86,7 +86,7 @@ export function Destinations() {
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}
-                  className="group relative block aspect-[1.5] overflow-hidden rounded-2xl bg-gray-200 dark:bg-gray-850 shadow-md transition-shadow hover:shadow-lg"
+                  className="group relative block aspect-[1.5] overflow-hidden rounded-2xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-md border border-white/20 dark:border-white/5 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
                 >
                   <Image
                     src={d.image}
@@ -101,13 +101,13 @@ export function Destinations() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
 
                   {/* Category Badge */}
-                  <div className="absolute left-3 top-3 rounded bg-white/90 px-2 py-0.5 text-[9px] font-bold text-gray-700 shadow-sm dark:bg-gray-900/90 dark:text-gray-200">
+                  <div className="absolute left-3 top-3 rounded bg-white/90 px-2 py-0.5 text-[9px] font-extrabold text-gray-700 shadow-sm dark:bg-slate-900/90 dark:text-gray-200 uppercase tracking-wide">
                     {categories[index % categories.length]}
                   </div>
 
                   {/* Text Overlay */}
                   <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <h3 className="font-extrabold text-sm sm:text-base leading-tight truncate group-hover:text-primary-300 transition-colors">
+                    <h3 className="font-extrabold text-sm sm:text-base leading-tight truncate group-hover:text-primary-400 transition-colors drop-shadow-sm">
                       {d.name}
                     </h3>
                   </div>
@@ -116,21 +116,21 @@ export function Destinations() {
             ))}
           </div>
 
-          {/* Navigation Buttons */}
+          {/* Navigation Buttons - placed inside container to prevent edge clipping */}
           <button
             onClick={() => scroll("left")}
-            className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll left"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-5 w-5" />
           </button>
 
           <button
             onClick={() => scroll("right")}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll right"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-5 w-5" />
           </button>
         </div>
 
