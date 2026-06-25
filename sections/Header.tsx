@@ -75,7 +75,7 @@ const NavLinks = memo(function NavLinks({
       <Link
         href={accountHref}
         prefetch={true}
-        className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+        className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
       >
         My Account
       </Link>
@@ -91,7 +91,7 @@ function SignUpButton() {
   return (
     <Link
       href="/auth/customer?tab=register"
-      className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+      className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-1.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
     >
       Sign Up
     </Link>
