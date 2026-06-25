@@ -99,16 +99,20 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
 
         {/* Nav links */}
         <nav className="flex flex-col gap-0.5 px-3 py-4">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={onClose}
-              className="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-            >
-              {link.label}
-            </a>
-          ))}
+          {links.map((link) => {
+            const Icon = (link as any).icon;
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={onClose}
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+              >
+                {Icon && <Icon className="h-4 w-4" />}
+                {link.label}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Separator */}

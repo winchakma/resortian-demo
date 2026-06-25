@@ -3,7 +3,7 @@
 import { memo, useState, useCallback, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Menu, User, ShoppingCart, Building2, LogOut } from "lucide-react";
+import { Menu, User, ShoppingCart, Building2, LogOut, Hotel, Compass, BookOpen, Info, Phone } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { MobileMenu } from "@/components/ui/MobileMenu";
@@ -14,12 +14,14 @@ import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import type { NavLink } from "@/types";
 
-const NAV_LINKS: NavLink[] = [
-  { label: "Hotels & Resorts", href: "/hotels" },
-  { label: "Destinations", href: "/destinations" },
-  { label: "Blog", href: "/blog" },
-  { label: "About Us", href: "/about" },
-  { label: "Contact", href: "/contact" },
+type NavLinkWithIcon = NavLink & { icon?: React.ElementType };
+
+const NAV_LINKS: NavLinkWithIcon[] = [
+  { label: "Hotels & Resorts", href: "/hotels", icon: Hotel },
+  { label: "Destinations", href: "/destinations", icon: Compass },
+  { label: "Blog", href: "/blog", icon: BookOpen },
+  { label: "About Us", href: "/about", icon: Info },
+  { label: "Contact", href: "/contact", icon: Phone },
 ];
 
 // ─── Cart indicator ───────────────────────────────────────────────────────────
@@ -53,7 +55,7 @@ CartIndicator.displayName = "CartIndicator";
 // ─── Nav links ────────────────────────────────────────────────────────────────
 
 const navLinkCls =
-  "rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:bg-transparent dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
+  "flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:bg-transparent dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
 
 const NavLinks = memo(function NavLinks({
   accountHref,
@@ -62,21 +64,26 @@ const NavLinks = memo(function NavLinks({
 }) {
   return (
     <nav className="hidden lg:flex lg:items-center lg:gap-1">
-      {NAV_LINKS.map((link) => (
-        <Link
-          key={link.href}
-          href={link.href}
-          prefetch={true}
-          className={navLinkCls}
-        >
-          {link.label}
-        </Link>
-      ))}
+      {NAV_LINKS.map((link) => {
+        const Icon = link.icon;
+        return (
+          <Link
+            key={link.href}
+            href={link.href}
+            prefetch={true}
+            className={navLinkCls}
+          >
+            {Icon && <Icon className="h-4 w-4" />}
+            {link.label}
+          </Link>
+        );
+      })}
       <Link
         href={accountHref}
         prefetch={true}
         className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
       >
+        <User className="h-4 w-4" />
         My Account
       </Link>
     </nav>
