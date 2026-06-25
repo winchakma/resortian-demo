@@ -17,42 +17,42 @@ const STORIES: Story[] = [
   {
     id: "1",
     quote: "Saint Martin Paradise Resort! Go Crazy at the Blue Water Beach Resort",
-    image: "https://images.unsplash.com/photo-1573052905904-34ad8c27f0cc?w=600&h=800&fit=crop",
+    image: "https://images.unsplash.com/photo-1573052905904-34ad8c27f0cc?w=600&h=450&fit=crop",
     author: "zayan_rahman_explorer",
     avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop",
   },
   {
     id: "2",
     quote: "Slow Healing Trip at Srimangal Tea Garden Escape 💚",
-    image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=800&fit=crop",
+    image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=450&fit=crop",
     author: "nabila_karim_local_guide",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
   },
   {
     id: "3",
     quote: "Nilgiri Hills Bandarban - watching clouds float below our balcony",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=800&fit=crop",
+    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=450&fit=crop",
     author: "faisal_ahmed_backpacker",
     avatar: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&h=100&fit=crop",
   },
   {
     id: "4",
     quote: "Venture deep into Sundarbans mangroves - Royal Bengal spotting!",
-    image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&h=800&fit=crop",
+    image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&h=450&fit=crop",
     author: "sadia_islam_wildlife",
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
   },
   {
     id: "5",
     quote: "A perfect weekend getaway at Kuakata - watched both sunrise and sunset!",
-    image: "https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=600&h=800&fit=crop",
+    image: "https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=600&h=450&fit=crop",
     author: "arif_hossain_travels",
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
   },
   {
     id: "6",
     quote: "Mesmerizing waterfalls in Khagrachari, truly a hidden gem of Bangladesh 🌊",
-    image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600&h=800&fit=crop",
+    image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600&h=450&fit=crop",
     author: "nusrat_jahan_diaries",
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop",
   },
@@ -96,13 +96,12 @@ export function UserStories() {
           </Link>
         </div>
 
-        {/* Carousel Container */}
+        {/* Slider Container — same structure as FeaturedPlaces */}
         <div className="relative group">
-
-          {/* Scrollable track */}
+          {/* Scrollable Area */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto pb-4"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {STORIES.map((story) => {
@@ -110,45 +109,46 @@ export function UserStories() {
               return (
                 <div
                   key={story.id}
-                  className="w-[240px] sm:w-[270px] shrink-0"
+                  className="w-[280px] sm:w-[300px] shrink-0 snap-start snap-always"
                 >
                   <Link href="/stories" className="block h-full cursor-pointer">
-                    <div className="group/card relative aspect-[3/4] w-full overflow-hidden rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                      {/* Background Image */}
-                      <Image
-                        src={story.image}
-                        alt="Travel Story"
-                        fill
-                        unoptimized
-                        className="object-cover transition-transform duration-500 group-hover/card:scale-105"
-                        sizes="(max-width: 640px) 240px, 270px"
-                      />
+                    <div className="group/card relative flex flex-col overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full">
 
-                      {/* Dark Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-
-                      {/* Favorite Heart Button */}
-                      <button
-                        type="button"
-                        onClick={(e) => toggleFavorite(story.id, e)}
-                        aria-label="Like story"
-                        className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition-all hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300"
-                      >
-                        <Heart
-                          fill={isFav ? "currentColor" : "none"}
-                          className={`h-4 w-4 transition-colors pointer-events-none ${
-                            isFav ? "text-red-500" : "text-gray-500 dark:text-gray-400"
-                          }`}
+                      {/* Image — same 4:3 landscape ratio as FeaturedPlaces */}
+                      <div className="relative aspect-[4/3] w-full overflow-hidden">
+                        <Image
+                          src={story.image}
+                          alt={story.quote}
+                          fill
+                          unoptimized
+                          className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+                          sizes="(max-width: 640px) 280px, 300px"
                         />
-                      </button>
 
-                      {/* Bottom Text */}
-                      <div className="absolute bottom-4 left-4 right-4 text-white flex flex-col gap-3">
-                        <p className="text-sm font-bold leading-snug text-gray-100 line-clamp-2">
+                        {/* Favorite Heart Button */}
+                        <button
+                          type="button"
+                          onClick={(e) => toggleFavorite(story.id, e)}
+                          aria-label="Like story"
+                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
+                        >
+                          <Heart
+                            fill={isFav ? "currentColor" : "none"}
+                            className={`h-4 w-4 transition-colors pointer-events-none ${
+                              isFav ? "text-red-500" : "text-gray-500 dark:text-gray-400"
+                            }`}
+                          />
+                        </button>
+                      </div>
+
+                      {/* Content Panel — below image, same as FeaturedPlaces */}
+                      <div className="p-4 flex flex-col gap-3">
+                        <p className="text-sm font-bold leading-snug text-gray-900 dark:text-white line-clamp-2 group-hover/card:text-primary-600 transition-colors">
                           {story.quote}
                         </p>
-                        <div className="flex items-center gap-2">
-                          <div className="relative h-6 w-6 overflow-hidden rounded-full border border-white/20 shrink-0">
+                        {/* Author */}
+                        <div className="flex items-center gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
+                          <div className="relative h-6 w-6 overflow-hidden rounded-full border border-gray-200 dark:border-gray-700 shrink-0">
                             <Image
                               src={story.avatar}
                               alt={story.author}
@@ -158,11 +158,12 @@ export function UserStories() {
                               sizes="24px"
                             />
                           </div>
-                          <span className="text-[11px] text-gray-300 font-semibold truncate">
+                          <span className="text-[11px] text-gray-500 dark:text-gray-400 font-semibold truncate">
                             {story.author}
                           </span>
                         </div>
                       </div>
+
                     </div>
                   </Link>
                 </div>
@@ -170,7 +171,7 @@ export function UserStories() {
             })}
           </div>
 
-          {/* Navigation Buttons — always visible, matching FeaturedPlaces style */}
+          {/* Navigation Buttons — exact same style as FeaturedPlaces */}
           <button
             onClick={() => scroll("left")}
             className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
