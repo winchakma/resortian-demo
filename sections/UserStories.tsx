@@ -42,6 +42,20 @@ const STORIES: Story[] = [
     author: "sadia_islam_wildlife",
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
   },
+  {
+    id: "5",
+    quote: "A perfect weekend getaway at Kuakata - watched both sunrise and sunset!",
+    image: "https://images.unsplash.com/photo-1548115184-bc6544d06a58?w=600&h=800&fit=crop",
+    author: "arif_hossain_travels",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+  },
+  {
+    id: "6",
+    quote: "Mesmerizing waterfalls in Khagrachari, truly a hidden gem of Bangladesh 🌊",
+    image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600&h=800&fit=crop",
+    author: "nusrat_jahan_diaries",
+    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop",
+  },
 ];
 
 export function UserStories() {
