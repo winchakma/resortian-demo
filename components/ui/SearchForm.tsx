@@ -255,12 +255,12 @@ export function SearchForm({
           e.preventDefault();
           handleSubmit();
         }}
-        className="flex w-full flex-col gap-3 rounded-2xl bg-white p-2 border border-gray-200 shadow-md sm:p-3 lg:flex-row lg:items-center lg:gap-2 lg:rounded-full dark:bg-gray-800 dark:border-gray-700"
+        className="flex w-full flex-col gap-3 rounded-full border border-gray-200 bg-white p-1.5 shadow-md lg:flex-row lg:items-center lg:gap-0 dark:border-gray-700 dark:bg-gray-800"
       >
         {/* ── Location ───────────────────────────────────────────── */}
         <div ref={locationRef} className="relative flex-1">
-          <div className="flex items-center gap-3 rounded-xl border border-gray-150 bg-gray-50/50 px-4 py-3 dark:border-gray-700 dark:bg-gray-900/40 lg:rounded-full">
-            <MapPin className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
+          <div className="flex items-center gap-3 bg-transparent px-4 py-2 lg:border-r lg:border-gray-200 lg:dark:border-gray-700">
+            <MapPin className="h-5 w-5 shrink-0 text-gray-450 dark:text-gray-400" />
             <div className="flex-1">
               <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                 Location
@@ -322,7 +322,7 @@ export function SearchForm({
         </div>
 
         {/* ── Date range picker ───────────────────────────────────── */}
-        <div className="flex-[1.4]">
+        <div className="flex-[1.4] lg:border-r lg:border-gray-200 lg:dark:border-gray-700">
           <DateRangePicker
             checkIn={formData.checkIn}
             checkOut={formData.checkOut}
@@ -340,9 +340,9 @@ export function SearchForm({
             aria-haspopup="dialog"
             aria-expanded={isGuestOpen}
             onClick={() => setIsGuestOpen((p) => !p)}
-            className="flex w-full items-center gap-3 rounded-xl border border-gray-150 bg-gray-50/50 px-4 py-3 text-left dark:border-gray-700 dark:bg-gray-900/40 lg:rounded-full"
+            className="flex w-full items-center gap-3 bg-transparent px-4 py-2 text-left lg:border-r lg:border-gray-200 lg:dark:border-gray-700"
           >
-            <Users className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
+            <Users className="h-5 w-5 shrink-0 text-gray-450 dark:text-gray-400" />
             <div className="min-w-0 flex-1 overflow-hidden">
               <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                 Guests &amp; Rooms
@@ -363,7 +363,7 @@ export function SearchForm({
             <div
               role="dialog"
               aria-label="Guests and rooms selector"
-              className="absolute left-0 top-full z-[200] mt-2 w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:w-80"
+              className="absolute right-0 top-full z-[200] mt-2 w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:w-80"
             >
               <div className="mb-1 border-b border-gray-100 pb-3 dark:border-gray-700">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white">
@@ -407,12 +407,12 @@ export function SearchForm({
         </div>
 
         {/* ── Action buttons ──────────────────────────────────────── */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 px-4 py-2 lg:px-2 lg:py-0 shrink-0">
           {/* Filter */}
           <button
             type="button"
             onClick={() => setIsFilterOpen(true)}
-            className="flex h-12 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 text-gray-700 transition-colors hover:bg-gray-50 active:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 lg:h-12 lg:w-12 lg:rounded-full lg:border-0 lg:bg-gray-100 lg:px-0 lg:dark:bg-gray-700"
+            className="flex h-11 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 text-gray-750 transition-colors hover:bg-gray-50 active:bg-gray-100 dark:border-gray-650 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-650 lg:h-11 lg:w-11 lg:rounded-full lg:border-0 lg:bg-gray-100 lg:px-0 lg:dark:bg-gray-700"
             aria-label="Filters"
           >
             <SlidersHorizontal className="h-5 w-5" />
@@ -422,11 +422,11 @@ export function SearchForm({
           {/* Search */}
           <button
             type="submit"
-            className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 font-medium text-white transition-colors hover:bg-primary-700 active:bg-primary-800 lg:h-12 lg:w-12 lg:flex-initial lg:rounded-full lg:p-0"
+            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 lg:h-11 lg:px-6 lg:rounded-full"
             aria-label="Search"
           >
-            <Search className="h-5 w-5" />
-            <span className="lg:hidden">Search</span>
+            <Search className="h-5 w-5 animate-pulse" />
+            <span className="font-bold text-sm">Search</span>
           </button>
         </div>
       </form>
