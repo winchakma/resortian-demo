@@ -228,7 +228,7 @@ export function FeaturedPlaces() {
           {/* Navigation Buttons */}
           <button
             onClick={() => scroll("left")}
-            className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105"
+            className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 hidden md:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105"
             aria-label="Scroll left"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -236,7 +236,7 @@ export function FeaturedPlaces() {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105"
+            className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 hidden md:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105"
             aria-label="Scroll right"
           >
             <ChevronRight className="h-5 w-5" />
