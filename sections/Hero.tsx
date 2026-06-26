@@ -20,7 +20,7 @@ export function Hero() {
 
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="text-center mb-6">
-          <h1 className="text-4xl font-serif font-extrabold tracking-tight text-white sm:text-5xl lg:text-[64px] drop-shadow-2xl leading-tight">
+          <h1 className="text-4xl font-display font-extrabold tracking-tight text-white sm:text-5xl lg:text-[64px] drop-shadow-2xl leading-tight">
             Discover Bangladesh Like <br className="hidden sm:block" />
             <span className="text-primary-400">Never Before</span>
           </h1>
@@ -49,7 +49,7 @@ export function BangladeshStaysWithYou() {
     <section className="bg-white py-3 sm:py-5 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-serif font-extrabold text-black dark:text-white sm:text-4xl flex items-center gap-2">
+          <h2 className="text-3xl font-display font-extrabold text-black dark:text-white sm:text-4xl flex items-center gap-2">
             <span className="h-6 w-1.5 rounded-full bg-primary-600"></span>
             Bangladesh Stays With You
           </h2>

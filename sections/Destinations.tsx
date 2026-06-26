@@ -71,7 +71,7 @@ export function Destinations() {
         
         {/* Section Header */}
         <div className="relative z-10 mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-serif font-bold text-black dark:text-white sm:text-3xl">
+          <h2 className="text-2xl font-display font-bold text-black dark:text-white sm:text-3xl">
             Get inspired for your next trip
           </h2>
         </div>

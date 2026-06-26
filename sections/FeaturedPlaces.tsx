@@ -109,7 +109,7 @@ export function FeaturedPlaces() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="relative z-10 mb-8 flex items-center justify-between gap-4">
-          <h2 className="text-2xl font-serif font-bold text-black dark:text-white sm:text-3xl">
+          <h2 className="text-2xl font-display font-bold text-black dark:text-white sm:text-3xl">
             Highly-Rated Gems Handpicked for You
           </h2>
           <Link
