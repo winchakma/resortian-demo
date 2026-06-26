@@ -55,10 +55,7 @@ CartIndicator.displayName = "CartIndicator";
 // ─── Nav links ────────────────────────────────────────────────────────────────
 
 const HOVER_THEMES = [
-  { textHover: "hover:text-[#FF385C] dark:hover:text-[#FF385C]" }, // Coral
-  { textHover: "hover:text-[#0D9488] dark:hover:text-[#0D9488]" }, // Teal
-  { textHover: "hover:text-[#D4A574] dark:hover:text-[#D4A574]" }, // Gold
-  { textHover: "hover:text-[#34A853] dark:hover:text-[#34A853]" }, // Green
+  { textHover: "hover:text-[#34A853] dark:hover:text-[#34A853]" },
 ];
 
 const NavLinks = memo(function NavLinks({
@@ -86,7 +83,7 @@ const NavLinks = memo(function NavLinks({
       <Link
         href={accountHref}
         prefetch={true}
-        className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-black transition-colors hover:border-[#0D9488] hover:bg-[#0D9488]/5 hover:text-[#0D9488] dark:border-gray-700 dark:text-gray-300 dark:hover:border-[#0D9488] dark:hover:bg-[#0D9488]/10 dark:hover:text-[#0D9488] ml-2"
+        className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-black transition-colors hover:border-[#34A853] hover:bg-[#34A853]/5 hover:text-[#34A853] dark:border-gray-700 dark:text-gray-300 dark:hover:border-[#34A853] dark:hover:bg-[#34A853]/10 dark:hover:text-[#34A853] ml-2"
       >
         <User className="h-4 w-4" />
         My Account
@@ -103,7 +100,7 @@ function SignUpButton() {
   return (
     <Link
       href="/auth/customer?tab=register"
-      className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-1.5 text-sm font-semibold text-black transition-colors hover:border-[#34A853] hover:bg-[#34A853]/5 hover:text-[#34A853] dark:border-gray-700 dark:text-gray-300 dark:hover:border-[#34A853] dark:hover:bg-[#34A853]/10 dark:hover:text-[#34A853]"
+      className="flex items-center gap-1.5 rounded-lg bg-[#34A853] px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[#2b8c45] shadow-sm"
     >
       Sign Up
     </Link>
