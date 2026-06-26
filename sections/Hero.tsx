@@ -40,7 +40,7 @@ export function Hero() {
 
 export function BangladeshStaysWithYou() {
   return (
-    <section className="bg-white py-10 sm:py-12 dark:bg-gray-950">
+    <section className="bg-white py-3 sm:py-5 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl flex items-center gap-2">

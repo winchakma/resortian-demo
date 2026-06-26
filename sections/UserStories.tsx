@@ -80,13 +80,13 @@ export function UserStories() {
   };
 
   return (
-    <section className="relative py-10 sm:py-12 dark:bg-gray-950 overflow-hidden">
+    <section className="relative py-3 sm:py-5 dark:bg-gray-950 overflow-hidden">
       {/* Dark overlay with emerald tint behind slider */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-primary-950 to-slate-900" />
       
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
               Real Stories. Unforgettable Moments.
