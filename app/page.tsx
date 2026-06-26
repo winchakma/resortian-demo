@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <main className="min-h-screen w-full max-w-full bg-gray-50 dark:bg-gray-950 overflow-x-hidden">
         <Hero />
         <Destinations />
         <FeaturedStays />

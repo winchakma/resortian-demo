@@ -76,10 +76,10 @@ export function Destinations() {
         </div>
 
         {/* Carousel Scroll Wrapper */}
-        <div className="relative">
+        <div className="relative overflow-hidden">
           <div
             ref={scrollRef}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 pt-4 -mt-4 scroll-px-0"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 pt-4 -mt-4 -mx-4 px-4 md:mx-0 md:px-0 scroll-px-4 md:scroll-px-0"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {/* Destination Cards */}
@@ -89,7 +89,7 @@ export function Destinations() {
               return (
               <div
                 key={d.id}
-                className="w-[92vw] sm:w-[240px] md:w-[calc(33.333%-10.66px)] lg:w-[calc(20%-12.8px)] shrink-0 snap-center sm:snap-start snap-always"
+                className="w-[85vw] sm:w-[240px] md:w-[calc(33.333%-10.66px)] lg:w-[calc(20%-12.8px)] shrink-0 snap-start snap-always"
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}

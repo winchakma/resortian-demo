@@ -122,11 +122,11 @@ export function FeaturedPlaces() {
         </div>
 
         {/* Slider Container */}
-        <div className="relative">
+        <div className="relative overflow-hidden">
           {/* Scrollable Area */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-14 -mt-14 scroll-px-0"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 -mx-4 px-4 md:mx-0 md:px-0 scroll-px-4 md:scroll-px-0"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {places.map((place, index) => {
@@ -137,7 +137,7 @@ export function FeaturedPlaces() {
               return (
                 <div
                   key={place.id}
-                  className="relative w-[92vw] sm:w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-center sm:snap-start snap-always"
+                  className="relative w-[85vw] sm:w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
                 >
                   <Link
                     href={`/hotels?location=${encodeURIComponent(place.name)}`}
