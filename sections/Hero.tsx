@@ -50,10 +50,10 @@ export function Hero() {
 }
 
 const HOVER_THEMES = [
-  { borderClass: "hover:border-[#FF385C]", textHoverClass: "group-hover:text-[#FF385C]", badgeClass: "bg-[#FF385C]" }, // Coral
-  { borderClass: "hover:border-[#0D9488]", textHoverClass: "group-hover:text-[#0D9488]", badgeClass: "bg-[#0D9488]" }, // Teal
-  { borderClass: "hover:border-[#D4A574]", textHoverClass: "group-hover:text-[#D4A574]", badgeClass: "bg-[#D4A574]" }, // Gold
-  { borderClass: "hover:border-[#34A853]", textHoverClass: "group-hover:text-[#34A853]", badgeClass: "bg-[#34A853]" }, // Green
+  { borderClass: "hover:border-[#FF385C] data-[mobile-active=true]:border-[#FF385C]", textHoverClass: "group-hover:text-[#FF385C] group-data-[mobile-active=true]:text-[#FF385C]", badgeClass: "bg-[#FF385C]" }, // Coral
+  { borderClass: "hover:border-[#0D9488] data-[mobile-active=true]:border-[#0D9488]", textHoverClass: "group-hover:text-[#0D9488] group-data-[mobile-active=true]:text-[#0D9488]", badgeClass: "bg-[#0D9488]" }, // Teal
+  { borderClass: "hover:border-[#D4A574] data-[mobile-active=true]:border-[#D4A574]", textHoverClass: "group-hover:text-[#D4A574] group-data-[mobile-active=true]:text-[#D4A574]", badgeClass: "bg-[#D4A574]" }, // Gold
+  { borderClass: "hover:border-[#34A853] data-[mobile-active=true]:border-[#34A853]", textHoverClass: "group-hover:text-[#34A853] group-data-[mobile-active=true]:text-[#34A853]", badgeClass: "bg-[#34A853]" }, // Green
 ];
 
 export function BangladeshStaysWithYou() {
