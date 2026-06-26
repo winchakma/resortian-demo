@@ -109,7 +109,7 @@ export function UserStories() {
           {/* Scrollable Area */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-4 -mt-4 px-2 -mx-2 scroll-px-2"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-4 -mt-4 px-2 -mx-2 md:mx-0 md:px-0 scroll-px-2 md:scroll-px-0"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {STORIES.map((story, index) => {

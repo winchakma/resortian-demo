@@ -32,10 +32,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${outfit.variable} h-full overflow-x-hidden`}
+      className={`${dmSans.variable} ${outfit.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="min-h-full font-sans antialiased overflow-x-hidden" suppressHydrationWarning>
+      <body className="min-h-full font-sans antialiased" suppressHydrationWarning>
         {GA_ID && process.env.NODE_ENV === "production" && (
           <>
             <Script
