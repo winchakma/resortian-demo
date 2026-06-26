@@ -30,7 +30,7 @@ export function FeaturedPlaces() {
   };
 
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
-  const [lastSavedId, setLastSavedId] = useState<string | null>(null);
+  const [lastAction, setLastAction] = useState<{ id: string; type: "saved" | "removed" } | null>(null);
 
   useEffect(() => {
     try {
@@ -51,14 +51,10 @@ export function FeaturedPlaces() {
         localStorage.setItem("resortian_favorites", JSON.stringify(newFavs));
       } catch (err) {}
 
-      if (willBeFav) {
-        setLastSavedId(id);
-        setTimeout(() => {
-          setLastSavedId((current) => (current === id ? null : current));
-        }, 4000);
-      } else {
-        setLastSavedId(null);
-      }
+      setLastAction({ id, type: willBeFav ? "saved" : "removed" });
+      setTimeout(() => {
+        setLastAction((current) => (current?.id === id ? null : current));
+      }, 4000);
       
       return newFavs;
     });
@@ -155,13 +151,17 @@ export function FeaturedPlaces() {
                   {/* Favorite Heart Button & Tooltip Wrapper - Placed outside the Link to prevent hydration/routing issues */}
                   <div className="absolute right-3 top-3 z-20 flex flex-col items-end">
                     {/* Tooltip */}
-                    {lastSavedId === place.id && (
+                    {lastAction?.id === place.id && (
                       <div className="absolute bottom-full right-[-4px] mb-3 w-max animate-in fade-in zoom-in duration-200">
                         <div className="relative flex items-center gap-8 rounded border border-gray-200 bg-white px-4 py-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-                          <span className="text-[13px] text-gray-800">Saved</span>
-                          <Link href="/favorites" className="flex items-center text-[13px] text-blue-600 hover:text-blue-700">
-                            View <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.5} />
-                          </Link>
+                          <span className="text-[13px] text-gray-800">
+                            {lastAction.type === "saved" ? "Saved" : "Removed"}
+                          </span>
+                          {lastAction.type === "saved" && (
+                            <Link href="/favorites" className="flex items-center text-[13px] text-blue-600 hover:text-blue-700">
+                              View <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                            </Link>
+                          )}
                           {/* Little downward pointing triangle */}
                           <div className="absolute -bottom-[5px] right-5 h-[10px] w-[10px] rotate-45 border-b border-r border-gray-200 bg-white" />
                         </div>
