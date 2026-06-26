@@ -4,20 +4,19 @@ import { SearchForm } from "@/components/ui/SearchForm";
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[500px] flex-col items-center justify-center pt-20 pb-6 lg:pt-28 lg:pb-6">
+    <section className="relative flex min-h-[460px] flex-col items-center justify-center pt-24 pb-12 lg:pt-32 lg:pb-16">
       {/* Background Image */}
       <Image
-        src="https://images.unsplash.com/photo-1542296332-2e4473faf563?w=1600&h=900&fit=crop"
-        alt="Beautiful landscape"
+        src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1600&h=900&fit=crop"
+        alt="Beautiful tropical beach landscape"
         fill
         priority
         unoptimized
         className="object-cover"
         sizes="100vw"
       />
-      {/* Dark Overlay with Primary Tint */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 to-primary-950/60 mix-blend-multiply" />
-      <div className="absolute inset-0 bg-black/20" />
+      {/* Lighter Overlay for Text Readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/50" />
 
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="text-center mb-12">
