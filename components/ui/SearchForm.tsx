@@ -107,6 +107,13 @@ const TABS = [
   { id: "cruises", label: "Cruises", icon: Ship },
 ];
 
+const HOVER_THEMES = [
+  { textHover: "hover:text-[#FF385C]", textActive: "text-[#FF385C]", bgActive: "bg-[#FF385C]" }, // Coral
+  { textHover: "hover:text-[#0D9488]", textActive: "text-[#0D9488]", bgActive: "bg-[#0D9488]" }, // Teal
+  { textHover: "hover:text-[#34A853]", textActive: "text-[#34A853]", bgActive: "bg-[#34A853]" }, // Green
+  { textHover: "hover:text-[#D4A574]", textActive: "text-[#D4A574]", bgActive: "bg-[#D4A574]" }, // Gold
+];
+
 export function SearchForm({
   initialValues,
   searchParams,
@@ -224,28 +231,29 @@ export function SearchForm({
   }, [formData.adults, formData.rooms]);
 
   return (
-    <div className="w-full rounded-3xl premium-glass p-8 shadow-2xl relative mt-6 lg:mt-8 z-20">
+    <div className="w-full rounded-2xl sm:rounded-3xl premium-glass p-5 sm:p-6 shadow-2xl relative mt-4 lg:mt-6 z-20">
       
       {/* Tabs */}
-      <div className="flex overflow-x-auto hide-scrollbar items-center gap-6 border-b border-gray-200 dark:border-gray-800 mb-6">
-        {TABS.map((tab) => {
+      <div className="flex overflow-x-auto hide-scrollbar items-center gap-6 border-b border-gray-200 dark:border-gray-800 mb-5">
+        {TABS.map((tab, index) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
+          const theme = HOVER_THEMES[index % HOVER_THEMES.length];
           return (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 pb-3 text-sm font-semibold transition-colors whitespace-nowrap relative ${
+              className={`flex items-center gap-2 pb-3 text-sm font-bold transition-colors whitespace-nowrap relative ${
                 isActive
-                  ? "text-primary-600 dark:text-primary-500"
-                  : "text-black hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                  ? theme.textActive
+                  : `text-black dark:text-gray-400 ${theme.textHover}`
               }`}
             >
               <Icon className="h-5 w-5" />
               {tab.label}
               {isActive && (
-                <span className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-primary-600 dark:bg-primary-500" />
+                <span className={`absolute bottom-[-1px] left-0 right-0 h-[3px] rounded-t-md ${theme.bgActive}`} />
               )}
             </button>
           );
@@ -264,10 +272,10 @@ export function SearchForm({
           
           {/* Location */}
           <div ref={locationRef} className="relative flex-[1.5] hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors rounded-t-lg lg:rounded-l-lg lg:rounded-tr-none">
-            <div className="flex items-center gap-3 px-4 py-2 h-[58px]">
+            <div className="flex items-center gap-3 px-4 py-2 h-[52px]">
               <MapPin className="h-5 w-5 shrink-0 text-black dark:text-gray-400" />
               <div className="flex-1 min-w-0">
-                <label className="block text-[11px] font-semibold text-black dark:text-white">
+                <label className="block text-[10px] sm:text-[11px] font-semibold text-black dark:text-white">
                   Going to
                 </label>
                 <input
@@ -345,11 +353,11 @@ export function SearchForm({
               aria-haspopup="dialog"
               aria-expanded={isGuestOpen}
               onClick={() => setIsGuestOpen((p) => !p)}
-              className="flex w-full items-center gap-3 bg-transparent px-4 py-2 h-[58px] text-left"
+              className="flex w-full items-center gap-3 bg-transparent px-4 py-2 h-[52px] text-left"
             >
               <Users className="h-5 w-5 shrink-0 text-black dark:text-gray-400" />
               <div className="min-w-0 flex-1 overflow-hidden">
-                <p className="whitespace-nowrap text-[11px] font-semibold text-black dark:text-white">
+                <p className="whitespace-nowrap text-[10px] sm:text-[11px] font-semibold text-black dark:text-white">
                   Travelers
                 </p>
                 <p className="truncate whitespace-nowrap text-sm font-medium text-black dark:text-white">
@@ -412,7 +420,7 @@ export function SearchForm({
           </label>
           <button
             type="submit"
-            className="w-full sm:w-auto rounded-full bg-primary-600 px-12 h-[56px] font-bold text-white premium-hover hover:scale-[1.05] hover:bg-primary-700 shadow-xl flex items-center justify-center text-lg"
+            className="w-full sm:w-auto rounded-full bg-primary-600 px-10 h-[50px] font-bold text-white premium-hover hover:scale-[1.05] hover:bg-primary-700 shadow-xl flex items-center justify-center text-[15px] sm:text-base"
             aria-label="Search"
           >
             Search
