@@ -79,8 +79,6 @@ export function UserStories() {
     }
   };
 
-  };
-
   return (
     <section className="relative py-3 sm:py-5 dark:bg-gray-950 overflow-hidden">
       {/* Dark overlay with emerald tint behind slider */}
