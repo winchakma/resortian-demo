@@ -122,12 +122,13 @@ export function FeaturedPlaces() {
                     {/* Content Panel */}
                     <div className="absolute bottom-4 left-4 right-4 flex flex-col items-start text-white">
                       {/* Location and Fire Rating Badge */}
-                      <div className="mb-2 inline-flex items-center overflow-hidden rounded-sm text-[11px] font-bold shadow-sm">
+                      <div className="mb-2 inline-flex items-center overflow-hidden rounded-sm text-[11px] font-bold shadow-sm transition-all">
                         <span className="bg-white/90 px-1.5 py-0.5 text-black">
                           {place.name.split(" ")[0]}
                         </span>
                         <span className="flex items-center gap-0.5 bg-[#e12d2d] px-1.5 py-0.5 text-white">
-                          <Flame className="h-3 w-3 fill-current" /> {reviews.rating === "4.9" || reviews.rating === "4.8" ? "10" : "9.7"}
+                          <Flame className={`h-3 w-3 fill-current ${isFav ? "animate-pulse" : ""}`} /> 
+                          {isFav ? (reviews.rating === "4.9" || reviews.rating === "4.8" ? "10+" : "9.8") : (reviews.rating === "4.9" || reviews.rating === "4.8" ? "10" : "9.7")}
                         </span>
                       </div>
 
@@ -136,7 +137,7 @@ export function FeaturedPlaces() {
                       </h3>
                       
                       <p className="mt-1 text-xs text-white/90 drop-shadow-md">
-                        {reviews.rating}/5 · {reviews.count} reviews
+                        {reviews.rating}/5 · {isFav ? (parseInt(reviews.count.replace(/,/g, '')) + 1).toLocaleString() : reviews.count} reviews
                       </p>
                     </div>
                   </Link>
