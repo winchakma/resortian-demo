@@ -9,30 +9,30 @@ import type { Destination } from "@/types";
 
 const HOVER_THEMES = [
   { 
-    borderClass: "hover:border-[#FF385C]", 
-    textHoverClass: "group-hover/card:text-[#FF385C]", 
-    badgeClass: "group-hover/card:bg-[#FF385C] group-hover/card:text-white",
+    borderClass: "hover:border-[#FF385C] data-[mobile-active=true]:border-[#FF385C]", 
+    textHoverClass: "group-hover/card:text-[#FF385C] group-data-[mobile-active=true]/card:text-[#FF385C]", 
+    badgeClass: "group-hover/card:bg-[#FF385C] group-data-[mobile-active=true]/card:bg-[#FF385C] group-hover/card:text-white group-data-[mobile-active=true]/card:text-white",
     reviewBgClass: "bg-[#FF385C]/10 dark:bg-[#FF385C]/20",
     reviewTextClass: "text-[#FF385C]"
   }, // Coral
   { 
-    borderClass: "hover:border-[#0D9488]", 
-    textHoverClass: "group-hover/card:text-[#0D9488]", 
-    badgeClass: "group-hover/card:bg-[#0D9488] group-hover/card:text-white",
+    borderClass: "hover:border-[#0D9488] data-[mobile-active=true]:border-[#0D9488]", 
+    textHoverClass: "group-hover/card:text-[#0D9488] group-data-[mobile-active=true]/card:text-[#0D9488]", 
+    badgeClass: "group-hover/card:bg-[#0D9488] group-data-[mobile-active=true]/card:bg-[#0D9488] group-hover/card:text-white group-data-[mobile-active=true]/card:text-white",
     reviewBgClass: "bg-[#0D9488]/10 dark:bg-[#0D9488]/20",
     reviewTextClass: "text-[#0D9488]"
   }, // Teal
   { 
-    borderClass: "hover:border-[#D4A574]", 
-    textHoverClass: "group-hover/card:text-[#D4A574]", 
-    badgeClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900",
+    borderClass: "hover:border-[#D4A574] data-[mobile-active=true]:border-[#D4A574]", 
+    textHoverClass: "group-hover/card:text-[#D4A574] group-data-[mobile-active=true]/card:text-[#D4A574]", 
+    badgeClass: "group-hover/card:bg-[#D4A574] group-data-[mobile-active=true]/card:bg-[#D4A574] group-hover/card:text-gray-900 group-data-[mobile-active=true]/card:text-gray-900",
     reviewBgClass: "bg-[#D4A574]/10 dark:bg-[#D4A574]/20",
     reviewTextClass: "text-[#D4A574]"
   }, // Gold
   { 
-    borderClass: "hover:border-[#34A853]", 
-    textHoverClass: "group-hover/card:text-[#34A853]", 
-    badgeClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white",
+    borderClass: "hover:border-[#34A853] data-[mobile-active=true]:border-[#34A853]", 
+    textHoverClass: "group-hover/card:text-[#34A853] group-data-[mobile-active=true]/card:text-[#34A853]", 
+    badgeClass: "group-hover/card:bg-[#34A853] group-data-[mobile-active=true]/card:bg-[#34A853] group-hover/card:text-white group-data-[mobile-active=true]/card:text-white",
     reviewBgClass: "bg-[#34A853]/10 dark:bg-[#34A853]/20",
     reviewTextClass: "text-[#34A853]"
   }, // Green
@@ -93,14 +93,14 @@ export function Destinations() {
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}
-                  className={`group/card relative block aspect-[1.5] overflow-hidden rounded-xl border-2 border-transparent bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${theme.borderClass}`}
+                  className={`group/card relative block aspect-[1.5] overflow-hidden rounded-xl border-2 border-transparent bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-md hover:shadow-lg data-[mobile-active=true]:shadow-lg transition-all duration-300 hover:-translate-y-1 data-[mobile-active=true]:-translate-y-1 ${theme.borderClass}`}
                 >
                   <Image
                     src={d.image}
                     alt={d.name}
                     fill
                     unoptimized
-                    className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+                    className="object-cover transition-transform duration-500 group-hover/card:scale-105 group-data-[mobile-active=true]/card:scale-105"
                     sizes="(max-width: 640px) 200px, (max-width: 1024px) 33vw, 20vw"
                   />
                   

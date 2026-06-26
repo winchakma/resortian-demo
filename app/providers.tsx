@@ -8,11 +8,13 @@ import { AuthProvider } from "@/context/AuthContext";
 import { SocketProvider } from "@/context/SocketContext";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { NavigationProgress } from "@/components/ui/NavigationProgress";
+import { MobileHoverObserver } from "@/components/ui/MobileHoverObserver";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <NavigationProgress />
+      <MobileHoverObserver />
       <AuthProvider>
       <SocketProvider>
       <CartProvider>

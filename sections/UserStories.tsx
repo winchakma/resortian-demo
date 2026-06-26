@@ -59,10 +59,10 @@ const STORIES: Story[] = [
 ];
 
 const HOVER_THEMES = [
-  { borderClass: "hover:border-[#FF385C] border-white/5", textClass: "text-[#FF385C]", hoverTextClass: "group-hover/card:text-[#FF385C]", iconBorderClass: "group-hover/card:border-[#FF385C]", buttonHoverClass: "group-hover/card:bg-[#FF385C] group-hover/card:text-white" }, // Coral
-  { borderClass: "hover:border-[#0D9488] border-white/5", textClass: "text-[#0D9488]", hoverTextClass: "group-hover/card:text-[#0D9488]", iconBorderClass: "group-hover/card:border-[#0D9488]", buttonHoverClass: "group-hover/card:bg-[#0D9488] group-hover/card:text-white" }, // Teal
-  { borderClass: "hover:border-[#D4A574] border-white/5", textClass: "text-[#D4A574]", hoverTextClass: "group-hover/card:text-[#D4A574]", iconBorderClass: "group-hover/card:border-[#D4A574]", buttonHoverClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900" }, // Gold
-  { borderClass: "hover:border-[#34A853] border-white/5", textClass: "text-[#34A853]", hoverTextClass: "group-hover/card:text-[#34A853]", iconBorderClass: "group-hover/card:border-[#34A853]", buttonHoverClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white" }, // Green
+  { borderClass: "hover:border-[#FF385C] data-[mobile-active=true]:border-[#FF385C] border-white/5", textClass: "text-[#FF385C]", hoverTextClass: "group-hover/card:text-[#FF385C] group-data-[mobile-active=true]/card:text-[#FF385C]", iconBorderClass: "group-hover/card:border-[#FF385C] group-data-[mobile-active=true]/card:border-[#FF385C]", buttonHoverClass: "group-hover/card:bg-[#FF385C] group-data-[mobile-active=true]/card:bg-[#FF385C] group-hover/card:text-white group-data-[mobile-active=true]/card:text-white" }, // Coral
+  { borderClass: "hover:border-[#0D9488] data-[mobile-active=true]:border-[#0D9488] border-white/5", textClass: "text-[#0D9488]", hoverTextClass: "group-hover/card:text-[#0D9488] group-data-[mobile-active=true]/card:text-[#0D9488]", iconBorderClass: "group-hover/card:border-[#0D9488] group-data-[mobile-active=true]/card:border-[#0D9488]", buttonHoverClass: "group-hover/card:bg-[#0D9488] group-data-[mobile-active=true]/card:bg-[#0D9488] group-hover/card:text-white group-data-[mobile-active=true]/card:text-white" }, // Teal
+  { borderClass: "hover:border-[#D4A574] data-[mobile-active=true]:border-[#D4A574] border-white/5", textClass: "text-[#D4A574]", hoverTextClass: "group-hover/card:text-[#D4A574] group-data-[mobile-active=true]/card:text-[#D4A574]", iconBorderClass: "group-hover/card:border-[#D4A574] group-data-[mobile-active=true]/card:border-[#D4A574]", buttonHoverClass: "group-hover/card:bg-[#D4A574] group-data-[mobile-active=true]/card:bg-[#D4A574] group-hover/card:text-gray-900 group-data-[mobile-active=true]/card:text-gray-900" }, // Gold
+  { borderClass: "hover:border-[#34A853] data-[mobile-active=true]:border-[#34A853] border-white/5", textClass: "text-[#34A853]", hoverTextClass: "group-hover/card:text-[#34A853] group-data-[mobile-active=true]/card:text-[#34A853]", iconBorderClass: "group-hover/card:border-[#34A853] group-data-[mobile-active=true]/card:border-[#34A853]", buttonHoverClass: "group-hover/card:bg-[#34A853] group-data-[mobile-active=true]/card:bg-[#34A853] group-hover/card:text-white group-data-[mobile-active=true]/card:text-white" }, // Green
 ];
 
 export function UserStories() {
@@ -121,7 +121,7 @@ export function UserStories() {
                   className="w-[85vw] sm:w-[280px] md:w-[calc(33.333%-24px)] lg:w-[calc(25%-24px)] shrink-0 snap-start snap-always"
                 >
                   <Link href="/stories" className="block h-full cursor-pointer">
-                    <div className={`group/card relative flex flex-col justify-end overflow-hidden rounded-3xl border-2 bg-gray-900 shadow-xl transition-all duration-500 hover:-translate-y-2 h-[420px] ${theme.borderClass}`}>
+                    <div className={`group/card relative flex flex-col justify-end overflow-hidden rounded-3xl border-2 bg-gray-900 shadow-xl transition-all duration-500 hover:-translate-y-2 data-[mobile-active=true]:-translate-y-2 h-[420px] ${theme.borderClass}`}>
 
                       {/* Background Image - Comes to life on hover */}
                       <Image
@@ -129,7 +129,7 @@ export function UserStories() {
                         alt={story.quote}
                         fill
                         unoptimized
-                        className="object-cover grayscale opacity-50 group-hover/card:grayscale-0 group-hover/card:opacity-100 transition-all duration-700 group-hover/card:scale-105"
+                        className="object-cover grayscale opacity-50 group-hover/card:grayscale-0 group-data-[mobile-active=true]/card:grayscale-0 group-hover/card:opacity-100 group-data-[mobile-active=true]/card:opacity-100 transition-all duration-700 group-hover/card:scale-105 group-data-[mobile-active=true]/card:scale-105"
                         sizes="(max-width: 640px) 280px, 25vw"
                       />
 
@@ -142,7 +142,7 @@ export function UserStories() {
                               alt={story.author}
                               fill
                               unoptimized
-                              className="object-cover grayscale group-hover/card:grayscale-0 transition-all duration-700"
+                              className="object-cover grayscale group-hover/card:grayscale-0 group-data-[mobile-active=true]/card:grayscale-0 transition-all duration-700"
                               sizes="28px"
                             />
                           </div>

@@ -12,32 +12,32 @@ interface HotelCardProps {
 
 const HOVER_THEMES = [
   { 
-    borderClass: "hover:border-[#FF385C]", 
-    textHoverClass: "group-hover:text-[#FF385C]", 
-    buttonHoverClass: "group-hover:bg-[#FF385C] group-hover:border-transparent group-hover:text-white", 
+    borderClass: "hover:border-[#FF385C] data-[mobile-active=true]:border-[#FF385C]", 
+    textHoverClass: "group-hover:text-[#FF385C] group-data-[mobile-active=true]:text-[#FF385C]", 
+    buttonHoverClass: "group-hover:bg-[#FF385C] group-data-[mobile-active=true]:bg-[#FF385C] group-hover:border-transparent group-data-[mobile-active=true]:border-transparent group-hover:text-white group-data-[mobile-active=true]:text-white", 
     badgeClass: "bg-[#FF385C]",
-    tagHoverClass: "group-hover:bg-[#FF385C] group-hover:text-white"
+    tagHoverClass: "group-hover:bg-[#FF385C] group-data-[mobile-active=true]:bg-[#FF385C] group-hover:text-white group-data-[mobile-active=true]:text-white"
   }, // Coral
   { 
-    borderClass: "hover:border-[#0D9488]", 
-    textHoverClass: "group-hover:text-[#0D9488]", 
-    buttonHoverClass: "group-hover:bg-[#0D9488] group-hover:border-transparent group-hover:text-white", 
+    borderClass: "hover:border-[#0D9488] data-[mobile-active=true]:border-[#0D9488]", 
+    textHoverClass: "group-hover:text-[#0D9488] group-data-[mobile-active=true]:text-[#0D9488]", 
+    buttonHoverClass: "group-hover:bg-[#0D9488] group-data-[mobile-active=true]:bg-[#0D9488] group-hover:border-transparent group-data-[mobile-active=true]:border-transparent group-hover:text-white group-data-[mobile-active=true]:text-white", 
     badgeClass: "bg-[#0D9488]",
-    tagHoverClass: "group-hover:bg-[#0D9488] group-hover:text-white"
+    tagHoverClass: "group-hover:bg-[#0D9488] group-data-[mobile-active=true]:bg-[#0D9488] group-hover:text-white group-data-[mobile-active=true]:text-white"
   }, // Teal
   { 
-    borderClass: "hover:border-[#D4A574]", 
-    textHoverClass: "group-hover:text-[#D4A574]", 
-    buttonHoverClass: "group-hover:bg-[#D4A574] group-hover:border-transparent group-hover:text-gray-900", 
+    borderClass: "hover:border-[#D4A574] data-[mobile-active=true]:border-[#D4A574]", 
+    textHoverClass: "group-hover:text-[#D4A574] group-data-[mobile-active=true]:text-[#D4A574]", 
+    buttonHoverClass: "group-hover:bg-[#D4A574] group-data-[mobile-active=true]:bg-[#D4A574] group-hover:border-transparent group-data-[mobile-active=true]:border-transparent group-hover:text-gray-900 group-data-[mobile-active=true]:text-gray-900", 
     badgeClass: "bg-[#D4A574]",
-    tagHoverClass: "group-hover:bg-[#D4A574] group-hover:text-gray-900"
+    tagHoverClass: "group-hover:bg-[#D4A574] group-data-[mobile-active=true]:bg-[#D4A574] group-hover:text-gray-900 group-data-[mobile-active=true]:text-gray-900"
   }, // Gold
   { 
-    borderClass: "hover:border-[#34A853]", 
-    textHoverClass: "group-hover:text-[#34A853]", 
-    buttonHoverClass: "group-hover:bg-[#34A853] group-hover:border-transparent group-hover:text-white", 
+    borderClass: "hover:border-[#34A853] data-[mobile-active=true]:border-[#34A853]", 
+    textHoverClass: "group-hover:text-[#34A853] group-data-[mobile-active=true]:text-[#34A853]", 
+    buttonHoverClass: "group-hover:bg-[#34A853] group-data-[mobile-active=true]:bg-[#34A853] group-hover:border-transparent group-data-[mobile-active=true]:border-transparent group-hover:text-white group-data-[mobile-active=true]:text-white", 
     badgeClass: "bg-[#34A853]",
-    tagHoverClass: "group-hover:bg-[#34A853] group-hover:text-white"
+    tagHoverClass: "group-hover:bg-[#34A853] group-data-[mobile-active=true]:bg-[#34A853] group-hover:text-white group-data-[mobile-active=true]:text-white"
   }, // Green
 ];
 
@@ -94,7 +94,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
         href={`/hotels/${hotel.slug}`}
         className="block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 rounded-2xl h-full outline-none"
       >
-      <article className={`group overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl dark:bg-gray-900 flex flex-col h-full ${theme.borderClass}`}>
+      <article className={`group overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-lg transition-all duration-500 hover:-translate-y-1 data-[mobile-active=true]:-translate-y-1 hover:shadow-2xl data-[mobile-active=true]:shadow-2xl dark:bg-gray-900 flex flex-col h-full ${theme.borderClass}`}>
         {/* Image */}
         <div className="relative aspect-[3/2] overflow-hidden">
           <Image

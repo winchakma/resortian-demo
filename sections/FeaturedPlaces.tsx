@@ -10,30 +10,30 @@ import type { Destination } from "@/types";
 
 const HOVER_THEMES = [
   { 
-    borderClass: "hover:border-[#FF385C]", 
-    textHoverClass: "group-hover/card:text-[#FF385C]", 
-    badgeClass: "group-hover/card:bg-[#FF385C] group-hover/card:text-white",
+    borderClass: "hover:border-[#FF385C] data-[mobile-active=true]:border-[#FF385C]", 
+    textHoverClass: "group-hover/card:text-[#FF385C] group-data-[mobile-active=true]/card:text-[#FF385C]", 
+    badgeClass: "group-hover/card:bg-[#FF385C] group-data-[mobile-active=true]/card:bg-[#FF385C] group-hover/card:text-white group-data-[mobile-active=true]/card:text-white",
     reviewBgClass: "bg-[#FF385C]/10 dark:bg-[#FF385C]/20",
     reviewTextClass: "text-[#FF385C]"
   }, // Coral
   { 
-    borderClass: "hover:border-[#0D9488]", 
-    textHoverClass: "group-hover/card:text-[#0D9488]", 
-    badgeClass: "group-hover/card:bg-[#0D9488] group-hover/card:text-white",
+    borderClass: "hover:border-[#0D9488] data-[mobile-active=true]:border-[#0D9488]", 
+    textHoverClass: "group-hover/card:text-[#0D9488] group-data-[mobile-active=true]/card:text-[#0D9488]", 
+    badgeClass: "group-hover/card:bg-[#0D9488] group-data-[mobile-active=true]/card:bg-[#0D9488] group-hover/card:text-white group-data-[mobile-active=true]/card:text-white",
     reviewBgClass: "bg-[#0D9488]/10 dark:bg-[#0D9488]/20",
     reviewTextClass: "text-[#0D9488]"
   }, // Teal
   { 
-    borderClass: "hover:border-[#D4A574]", 
-    textHoverClass: "group-hover/card:text-[#D4A574]", 
-    badgeClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900",
+    borderClass: "hover:border-[#D4A574] data-[mobile-active=true]:border-[#D4A574]", 
+    textHoverClass: "group-hover/card:text-[#D4A574] group-data-[mobile-active=true]/card:text-[#D4A574]", 
+    badgeClass: "group-hover/card:bg-[#D4A574] group-data-[mobile-active=true]/card:bg-[#D4A574] group-hover/card:text-gray-900 group-data-[mobile-active=true]/card:text-gray-900",
     reviewBgClass: "bg-[#D4A574]/10 dark:bg-[#D4A574]/20",
     reviewTextClass: "text-[#D4A574]"
   }, // Gold
   { 
-    borderClass: "hover:border-[#34A853]", 
-    textHoverClass: "group-hover/card:text-[#34A853]", 
-    badgeClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white",
+    borderClass: "hover:border-[#34A853] data-[mobile-active=true]:border-[#34A853]", 
+    textHoverClass: "group-hover/card:text-[#34A853] group-data-[mobile-active=true]/card:text-[#34A853]", 
+    badgeClass: "group-hover/card:bg-[#34A853] group-data-[mobile-active=true]/card:bg-[#34A853] group-hover/card:text-white group-data-[mobile-active=true]/card:text-white",
     reviewBgClass: "bg-[#34A853]/10 dark:bg-[#34A853]/20",
     reviewTextClass: "text-[#34A853]"
   }, // Green
@@ -141,7 +141,7 @@ export function FeaturedPlaces() {
                 >
                   <Link
                     href={`/hotels?location=${encodeURIComponent(place.name)}`}
-                    className={`group/card relative flex flex-col h-[360px] sm:h-[400px] w-full rounded-3xl bg-gradient-to-b from-white to-[#f0f4ff] dark:from-gray-900 dark:to-gray-800 p-2 cursor-pointer shadow-lg hover:scale-[1.02] hover:shadow-2xl border-2 border-transparent transition-all duration-300 ${theme.borderClass}`}
+                    className={`group/card relative flex flex-col h-[360px] sm:h-[400px] w-full rounded-3xl bg-gradient-to-b from-white to-[#f0f4ff] dark:from-gray-900 dark:to-gray-800 p-2 cursor-pointer shadow-lg hover:scale-[1.02] data-[mobile-active=true]:scale-[1.02] hover:shadow-2xl data-[mobile-active=true]:shadow-2xl border-2 border-transparent transition-all duration-300 ${theme.borderClass}`}
                   >
                     <div className="relative w-full h-[220px] shrink-0 overflow-hidden rounded-2xl">
                       <Image
@@ -149,7 +149,7 @@ export function FeaturedPlaces() {
                         alt={place.name}
                         fill
                         unoptimized
-                        className="object-cover object-center transition-transform duration-500 group-hover/card:scale-105"
+                        className="object-cover object-center transition-transform duration-500 group-hover/card:scale-105 group-data-[mobile-active=true]/card:scale-105"
                         sizes="(max-width: 640px) 260px, 25vw"
                       />
                       {/* Trip Best Badge */}
