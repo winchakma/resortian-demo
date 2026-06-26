@@ -24,19 +24,19 @@ const HOVER_THEMES = [
     reviewTextClass: "text-[#0D9488]"
   }, // Teal
   { 
-    borderClass: "hover:border-[#34A853]", 
-    textHoverClass: "group-hover/card:text-[#34A853]", 
-    badgeClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white",
-    reviewBgClass: "bg-[#34A853]/10 dark:bg-[#34A853]/20",
-    reviewTextClass: "text-[#34A853]"
-  }, // Green
-  { 
     borderClass: "hover:border-[#D4A574]", 
     textHoverClass: "group-hover/card:text-[#D4A574]", 
     badgeClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900",
     reviewBgClass: "bg-[#D4A574]/10 dark:bg-[#D4A574]/20",
     reviewTextClass: "text-[#D4A574]"
   }, // Gold
+  { 
+    borderClass: "hover:border-[#34A853]", 
+    textHoverClass: "group-hover/card:text-[#34A853]", 
+    badgeClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white",
+    reviewBgClass: "bg-[#34A853]/10 dark:bg-[#34A853]/20",
+    reviewTextClass: "text-[#34A853]"
+  }, // Green
 ];
 
 export function FeaturedPlaces() {

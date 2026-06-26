@@ -41,6 +41,7 @@ export function Hero() {
 const HOVER_THEMES = [
   { borderClass: "hover:border-[#FF385C]", textHoverClass: "group-hover:text-[#FF385C]", badgeClass: "bg-[#FF385C]" }, // Coral
   { borderClass: "hover:border-[#0D9488]", textHoverClass: "group-hover:text-[#0D9488]", badgeClass: "bg-[#0D9488]" }, // Teal
+  { borderClass: "hover:border-[#D4A574]", textHoverClass: "group-hover:text-[#D4A574]", badgeClass: "bg-[#D4A574]" }, // Gold
   { borderClass: "hover:border-[#34A853]", textHoverClass: "group-hover:text-[#34A853]", badgeClass: "bg-[#34A853]" }, // Green
 ];
 

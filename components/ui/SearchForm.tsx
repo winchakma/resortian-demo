@@ -110,8 +110,8 @@ const TABS = [
 const HOVER_THEMES = [
   { textHover: "hover:text-[#FF385C]", textActive: "text-[#FF385C]", bgActive: "bg-[#FF385C]" }, // Coral
   { textHover: "hover:text-[#0D9488]", textActive: "text-[#0D9488]", bgActive: "bg-[#0D9488]" }, // Teal
-  { textHover: "hover:text-[#34A853]", textActive: "text-[#34A853]", bgActive: "bg-[#34A853]" }, // Green
   { textHover: "hover:text-[#D4A574]", textActive: "text-[#D4A574]", bgActive: "bg-[#D4A574]" }, // Gold
+  { textHover: "hover:text-[#34A853]", textActive: "text-[#34A853]", bgActive: "bg-[#34A853]" }, // Green
 ];
 
 export function SearchForm({

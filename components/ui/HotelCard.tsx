@@ -26,19 +26,19 @@ const HOVER_THEMES = [
     tagHoverClass: "group-hover:bg-[#0D9488] group-hover:text-white"
   }, // Teal
   { 
-    borderClass: "hover:border-[#34A853]", 
-    textHoverClass: "group-hover:text-[#34A853]", 
-    buttonHoverClass: "group-hover:bg-[#34A853] group-hover:border-transparent group-hover:text-white", 
-    badgeClass: "bg-[#34A853]",
-    tagHoverClass: "group-hover:bg-[#34A853] group-hover:text-white"
-  }, // Green
-  { 
     borderClass: "hover:border-[#D4A574]", 
     textHoverClass: "group-hover:text-[#D4A574]", 
     buttonHoverClass: "group-hover:bg-[#D4A574] group-hover:border-transparent group-hover:text-gray-900", 
     badgeClass: "bg-[#D4A574]",
     tagHoverClass: "group-hover:bg-[#D4A574] group-hover:text-gray-900"
   }, // Gold
+  { 
+    borderClass: "hover:border-[#34A853]", 
+    textHoverClass: "group-hover:text-[#34A853]", 
+    buttonHoverClass: "group-hover:bg-[#34A853] group-hover:border-transparent group-hover:text-white", 
+    badgeClass: "bg-[#34A853]",
+    tagHoverClass: "group-hover:bg-[#34A853] group-hover:text-white"
+  }, // Green
 ];
 
 export function HotelCard({ hotel }: HotelCardProps) {

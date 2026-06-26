@@ -57,8 +57,8 @@ CartIndicator.displayName = "CartIndicator";
 const HOVER_THEMES = [
   { textHover: "hover:text-[#FF385C] dark:hover:text-[#FF385C]" }, // Coral
   { textHover: "hover:text-[#0D9488] dark:hover:text-[#0D9488]" }, // Teal
-  { textHover: "hover:text-[#34A853] dark:hover:text-[#34A853]" }, // Green
   { textHover: "hover:text-[#D4A574] dark:hover:text-[#D4A574]" }, // Gold
+  { textHover: "hover:text-[#34A853] dark:hover:text-[#34A853]" }, // Green
 ];
 
 const NavLinks = memo(function NavLinks({

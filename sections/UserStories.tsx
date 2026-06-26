@@ -61,8 +61,8 @@ const STORIES: Story[] = [
 const HOVER_THEMES = [
   { borderClass: "hover:border-[#FF385C] border-white/5", textClass: "text-[#FF385C]", hoverTextClass: "group-hover/card:text-[#FF385C]", iconBorderClass: "group-hover/card:border-[#FF385C]", buttonHoverClass: "group-hover/card:bg-[#FF385C] group-hover/card:text-white" }, // Coral
   { borderClass: "hover:border-[#0D9488] border-white/5", textClass: "text-[#0D9488]", hoverTextClass: "group-hover/card:text-[#0D9488]", iconBorderClass: "group-hover/card:border-[#0D9488]", buttonHoverClass: "group-hover/card:bg-[#0D9488] group-hover/card:text-white" }, // Teal
+  { borderClass: "hover:border-[#D4A574] border-white/5", textClass: "text-[#D4A574]", hoverTextClass: "group-hover/card:text-[#D4A574]", iconBorderClass: "group-hover/card:border-[#D4A574]", buttonHoverClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900" }, // Gold
   { borderClass: "hover:border-[#34A853] border-white/5", textClass: "text-[#34A853]", hoverTextClass: "group-hover/card:text-[#34A853]", iconBorderClass: "group-hover/card:border-[#34A853]", buttonHoverClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white" }, // Green
-  { borderClass: "hover:border-[#D4A574] border-white/5", textClass: "text-[#D4A574]", hoverTextClass: "group-hover/card:text-[#D4A574]", iconBorderClass: "group-hover/card:border-[#D4A574]", buttonHoverClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900" }, // Gold (dark text on hover for contrast)
 ];
 
 export function UserStories() {

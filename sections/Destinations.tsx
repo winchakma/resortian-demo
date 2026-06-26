@@ -8,10 +8,34 @@ import { getPopularDestinations } from "@/utils/api";
 import type { Destination } from "@/types";
 
 const HOVER_THEMES = [
-  { borderClass: "hover:border-[#FF385C]", textHoverClass: "group-hover/card:text-[#FF385C]", badgeClass: "group-hover/card:bg-[#FF385C] group-hover/card:text-white" }, // Coral
-  { borderClass: "hover:border-[#0D9488]", textHoverClass: "group-hover/card:text-[#0D9488]", badgeClass: "group-hover/card:bg-[#0D9488] group-hover/card:text-white" }, // Teal
-  { borderClass: "hover:border-[#34A853]", textHoverClass: "group-hover/card:text-[#34A853]", badgeClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white" }, // Green
-  { borderClass: "hover:border-[#D4A574]", textHoverClass: "group-hover/card:text-[#D4A574]", badgeClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900" }, // Gold
+  { 
+    borderClass: "hover:border-[#FF385C]", 
+    textHoverClass: "group-hover/card:text-[#FF385C]", 
+    badgeClass: "group-hover/card:bg-[#FF385C] group-hover/card:text-white",
+    reviewBgClass: "bg-[#FF385C]/10 dark:bg-[#FF385C]/20",
+    reviewTextClass: "text-[#FF385C]"
+  }, // Coral
+  { 
+    borderClass: "hover:border-[#0D9488]", 
+    textHoverClass: "group-hover/card:text-[#0D9488]", 
+    badgeClass: "group-hover/card:bg-[#0D9488] group-hover/card:text-white",
+    reviewBgClass: "bg-[#0D9488]/10 dark:bg-[#0D9488]/20",
+    reviewTextClass: "text-[#0D9488]"
+  }, // Teal
+  { 
+    borderClass: "hover:border-[#D4A574]", 
+    textHoverClass: "group-hover/card:text-[#D4A574]", 
+    badgeClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900",
+    reviewBgClass: "bg-[#D4A574]/10 dark:bg-[#D4A574]/20",
+    reviewTextClass: "text-[#D4A574]"
+  }, // Gold
+  { 
+    borderClass: "hover:border-[#34A853]", 
+    textHoverClass: "group-hover/card:text-[#34A853]", 
+    badgeClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white",
+    reviewBgClass: "bg-[#34A853]/10 dark:bg-[#34A853]/20",
+    reviewTextClass: "text-[#34A853]"
+  }, // Green
 ];
 
 export function Destinations() {
