@@ -11,10 +11,34 @@ interface HotelCardProps {
 }
 
 const HOVER_THEMES = [
-  { borderClass: "hover:border-[#FF385C]", textHoverClass: "group-hover:text-[#FF385C]", buttonHoverClass: "group-hover:bg-[#FF385C] group-hover:border-transparent group-hover:text-white", badgeClass: "bg-[#FF385C]" }, // Coral
-  { borderClass: "hover:border-[#0D9488]", textHoverClass: "group-hover:text-[#0D9488]", buttonHoverClass: "group-hover:bg-[#0D9488] group-hover:border-transparent group-hover:text-white", badgeClass: "bg-[#0D9488]" }, // Teal
-  { borderClass: "hover:border-[#34A853]", textHoverClass: "group-hover:text-[#34A853]", buttonHoverClass: "group-hover:bg-[#34A853] group-hover:border-transparent group-hover:text-white", badgeClass: "bg-[#34A853]" }, // Green
-  { borderClass: "hover:border-[#D4A574]", textHoverClass: "group-hover:text-[#D4A574]", buttonHoverClass: "group-hover:bg-[#D4A574] group-hover:border-transparent group-hover:text-gray-900", badgeClass: "bg-[#D4A574]" }, // Gold
+  { 
+    borderClass: "hover:border-[#FF385C]", 
+    textHoverClass: "group-hover:text-[#FF385C]", 
+    buttonHoverClass: "group-hover:bg-[#FF385C] group-hover:border-transparent group-hover:text-white", 
+    badgeClass: "bg-[#FF385C]",
+    tagHoverClass: "group-hover:bg-[#FF385C] group-hover:text-white"
+  }, // Coral
+  { 
+    borderClass: "hover:border-[#0D9488]", 
+    textHoverClass: "group-hover:text-[#0D9488]", 
+    buttonHoverClass: "group-hover:bg-[#0D9488] group-hover:border-transparent group-hover:text-white", 
+    badgeClass: "bg-[#0D9488]",
+    tagHoverClass: "group-hover:bg-[#0D9488] group-hover:text-white"
+  }, // Teal
+  { 
+    borderClass: "hover:border-[#34A853]", 
+    textHoverClass: "group-hover:text-[#34A853]", 
+    buttonHoverClass: "group-hover:bg-[#34A853] group-hover:border-transparent group-hover:text-white", 
+    badgeClass: "bg-[#34A853]",
+    tagHoverClass: "group-hover:bg-[#34A853] group-hover:text-white"
+  }, // Green
+  { 
+    borderClass: "hover:border-[#D4A574]", 
+    textHoverClass: "group-hover:text-[#D4A574]", 
+    buttonHoverClass: "group-hover:bg-[#D4A574] group-hover:border-transparent group-hover:text-gray-900", 
+    badgeClass: "bg-[#D4A574]",
+    tagHoverClass: "group-hover:bg-[#D4A574] group-hover:text-gray-900"
+  }, // Gold
 ];
 
 export function HotelCard({ hotel }: HotelCardProps) {
@@ -81,11 +105,11 @@ export function HotelCard({ hotel }: HotelCardProps) {
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          <div className="absolute left-3 top-3 flex gap-1.5">
+          <div className="absolute left-3 top-3 flex gap-1.5 transition-colors duration-500">
             {hotel.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-white/95 px-2.5 py-0.5 text-[11px] font-bold text-black backdrop-blur-sm shadow-sm dark:bg-gray-900/90 dark:text-gray-100"
+                className={`rounded-full bg-white/95 px-2.5 py-0.5 text-[11px] font-bold text-black backdrop-blur-sm shadow-sm transition-colors duration-500 dark:bg-gray-900/90 dark:text-gray-100 ${theme.tagHoverClass}`}
               >
                 {tag}
               </span>
