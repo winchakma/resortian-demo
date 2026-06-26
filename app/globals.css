@@ -128,6 +128,115 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE OVERRIDES — max-width: 768px
+   Desktop layout is NEVER touched by any rule in this block.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── 1. STRICT CONTAINER LOCK ─────────────────────────────────────────── */
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  main {
+    max-width: 100vw;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Every section is clamped to the viewport */
+  section {
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  /* ── 2. IMAGES — always responsive ───────────────────────────────────── */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Next.js <Image fill> uses absolute positioning — keep those untouched */
+  img[style*="position: absolute"],
+  img[data-nimg] {
+    max-width: unset;
+    height: unset;
+  }
+
+  /* ── 3. TYPOGRAPHY — clamp() so text never forces container wider ─────── */
+  h1 {
+    font-size: clamp(1.375rem, 6vw, 2rem) !important;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: clamp(1.125rem, 5vw, 1.75rem) !important;
+    line-height: 1.25;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 4vw, 1.375rem) !important;
+    line-height: 1.3;
+  }
+
+  h4 {
+    font-size: clamp(0.9rem, 3.5vw, 1.125rem) !important;
+    line-height: 1.3;
+  }
+
+  /* ── 4. HOTEL CARDS (FeaturedStays grid — single column) ─────────────── */
+  /* The grid is already single-column on mobile via Tailwind.              */
+  /* These rules ensure each card never bleeds past its container.          */
+  article {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ── 5. CAROUSEL CARDS (Destinations, FeaturedPlaces, UserStories) ────── */
+  /* Cards are w-[85vw] via Tailwind. This CSS reinforces the constraint.   */
+  /* The scroll track uses -mx-4 px-4 to break out to full bleed edges.     */
+  .snap-start,
+  .snap-always {
+    flex-shrink: 0;
+    max-width: 90vw;
+    box-sizing: border-box;
+  }
+
+  /* ── 6. BANGLADESH STAYS WITH YOU cards ──────────────────────────────── */
+  /* These are Links with aspect-ratio — ensure they don't overflow.        */
+  .aspect-\[16\/10\] {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* ── 7. SEARCH FORM — never wider than screen ────────────────────────── */
+  form {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ── 8. GENERAL SAFETY NET — no element wider than viewport ──────────── */
+  * {
+    box-sizing: border-box;
+    max-width: 100vw;
+  }
+
+  /* Restore width: auto for fill-positioned elements (avoids breaking
+     Next.js Image fill, absolute overlays, etc.) */
+  [style*="position: absolute"],
+  [style*="position: fixed"] {
+    max-width: none;
+  }
+
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
    React Calendar — scoped overrides (.resortian-cal wrapper)
    Base CSS is imported directly inside DateRangePicker.tsx.
    All selectors here start with .resortian-cal so specificity (0,2,0) always
