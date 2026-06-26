@@ -8,17 +8,17 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-dm-sans);
 
-  --color-primary-50: #fff0f3;
-  --color-primary-100: #ffe1e8;
-  --color-primary-200: #ffc7d5;
-  --color-primary-300: #ffa0b6;
-  --color-primary-400: #ff7191;
-  --color-primary-500: #fc466b;
-  --color-primary-600: #ff385c; /* Sunset Rose Brand Color */
-  --color-primary-700: #e31c46; /* Hover color */
-  --color-primary-800: #be123c;
-  --color-primary-900: #9f1239;
-  --color-primary-950: #4c0519;
+  --color-primary-50: #fff8f4;
+  --color-primary-100: #ffece2;
+  --color-primary-200: #ffd3bf;
+  --color-primary-300: #ffb495;
+  --color-primary-400: #ff9266;
+  --color-primary-500: #f48b54;
+  --color-primary-600: #e57335; /* Custom Orange Brand Color */
+  --color-primary-700: #c45620; /* Hover color */
+  --color-primary-800: #9c421b;
+  --color-primary-900: #7d3718;
+  --color-primary-950: #451b08;
 
   --color-gold-500: #D4A574;
   --color-teal-500: #4A9B7F;
