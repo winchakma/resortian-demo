@@ -59,7 +59,7 @@
 }
 
 html {
-  font-size: 17px; /* Scaled up from default 16px to make font slightly bigger */
+  font-size: 18px; /* Scaled up from default 16px to make font slightly bigger */
   scroll-padding-top: 4rem; /* offset for sticky header (h-16 = 4rem) */
 }
 
