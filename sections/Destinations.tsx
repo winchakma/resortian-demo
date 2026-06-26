@@ -79,7 +79,7 @@ export function Destinations() {
         <div className="relative">
           <div
             ref={scrollRef}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-4 -mx-4"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-4 -mx-4 scroll-px-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {/* Destination Cards */}
