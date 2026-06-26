@@ -7,6 +7,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getPopularDestinations } from "@/utils/api";
 import type { Destination } from "@/types";
 
+const HOVER_THEMES = [
+  { borderClass: "hover:border-[#FF385C]", textHoverClass: "group-hover:text-[#FF385C]", badgeClass: "group-hover:bg-[#FF385C] group-hover:text-white" }, // Coral
+  { borderClass: "hover:border-[#0D9488]", textHoverClass: "group-hover:text-[#0D9488]", badgeClass: "group-hover:bg-[#0D9488] group-hover:text-white" }, // Teal
+  { borderClass: "hover:border-[#34A853]", textHoverClass: "group-hover:text-[#34A853]", badgeClass: "group-hover:bg-[#34A853] group-hover:text-white" }, // Green
+  { borderClass: "hover:border-[#D4A574]", textHoverClass: "group-hover:text-[#D4A574]", badgeClass: "group-hover:bg-[#D4A574] group-hover:text-gray-900" }, // Gold
+];
+
 export function Destinations() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -52,14 +59,17 @@ export function Destinations() {
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {/* Destination Cards */}
-            {destinations.map((d, index) => (
+            {destinations.map((d, index) => {
+              const theme = HOVER_THEMES[index % HOVER_THEMES.length];
+              
+              return (
               <div
                 key={d.id}
                 className="w-[200px] sm:w-[240px] md:w-[calc(33.333%-10.66px)] lg:w-[calc(20%-12.8px)] shrink-0 snap-start snap-always"
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}
-                  className="group relative block aspect-[1.5] overflow-hidden rounded-xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300"
+                  className={`group relative block aspect-[1.5] overflow-hidden rounded-xl border-2 border-transparent bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${theme.borderClass}`}
                 >
                   <Image
                     src={d.image}
@@ -71,22 +81,22 @@ export function Destinations() {
                   />
                   
                   {/* Dark Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
 
                   {/* Category Badge */}
-                  <div className="absolute left-3 top-3 rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm dark:bg-slate-900/95 dark:text-gray-200">
+                  <div className={`absolute left-3 top-3 rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm transition-colors duration-300 dark:bg-slate-900/95 dark:text-gray-200 ${theme.badgeClass}`}>
                     {categories[index % categories.length]}
                   </div>
 
                   {/* Text Overlay */}
                   <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <h3 className="font-extrabold text-lg sm:text-xl leading-tight truncate drop-shadow-md">
+                    <h3 className={`font-extrabold text-lg sm:text-xl leading-tight truncate drop-shadow-md transition-colors duration-300 ${theme.textHoverClass}`}>
                       {d.name}
                     </h3>
                   </div>
                 </Link>
               </div>
-            ))}
+            );})}
           </div>
 
           {/* Navigation Buttons */}

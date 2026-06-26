@@ -3,12 +3,19 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Heart, ChevronRight } from "lucide-react";
+import { MapPin, Heart, ChevronRight, ArrowRight } from "lucide-react";
 import type { Hotel } from "@/types";
 
 interface HotelCardProps {
   hotel: Hotel;
 }
+
+const HOVER_THEMES = [
+  { borderClass: "hover:border-[#FF385C]", textHoverClass: "group-hover:text-[#FF385C]", buttonHoverClass: "group-hover:bg-[#FF385C] group-hover:border-transparent group-hover:text-white", badgeClass: "bg-[#FF385C]" }, // Coral
+  { borderClass: "hover:border-[#0D9488]", textHoverClass: "group-hover:text-[#0D9488]", buttonHoverClass: "group-hover:bg-[#0D9488] group-hover:border-transparent group-hover:text-white", badgeClass: "bg-[#0D9488]" }, // Teal
+  { borderClass: "hover:border-[#34A853]", textHoverClass: "group-hover:text-[#34A853]", buttonHoverClass: "group-hover:bg-[#34A853] group-hover:border-transparent group-hover:text-white", badgeClass: "bg-[#34A853]" }, // Green
+  { borderClass: "hover:border-[#D4A574]", textHoverClass: "group-hover:text-[#D4A574]", buttonHoverClass: "group-hover:bg-[#D4A574] group-hover:border-transparent group-hover:text-gray-900", badgeClass: "bg-[#D4A574]" }, // Gold
+];
 
 export function HotelCard({ hotel }: HotelCardProps) {
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
@@ -54,13 +61,16 @@ export function HotelCard({ hotel }: HotelCardProps) {
     ? `Dropped ৳${(Math.round((hotel.price * 0.12) / 100) * 100).toLocaleString()}`
     : "12% lower than other sites";
 
+  const themeIndex = (parseInt(hotel.id) - 1) % HOVER_THEMES.length;
+  const theme = HOVER_THEMES[isNaN(themeIndex) ? 0 : themeIndex];
+
   return (
     <div className="relative h-full block rounded-2xl">
       <Link
         href={`/hotels/${hotel.slug}`}
         className="block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 rounded-2xl h-full outline-none"
       >
-      <article className="group overflow-hidden rounded-2xl border border-white/40 bg-gradient-to-b from-white to-[#f8fbff] premium-hover hover:scale-[1.02] hover:shadow-2xl shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800 flex flex-col h-full">
+      <article className={`group overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl dark:bg-gray-900 flex flex-col h-full ${theme.borderClass}`}>
         {/* Image */}
         <div className="relative aspect-[3/2] overflow-hidden">
           <Image
@@ -75,7 +85,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
             {hotel.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-white/95 px-2.5 py-0.5 text-[11px] font-bold text-black backdrop-blur-sm dark:bg-gray-900/90 dark:text-gray-100"
+                className="rounded-full bg-white/95 px-2.5 py-0.5 text-[11px] font-bold text-black backdrop-blur-sm shadow-sm dark:bg-gray-900/90 dark:text-gray-100"
               >
                 {tag}
               </span>
@@ -87,7 +97,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
         <div className="p-6 flex-1 flex flex-col justify-between">
           <div>
             {/* Hotel name */}
-            <h3 className="mb-1.5 text-base font-extrabold text-black dark:text-white line-clamp-1 group-hover:text-primary-600 transition-colors leading-tight">
+            <h3 className={`mb-1.5 text-base font-extrabold text-black dark:text-white line-clamp-1 transition-colors leading-tight ${theme.textHoverClass}`}>
               {hotel.name}
             </h3>
 
@@ -101,7 +111,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
 
             {/* Rating */}
             <div className="mb-3 flex items-center gap-2">
-              <span className="inline-flex items-center justify-center rounded bg-primary-600 px-1.5 py-0.5 text-sm font-bold text-white">
+              <span className={`inline-flex items-center justify-center rounded px-1.5 py-0.5 text-sm font-bold text-white shadow-sm ${theme.badgeClass}`}>
                 {hotel.rating}
               </span>
               <span className="text-sm font-bold text-black dark:text-white">
@@ -114,29 +124,27 @@ export function HotelCard({ hotel }: HotelCardProps) {
           </div>
 
           {/* Price + CTA */}
-          <div className="border-t border-gray-200 pt-3 dark:border-gray-700 mt-auto">
+          <div className="border-t border-gray-100 pt-4 dark:border-gray-800 mt-auto">
             {/* Deal Badge */}
             <div className="mb-3">
-              <span className="inline-block bg-primary-600 text-white text-[11px] font-extrabold px-2 py-0.5 rounded tracking-wide uppercase shadow-sm">
+              <span className="inline-block bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200 text-[11px] font-extrabold px-2 py-0.5 rounded tracking-wide uppercase">
                 {dealText}
               </span>
             </div>
 
-            <div className="flex items-end justify-between">
+            <div className="flex flex-col gap-3">
               <div>
-                <div className="text-[10px] font-bold tracking-widest uppercase text-black dark:text-gray-400 mb-0.5">
+                <div className="text-[10px] font-bold tracking-widest uppercase text-gray-500 dark:text-gray-400 mb-0.5">
                   Resortian Book &amp; Go
                 </div>
-                <div className="text-[18px] font-extrabold text-primary-600 dark:text-primary-400 leading-none">
+                <div className="text-[18px] font-extrabold text-black dark:text-white leading-none">
                   ৳{hotel.price.toLocaleString()}
                 </div>
-                <div className="text-sm font-medium text-black dark:text-gray-300 mt-0.5">
-                  per night
-                </div>
               </div>
-              <span className="text-sm font-bold text-primary-600 group-hover:underline inline-flex items-center gap-1 transition-transform group-hover:translate-x-0.5">
-                View Deal →
-              </span>
+              
+              <div className={`flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-gray-50/50 py-2.5 text-xs font-black tracking-widest uppercase text-gray-700 shadow-sm transition-all duration-500 dark:border-white/10 dark:bg-white/5 dark:text-gray-300 ${theme.buttonHoverClass}`}>
+                VIEW DEAL <ArrowRight className="h-4 w-4" />
+              </div>
             </div>
           </div>
         </div>
