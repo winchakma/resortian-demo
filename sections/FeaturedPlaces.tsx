@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Heart, ChevronLeft, ChevronRight, Flame } from "lucide-react";
 import { getPopularDestinations } from "@/utils/api";
 import type { Destination } from "@/types";
 
@@ -13,7 +13,7 @@ export function FeaturedPlaces() {
 
   useEffect(() => {
     getPopularDestinations().then((data) => {
-      setPlaces(data.slice(0, 6)); // Display up to 6 places in the slider
+      setPlaces(data); // Display all places to allow scrolling
     });
   }, []);
 
@@ -56,15 +56,13 @@ export function FeaturedPlaces() {
     <section className="bg-white py-4 dark:bg-gray-950 sm:py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
-        <div className="mb-10 flex items-center justify-between gap-4">
-          <div>
-            <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
-              Places you may like
-            </h2>
-            <p className="mt-1 text-base font-medium text-black dark:text-gray-300">
-              Highly-rated stays and hot spots recommended for you
-            </p>
-          </div>
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <h2 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
+            Places you may like
+          </h2>
+          <Link href="/hotels" className="text-sm font-semibold text-gray-600 hover:text-black dark:text-gray-300 flex items-center transition-colors">
+            More <ChevronRight className="h-4 w-4 ml-0.5" />
+          </Link>
         </div>
 
         {/* Slider Container */}
@@ -81,67 +79,65 @@ export function FeaturedPlaces() {
               return (
                 <div
                   key={place.id}
-                  className="w-[280px] sm:w-[300px] shrink-0 snap-start snap-always"
+                  className="w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
                 >
                   <Link
                     href={`/hotels?location=${encodeURIComponent(place.name)}`}
-                    className="block h-full cursor-pointer"
+                    className="group relative block h-[340px] sm:h-[380px] w-full overflow-hidden rounded-2xl cursor-pointer shadow-md hover:shadow-xl transition-all duration-300"
                   >
-                    <div className="group/card relative flex flex-col overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-355 hover:-translate-y-1 h-full">
-                      {/* Image Container */}
-                      <div className="relative aspect-[4/3] w-full overflow-hidden">
-                        <Image
-                          src={place.image}
-                          alt={place.name}
-                          fill
-                          unoptimized
-                          className="object-cover transition-transform duration-500 group-hover/card:scale-105"
-                          sizes="(max-width: 640px) 280px, 300px"
-                        />
-                        
-                        {/* Trip Best Badge */}
-                        <div className="absolute left-3 top-3 rounded bg-gradient-to-r from-amber-500 to-orange-600 px-2 py-0.5 text-[9px] font-extrabold text-white uppercase tracking-wider shadow-sm">
-                          Trip.Best
-                        </div>
+                    <Image
+                      src={place.image}
+                      alt={place.name}
+                      fill
+                      unoptimized
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 260px, 25vw"
+                    />
+                    
+                    {/* Dark Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
-                        {/* Favorite Heart Button */}
-                        <button
-                          type="button"
-                          onClick={(e) => toggleFavorite(place.id, e)}
-                          aria-label="Add to favorites"
-                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-black shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
-                        >
-                          <Heart
-                            fill={isFav ? "currentColor" : "none"}
-                            className={`h-4 w-4 transition-colors pointer-events-none ${
-                              isFav ? "text-red-500" : "text-black dark:text-gray-400"
-                            }`}
-                          />
-                        </button>
+                    {/* Trip Best Badge */}
+                    <div className="absolute left-3 top-3 flex items-center rounded bg-white px-1.5 py-0.5 text-[11px] font-extrabold text-black shadow-sm">
+                      <span className="text-orange-600 mr-0.5">{"{"}</span>
+                      Trip.Best
+                      <span className="text-orange-600 ml-0.5">{"}"}</span>
+                    </div>
+
+                    {/* Favorite Heart Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => toggleFavorite(place.id, e)}
+                      aria-label="Add to favorites"
+                      className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white text-black shadow-md transition hover:scale-110 active:scale-95"
+                    >
+                      <Heart
+                        fill={isFav ? "currentColor" : "none"}
+                        className={`h-4 w-4 transition-colors pointer-events-none ${
+                          isFav ? "text-red-500" : "text-gray-700"
+                        }`}
+                      />
+                    </button>
+
+                    {/* Content Panel */}
+                    <div className="absolute bottom-4 left-4 right-4 flex flex-col items-start text-white">
+                      {/* Location and Fire Rating Badge */}
+                      <div className="mb-2 inline-flex items-center overflow-hidden rounded-sm text-[11px] font-bold shadow-sm">
+                        <span className="bg-white/90 px-1.5 py-0.5 text-black">
+                          {place.name.split(" ")[0]}
+                        </span>
+                        <span className="flex items-center gap-0.5 bg-[#e12d2d] px-1.5 py-0.5 text-white">
+                          <Flame className="h-3 w-3 fill-current" /> {reviews.rating === "4.9" || reviews.rating === "4.8" ? "10" : "9.7"}
+                        </span>
                       </div>
 
-                      {/* Content Panel */}
-                      <div className="p-4 flex flex-col gap-3">
-                        <div>
-                          <h3 className="text-[15px] font-extrabold text-black dark:text-white group-hover/card:text-primary-600 transition-colors leading-tight">
-                            {place.name}
-                          </h3>
-                          <p className="text-xs font-medium text-black dark:text-gray-400 mt-1 line-clamp-1">
-                            {place.region}
-                          </p>
-                        </div>
-
-                        {/* Ratings and Reviews */}
-                        <div className="mt-3 flex items-center gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
-                          <span className="flex items-center gap-0.5 rounded bg-amber-50 px-1.5 py-0.5 text-xs font-extrabold text-amber-700 dark:bg-amber-950/20 dark:text-amber-400">
-                            <Star className="h-3 w-3 fill-current text-amber-500" />
-                            {reviews.rating}
-                          </span>
-                          <span className="text-xs font-semibold text-black dark:text-gray-300">
-                            {reviews.count} reviews
-                          </span>
-                        </div>
-                      </div>
+                      <h3 className="text-lg sm:text-xl font-bold leading-tight drop-shadow-md">
+                        {place.name}
+                      </h3>
+                      
+                      <p className="mt-1 text-xs text-white/90 drop-shadow-md">
+                        {reviews.rating}/5 · {reviews.count} reviews
+                      </p>
                     </div>
                   </Link>
                 </div>
@@ -152,7 +148,7 @@ export function FeaturedPlaces() {
           {/* Navigation Buttons */}
           <button
             onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105"
             aria-label="Scroll left"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -160,7 +156,7 @@ export function FeaturedPlaces() {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105"
             aria-label="Scroll right"
           >
             <ChevronRight className="h-5 w-5" />
