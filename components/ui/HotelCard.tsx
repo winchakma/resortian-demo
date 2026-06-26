@@ -118,7 +118,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
         </div>
 
         {/* Content */}
-        <div className="p-6 flex-1 flex flex-col justify-between">
+        <div className="p-6 flex-1 flex flex-col justify-between min-w-0">
           <div>
             {/* Hotel name */}
             <h3 className={`mb-1.5 text-base font-extrabold text-black dark:text-white line-clamp-1 transition-colors leading-tight ${theme.textHoverClass}`}>
@@ -126,7 +126,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
             </h3>
 
             {/* Location */}
-            <div className="mb-3 flex items-center gap-1">
+            <div className="mb-3 flex items-center gap-1 min-w-0">
               <MapPin className="h-3.5 w-3.5 shrink-0 text-black dark:text-gray-400" />
               <span className="truncate text-sm font-medium text-black dark:text-gray-300">
                 {hotel.location}
@@ -134,14 +134,14 @@ export function HotelCard({ hotel }: HotelCardProps) {
             </div>
 
             {/* Rating */}
-            <div className="mb-3 flex items-center gap-2">
-              <span className={`inline-flex items-center justify-center rounded px-1.5 py-0.5 text-sm font-bold text-white shadow-sm ${theme.badgeClass}`}>
+            <div className="mb-3 flex items-center gap-2 min-w-0">
+              <span className={`inline-flex items-center justify-center rounded px-1.5 py-0.5 text-sm font-bold text-white shadow-sm shrink-0 ${theme.badgeClass}`}>
                 {hotel.rating}
               </span>
-              <span className="text-sm font-bold text-black dark:text-white">
+              <span className="text-sm font-bold text-black dark:text-white shrink-0">
                 {ratingText}
               </span>
-              <span className="text-sm font-medium text-black dark:text-gray-300">
+              <span className="text-sm font-medium text-black dark:text-gray-300 truncate">
                 ({hotel.reviewCount} reviews)
               </span>
             </div>
@@ -150,8 +150,8 @@ export function HotelCard({ hotel }: HotelCardProps) {
           {/* Price + CTA */}
           <div className="border-t border-gray-100 pt-4 dark:border-gray-800 mt-auto">
             {/* Deal Badge */}
-            <div className="mb-3">
-              <span className="inline-block bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200 text-[11px] font-extrabold px-2 py-0.5 rounded tracking-wide uppercase">
+            <div className="mb-3 min-w-0">
+              <span className="inline-block bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200 text-[11px] font-extrabold px-2 py-0.5 rounded tracking-wide uppercase truncate max-w-full">
                 {dealText}
               </span>
             </div>

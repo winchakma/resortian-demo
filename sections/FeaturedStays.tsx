@@ -31,7 +31,7 @@ export async function FeaturedStays() {
         {/* 2 rows of 4 — all 8 visible on same page */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {deals.map((hotel) => (
-            <div key={hotel.id}>
+            <div key={hotel.id} className="min-w-0">
               <HotelCard hotel={hotel} />
             </div>
           ))}
