@@ -126,7 +126,7 @@ export function FeaturedPlaces() {
           {/* Scrollable Area */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-8 -mt-8 -mx-4 px-4 md:-mx-6 md:px-6 scroll-px-4 md:scroll-px-6"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-8 -mt-8 -mx-4 px-4 md:-ml-6 md:pl-6 md:mr-0 md:pr-0 scroll-px-4 md:scroll-px-6"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {places.map((place, index) => {
