@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Heart, ChevronLeft, ChevronRight, Flame } from "lucide-react";
+import { Star, Heart, ChevronLeft, ChevronRight, Flame, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { getPopularDestinations } from "@/utils/api";
 import type { Destination } from "@/types";
@@ -112,8 +112,12 @@ export function FeaturedPlaces() {
           <h2 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
             Highly-Rated Gems Handpicked for You
           </h2>
-          <Link href="/hotels" className="text-sm font-semibold text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 flex items-center transition-colors">
-            More <ChevronRight className="h-4 w-4 ml-0.5" />
+          <Link
+            href="/hotels"
+            className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-primary-600 hover:underline"
+          >
+            See more gems
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
