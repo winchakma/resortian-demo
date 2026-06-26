@@ -199,9 +199,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   /* ── 5. CAROUSEL CARDS (Destinations, FeaturedPlaces, UserStories) ────── */
   /* Cards are w-[85vw] via Tailwind. This CSS overrides it to center them  */
-  /* with equal left/right breathing room and only a subtle peek.           */
+  /* perfectly in the middle with exactly equal 16px padding on both sides. */
   .w-\[85vw\] {
-    width: calc(100vw - 2.5rem) !important;
+    width: calc(100vw - 2rem) !important;
   }
   
   .snap-start,
