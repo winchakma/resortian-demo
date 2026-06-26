@@ -224,7 +224,7 @@ export function SearchForm({
   }, [formData.adults, formData.rooms]);
 
   return (
-    <div className="w-full rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 relative mt-8 lg:mt-12">
+    <div className="w-full rounded-3xl premium-glass p-8 shadow-2xl relative mt-8 lg:mt-12 z-20">
       
       {/* Tabs */}
       <div className="flex overflow-x-auto hide-scrollbar items-center gap-6 border-b border-gray-200 dark:border-gray-800 mb-6">
@@ -412,7 +412,7 @@ export function SearchForm({
           </label>
           <button
             type="submit"
-            className="w-full sm:w-auto rounded-full bg-[#007cc2] px-12 py-3.5 font-bold text-white transition-colors hover:bg-[#005a8f] shadow-sm flex items-center justify-center text-base"
+            className="w-full sm:w-auto rounded-full bg-primary-600 px-12 h-[56px] font-bold text-white premium-hover hover:scale-[1.05] hover:bg-primary-700 shadow-xl flex items-center justify-center text-lg"
             aria-label="Search"
           >
             Search

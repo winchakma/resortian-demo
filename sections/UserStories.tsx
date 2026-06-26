@@ -80,16 +80,24 @@ export function UserStories() {
   };
 
   return (
-    <section className="bg-gray-50 py-4 dark:bg-gray-900/40 sm:py-6">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="relative py-24 dark:bg-gray-950 overflow-hidden">
+      {/* Dark overlay with emerald tint behind slider */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-primary-950 to-slate-900" />
+      
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        <div className="mb-6 flex items-center justify-between gap-4">
-          <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
-            Magical trip moments that last
-          </h2>
+        <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
+              Real Stories. Unforgettable Moments.
+            </h2>
+            <p className="mt-3 text-lg text-primary-100">
+              See how travelers share their unforgettable moments
+            </p>
+          </div>
           <Link
             href="/stories"
-            className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-black hover:text-black dark:text-gray-300 dark:hover:text-white"
+            className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary-200 hover:text-white transition-colors"
           >
             More
             <ChevronRight className="h-4 w-4" />
@@ -112,7 +120,7 @@ export function UserStories() {
                   className="w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
                 >
                   <Link href="/stories" className="block h-full cursor-pointer">
-                    <div className="group/card relative flex flex-col overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div className="group/card relative flex flex-col overflow-hidden rounded-3xl premium-glass shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full">
 
                       {/* Image — same 4:3 landscape ratio as FeaturedPlaces */}
                       <div className="relative aspect-[4/3] w-full overflow-hidden">
@@ -135,7 +143,7 @@ export function UserStories() {
                           <Heart
                             fill={isFav ? "currentColor" : "none"}
                             className={`h-4 w-4 transition-colors pointer-events-none ${
-                              isFav ? "text-red-500" : "text-black dark:text-gray-400"
+                              isFav ? "text-coral-500" : "text-gray-400 group-hover/card:text-coral-400"
                             }`}
                           />
                         </button>

@@ -74,12 +74,12 @@ export function FeaturedPlaces() {
   }
 
   return (
-    <section className="bg-white py-4 dark:bg-gray-950 sm:py-6">
+    <section className="bg-white py-24 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="mb-6 flex items-center justify-between gap-4">
           <h2 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
-            Places you may like
+            Highly-Rated Gems Handpicked for You
           </h2>
           <Link href="/hotels" className="text-sm font-semibold text-gray-600 hover:text-black dark:text-gray-300 flex items-center transition-colors">
             More <ChevronRight className="h-4 w-4 ml-0.5" />
@@ -104,47 +104,48 @@ export function FeaturedPlaces() {
                 >
                   <Link
                     href={`/hotels?location=${encodeURIComponent(place.name)}`}
-                    className="group relative block h-[340px] sm:h-[380px] w-full overflow-hidden rounded-2xl cursor-pointer shadow-md hover:shadow-xl transition-all duration-300"
+                    className="group relative flex flex-col h-[360px] sm:h-[400px] w-full rounded-3xl bg-gradient-to-b from-white to-[#f0f4ff] dark:from-gray-900 dark:to-gray-800 p-2 cursor-pointer shadow-lg premium-hover hover:scale-[1.02] hover:shadow-2xl border border-gray-100 dark:border-gray-700"
                   >
-                    <Image
-                      src={place.image}
-                      alt={place.name}
-                      fill
-                      unoptimized
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 640px) 260px, 25vw"
-                    />
-                    
-                    {/* Dark Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-
-                    {/* Trip Best Badge */}
-                    <div className="absolute left-3 top-3 flex items-center rounded-md bg-[#fdf4e3] px-2 py-1 text-[13px] font-extrabold text-[#5c3a21] shadow-sm">
-                      <span className="flex items-end leading-none tracking-tight">
-                        Trip<div className="w-[3.5px] h-[3.5px] bg-[#f5a623] mx-[2px] mb-[1.5px]"></div>Best
-                      </span>
+                    <div className="relative flex-1 w-full overflow-hidden rounded-2xl">
+                      <Image
+                        src={place.image}
+                        alt={place.name}
+                        fill
+                        unoptimized
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 260px, 25vw"
+                      />
+                      {/* Trip Best Badge */}
+                      <div className="absolute left-3 top-3 flex items-center rounded-md bg-gold-500/95 backdrop-blur-md px-2 py-1 text-[13px] font-extrabold text-white shadow-sm">
+                        <span className="flex items-end leading-none tracking-tight">
+                          Trip<div className="w-[3.5px] h-[3.5px] bg-white mx-[2px] mb-[1.5px] rounded-full"></div>Best
+                        </span>
+                      </div>
                     </div>
 
                     {/* Content Panel */}
-                    <div className="absolute bottom-4 left-4 right-4 flex flex-col items-start text-white">
+                    <div className="flex flex-col items-start p-3 pt-4 text-black dark:text-white">
                       {/* Location and Fire Rating Badge */}
-                      <div className="mb-2 inline-flex items-center overflow-hidden rounded-sm text-[11px] font-bold shadow-sm transition-all">
-                        <span className="bg-white/90 px-1.5 py-0.5 text-black">
+                      <div className="mb-2 inline-flex items-center overflow-hidden rounded-md text-[11px] font-bold shadow-sm border border-gray-200 dark:border-gray-700">
+                        <span className="bg-white dark:bg-gray-800 px-2 py-0.5 text-black dark:text-white">
                           {place.name.split(" ")[0]}
                         </span>
-                        <span className="flex items-center gap-0.5 bg-[#e12d2d] px-1.5 py-0.5 text-white">
+                        <span className="flex items-center gap-0.5 bg-coral-500 px-2 py-0.5 text-white">
                           <Flame className="h-3 w-3 fill-current" /> 
                           {reviews.rating === "4.9" || reviews.rating === "4.8" ? "10" : "9.7"}
                         </span>
                       </div>
 
-                      <h3 className="text-lg sm:text-xl font-bold leading-tight drop-shadow-md">
+                      <h3 className="text-lg sm:text-xl font-bold leading-tight group-hover:text-primary-600 transition-colors">
                         {place.name}
                       </h3>
                       
-                      <p className="mt-1 text-xs text-white/90 drop-shadow-md">
-                        {reviews.rating}/5 · {reviews.count} reviews
-                      </p>
+                      {/* Review Section with subtle tint */}
+                      <div className="mt-2 inline-block rounded-lg bg-teal-500/10 dark:bg-teal-500/20 px-2.5 py-1">
+                        <p className="text-xs font-semibold text-teal-700 dark:text-teal-400">
+                          {reviews.rating}/5 · {reviews.count} reviews
+                        </p>
+                      </div>
                     </div>
                   </Link>
 
@@ -177,7 +178,7 @@ export function FeaturedPlaces() {
                       <Heart
                         fill={isFav ? "currentColor" : "none"}
                         className={`h-4 w-4 transition-colors pointer-events-none ${
-                          isFav ? "text-[#ff4d4f]" : "text-gray-700"
+                          isFav ? "text-coral-500" : "text-gray-400 group-hover:text-primary-500"
                         }`}
                       />
                     </button>

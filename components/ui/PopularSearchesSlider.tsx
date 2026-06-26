@@ -80,27 +80,29 @@ export function PopularSearchesSlider({ destinations }: PopularSearchesSliderPro
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}
-                  className="group block overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 transition hover:shadow-md h-full"
+                  className="group block overflow-hidden rounded-3xl premium-hover hover:scale-[1.03] hover:shadow-2xl shadow-lg relative h-[260px] cursor-pointer"
                 >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden">
-                    <Image
-                      src={d.image}
-                      alt={d.name}
-                      fill
-                      unoptimized
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 640px) 150px, 200px"
-                    />
-                  </div>
-                  <div className="p-3">
-                    <h4 className="font-semibold text-sm text-black dark:text-white group-hover:text-[#007fcd] transition-colors truncate">
+                  <Image
+                    src={d.image}
+                    alt={d.name}
+                    fill
+                    unoptimized
+                    className="object-cover transition-all duration-500 group-hover:scale-[1.08] group-hover:blur-[1px]"
+                    sizes="(max-width: 640px) 150px, 200px"
+                  />
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/90 via-[#0a2512]/40 to-transparent transition-opacity" />
+                  
+                  {/* Content overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <h4 className="font-extrabold text-xl text-white group-hover:text-primary-300 transition-colors drop-shadow-md">
                       {d.name}
                     </h4>
-                    <p className="text-xs text-black dark:text-gray-400 mt-0.5">
+                    <p className="text-sm font-medium text-gray-200 mt-0.5 drop-shadow">
                       {d.propertyCount} properties
                     </p>
-                    <div className="mt-2 text-xs font-bold text-emerald-600 dark:text-emerald-500">
-                      Avg. ৳{avgPrice.toLocaleString()} / night
+                    <div className="mt-3 inline-flex items-center rounded-full bg-primary-600 px-3 py-1 text-xs font-extrabold text-white shadow-sm border border-white/20 premium-glass">
+                      Avg. ৳{avgPrice.toLocaleString()}
                     </div>
                   </div>
                 </Link>
@@ -114,18 +116,18 @@ export function PopularSearchesSlider({ destinations }: PopularSearchesSliderPro
           <>
             <button
               onClick={() => scroll("left")}
-              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-black shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+              className="absolute -left-5 top-1/2 -translate-y-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-primary-600 text-white shadow-md premium-hover hover:scale-110 hover:shadow-lg hover:bg-primary-700"
               aria-label="Scroll left"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-6 w-6" />
             </button>
 
             <button
               onClick={() => scroll("right")}
-              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-black shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+              className="absolute -right-5 top-1/2 -translate-y-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-primary-600 text-white shadow-md premium-hover hover:scale-110 hover:shadow-lg hover:bg-primary-700"
               aria-label="Scroll right"
             >
-              <ChevronRight className="h-5 w-5" />
+              <ChevronRight className="h-6 w-6" />
             </button>
           </>
         )}

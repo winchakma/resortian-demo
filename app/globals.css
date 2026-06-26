@@ -13,12 +13,23 @@
   --color-primary-200: #bbf7d0;
   --color-primary-300: #86efac;
   --color-primary-400: #4ade80;
-  --color-primary-500: #34a853; /* Emerald Green Brand Color */
-  --color-primary-600: #2c8e46;
-  --color-primary-700: #24753a;
+  --color-primary-500: #3fb95e;
+  --color-primary-600: #34a853; /* Emerald Green Brand Color */
+  --color-primary-700: #2d8a47; /* Hover color */
   --color-primary-800: #1b5b2e;
   --color-primary-900: #134221;
   --color-primary-950: #0a2512;
+
+  --color-gold-500: #D4A574;
+  --color-teal-500: #4A9B7F;
+  --color-coral-500: #FF6B5B;
+
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 12px 30px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
+
+  --ease-premium: cubic-bezier(0.23, 1, 0.32, 1);
 
   /* Hotel-owner (vendor) brand — #61aa74 mapped to green-600. */
   --color-green-50: #f1f8f3;
@@ -56,6 +67,24 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.premium-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .premium-glass {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.premium-hover {
+  transition: all 300ms var(--ease-premium);
 }
 
 html {

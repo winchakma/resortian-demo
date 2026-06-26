@@ -15,14 +15,19 @@ export function Hero() {
         className="object-cover"
         sizes="100vw"
       />
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/40" />
+      {/* Dark Overlay with Emerald Tint */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/70 to-[#0a2512]/60 mix-blend-multiply" />
+      <div className="absolute inset-0 bg-black/20" />
 
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl drop-shadow-lg">
-            The one place you go to go places
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-[64px] drop-shadow-2xl leading-tight">
+            Discover Bangladesh Like <br className="hidden sm:block" />
+            <span className="text-primary-400">Never Before</span>
           </h1>
+          <p className="mt-6 text-lg sm:text-xl font-medium text-gray-200 drop-shadow-md max-w-2xl mx-auto">
+            Your next unforgettable adventure awaits. Find the perfect stay for your dream getaway.
+          </p>
         </div>
 
         <div className="mx-auto w-full max-w-5xl">
@@ -35,7 +40,7 @@ export function Hero() {
 
 export function BangladeshStaysWithYou() {
   return (
-    <section className="bg-white py-4 dark:bg-gray-950 sm:py-6">
+    <section className="bg-white py-24 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl flex items-center gap-2">

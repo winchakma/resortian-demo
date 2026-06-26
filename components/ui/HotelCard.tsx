@@ -60,7 +60,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
         href={`/hotels/${hotel.slug}`}
         className="block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 rounded-2xl h-full outline-none"
       >
-      <article className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 dark:border-gray-800 dark:bg-gray-900 flex flex-col h-full shadow-sm">
+      <article className="group overflow-hidden rounded-2xl border border-white/40 bg-gradient-to-b from-white to-[#f8fbff] premium-hover hover:scale-[1.02] hover:shadow-2xl shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800 flex flex-col h-full">
         {/* Image */}
         <div className="relative aspect-[3/2] overflow-hidden">
           <Image
@@ -84,7 +84,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
         </div>
 
         {/* Content */}
-        <div className="p-4 flex-1 flex flex-col justify-between">
+        <div className="p-6 flex-1 flex flex-col justify-between">
           <div>
             {/* Hotel name */}
             <h3 className="mb-1.5 text-base font-extrabold text-black dark:text-white line-clamp-1 group-hover:text-primary-600 transition-colors leading-tight">
@@ -116,8 +116,8 @@ export function HotelCard({ hotel }: HotelCardProps) {
           {/* Price + CTA */}
           <div className="border-t border-gray-200 pt-3 dark:border-gray-700 mt-auto">
             {/* Deal Badge */}
-            <div className="mb-2.5">
-              <span className="inline-block bg-[#c9183b] text-white text-[11px] font-extrabold px-2 py-0.5 rounded tracking-wide uppercase">
+            <div className="mb-3">
+              <span className="inline-block bg-primary-600 text-white text-[11px] font-extrabold px-2 py-0.5 rounded tracking-wide uppercase shadow-sm">
                 {dealText}
               </span>
             </div>
@@ -127,7 +127,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
                 <div className="text-[10px] font-bold tracking-widest uppercase text-black dark:text-gray-400 mb-0.5">
                   Resortian Book &amp; Go
                 </div>
-                <div className="text-xl font-extrabold text-black dark:text-white leading-none">
+                <div className="text-[18px] font-extrabold text-primary-600 dark:text-primary-400 leading-none">
                   ৳{hotel.price.toLocaleString()}
                 </div>
                 <div className="text-sm font-medium text-black dark:text-gray-300 mt-0.5">
