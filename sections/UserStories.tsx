@@ -59,10 +59,10 @@ const STORIES: Story[] = [
 ];
 
 const HOVER_THEMES = [
-  { borderClass: "hover:border-[#FF385C] border-white/5", textClass: "text-[#FF385C]", hoverTextClass: "group-hover/card:text-[#FF385C]", iconBorderClass: "group-hover/card:border-[#FF385C]" }, // Coral
-  { borderClass: "hover:border-[#0D9488] border-white/5", textClass: "text-[#0D9488]", hoverTextClass: "group-hover/card:text-[#0D9488]", iconBorderClass: "group-hover/card:border-[#0D9488]" }, // Teal
-  { borderClass: "hover:border-[#34A853] border-white/5", textClass: "text-[#34A853]", hoverTextClass: "group-hover/card:text-[#34A853]", iconBorderClass: "group-hover/card:border-[#34A853]" }, // Green
-  { borderClass: "hover:border-[#D4A574] border-white/5", textClass: "text-[#D4A574]", hoverTextClass: "group-hover/card:text-[#D4A574]", iconBorderClass: "group-hover/card:border-[#D4A574]" }, // Gold
+  { borderClass: "hover:border-[#FF385C] border-white/5", textClass: "text-[#FF385C]", hoverTextClass: "group-hover/card:text-[#FF385C]", iconBorderClass: "group-hover/card:border-[#FF385C]", buttonHoverClass: "group-hover/card:bg-[#FF385C] group-hover/card:text-white" }, // Coral
+  { borderClass: "hover:border-[#0D9488] border-white/5", textClass: "text-[#0D9488]", hoverTextClass: "group-hover/card:text-[#0D9488]", iconBorderClass: "group-hover/card:border-[#0D9488]", buttonHoverClass: "group-hover/card:bg-[#0D9488] group-hover/card:text-white" }, // Teal
+  { borderClass: "hover:border-[#34A853] border-white/5", textClass: "text-[#34A853]", hoverTextClass: "group-hover/card:text-[#34A853]", iconBorderClass: "group-hover/card:border-[#34A853]", buttonHoverClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white" }, // Green
+  { borderClass: "hover:border-[#D4A574] border-white/5", textClass: "text-[#D4A574]", hoverTextClass: "group-hover/card:text-[#D4A574]", iconBorderClass: "group-hover/card:border-[#D4A574]", buttonHoverClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900" }, // Gold (dark text on hover for contrast)
 ];
 
 export function UserStories() {
@@ -133,44 +133,46 @@ export function UserStories() {
                         sizes="(max-width: 640px) 280px, 25vw"
                       />
 
-                      {/* Top Icon */}
-                      <div className={`absolute top-5 right-5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur-md transition-colors duration-500 ${theme.iconBorderClass}`}>
-                        <Quote className={`h-4 w-4 text-white transition-colors duration-500 ${theme.hoverTextClass}`} />
-                      </div>
-
-                      {/* Content Panel */}
-                      <div className="relative z-20 p-6 flex flex-col gap-4">
-                        
-                        {/* Author */}
-                        <div className="flex items-center gap-3">
-                          <div className="relative h-8 w-8 overflow-hidden rounded-full border border-white/20 shrink-0">
+                      {/* Top Left: Author Info (Matching Gym's Time/Intensity placement) */}
+                      <div className="absolute top-5 left-5 z-20 flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <div className="relative h-7 w-7 overflow-hidden rounded-full border border-white/20 shrink-0">
                             <Image
                               src={story.avatar}
                               alt={story.author}
                               fill
                               unoptimized
                               className="object-cover grayscale group-hover/card:grayscale-0 transition-all duration-700"
-                              sizes="32px"
+                              sizes="28px"
                             />
                           </div>
-                          <span className={`text-sm font-semibold truncate transition-colors duration-500 ${theme.textClass}`}>
+                          <span className={`text-xs font-bold tracking-wide uppercase transition-colors duration-500 drop-shadow-md ${theme.textClass}`}>
                             @{story.author}
                           </span>
                         </div>
+                      </div>
 
-                        {/* The Paragraph (Stays Crisp White) */}
-                        <p className="text-lg font-bold leading-tight text-white line-clamp-3">
+                      {/* Top Right Icon */}
+                      <div className={`absolute top-5 right-5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur-md transition-colors duration-500 ${theme.iconBorderClass}`}>
+                        <Quote className={`h-4 w-4 text-white transition-colors duration-500 ${theme.hoverTextClass}`} />
+                      </div>
+
+                      {/* Bottom Content Panel */}
+                      <div className="relative z-20 p-5 flex flex-col justify-end h-full">
+                        
+                        {/* The Paragraph (Stays Crisp White, acting like the Class Name in Gym) */}
+                        <p className="text-xl font-extrabold leading-tight text-white mb-5 drop-shadow-lg">
                           "{story.quote}"
                         </p>
 
-                        {/* Action Link (Colorful Automatically) */}
-                        <div className={`mt-2 flex items-center gap-2 text-xs font-bold tracking-widest uppercase transition-colors duration-500 ${theme.textClass}`}>
+                        {/* Frosted Glass Action Button (Fills with color on hover, matching Gym 'BOOK SESSION') */}
+                        <div className={`flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md py-3 text-xs font-black tracking-widest uppercase transition-all duration-500 group-hover/card:border-transparent ${theme.textClass} ${theme.buttonHoverClass}`}>
                           READ STORY <ArrowRight className="h-4 w-4" />
                         </div>
                       </div>
 
-                      {/* Gradient Overlay for Readability */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none z-10 group-hover/card:via-black/60 transition-colors duration-700" />
+                      {/* Gradient Overlay for Readability (Heavy at bottom, matching Gym) */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/10 pointer-events-none z-10 group-hover/card:via-black/50 transition-colors duration-700" />
 
                     </div>
                   </Link>
