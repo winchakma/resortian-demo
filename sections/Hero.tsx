@@ -74,7 +74,7 @@ export function BangladeshStaysWithYou() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6 text-white">
-              <span className={`inline-block -rotate-12 transform origin-bottom-left mr-2 rounded-full px-3 py-1 text-xs font-semibold text-white shadow transition-colors duration-300 ${HOVER_THEMES[0].badgeClass}`}>
+              <span className={`rounded-full px-3 py-1 text-xs font-semibold text-white shadow transition-colors duration-300 ${HOVER_THEMES[0].badgeClass}`}>
                 Featured Destination
               </span>
               <h3 className={`text-2xl font-bold mt-2.5 sm:text-3xl transition-colors duration-300 ${HOVER_THEMES[0].textHoverClass}`}>Cox&apos;s Bazar Coastline</h3>

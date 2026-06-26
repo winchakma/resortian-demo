@@ -153,7 +153,7 @@ export function FeaturedPlaces() {
                         sizes="(max-width: 640px) 260px, 25vw"
                       />
                       {/* Trip Best Badge */}
-                      <div className={`absolute left-3 top-3 -rotate-12 origin-bottom-left flex items-center rounded-md bg-gold-500/95 backdrop-blur-md px-2 py-1 text-[13px] font-extrabold text-white shadow-sm transition-colors duration-300 ${theme.badgeClass}`}>
+                      <div className={`absolute left-3 top-3 flex items-center rounded-md bg-gold-500/95 backdrop-blur-md px-2 py-1 text-[13px] font-extrabold text-white shadow-sm transition-colors duration-300 ${theme.badgeClass}`}>
                         <span className="flex items-end leading-none tracking-tight">
                           Trip<div className="w-[3.5px] h-[3.5px] bg-white mx-[2px] mb-[1.5px] rounded-full"></div>Best
                         </span>
@@ -163,7 +163,7 @@ export function FeaturedPlaces() {
                     {/* Content Panel */}
                     <div className="flex flex-col items-start p-3 pt-4 text-black dark:text-white">
                       {/* Location and Fire Rating Badge */}
-                      <div className="mb-3 mr-2 -rotate-12 origin-bottom-left inline-flex items-center overflow-hidden rounded-md text-[11px] font-bold shadow-sm border border-gray-200 dark:border-gray-700">
+                      <div className="mb-2 inline-flex items-center overflow-hidden rounded-md text-[11px] font-bold shadow-sm border border-gray-200 dark:border-gray-700">
                         <span className="bg-white dark:bg-gray-800 px-2 py-0.5 text-black dark:text-white">
                           {place.name.split(" ")[0]}
                         </span>
