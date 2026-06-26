@@ -59,10 +59,10 @@ const STORIES: Story[] = [
 ];
 
 const HOVER_THEMES = [
-  { borderClass: "hover:border-[#FF385C] border-white/5", textClass: "group-hover/card:text-[#FF385C]", iconBorderClass: "group-hover/card:border-[#FF385C]" }, // Coral
-  { borderClass: "hover:border-[#0D9488] border-white/5", textClass: "group-hover/card:text-[#0D9488]", iconBorderClass: "group-hover/card:border-[#0D9488]" }, // Teal
-  { borderClass: "hover:border-[#34A853] border-white/5", textClass: "group-hover/card:text-[#34A853]", iconBorderClass: "group-hover/card:border-[#34A853]" }, // Green
-  { borderClass: "hover:border-[#D4A574] border-white/5", textClass: "group-hover/card:text-[#D4A574]", iconBorderClass: "group-hover/card:border-[#D4A574]" }, // Gold
+  { borderClass: "hover:border-[#FF385C] border-white/5", textClass: "text-[#FF385C]", hoverTextClass: "group-hover/card:text-[#FF385C]", iconBorderClass: "group-hover/card:border-[#FF385C]" }, // Coral
+  { borderClass: "hover:border-[#0D9488] border-white/5", textClass: "text-[#0D9488]", hoverTextClass: "group-hover/card:text-[#0D9488]", iconBorderClass: "group-hover/card:border-[#0D9488]" }, // Teal
+  { borderClass: "hover:border-[#34A853] border-white/5", textClass: "text-[#34A853]", hoverTextClass: "group-hover/card:text-[#34A853]", iconBorderClass: "group-hover/card:border-[#34A853]" }, // Green
+  { borderClass: "hover:border-[#D4A574] border-white/5", textClass: "text-[#D4A574]", hoverTextClass: "group-hover/card:text-[#D4A574]", iconBorderClass: "group-hover/card:border-[#D4A574]" }, // Gold
 ];
 
 export function UserStories() {
@@ -123,19 +123,19 @@ export function UserStories() {
                   <Link href="/stories" className="block h-full cursor-pointer">
                     <div className={`group/card relative flex flex-col justify-end overflow-hidden rounded-3xl border-2 bg-gray-900 shadow-xl transition-all duration-500 hover:-translate-y-2 h-[420px] ${theme.borderClass}`}>
 
-                      {/* Permanent Dark B&W Background Image */}
+                      {/* Background Image - Comes to life on hover */}
                       <Image
                         src={story.image}
                         alt={story.quote}
                         fill
                         unoptimized
-                        className="object-cover grayscale opacity-40 transition-transform duration-700 group-hover/card:scale-105"
+                        className="object-cover grayscale opacity-50 group-hover/card:grayscale-0 group-hover/card:opacity-100 transition-all duration-700 group-hover/card:scale-105"
                         sizes="(max-width: 640px) 280px, 25vw"
                       />
 
                       {/* Top Icon */}
                       <div className={`absolute top-5 right-5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur-md transition-colors duration-500 ${theme.iconBorderClass}`}>
-                        <Quote className={`h-4 w-4 text-white transition-colors duration-500 ${theme.textClass}`} />
+                        <Quote className={`h-4 w-4 text-white transition-colors duration-500 ${theme.hoverTextClass}`} />
                       </div>
 
                       {/* Content Panel */}
@@ -149,11 +149,11 @@ export function UserStories() {
                               alt={story.author}
                               fill
                               unoptimized
-                              className="object-cover grayscale"
+                              className="object-cover grayscale group-hover/card:grayscale-0 transition-all duration-700"
                               sizes="32px"
                             />
                           </div>
-                          <span className="text-sm font-semibold text-gray-300 truncate">
+                          <span className={`text-sm font-semibold truncate transition-colors duration-500 ${theme.textClass}`}>
                             @{story.author}
                           </span>
                         </div>
@@ -163,14 +163,14 @@ export function UserStories() {
                           "{story.quote}"
                         </p>
 
-                        {/* Action Link (Lights up on hover) */}
-                        <div className={`mt-2 flex items-center gap-2 text-xs font-bold tracking-widest text-white/50 uppercase transition-colors duration-500 ${theme.textClass}`}>
+                        {/* Action Link (Colorful Automatically) */}
+                        <div className={`mt-2 flex items-center gap-2 text-xs font-bold tracking-widest uppercase transition-colors duration-500 ${theme.textClass}`}>
                           READ STORY <ArrowRight className="h-4 w-4" />
                         </div>
                       </div>
 
                       {/* Gradient Overlay for Readability */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent pointer-events-none z-10" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none z-10 group-hover/card:via-black/60 transition-colors duration-700" />
 
                     </div>
                   </Link>
