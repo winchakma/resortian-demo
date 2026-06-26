@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, Heart, ChevronLeft, ChevronRight, Flame } from "lucide-react";
+import toast from "react-hot-toast";
 import { getPopularDestinations } from "@/utils/api";
 import type { Destination } from "@/types";
 
@@ -33,10 +34,32 @@ export function FeaturedPlaces() {
   const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setFavorites((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    
+    setFavorites((prev) => {
+      const willBeFav = !prev[id];
+      
+      if (willBeFav) {
+        toast(
+          (t) => (
+            <div className="flex w-full min-w-[120px] items-center justify-between gap-4">
+              <span className="font-semibold text-gray-900">Saved</span>
+              <button 
+                onClick={() => toast.dismiss(t.id)} 
+                className="text-sm font-bold text-blue-600 hover:text-blue-700 hover:underline"
+              >
+                View
+              </button>
+            </div>
+          ),
+          { duration: 4000 }
+        );
+      }
+      
+      return {
+        ...prev,
+        [id]: willBeFav,
+      };
+    });
   };
 
   const reviewsData = [
@@ -127,8 +150,8 @@ export function FeaturedPlaces() {
                           {place.name.split(" ")[0]}
                         </span>
                         <span className="flex items-center gap-0.5 bg-[#e12d2d] px-1.5 py-0.5 text-white">
-                          <Flame className={`h-3 w-3 fill-current ${isFav ? "animate-pulse" : ""}`} /> 
-                          {isFav ? (reviews.rating === "4.9" || reviews.rating === "4.8" ? "10+" : "9.8") : (reviews.rating === "4.9" || reviews.rating === "4.8" ? "10" : "9.7")}
+                          <Flame className="h-3 w-3 fill-current" /> 
+                          {reviews.rating === "4.9" || reviews.rating === "4.8" ? "10" : "9.7"}
                         </span>
                       </div>
 
@@ -137,7 +160,7 @@ export function FeaturedPlaces() {
                       </h3>
                       
                       <p className="mt-1 text-xs text-white/90 drop-shadow-md">
-                        {reviews.rating}/5 · {isFav ? (parseInt(reviews.count.replace(/,/g, '')) + 1).toLocaleString() : reviews.count} reviews
+                        {reviews.rating}/5 · {reviews.count} reviews
                       </p>
                     </div>
                   </Link>
