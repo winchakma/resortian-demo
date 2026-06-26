@@ -90,7 +90,7 @@ export function Destinations() {
               return (
               <div
                 key={d.id}
-                className="w-[200px] sm:w-[240px] md:w-[calc(33.333%-10.66px)] lg:w-[calc(20%-12.8px)] shrink-0 snap-start snap-always"
+                className="w-[calc(100vw-32px)] sm:w-[240px] md:w-[calc(33.333%-10.66px)] lg:w-[calc(20%-19.2px)] shrink-0 snap-center sm:snap-start"
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}

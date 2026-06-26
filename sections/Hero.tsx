@@ -74,7 +74,7 @@ export function BangladeshStaysWithYou() {
           {/* Left: Large Hero Image Card */}
           <Link
             href="/hotels?location=Cox's%20Bazar"
-            className={`relative overflow-hidden rounded-3xl shadow-lg lg:col-span-7 group aspect-[16/10] lg:aspect-auto min-h-[320px] block cursor-pointer border-2 border-transparent transition-all duration-300 hover:-translate-y-1 ${HOVER_THEMES[0].borderClass}`}
+            className={`relative overflow-hidden rounded-3xl shadow-lg lg:col-span-7 group aspect-[16/10] lg:aspect-auto min-h-[240px] sm:min-h-[320px] block cursor-pointer border-2 border-transparent transition-all duration-300 hover:-translate-y-1 ${HOVER_THEMES[0].borderClass}`}
           >
             <Image
               src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=800&fit=crop"

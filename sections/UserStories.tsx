@@ -118,7 +118,7 @@ export function UserStories() {
               return (
                 <div
                   key={story.id}
-                  className="w-[280px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
+                  className="w-[calc(100vw-32px)] sm:w-[320px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-center sm:snap-start snap-always"
                 >
                   <Link href="/stories" className="block h-full cursor-pointer">
                     <div className={`group/card relative flex flex-col justify-end overflow-hidden rounded-3xl border-2 bg-gray-900 shadow-xl transition-all duration-500 hover:-translate-y-2 h-[420px] ${theme.borderClass}`}>
