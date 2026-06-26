@@ -80,7 +80,7 @@ export function UserStories() {
   };
 
   return (
-    <section className="relative py-24 dark:bg-gray-950 overflow-hidden">
+    <section className="relative py-10 sm:py-12 dark:bg-gray-950 overflow-hidden">
       {/* Dark overlay with emerald tint behind slider */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-primary-950 to-slate-900" />
       

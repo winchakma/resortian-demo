@@ -224,7 +224,7 @@ export function SearchForm({
   }, [formData.adults, formData.rooms]);
 
   return (
-    <div className="w-full rounded-3xl premium-glass p-8 shadow-2xl relative mt-8 lg:mt-12 z-20">
+    <div className="w-full rounded-3xl premium-glass p-8 shadow-2xl relative mt-6 lg:mt-8 z-20">
       
       {/* Tabs */}
       <div className="flex overflow-x-auto hide-scrollbar items-center gap-6 border-b border-gray-200 dark:border-gray-800 mb-6">

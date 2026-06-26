@@ -4,7 +4,7 @@ import { SearchForm } from "@/components/ui/SearchForm";
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[500px] flex-col items-center justify-center pt-20 pb-16 lg:pt-28 lg:pb-24">
+    <section className="relative flex min-h-[500px] flex-col items-center justify-center pt-20 pb-6 lg:pt-28 lg:pb-6">
       {/* Background Image */}
       <Image
         src="https://images.unsplash.com/photo-1542296332-2e4473faf563?w=1600&h=900&fit=crop"
@@ -40,9 +40,9 @@ export function Hero() {
 
 export function BangladeshStaysWithYou() {
   return (
-    <section className="bg-white py-24 dark:bg-gray-950">
+    <section className="bg-white py-10 sm:py-12 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-6">
+        <div className="mb-8">
           <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl flex items-center gap-2">
             <span className="h-6 w-1.5 rounded-full bg-primary-600"></span>
             Bangladesh Stays With You

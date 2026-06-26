@@ -9,7 +9,7 @@ export async function FeaturedStays() {
   const deals = hotels.slice(0, 8);
 
   return (
-    <section className="bg-white py-24 dark:bg-gray-950">
+    <section className="bg-white py-10 sm:py-12 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header row: heading + See more deals */}
         <div className="mb-8 flex items-center justify-between gap-4">
