@@ -141,7 +141,7 @@ export function FeaturedPlaces() {
                 >
                   <Link
                     href={`/hotels?location=${encodeURIComponent(place.name)}`}
-                    className={`group/card relative flex flex-col h-[360px] sm:h-[400px] w-full rounded-3xl bg-gradient-to-b from-white to-[#f0f4ff] dark:from-gray-900 dark:to-gray-800 p-2 cursor-pointer shadow-lg hover:scale-[1.02] data-[mobile-active=true]:scale-[1.02] hover:shadow-2xl data-[mobile-active=true]:shadow-2xl border-2 border-transparent transition-all duration-300 ${theme.borderClass}`}
+                    className={`group/card relative flex flex-col h-[360px] sm:h-[400px] w-full rounded-3xl bg-gradient-to-b from-white to-[#f0f4ff] dark:from-gray-900 dark:to-gray-800 p-2 cursor-pointer shadow-lg hover:scale-[1.02] hover:shadow-2xl data-[mobile-active=true]:shadow-2xl border-2 border-transparent transition-all duration-300 ${theme.borderClass}`}
                   >
                     <div className="relative w-full h-[220px] shrink-0 overflow-hidden rounded-2xl">
                       <Image
@@ -149,7 +149,7 @@ export function FeaturedPlaces() {
                         alt={place.name}
                         fill
                         unoptimized
-                        className="object-cover object-center transition-transform duration-500 group-hover/card:scale-105 group-data-[mobile-active=true]/card:scale-105"
+                        className="object-cover object-center transition-transform duration-500 group-hover/card:scale-105"
                         sizes="(max-width: 640px) 260px, 25vw"
                       />
                       {/* Trip Best Badge */}

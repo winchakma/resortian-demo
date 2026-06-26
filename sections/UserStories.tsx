@@ -83,7 +83,7 @@ export function UserStories() {
     <section className="relative py-3 sm:py-5 dark:bg-gray-950 overflow-hidden">
       {/* Dark overlay with emerald tint behind slider */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-primary-950 to-slate-900" />
-      
+
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         <div className="relative z-10 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -114,7 +114,7 @@ export function UserStories() {
           >
             {STORIES.map((story, index) => {
               const theme = HOVER_THEMES[index % HOVER_THEMES.length];
-              
+
               return (
                 <div
                   key={story.id}
@@ -159,7 +159,7 @@ export function UserStories() {
 
                       {/* Bottom Content Panel */}
                       <div className="relative z-20 p-5 flex flex-col justify-end h-full">
-                        
+
                         {/* The Paragraph (Stays Crisp White, acting like the Class Name in Gym) */}
                         <p className="text-xl font-extrabold leading-tight text-white mb-5 drop-shadow-lg">
                           "{story.quote}"

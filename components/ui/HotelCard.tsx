@@ -94,7 +94,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
         href={`/hotels/${hotel.slug}`}
         className="block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 rounded-2xl h-full outline-none"
       >
-      <article className={`group overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-lg transition-all duration-500 hover:-translate-y-1 data-[mobile-active=true]:-translate-y-1 hover:shadow-2xl data-[mobile-active=true]:shadow-2xl dark:bg-gray-900 flex flex-col h-full ${theme.borderClass}`}>
+      <article className={`group overflow-hidden rounded-2xl border-2 border-transparent bg-white shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl data-[mobile-active=true]:shadow-2xl dark:bg-gray-900 flex flex-col h-full ${theme.borderClass}`}>
         {/* Image */}
         <div className="relative aspect-[3/2] overflow-hidden">
           <Image
