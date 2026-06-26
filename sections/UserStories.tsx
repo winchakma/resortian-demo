@@ -58,6 +58,13 @@ const STORIES: Story[] = [
   },
 ];
 
+const HOVER_THEMES = [
+  { shadowClass: "hover:shadow-[0_12px_40px_rgba(255,56,92,0.35)]", textClass: "group-hover/card:text-[#FF385C]" }, // Coral
+  { shadowClass: "hover:shadow-[0_12px_40px_rgba(13,148,136,0.35)]", textClass: "group-hover/card:text-[#0D9488]" }, // Teal
+  { shadowClass: "hover:shadow-[0_12px_40px_rgba(52,168,83,0.35)]", textClass: "group-hover/card:text-[#34A853]" }, // Green
+  { shadowClass: "hover:shadow-[0_12px_40px_rgba(212,165,116,0.35)]", textClass: "group-hover/card:text-[#D4A574]" }, // Gold
+];
+
 export function UserStories() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
@@ -104,32 +111,34 @@ export function UserStories() {
           </Link>
         </div>
 
-        {/* Slider Container — same structure as FeaturedPlaces */}
+        {/* Slider Container */}
         <div className="relative group">
           {/* Scrollable Area */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-4 -mt-4 px-2 -mx-2"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {STORIES.map((story) => {
+            {STORIES.map((story, index) => {
               const isFav = !!favorites[story.id];
+              const theme = HOVER_THEMES[index % HOVER_THEMES.length];
+              
               return (
                 <div
                   key={story.id}
                   className="w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
                 >
                   <Link href="/stories" className="block h-full cursor-pointer">
-                    <div className="group/card relative flex flex-col overflow-hidden rounded-3xl premium-glass shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 h-full">
+                    <div className={`group/card relative flex flex-col overflow-hidden rounded-3xl premium-glass shadow-xl transition-all duration-500 hover:-translate-y-2 h-full ${theme.shadowClass}`}>
 
-                      {/* Image — same 4:3 landscape ratio as FeaturedPlaces */}
+                      {/* Image */}
                       <div className="relative aspect-[4/3] w-full overflow-hidden">
                         <Image
                           src={story.image}
                           alt={story.quote}
                           fill
                           unoptimized
-                          className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+                          className="object-cover grayscale group-hover/card:grayscale-0 transition-all duration-700 group-hover/card:scale-105"
                           sizes="(max-width: 640px) 260px, 25vw"
                         />
 
@@ -149,9 +158,9 @@ export function UserStories() {
                         </button>
                       </div>
 
-                      {/* Content Panel — below image, same as FeaturedPlaces */}
+                      {/* Content Panel */}
                       <div className="p-4 flex flex-col gap-3">
-                        <p className="text-[14px] font-extrabold leading-snug text-black dark:text-white line-clamp-2 group-hover/card:text-primary-600 transition-colors">
+                        <p className={`text-[14px] font-extrabold leading-snug text-black dark:text-white line-clamp-2 transition-colors duration-500 ${theme.textClass}`}>
                           {story.quote}
                         </p>
                         {/* Author */}
@@ -162,11 +171,11 @@ export function UserStories() {
                               alt={story.author}
                               fill
                               unoptimized
-                              className="object-cover"
+                              className="object-cover grayscale group-hover/card:grayscale-0 transition-all duration-700"
                               sizes="24px"
                             />
                           </div>
-                          <span className="text-xs font-semibold text-black dark:text-gray-300 truncate">
+                          <span className="text-xs font-semibold text-black dark:text-gray-300 truncate transition-colors duration-500">
                             {story.author}
                           </span>
                         </div>
