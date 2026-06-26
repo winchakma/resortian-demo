@@ -52,7 +52,7 @@ export function Destinations() {
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {/* Anywhere Card */}
-            <div className="w-[150px] sm:w-[170px] shrink-0 snap-start snap-always">
+            <div className="w-[180px] sm:w-[210px] shrink-0 snap-start snap-always">
               <Link
                 href="/hotels"
                 className="group relative block aspect-[1.5] overflow-visible rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-primary-600 shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5"
