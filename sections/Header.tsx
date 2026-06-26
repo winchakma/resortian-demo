@@ -54,8 +54,12 @@ CartIndicator.displayName = "CartIndicator";
 
 // ─── Nav links ────────────────────────────────────────────────────────────────
 
-const navLinkCls =
-  "flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-black transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:bg-transparent dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
+const HOVER_THEMES = [
+  { textHover: "hover:text-[#FF385C] dark:hover:text-[#FF385C]" }, // Coral
+  { textHover: "hover:text-[#0D9488] dark:hover:text-[#0D9488]" }, // Teal
+  { textHover: "hover:text-[#34A853] dark:hover:text-[#34A853]" }, // Green
+  { textHover: "hover:text-[#D4A574] dark:hover:text-[#D4A574]" }, // Gold
+];
 
 const NavLinks = memo(function NavLinks({
   accountHref,
@@ -64,14 +68,15 @@ const NavLinks = memo(function NavLinks({
 }) {
   return (
     <nav className="hidden lg:flex lg:items-center lg:gap-1">
-      {NAV_LINKS.map((link) => {
+      {NAV_LINKS.map((link, index) => {
         const Icon = link.icon;
+        const theme = HOVER_THEMES[index % HOVER_THEMES.length];
         return (
           <Link
             key={link.href}
             href={link.href}
             prefetch={true}
-            className={navLinkCls}
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:bg-gray-100 dark:bg-transparent dark:hover:bg-gray-800/50 text-black dark:text-gray-300 ${theme.textHover}`}
           >
             {Icon && <Icon className="h-4 w-4" />}
             {link.label}
@@ -81,7 +86,7 @@ const NavLinks = memo(function NavLinks({
       <Link
         href={accountHref}
         prefetch={true}
-        className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+        className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 ml-2"
       >
         <User className="h-4 w-4" />
         My Account
