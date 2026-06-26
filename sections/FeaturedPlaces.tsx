@@ -8,6 +8,13 @@ import toast from "react-hot-toast";
 import { getPopularDestinations } from "@/utils/api";
 import type { Destination } from "@/types";
 
+const HOVER_THEMES = [
+  { borderClass: "hover:border-[#FF385C]", textHoverClass: "group-hover/card:text-[#FF385C]", badgeClass: "group-hover/card:bg-[#FF385C] group-hover/card:text-white" }, // Coral
+  { borderClass: "hover:border-[#0D9488]", textHoverClass: "group-hover/card:text-[#0D9488]", badgeClass: "group-hover/card:bg-[#0D9488] group-hover/card:text-white" }, // Teal
+  { borderClass: "hover:border-[#34A853]", textHoverClass: "group-hover/card:text-[#34A853]", badgeClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white" }, // Green
+  { borderClass: "hover:border-[#D4A574]", textHoverClass: "group-hover/card:text-[#D4A574]", badgeClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900" }, // Gold
+];
+
 export function FeaturedPlaces() {
   const [places, setPlaces] = useState<Destination[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -87,7 +94,7 @@ export function FeaturedPlaces() {
         </div>
 
         {/* Slider Container */}
-        <div className="relative group">
+        <div className="relative">
           {/* Scrollable Area */}
           <div
             ref={scrollRef}
@@ -97,6 +104,8 @@ export function FeaturedPlaces() {
             {places.map((place, index) => {
               const reviews = reviewsData[index % reviewsData.length];
               const isFav = !!favorites[place.id];
+              const theme = HOVER_THEMES[index % HOVER_THEMES.length];
+              
               return (
                 <div
                   key={place.id}
@@ -104,7 +113,7 @@ export function FeaturedPlaces() {
                 >
                   <Link
                     href={`/hotels?location=${encodeURIComponent(place.name)}`}
-                    className="group relative flex flex-col h-[360px] sm:h-[400px] w-full rounded-3xl bg-gradient-to-b from-white to-[#f0f4ff] dark:from-gray-900 dark:to-gray-800 p-2 cursor-pointer shadow-lg premium-hover hover:scale-[1.02] hover:shadow-2xl border border-gray-100 dark:border-gray-700"
+                    className={`group/card relative flex flex-col h-[360px] sm:h-[400px] w-full rounded-3xl bg-gradient-to-b from-white to-[#f0f4ff] dark:from-gray-900 dark:to-gray-800 p-2 cursor-pointer shadow-lg hover:scale-[1.02] hover:shadow-2xl border-2 border-transparent transition-all duration-300 ${theme.borderClass}`}
                   >
                     <div className="relative flex-1 w-full overflow-hidden rounded-2xl">
                       <Image
@@ -112,11 +121,11 @@ export function FeaturedPlaces() {
                         alt={place.name}
                         fill
                         unoptimized
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="object-cover transition-transform duration-500 group-hover/card:scale-105"
                         sizes="(max-width: 640px) 260px, 25vw"
                       />
                       {/* Trip Best Badge */}
-                      <div className="absolute left-3 top-3 flex items-center rounded-md bg-gold-500/95 backdrop-blur-md px-2 py-1 text-[13px] font-extrabold text-white shadow-sm">
+                      <div className={`absolute left-3 top-3 flex items-center rounded-md bg-gold-500/95 backdrop-blur-md px-2 py-1 text-[13px] font-extrabold text-white shadow-sm transition-colors duration-300 ${theme.badgeClass}`}>
                         <span className="flex items-end leading-none tracking-tight">
                           Trip<div className="w-[3.5px] h-[3.5px] bg-white mx-[2px] mb-[1.5px] rounded-full"></div>Best
                         </span>
@@ -136,7 +145,7 @@ export function FeaturedPlaces() {
                         </span>
                       </div>
 
-                      <h3 className="text-lg sm:text-xl font-bold leading-tight group-hover:text-primary-600 transition-colors">
+                      <h3 className={`text-lg sm:text-xl font-bold leading-tight transition-colors duration-300 ${theme.textHoverClass}`}>
                         {place.name}
                       </h3>
                       
@@ -178,7 +187,7 @@ export function FeaturedPlaces() {
                       <Heart
                         fill={isFav ? "currentColor" : "none"}
                         className={`h-4 w-4 transition-colors pointer-events-none ${
-                          isFav ? "text-coral-500" : "text-gray-400 group-hover:text-primary-500"
+                          isFav ? "text-coral-500" : "text-gray-400 group-hover/card:text-primary-500"
                         }`}
                       />
                     </button>
