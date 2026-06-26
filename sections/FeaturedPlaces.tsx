@@ -137,7 +137,7 @@ export function FeaturedPlaces() {
               return (
                 <div
                   key={place.id}
-                  className="relative w-[85vw] sm:w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
+                  className="relative w-[85vw] sm:w-[260px] md:w-[calc(33.333%-18px)] lg:w-[calc(25%-19.5px)] shrink-0 snap-start snap-always"
                 >
                   <Link
                     href={`/hotels?location=${encodeURIComponent(place.name)}`}
