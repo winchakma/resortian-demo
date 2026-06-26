@@ -5,22 +5,22 @@ const SOCIAL_LINKS = [
   {
     label: "Facebook",
     href: "https://www.facebook.com/resortian",
-    path: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z",
+    icon: (
+      <svg className="h-6 w-6 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    ),
+    hoverClass: "hover:bg-[#1877F2]/10 hover:border-[#1877F2]/50"
   },
-  // {
-  //   label: "Twitter",
-  //   href: "#",
-  //   path: "M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z",
-  // },
-  // {
-  //   label: "Instagram",
-  //   href: "#",
-  //   path: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2z",
-  // },
   {
     label: "YouTube",
     href: "https://www.youtube.com/@resortian",
-    path: "M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17zM10 15l5-3-5-3z",
+    icon: (
+      <svg className="h-6 w-6 text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+      </svg>
+    ),
+    hoverClass: "hover:bg-[#FF0000]/10 hover:border-[#FF0000]/50"
   },
 ];
 
@@ -33,20 +33,6 @@ export async function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-6">
           <div className="sm:col-span-2">
             <Logo />
-            {/* <Image
-              src="/images/logoBlack.svg"
-              alt="Resortian"
-              width={100}
-              height={100}
-              className="rounded-lg dark:hidden"
-            />
-            <Image
-              src="/images/logo.svg"
-              alt="Resortian"
-              width={100}
-              height={100}
-              className="hidden rounded-lg dark:block"
-            /> */}
             <p className="mt-4 max-w-xs text-sm font-medium text-black dark:text-gray-200">
               Resortian.com is trademark of{" "}
               <strong>Resortian Tourism Services</strong>, officially registered
@@ -56,26 +42,16 @@ export async function Footer() {
               Our Office: Army Building, Dorji Bari, Uttarpara, Khilkhet,
               Dhaka 1229
             </p>
-            <div className="mt-6 flex items-center gap-3">
+            <div className="mt-6 flex items-center gap-4">
               {SOCIAL_LINKS.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
                   target="_blank"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-black transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                  className={`flex h-11 w-11 items-center justify-center rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:scale-105 ${social.hoverClass}`}
                   aria-label={social.label}
                 >
-                  <svg
-                    className="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d={social.path} />
-                  </svg>
+                  {social.icon}
                 </a>
               ))}
             </div>
