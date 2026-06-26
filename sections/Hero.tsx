@@ -4,20 +4,30 @@ import { SearchForm } from "@/components/ui/SearchForm";
 
 export function Hero() {
   return (
-    <section className="bg-white dark:bg-gray-950 px-4 sm:px-6 lg:px-8 pt-4 pb-8 lg:pt-6 lg:pb-10">
+    <section className="bg-white dark:bg-gray-950 px-2 sm:px-3 lg:px-5 pt-3 pb-8 lg:pt-4 lg:pb-10">
       <div className="relative flex min-h-[360px] flex-col items-center justify-center rounded-[2rem] sm:rounded-[3rem] overflow-hidden py-14 lg:py-20 mx-auto max-w-[1600px] shadow-2xl">
-        {/* Background Image */}
+        {/* Light Mode Background Image */}
         <Image
-          src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1600&h=900&fit=crop"
-          alt="Beautiful tropical beach landscape"
+          src="https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=1600&h=900&fit=crop"
+          alt="Sunny tropical beach resort"
           fill
           priority
           unoptimized
-          className="object-cover object-[60%_center]"
+          className="object-cover object-[center_65%] dark:hidden"
+          sizes="(max-width: 1600px) 100vw, 1600px"
+        />
+        {/* Dark Mode Background Image */}
+        <Image
+          src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1600&h=900&fit=crop"
+          alt="Luxury resort illuminated at night"
+          fill
+          priority
+          unoptimized
+          className="object-cover object-center hidden dark:block"
           sizes="(max-width: 1600px) 100vw, 1600px"
         />
         {/* Lighter Overlay for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/50 dark:from-black/60 dark:via-black/30 dark:to-black/60" />
 
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="text-center mb-6">
