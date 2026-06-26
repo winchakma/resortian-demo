@@ -198,13 +198,37 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 
   /* ── 5. CAROUSEL CARDS (Destinations, FeaturedPlaces, UserStories) ────── */
-  /* Cards are w-[85vw] via Tailwind. This CSS reinforces the constraint.   */
-  /* The scroll track uses -mx-4 px-4 to break out to full bleed edges.     */
+  /* Cards are w-[85vw] via Tailwind. This CSS overrides it to center them  */
+  /* with equal left/right breathing room and only a subtle peek.           */
+  .w-\[85vw\] {
+    width: calc(100vw - 2.5rem) !important;
+  }
+  
   .snap-start,
   .snap-always {
     flex-shrink: 0;
-    max-width: 90vw;
+    max-width: 100vw;
     box-sizing: border-box;
+  }
+
+  /* Gem cards height fix (proportional to narrower width) */
+  .h-\[360px\] {
+    height: 320px !important;
+  }
+
+  /* Story cards height fix */
+  .h-\[420px\] {
+    height: 380px !important;
+  }
+
+  /* Story cards author text truncate */
+  .tracking-wide.uppercase {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    display: inline-block;
+    vertical-align: bottom;
   }
 
   /* ── 6. BANGLADESH STAYS WITH YOU cards ──────────────────────────────── */
