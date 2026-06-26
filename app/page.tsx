@@ -5,7 +5,6 @@ import { FeaturedPlaces } from "@/sections/FeaturedPlaces";
 import { UserStories } from "@/sections/UserStories";
 import { FeaturedStays } from "@/sections/FeaturedStays";
 import { Footer } from "@/sections/Footer";
-import { Marquee } from "@/components/ui/Marquee";
 
 export default function Home() {
   return (
@@ -13,7 +12,6 @@ export default function Home() {
       <Header />
       <main className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Hero />
-        <Marquee />
         <Destinations />
         <FeaturedStays />
         <FeaturedPlaces />

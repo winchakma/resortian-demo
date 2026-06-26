@@ -44,12 +44,6 @@
   --color-green-800: #3f7048;
   --color-green-900: #335b3c;
   --color-green-950: #1c351f;
-
-  --animate-marquee: marquee 40s linear infinite;
-  
-  @keyframes marquee {
-    to { transform: translateX(-50%); }
-  }
 }
 
 :root {
