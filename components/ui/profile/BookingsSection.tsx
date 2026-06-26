@@ -49,28 +49,28 @@ export default function BookingsSection({ bookings }: { bookings: Booking[] }) {
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-5 py-4 dark:border-gray-800">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-black dark:text-white">
               My Bookings
             </h3>
-            <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+            <p className="mt-0.5 text-xs text-black dark:text-gray-500">
               {bookings.length} booking{bookings.length !== 1 ? "s" : ""} in
               total
             </p>
           </div>
           <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by hotel or reference…"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2 pl-9 pr-8 text-sm text-gray-900 outline-none transition-colors focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2 pl-9 pr-8 text-sm text-black outline-none transition-colors focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             />
             {query && (
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-black hover:text-gray-600"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -88,7 +88,7 @@ export default function BookingsSection({ bookings }: { bookings: Booking[] }) {
                 className={`flex shrink-0 items-center gap-1.5 border-b-2 px-5 py-3 text-sm font-medium transition-colors ${
                   active
                     ? "border-primary-600 text-primary-700 dark:border-primary-400 dark:text-primary-400"
-                    : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                    : "border-transparent text-black hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                 }`}
               >
                 {tab.label}
@@ -97,7 +97,7 @@ export default function BookingsSection({ bookings }: { bookings: Booking[] }) {
                     className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
                       active
                         ? "bg-primary-100 text-primary-700 dark:bg-primary-950/50 dark:text-primary-400"
-                        : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                        : "bg-gray-100 text-black dark:bg-gray-800 dark:text-gray-400"
                     }`}
                   >
                     {tab.count}
@@ -110,12 +110,12 @@ export default function BookingsSection({ bookings }: { bookings: Booking[] }) {
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-              <CalendarDays className="h-7 w-7 text-gray-400" />
+              <CalendarDays className="h-7 w-7 text-black" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <p className="text-sm font-semibold text-black dark:text-gray-300">
               No bookings found
             </p>
-            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+            <p className="mt-1 text-xs text-black dark:text-gray-500">
               {query
                 ? "Try a different search term."
                 : "You have no bookings in this category yet."}

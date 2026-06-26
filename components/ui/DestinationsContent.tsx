@@ -58,19 +58,19 @@ export function DestinationsContent({ destinations }: DestinationsContentProps) 
 
           {/* Search bar */}
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-black" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search destinations, regions, or experiences…"
-              className="w-full rounded-2xl border-0 bg-white py-4 pl-12 pr-12 text-sm text-gray-900 shadow-lg placeholder-gray-400 outline-none focus:ring-2 focus:ring-primary-400 dark:bg-gray-900 dark:text-white dark:placeholder-gray-500 dark:focus:ring-primary-500"
+              className="w-full rounded-2xl border-0 bg-white py-4 pl-12 pr-12 text-sm text-black shadow-lg placeholder-gray-400 outline-none focus:ring-2 focus:ring-primary-400 dark:bg-gray-900 dark:text-white dark:placeholder-gray-500 dark:focus:ring-primary-500"
             />
             {query && (
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
+                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-black transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -83,14 +83,14 @@ export function DestinationsContent({ destinations }: DestinationsContentProps) 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Results bar */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <p className="text-sm font-semibold text-black dark:text-gray-300">
             {filtered.length === 0
               ? "No destinations found"
               : filtered.length === destinations.length
                 ? `All ${destinations.length} destinations`
                 : `${filtered.length} destination${filtered.length !== 1 ? "s" : ""} found`}
             {query && (
-              <span className="ml-1 font-normal text-gray-400 dark:text-gray-500">
+              <span className="ml-1 font-normal text-black dark:text-gray-500">
                 for &ldquo;{query}&rdquo;
               </span>
             )}
@@ -105,7 +105,7 @@ export function DestinationsContent({ destinations }: DestinationsContentProps) 
                 className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
                   query === region
                     ? "border-primary-500 bg-primary-50 text-primary-700 dark:border-primary-500 dark:bg-primary-950/30 dark:text-primary-400"
-                    : "border-gray-200 bg-white text-gray-600 hover:border-primary-300 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-primary-700 dark:hover:text-primary-400"
+                    : "border-gray-200 bg-white text-black hover:border-primary-300 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-primary-700 dark:hover:text-primary-400"
                 }`}
               >
                 {region}
@@ -115,7 +115,7 @@ export function DestinationsContent({ destinations }: DestinationsContentProps) 
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
+                className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
               >
                 Clear
               </button>
@@ -127,12 +127,12 @@ export function DestinationsContent({ destinations }: DestinationsContentProps) 
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white py-20 text-center dark:border-gray-700 dark:bg-gray-900">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-              <Search className="h-7 w-7 text-gray-400" />
+              <Search className="h-7 w-7 text-black" />
             </div>
-            <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">
               No destinations found
             </h3>
-            <p className="mb-5 max-w-xs text-sm text-gray-500 dark:text-gray-400">
+            <p className="mb-5 max-w-xs text-sm text-black dark:text-gray-400">
               Try a different name, region, or experience.
             </p>
             <button
@@ -178,7 +178,7 @@ function DestinationCard({ destination }: { destination: Destination }) {
 
           {/* Region badge */}
           <div className="absolute left-3 top-3">
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-gray-800 shadow-sm backdrop-blur-sm dark:bg-gray-900/90 dark:text-gray-200">
+            <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-black shadow-sm backdrop-blur-sm dark:bg-gray-900/90 dark:text-gray-200">
               <MapPin className="h-3 w-3 text-primary-600" />
               {destination.region}
             </span>
@@ -202,7 +202,7 @@ function DestinationCard({ destination }: { destination: Destination }) {
 
         {/* Content */}
         <div className="p-4">
-          <p className="mb-3 line-clamp-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+          <p className="mb-3 line-clamp-2 text-sm leading-relaxed text-black dark:text-gray-400">
             {destination.description}
           </p>
 
@@ -220,7 +220,7 @@ function DestinationCard({ destination }: { destination: Destination }) {
 
           {/* CTA row */}
           <div className="flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-800">
-            <span className="text-xs text-gray-400 dark:text-gray-500">
+            <span className="text-xs text-black dark:text-gray-500">
               {destination.propertyCount} properties available
             </span>
             <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary-600 transition-colors group-hover:text-primary-700 dark:text-primary-400 dark:group-hover:text-primary-300">

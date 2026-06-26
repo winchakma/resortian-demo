@@ -34,10 +34,10 @@ export default function DestinationCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
-              <h4 className="font-semibold text-gray-900 dark:text-white">
+              <h4 className="font-semibold text-black dark:text-white">
                 {destination.name}
               </h4>
-              <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+              <div className="mt-0.5 flex items-center gap-1 text-xs text-black dark:text-gray-500">
                 <MapPin className="h-3 w-3 shrink-0" />
                 {destination.region}
               </div>
@@ -45,7 +45,7 @@ export default function DestinationCard({
             <ApprovalBadge status={destination.approvalStatus} />
           </div>
 
-          <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-black dark:text-gray-400">
             <span className="flex items-center gap-1">
               <Building2 className="h-3.5 w-3.5" />
               {destination._count.hotels} hotel
@@ -68,7 +68,7 @@ export default function DestinationCard({
             )}
 
           {destination.description && (
-            <p className="mt-2 line-clamp-2 text-xs text-gray-400 dark:text-gray-500">
+            <p className="mt-2 line-clamp-2 text-xs text-black dark:text-gray-500">
               {destination.description}
             </p>
           )}

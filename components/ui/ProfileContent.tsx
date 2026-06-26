@@ -172,10 +172,10 @@ export function ProfileContent({
                   {isVendor ? "Vendor" : isAffiliate ? "Affiliate" : "Member"}
                 </span>
               </div>
-              <h2 className="text-base font-bold text-gray-900 dark:text-white">
+              <h2 className="text-base font-bold text-black dark:text-white">
                 {user.name}
               </h2>
-              <p className="mt-0.5 truncate text-sm text-gray-500 dark:text-gray-400">
+              <p className="mt-0.5 truncate text-sm text-black dark:text-gray-400">
                 {user.email || user.phone}
               </p>
               {!isVendor && (
@@ -186,10 +186,10 @@ export function ProfileContent({
                     { label: "Upcoming", value: upcomingCount },
                   ].map((s) => (
                     <div key={s.label} className="py-2.5 text-center">
-                      <p className="text-base font-bold text-gray-900 dark:text-white">
+                      <p className="text-base font-bold text-black dark:text-white">
                         {s.value}
                       </p>
-                      <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                      <p className="text-[10px] text-black dark:text-gray-500">
                         {s.label}
                       </p>
                     </div>
@@ -232,11 +232,11 @@ export function ProfileContent({
                     key={item.id}
                     type="button"
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors ${active ? activeClass : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"}`}
+                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors ${active ? activeClass : "text-black hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"}`}
                   >
                     <span
                       className={
-                        active ? activeIcon : "text-gray-400 dark:text-gray-500"
+                        active ? activeIcon : "text-black dark:text-gray-500"
                       }
                     >
                       {item.icon}
@@ -257,9 +257,9 @@ export function ProfileContent({
             <div className="border-t border-gray-100 px-2 py-2 dark:border-gray-800">
               <Link
                 href="/help"
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-black transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
               >
-                <HelpCircle className="h-4 w-4 text-gray-400" />
+                <HelpCircle className="h-4 w-4 text-black" />
                 Help & Support
               </Link>
               <SignOutButton />
@@ -283,7 +283,7 @@ export function ProfileContent({
                       ? isVendor
                         ? "bg-green-600 text-white shadow-sm"
                         : "bg-primary-600 text-white shadow-sm"
-                      : "text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                      : "text-black hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
                   }`}
                 >
                   {item.icon}

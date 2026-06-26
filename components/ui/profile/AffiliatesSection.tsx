@@ -47,7 +47,7 @@ function StatCard({
         className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl ${
           accent
             ? "bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400"
-            : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+            : "bg-gray-100 text-black dark:bg-gray-800 dark:text-gray-400"
         }`}
       >
         {icon}
@@ -56,14 +56,14 @@ function StatCard({
         className={`text-2xl font-bold ${
           accent
             ? "text-primary-700 dark:text-primary-300"
-            : "text-gray-900 dark:text-white"
+            : "text-black dark:text-white"
         }`}
       >
         {value}
       </p>
-      <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{label}</p>
+      <p className="mt-0.5 text-sm text-black dark:text-gray-400">{label}</p>
       {sub && (
-        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{sub}</p>
+        <p className="mt-1 text-xs text-black dark:text-gray-500">{sub}</p>
       )}
     </div>
   );
@@ -198,7 +198,7 @@ export default function AffiliatesSection() {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 py-24 text-gray-500 dark:text-gray-400">
+      <div className="flex flex-col items-center justify-center gap-3 py-24 text-black dark:text-gray-400">
         <AlertCircle className="h-8 w-8" />
         <p>{error}</p>
       </div>
@@ -220,10 +220,10 @@ export default function AffiliatesSection() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+        <h2 className="text-xl font-bold text-black dark:text-white">
           Affiliate Dashboard
         </h2>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-sm text-black dark:text-gray-400">
           Track earnings from your referral promo code
         </p>
       </div>
@@ -232,13 +232,13 @@ export default function AffiliatesSection() {
       {!promo ? (
         <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-gray-300 bg-white py-16 dark:border-gray-700 dark:bg-gray-900">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100 dark:bg-gray-800">
-            <Ticket className="h-7 w-7 text-gray-400" />
+            <Ticket className="h-7 w-7 text-black" />
           </div>
           <div className="text-center">
-            <p className="font-semibold text-gray-900 dark:text-white">
+            <p className="font-semibold text-black dark:text-white">
               No promo code assigned yet
             </p>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-black dark:text-gray-400">
               An admin will assign your personal promo code. Check back soon.
             </p>
           </div>
@@ -248,7 +248,7 @@ export default function AffiliatesSection() {
           {/* Promo code card */}
           <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
             <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-              <h3 className="font-semibold text-gray-900 dark:text-white">
+              <h3 className="font-semibold text-black dark:text-white">
                 Your Promo Code
               </h3>
             </div>
@@ -281,17 +281,17 @@ export default function AffiliatesSection() {
               {/* Code details */}
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 <div className="rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-800/60">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-black dark:text-gray-500">
                     Discount
                   </p>
-                  <p className="mt-0.5 font-semibold text-gray-900 dark:text-white">
+                  <p className="mt-0.5 font-semibold text-black dark:text-white">
                     {promo.discountType === "PERCENTAGE"
                       ? `${promo.discountValue}%`
                       : `৳${promo.discountValue.toLocaleString()}`}
                   </p>
                 </div>
                 <div className="rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-800/60">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-black dark:text-gray-500">
                     Your Commission
                   </p>
                   <p className="mt-0.5 font-semibold text-primary-600 dark:text-primary-400">
@@ -301,19 +301,19 @@ export default function AffiliatesSection() {
                   </p>
                 </div>
                 <div className="rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-800/60">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-black dark:text-gray-500">
                     Total Uses
                   </p>
-                  <p className="mt-0.5 font-semibold text-gray-900 dark:text-white">
+                  <p className="mt-0.5 font-semibold text-black dark:text-white">
                     {promo.usedCount}
                   </p>
                 </div>
                 <div className="rounded-xl bg-gray-50 px-3 py-2.5 dark:bg-gray-800/60">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-black dark:text-gray-500">
                     Status
                   </p>
                   <p
-                    className={`mt-0.5 font-semibold ${promo.isActive ? "text-green-600 dark:text-green-400" : "text-gray-400"}`}
+                    className={`mt-0.5 font-semibold ${promo.isActive ? "text-green-600 dark:text-green-400" : "text-black"}`}
                   >
                     {promo.isActive ? "Active" : "Inactive"}
                   </p>
@@ -321,7 +321,7 @@ export default function AffiliatesSection() {
               </div>
 
               {promo.minBookingAmount && (
-                <p className="mt-3 text-xs text-gray-400 dark:text-gray-500">
+                <p className="mt-3 text-xs text-black dark:text-gray-500">
                   Min. booking value: ৳{promo.minBookingAmount.toLocaleString()}
                   {promo.maxDiscountAmount
                     ? ` · Max discount: ৳${promo.maxDiscountAmount.toLocaleString()}`
@@ -330,7 +330,7 @@ export default function AffiliatesSection() {
               )}
 
               {(promo.validFrom || promo.validTo) && (
-                <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500">
+                <div className="mt-3 flex items-center gap-1.5 text-xs text-black dark:text-gray-500">
                   <Calendar className="h-3.5 w-3.5" />
                   Valid{" "}
                   {promo.validFrom
@@ -379,10 +379,10 @@ export default function AffiliatesSection() {
           {/* Cashout Action Card */}
           <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
             <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-              <h3 className="font-semibold text-gray-900 dark:text-white">
+              <h3 className="font-semibold text-black dark:text-white">
                 Request Cashout
               </h3>
-              <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+              <p className="mt-0.5 text-xs text-black dark:text-gray-500">
                 Minimum balance of ৳100 required to request a cashout
               </p>
             </div>
@@ -391,7 +391,7 @@ export default function AffiliatesSection() {
                 !bankInfoLoading && hasBankInfo ? (
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <p className="text-sm text-black dark:text-gray-300">
                         Available for cashout:{" "}
                         <span className="font-bold text-emerald-600 dark:text-emerald-400">
                           ৳{availableBalance.toLocaleString()}
@@ -424,7 +424,7 @@ export default function AffiliatesSection() {
                     </p>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <div className="flex items-center gap-2 text-sm text-black">
                     <Loader2 className="h-4 w-4 animate-spin" /> Checking bank info…
                   </div>
                 )
@@ -437,8 +437,8 @@ export default function AffiliatesSection() {
                 </div>
               ) : (
                 <div className="flex items-start gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 dark:border-gray-700 dark:bg-gray-800/40">
-                  <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-black" />
+                  <p className="text-xs text-black dark:text-gray-400">
                     Your available balance is ৳{availableBalance.toLocaleString()}. A minimum of ৳100 is required to request a cashout.
                   </p>
                 </div>
@@ -450,17 +450,17 @@ export default function AffiliatesSection() {
           {cashouts.length > 0 && (
             <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-                <h3 className="font-semibold text-gray-900 dark:text-white">
+                <h3 className="font-semibold text-black dark:text-white">
                   Cashout History
                 </h3>
-                <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                <p className="mt-0.5 text-xs text-black dark:text-gray-500">
                   Your commission cashout requests
                 </p>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
+                    <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-black dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
                       <th className="px-5 py-3">Date</th>
                       <th className="px-5 py-3">Amount</th>
                       <th className="px-5 py-3">Total Earned</th>
@@ -476,7 +476,7 @@ export default function AffiliatesSection() {
                         key={c.id}
                         className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30"
                       >
-                        <td className="px-5 py-3.5 text-gray-500 dark:text-gray-400">
+                        <td className="px-5 py-3.5 text-black dark:text-gray-400">
                           {new Date(c.createdAt).toLocaleDateString("en-BD", {
                             day: "numeric",
                             month: "short",
@@ -486,19 +486,19 @@ export default function AffiliatesSection() {
                         <td className="px-5 py-3.5 font-semibold text-emerald-600 dark:text-emerald-400">
                           ৳{c.amount.toLocaleString()}
                         </td>
-                        <td className="px-5 py-3.5 text-gray-700 dark:text-gray-300">
+                        <td className="px-5 py-3.5 text-black dark:text-gray-300">
                           ৳{c.totalEarnings.toLocaleString()}
                         </td>
-                        <td className="px-5 py-3.5 text-gray-500 dark:text-gray-400">
+                        <td className="px-5 py-3.5 text-black dark:text-gray-400">
                           ৳{c.paidAmount.toLocaleString()}
                         </td>
-                        <td className="px-5 py-3.5 text-gray-700 dark:text-gray-300">
+                        <td className="px-5 py-3.5 text-black dark:text-gray-300">
                           ৳{c.remainingBalance.toLocaleString()}
                         </td>
                         <td className="px-5 py-3.5">
                           <CashoutStatusBadge status={c.status} />
                         </td>
-                        <td className="max-w-[200px] truncate px-5 py-3.5 text-xs text-gray-400 dark:text-gray-500">
+                        <td className="max-w-[200px] truncate px-5 py-3.5 text-xs text-black dark:text-gray-500">
                           {c.rejectionReason || c.note || "—"}
                         </td>
                       </tr>
@@ -512,16 +512,16 @@ export default function AffiliatesSection() {
           {/* Bookings table */}
           <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
             <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-              <h3 className="font-semibold text-gray-900 dark:text-white">
+              <h3 className="font-semibold text-black dark:text-white">
                 Booking History
               </h3>
-              <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+              <p className="mt-0.5 text-xs text-black dark:text-gray-500">
                 Bookings made using your promo code
               </p>
             </div>
 
             {bookings.length === 0 ? (
-              <div className="flex flex-col items-center justify-center gap-3 py-16 text-gray-400 dark:text-gray-600">
+              <div className="flex flex-col items-center justify-center gap-3 py-16 text-black dark:text-gray-600">
                 <BadgePercent className="h-10 w-10" />
                 <p className="text-sm">No bookings yet — share your code!</p>
               </div>
@@ -529,7 +529,7 @@ export default function AffiliatesSection() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
+                    <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-black dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
                       <th className="px-5 py-3">Booking ID</th>
                       <th className="px-5 py-3">Date</th>
                       <th className="px-5 py-3">Net Value</th>
@@ -544,24 +544,24 @@ export default function AffiliatesSection() {
                         className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30"
                       >
                         <td className="px-5 py-3.5">
-                          <span className="font-mono text-xs font-semibold text-gray-700 dark:text-gray-300">
+                          <span className="font-mono text-xs font-semibold text-black dark:text-gray-300">
                             {b.reference}
                           </span>
                         </td>
-                        <td className="px-5 py-3.5 text-gray-500 dark:text-gray-400">
+                        <td className="px-5 py-3.5 text-black dark:text-gray-400">
                           {new Date(b.bookedOn).toLocaleDateString("en-BD", {
                             day: "numeric",
                             month: "short",
                             year: "numeric",
                           })}
-                          <span className="ml-1.5 text-xs text-gray-400 dark:text-gray-600">
+                          <span className="ml-1.5 text-xs text-black dark:text-gray-600">
                             {new Date(b.bookedOn).toLocaleTimeString("en-BD", {
                               hour: "2-digit",
                               minute: "2-digit",
                             })}
                           </span>
                         </td>
-                        <td className="px-5 py-3.5 text-gray-700 dark:text-gray-300">
+                        <td className="px-5 py-3.5 text-black dark:text-gray-300">
                           ৳{(b.totalPrice - b.discountAmount).toLocaleString()}
                         </td>
                         <td className="px-5 py-3.5">
@@ -571,7 +571,7 @@ export default function AffiliatesSection() {
                                 ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
                                 : b.status === "COMPLETED"
                                   ? "bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400"
-                                  : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                                  : "bg-gray-100 text-black dark:bg-gray-800 dark:text-gray-400"
                             }`}
                           >
                             {b.status}
@@ -587,7 +587,7 @@ export default function AffiliatesSection() {
                     <tr className="border-t border-gray-200 dark:border-gray-700">
                       <td
                         colSpan={4}
-                        className="px-5 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-300"
+                        className="px-5 py-3 text-right text-sm font-semibold text-black dark:text-gray-300"
                       >
                         Total Earnings
                       </td>

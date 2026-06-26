@@ -104,38 +104,38 @@ export default function RoomDetailModal({
           {/* Key stats */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-800">
-              <p className="text-lg font-bold text-gray-900 dark:text-white">
+              <p className="text-lg font-bold text-black dark:text-white">
                 ৳{room.price.toLocaleString()}
               </p>
-              <p className="text-xs text-gray-400">per night</p>
+              <p className="text-xs text-black">per night</p>
             </div>
             <div className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-800">
-              <p className="flex items-center justify-center gap-1 text-lg font-bold text-gray-900 dark:text-white">
+              <p className="flex items-center justify-center gap-1 text-lg font-bold text-black dark:text-white">
                 <Users className="h-4 w-4" />{room.capacity}
               </p>
-              <p className="text-xs text-gray-400">guest{room.capacity !== 1 ? "s" : ""}</p>
+              <p className="text-xs text-black">guest{room.capacity !== 1 ? "s" : ""}</p>
             </div>
             <div className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-800">
-              <p className="flex items-center justify-center gap-1 text-sm font-bold text-gray-900 dark:text-white">
+              <p className="flex items-center justify-center gap-1 text-sm font-bold text-black dark:text-white">
                 <Eye className="h-4 w-4" />{room.view || "—"}
               </p>
-              <p className="text-xs text-gray-400">view</p>
+              <p className="text-xs text-black">view</p>
             </div>
             <div className="rounded-xl bg-gray-50 p-3 text-center dark:bg-gray-800">
-              <p className="flex items-center justify-center gap-1 text-sm font-bold text-gray-900 dark:text-white">
+              <p className="flex items-center justify-center gap-1 text-sm font-bold text-black dark:text-white">
                 <Maximize2 className="h-4 w-4" />{room.size || "—"}
               </p>
-              <p className="text-xs text-gray-400">size</p>
+              <p className="text-xs text-black">size</p>
             </div>
           </div>
 
           {/* Description */}
           {room.description && (
             <div>
-              <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-black">
                 Description
               </h3>
-              <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+              <p className="text-sm leading-relaxed text-black dark:text-gray-300">
                 {room.description}
               </p>
             </div>
@@ -144,17 +144,17 @@ export default function RoomDetailModal({
           {/* Units */}
           {room.units && room.units.length > 0 && (
             <div>
-              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-black">
                 Units ({room.units.length})
               </h3>
               <div className="divide-y divide-gray-100 overflow-hidden rounded-xl border border-gray-200 dark:divide-gray-800 dark:border-gray-700">
                 {room.units.map((u, i) => (
                   <div key={u.id} className="flex items-center justify-between px-3 py-2 text-sm">
-                    <span className="font-medium text-gray-900 dark:text-white">
+                    <span className="font-medium text-black dark:text-white">
                       {u.unitName || `Unit ${i + 1}`}
                     </span>
                     {u.floorNumber != null && (
-                      <span className="text-xs text-gray-400">Floor {u.floorNumber}</span>
+                      <span className="text-xs text-black">Floor {u.floorNumber}</span>
                     )}
                   </div>
                 ))}
@@ -165,14 +165,14 @@ export default function RoomDetailModal({
           {/* Amenities */}
           {room.amenities.length > 0 && (
             <div>
-              <h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-black">
                 <BedDouble className="h-3.5 w-3.5" /> Amenities
               </h3>
               <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
                 {room.amenities.map((a) => (
                   <span
                     key={a}
-                    className="flex items-center gap-1.5 text-xs text-gray-700 dark:text-gray-300"
+                    className="flex items-center gap-1.5 text-xs text-black dark:text-gray-300"
                   >
                     <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-green-500" />
                     {a}
@@ -183,7 +183,7 @@ export default function RoomDetailModal({
           )}
 
           {/* Status */}
-          <div className="flex flex-wrap gap-4 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-gray-500 dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
+          <div className="flex flex-wrap gap-4 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-black dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
             <span>
               Status:{" "}
               <span className="font-semibold capitalize">

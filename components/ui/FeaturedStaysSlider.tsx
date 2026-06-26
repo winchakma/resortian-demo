@@ -33,7 +33,7 @@ export function FeaturedStaysSlider({ hotels }: FeaturedStaysSliderProps) {
           <button
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={page === 0}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-md transition-all hover:bg-gray-50 hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-black shadow-md transition-all hover:bg-gray-50 hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
             aria-label="Previous page"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -58,7 +58,7 @@ export function FeaturedStaysSlider({ hotels }: FeaturedStaysSliderProps) {
           <button
             onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
             disabled={page === totalPages - 1}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-md transition-all hover:bg-gray-50 hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-black shadow-md transition-all hover:bg-gray-50 hover:scale-105 disabled:opacity-30 disabled:cursor-not-allowed dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
             aria-label="Next page"
           >
             <ChevronRight className="h-5 w-5" />

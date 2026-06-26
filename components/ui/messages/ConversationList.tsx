@@ -63,7 +63,7 @@ export default function ConversationList({
     <div className="flex h-full min-h-0 flex-col bg-gray-50 dark:bg-gray-950/40">
       <div className="border-b border-gray-100 p-3 dark:border-gray-800">
         <div className="flex items-center gap-2">
-          <h3 className="flex-1 text-sm font-semibold text-gray-900 dark:text-white">
+          <h3 className="flex-1 text-sm font-semibold text-black dark:text-white">
             Messages
           </h3>
           <span
@@ -72,7 +72,7 @@ export default function ConversationList({
           />
         </div>
         <div className="relative mt-2">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-black" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -99,17 +99,17 @@ export default function ConversationList({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
-                  <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+                  <p className="truncate text-sm font-semibold text-black dark:text-white">
                     Resortian Support
                   </p>
                   <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
                     Support
                   </span>
                 </div>
-                <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                <p className="truncate text-xs text-black dark:text-gray-400">
                   {supportStatusLabel(pinned)}
                 </p>
-                <p className="mt-0.5 line-clamp-1 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-0.5 line-clamp-1 text-xs text-black dark:text-gray-400">
                   {pinned.lastMessage ?? "Send a message to get started"}
                 </p>
               </div>
@@ -122,7 +122,7 @@ export default function ConversationList({
           </li>
         )}
         {filtered.length === 0 && !pinned && (
-          <li className="px-4 py-6 text-center text-sm text-gray-400">
+          <li className="px-4 py-6 text-center text-sm text-black">
             No matches
           </li>
         )}
@@ -145,18 +145,18 @@ export default function ConversationList({
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline justify-between gap-2">
-                    <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+                    <p className="truncate text-sm font-semibold text-black dark:text-white">
                       {name}
                     </p>
-                    <span className="shrink-0 text-[10px] text-gray-400">
+                    <span className="shrink-0 text-[10px] text-black">
                       {formatTime(c.lastMessageAt)}
                     </span>
                   </div>
-                  <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                  <p className="truncate text-xs text-black dark:text-gray-400">
                     {c.hotel?.name ?? "—"}
                     {c.booking?.reference ? ` · ${c.booking.reference}` : ""}
                   </p>
-                  <p className="mt-0.5 line-clamp-1 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="mt-0.5 line-clamp-1 text-xs text-black dark:text-gray-400">
                     {c.lastMessage ?? "No messages yet"}
                   </p>
                 </div>

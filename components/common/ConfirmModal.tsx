@@ -40,10 +40,10 @@ export default function ConfirmModal({
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-100 dark:bg-red-950/40">
             <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
           </div>
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-base font-semibold text-black dark:text-white">
             {title}
           </h3>
-          <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1.5 text-sm text-black dark:text-gray-400">
             {message}
           </p>
         </div>
@@ -52,7 +52,7 @@ export default function ConfirmModal({
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="flex-1 rounded-xl border border-gray-200 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
           >
             Cancel
           </button>

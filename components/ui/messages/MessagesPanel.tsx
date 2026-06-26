@@ -62,7 +62,7 @@ export default function MessagesPanel() {
   if (loading) {
     return (
       <div className="flex h-[60vh] items-center justify-center rounded-2xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
-        <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+        <Loader2 className="h-5 w-5 animate-spin text-black" />
       </div>
     );
   }
@@ -71,10 +71,10 @@ export default function MessagesPanel() {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-900">
         <MessageCircle className="h-10 w-10 text-gray-300 dark:text-gray-600" />
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-base font-semibold text-black dark:text-white">
           No conversations yet
         </h3>
-        <p className="max-w-sm text-sm text-gray-500 dark:text-gray-400">
+        <p className="max-w-sm text-sm text-black dark:text-gray-400">
           Conversations are created automatically when your booking is
           confirmed. Once a guest pays, you can chat here.
         </p>
@@ -118,7 +118,7 @@ export default function MessagesPanel() {
               onBack={() => setSelectedId(null)}
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-sm text-gray-400">
+            <div className="flex h-full items-center justify-center text-sm text-black">
               Select a conversation
             </div>
           )}

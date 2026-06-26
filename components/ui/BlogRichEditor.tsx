@@ -50,7 +50,7 @@ function ToolbarButton({
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={`flex items-center justify-center rounded p-1.5 text-gray-600 transition-colors disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-300 ${
+      className={`flex items-center justify-center rounded p-1.5 text-black transition-colors disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-300 ${
         active
           ? "bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
           : "hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white"
@@ -375,7 +375,7 @@ export default function BlogRichEditor({
               }
             }}
             placeholder="https://example.com"
-            className="flex-1 rounded border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500/30 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            className="flex-1 rounded border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-black placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500/30 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             autoFocus
           />
           <button
@@ -391,7 +391,7 @@ export default function BlogRichEditor({
               setShowLinkInput(false);
               setLinkUrl("");
             }}
-            className="rounded px-2 py-1.5 text-xs text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="rounded px-2 py-1.5 text-xs text-black hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             Cancel
           </button>

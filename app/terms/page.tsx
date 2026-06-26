@@ -19,10 +19,10 @@ function Section({
 }) {
   return (
     <section className="mt-10">
-      <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+      <h2 className="text-lg font-bold text-black dark:text-white">
         {title}
       </h2>
-      <div className="mt-3 space-y-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+      <div className="mt-3 space-y-3 text-sm leading-relaxed text-black dark:text-gray-400">
         {children}
       </div>
     </section>
@@ -53,13 +53,13 @@ export default function TermsPage() {
             <p className="text-xs font-semibold uppercase tracking-widest text-primary-600 dark:text-primary-400">
               Legal
             </p>
-            <h1 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-bold text-black dark:text-white sm:text-4xl">
               Terms of Service
             </h1>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm text-black dark:text-gray-400">
               Last updated: {LAST_UPDATED}
             </p>
-            <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="mt-4 text-sm leading-relaxed text-black dark:text-gray-400">
               These Terms of Service (&quot;Terms&quot;) govern your access to
               and use of Resortian&apos;s website, mobile applications, and
               booking services (collectively, the &quot;Platform&quot;). Please

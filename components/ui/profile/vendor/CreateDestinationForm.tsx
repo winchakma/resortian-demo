@@ -135,7 +135,7 @@ export default function CreateDestinationForm({
           <span className="flex items-center gap-1.5">
             <Sparkles className="h-3.5 w-3.5" />
             Highlights
-            <span className="font-normal text-gray-400">(comma-separated)</span>
+            <span className="font-normal text-black">(comma-separated)</span>
           </span>
         </label>
         <input
@@ -181,10 +181,10 @@ export default function CreateDestinationForm({
           ) : (
             <>
               <Upload className="mb-2 h-8 w-8 text-gray-300" />
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-black dark:text-gray-400">
                 Click or drag to upload
               </p>
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-black">
                 JPEG, PNG or WebP — max 10 MB
               </p>
             </>

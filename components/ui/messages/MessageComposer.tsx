@@ -158,7 +158,7 @@ export default function MessageComposer({
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="rounded-xl p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="rounded-xl p-2 text-black hover:bg-gray-100 dark:hover:bg-gray-800"
           aria-label="Attach image"
         >
           <ImagePlus className="h-5 w-5" />

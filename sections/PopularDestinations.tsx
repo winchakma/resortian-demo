@@ -11,7 +11,7 @@ export async function PopularDestinations() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+            <h2 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
               Popular searches
             </h2>
           </div>

@@ -58,7 +58,7 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <label className="text-sm font-medium text-black dark:text-gray-300">
         {label}
       </label>
       {children}
@@ -70,7 +70,7 @@ function Field({
 // ─── Input styles ─────────────────────────────────────────────────────────────
 
 const inputCls =
-  "w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-primary-400 dark:focus:bg-gray-900";
+  "w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm text-black outline-none transition-colors placeholder:text-gray-400 focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-primary-400 dark:focus:bg-gray-900";
 
 // ─── Google divider ───────────────────────────────────────────────────────────
 
@@ -78,7 +78,7 @@ function OrDivider() {
   return (
     <div className="flex items-center gap-3">
       <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
-      <span className="text-xs text-gray-400 dark:text-gray-500">or</span>
+      <span className="text-xs text-black dark:text-gray-500">or</span>
       <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
     </div>
   );
@@ -125,7 +125,7 @@ function LoginForm({
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Field label="Phone number" error={errors.identifier?.message}>
         <div className="relative">
-          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("identifier")}
             type="tel"
@@ -137,7 +137,7 @@ function LoginForm({
 
       <Field label="Password" error={errors.password?.message}>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("password")}
             type={showPw ? "text" : "password"}
@@ -147,7 +147,7 @@ function LoginForm({
           <button
             type="button"
             onClick={() => setShowPw((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-black hover:text-gray-600 dark:hover:text-gray-300"
           >
             {showPw ? (
               <EyeOff className="h-4 w-4" />
@@ -226,7 +226,7 @@ function RegisterForm({
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Field label="Full name" error={errors.name?.message}>
         <div className="relative">
-          <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("name")}
             type="text"
@@ -238,7 +238,7 @@ function RegisterForm({
 
       <Field label="Phone number" error={errors.phone?.message}>
         <div className="relative">
-          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("phone")}
             type="tel"
@@ -250,7 +250,7 @@ function RegisterForm({
 
       <Field label="Email address (optional)" error={errors.email?.message}>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("email")}
             type="email"
@@ -262,7 +262,7 @@ function RegisterForm({
 
       <Field label="Password" error={errors.password?.message}>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("password")}
             type={showPw ? "text" : "password"}
@@ -272,7 +272,7 @@ function RegisterForm({
           <button
             type="button"
             onClick={() => setShowPw((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-black hover:text-gray-600 dark:hover:text-gray-300"
           >
             {showPw ? (
               <EyeOff className="h-4 w-4" />
@@ -285,7 +285,7 @@ function RegisterForm({
 
       <Field label="Confirm password" error={errors.confirmPassword?.message}>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("confirmPassword")}
             type={showConfirm ? "text" : "password"}
@@ -295,7 +295,7 @@ function RegisterForm({
           <button
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-black hover:text-gray-600 dark:hover:text-gray-300"
           >
             {showConfirm ? (
               <EyeOff className="h-4 w-4" />
@@ -350,14 +350,14 @@ export function AuthForm({ role, defaultTab = "login" }: AuthFormProps) {
       <div className="w-full max-w-md">
         {/* Page heading */}
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-black dark:text-white">
             {isVendor
               ? "Property Owner Portal"
               : tab === "login"
                 ? "Welcome back"
                 : "Create an account"}
           </h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-black dark:text-gray-400">
             {isVendor
               ? "Manage your properties on Resortian"
               : "Book your perfect stay across Bangladesh"}
@@ -388,8 +388,8 @@ export function AuthForm({ role, defaultTab = "login" }: AuthFormProps) {
                 onClick={() => setTab(t)}
                 className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
                   tab === t
-                    ? "bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white"
-                    : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    ? "bg-white text-black shadow-sm dark:bg-gray-700 dark:text-white"
+                    : "text-black hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                 }`}
               >
                 {t === "login" ? "Sign In" : "Register"}
@@ -405,7 +405,7 @@ export function AuthForm({ role, defaultTab = "login" }: AuthFormProps) {
         </div>
 
         {/* Switch role link */}
-        {/* <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+        {/* <p className="mt-4 text-center text-sm text-black dark:text-gray-400">
           <Link
             href={switchHref}
             className="font-medium text-primary-600 hover:underline dark:text-primary-400"

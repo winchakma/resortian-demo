@@ -38,7 +38,7 @@ export default function NotFound() {
                   {["Cox's Bazar", "Sylhet", "Bandarban"].map((dest) => (
                     <span
                       key={dest}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-black dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
                     >
                       <MapPin className="h-3 w-3 text-primary-500" />
                       {dest}
@@ -53,7 +53,7 @@ export default function NotFound() {
                   Page not found
                 </span>
 
-                <h1 className="mt-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+                <h1 className="mt-4 text-4xl font-bold tracking-tight text-black dark:text-white sm:text-5xl">
                   Looks like you&apos;ve
                   <br />
                   <span className="text-primary-600 dark:text-primary-400">
@@ -61,7 +61,7 @@ export default function NotFound() {
                   </span>
                 </h1>
 
-                <p className="mt-5 max-w-md text-lg leading-relaxed text-gray-500 dark:text-gray-400">
+                <p className="mt-5 max-w-md text-lg leading-relaxed text-black dark:text-gray-400">
                   This page has packed its bags and left. Maybe it moved to a
                   beachfront villa — or maybe the URL just took a wrong turn
                   somewhere between Dhaka and Cox&apos;s Bazar.
@@ -77,14 +77,14 @@ export default function NotFound() {
                   </Link>
                   <Link
                     href="/hotels"
-                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-primary-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-700"
+                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-black transition-all hover:border-primary-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-700"
                   >
                     <Search className="h-4 w-4" />
                     Browse Hotels & Resorts
                   </Link>
                   <Link
                     href="/destinations"
-                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-primary-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-700"
+                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-black transition-all hover:border-primary-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-700"
                   >
                     <MapPin className="h-4 w-4" />
                     Destinations
@@ -93,7 +93,7 @@ export default function NotFound() {
 
                 {/* Quick links */}
                 <div className="mt-10 border-t border-gray-200 pt-8 dark:border-gray-800">
-                  <p className="text-sm text-gray-400 dark:text-gray-500">
+                  <p className="text-sm text-black dark:text-gray-500">
                     Popular places to explore
                   </p>
                   <div className="mt-3 flex flex-wrap justify-center gap-x-6 gap-y-2 lg:justify-start">

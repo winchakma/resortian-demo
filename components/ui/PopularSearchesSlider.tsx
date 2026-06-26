@@ -41,7 +41,7 @@ export function PopularSearchesSlider({ destinations }: PopularSearchesSliderPro
           className={`pb-2 text-sm font-semibold transition-colors relative ${
             activeTab === "destinations"
               ? "text-[#007fcd]"
-              : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              : "text-black hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           }`}
         >
           Destinations
@@ -54,7 +54,7 @@ export function PopularSearchesSlider({ destinations }: PopularSearchesSliderPro
           className={`pb-2 text-sm font-semibold transition-colors relative ${
             activeTab === "cities"
               ? "text-[#007fcd]"
-              : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              : "text-black hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           }`}
         >
           Cities
@@ -93,10 +93,10 @@ export function PopularSearchesSlider({ destinations }: PopularSearchesSliderPro
                     />
                   </div>
                   <div className="p-3">
-                    <h4 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-[#007fcd] transition-colors truncate">
+                    <h4 className="font-semibold text-sm text-black dark:text-white group-hover:text-[#007fcd] transition-colors truncate">
                       {d.name}
                     </h4>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    <p className="text-xs text-black dark:text-gray-400 mt-0.5">
                       {d.propertyCount} properties
                     </p>
                     <div className="mt-2 text-xs font-bold text-emerald-600 dark:text-emerald-500">
@@ -114,7 +114,7 @@ export function PopularSearchesSlider({ destinations }: PopularSearchesSliderPro
           <>
             <button
               onClick={() => scroll("left")}
-              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-black shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
               aria-label="Scroll left"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -122,7 +122,7 @@ export function PopularSearchesSlider({ destinations }: PopularSearchesSliderPro
 
             <button
               onClick={() => scroll("right")}
-              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-gray-700 shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white/90 text-black shadow-md backdrop-blur-sm transition hover:bg-white hover:text-black dark:border-gray-800 dark:bg-gray-900/90 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
               aria-label="Scroll right"
             >
               <ChevronRight className="h-5 w-5" />

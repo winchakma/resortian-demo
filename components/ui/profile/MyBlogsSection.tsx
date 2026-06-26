@@ -98,10 +98,10 @@ export default function MyBlogsSection() {
       {/* Header */}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-xl font-bold text-black dark:text-white">
             My Blog Posts
           </h2>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-black dark:text-gray-400">
             Submit a blog post for review. Our team will publish it once
             approved.
           </p>
@@ -126,13 +126,13 @@ export default function MyBlogsSection() {
       ) : blogs.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-gray-300 bg-white py-16 dark:border-gray-700 dark:bg-gray-900">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100 dark:bg-gray-800">
-            <BookOpen className="h-7 w-7 text-gray-400" />
+            <BookOpen className="h-7 w-7 text-black" />
           </div>
           <div className="text-center">
-            <p className="font-semibold text-gray-900 dark:text-white">
+            <p className="font-semibold text-black dark:text-white">
               No posts yet
             </p>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-black dark:text-gray-400">
               Share your travel stories — submit your first post for review.
             </p>
           </div>
@@ -163,7 +163,7 @@ export default function MyBlogsSection() {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <BookOpen className="h-6 w-6 text-gray-400" />
+                    <BookOpen className="h-6 w-6 text-black" />
                   </div>
                 )}
               </div>
@@ -172,10 +172,10 @@ export default function MyBlogsSection() {
               <div className="flex flex-1 flex-col">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 className="truncate text-base font-semibold text-gray-900 dark:text-white">
+                    <h3 className="truncate text-base font-semibold text-black dark:text-white">
                       {b.title}
                     </h3>
-                    <p className="mt-0.5 line-clamp-2 text-sm text-gray-500 dark:text-gray-400">
+                    <p className="mt-0.5 line-clamp-2 text-sm text-black dark:text-gray-400">
                       {b.excerpt}
                     </p>
                   </div>
@@ -195,7 +195,7 @@ export default function MyBlogsSection() {
                   </span>
                 </div>
 
-                <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+                <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-black dark:text-gray-400">
                   {b.category && (
                     <span className="inline-flex items-center gap-1">
                       <Tag className="h-3 w-3" /> {b.category}
@@ -220,7 +220,7 @@ export default function MyBlogsSection() {
                       <button
                         type="button"
                         onClick={() => setMode({ kind: "edit", id: b.id })}
-                        className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                        className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
                       >
                         <Pencil className="h-3 w-3" /> Edit
                       </button>
@@ -261,14 +261,14 @@ export default function MyBlogsSection() {
             <button
               type="button"
               onClick={() => !deleting && setConfirming(null)}
-              className="absolute right-3 top-3 rounded p-1 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-3 rounded p-1 text-black hover:text-gray-600"
             >
               <X className="h-4 w-4" />
             </button>
-            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-base font-semibold text-black dark:text-white">
               Delete &ldquo;{confirming.title}&rdquo;?
             </h3>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm text-black dark:text-gray-400">
               The draft will be removed permanently.
             </p>
             <div className="mt-4 flex justify-end gap-2">
@@ -276,7 +276,7 @@ export default function MyBlogsSection() {
                 type="button"
                 onClick={() => setConfirming(null)}
                 disabled={deleting}
-                className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-black hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Cancel
               </button>

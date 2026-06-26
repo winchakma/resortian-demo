@@ -87,7 +87,7 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
           /> */}
           <button
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-black transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
             aria-label="Close menu"
           >
             <X className="h-5 w-5" />
@@ -106,7 +106,7 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
-                className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-black transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 {Icon && <Icon className="h-4 w-4" />}
                 {link.label}
@@ -142,7 +142,7 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
           {!user && (
             <a
               href={`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3005"}/auth/google`}
-              className="flex items-center gap-2.5 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              className="flex items-center gap-2.5 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-black shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               {/* Google G icon */}
               <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
@@ -173,7 +173,7 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
 
         {/* Social links */}
         <div className="border-t border-gray-100 px-5 py-5 dark:border-gray-800">
-          <p className="mb-3 text-xs font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500">
+          <p className="mb-3 text-xs font-medium uppercase tracking-wider text-black dark:text-gray-500">
             Follow us
           </p>
           <div className="flex items-center gap-2">
@@ -184,7 +184,7 @@ export function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-black transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
               >
                 <svg
                   className="h-4 w-4"

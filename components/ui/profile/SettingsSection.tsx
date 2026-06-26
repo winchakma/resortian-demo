@@ -77,10 +77,10 @@ export default function SettingsSection() {
             <Lock className="h-4 w-4 text-primary-600 dark:text-primary-400" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-black dark:text-white">
               Change Password
             </h3>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
+            <p className="text-xs text-black dark:text-gray-500">
               Keep your account secure with a strong password
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function SettingsSection() {
           <div>
             <label className={labelCls()}>Current Password</label>
             <div className="relative">
-              <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
               <input
                 type={showCurrent ? "text" : "password"}
                 {...register("currentPassword")}
@@ -103,7 +103,7 @@ export default function SettingsSection() {
               <button
                 type="button"
                 onClick={() => setShowCurrent((p) => !p)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-black hover:text-gray-600"
               >
                 {showCurrent ? (
                   <EyeOff className="h-4 w-4" />
@@ -118,7 +118,7 @@ export default function SettingsSection() {
             <div>
               <label className={labelCls()}>New Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
                 <input
                   type={showNew ? "text" : "password"}
                   {...register("newPassword")}
@@ -128,7 +128,7 @@ export default function SettingsSection() {
                 <button
                   type="button"
                   onClick={() => setShowNew((p) => !p)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-black hover:text-gray-600"
                 >
                   {showNew ? (
                     <EyeOff className="h-4 w-4" />
@@ -142,7 +142,7 @@ export default function SettingsSection() {
             <div>
               <label className={labelCls()}>Confirm New Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
                 <input
                   type={showConfirm ? "text" : "password"}
                   {...register("confirmPassword")}
@@ -152,7 +152,7 @@ export default function SettingsSection() {
                 <button
                   type="button"
                   onClick={() => setShowConfirm((p) => !p)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-black hover:text-gray-600"
                 >
                   {showConfirm ? (
                     <EyeOff className="h-4 w-4" />
@@ -191,10 +191,10 @@ export default function SettingsSection() {
         </div>
         <div className="flex flex-col gap-3 p-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
+            <p className="text-sm font-medium text-black dark:text-white">
               Delete Account
             </p>
-            <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+            <p className="mt-0.5 text-xs text-black dark:text-gray-400">
               Permanently delete your account and all data. This cannot be
               undone.
             </p>

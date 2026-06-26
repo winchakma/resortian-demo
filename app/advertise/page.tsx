@@ -107,7 +107,7 @@ export default function AdvertisePage() {
         {/* Audience stats */}
         <section className="bg-white py-12 dark:bg-gray-900">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-center text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-center text-xl font-bold text-black dark:text-white">
               Our Audience
             </h2>
             <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -122,7 +122,7 @@ export default function AdvertisePage() {
                   <p className="mt-3 text-3xl font-bold text-primary-600 dark:text-primary-400">
                     {s.value}
                   </p>
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 text-xs text-black dark:text-gray-400">
                     {s.label}
                   </p>
                 </div>
@@ -134,10 +134,10 @@ export default function AdvertisePage() {
         {/* Packages */}
         <section className="py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-black dark:text-white">
               Advertising Packages
             </h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-black dark:text-gray-400">
               All packages are billed monthly with no long-term contract.
             </p>
             <div className="mt-6 grid gap-6 md:grid-cols-3">
@@ -156,26 +156,26 @@ export default function AdvertisePage() {
                     </span>
                   )}
                   <h3
-                    className={`font-bold ${pkg.highlight ? "text-white" : "text-gray-900 dark:text-white"}`}
+                    className={`font-bold ${pkg.highlight ? "text-white" : "text-black dark:text-white"}`}
                   >
                     {pkg.name}
                   </h3>
                   <div className="mt-2 flex items-end gap-1">
                     <span
-                      className={`text-2xl font-bold ${pkg.highlight ? "text-white" : "text-gray-900 dark:text-white"}`}
+                      className={`text-2xl font-bold ${pkg.highlight ? "text-white" : "text-black dark:text-white"}`}
                     >
                       {pkg.price}
                     </span>
                     {pkg.period && (
                       <span
-                        className={`mb-0.5 text-sm ${pkg.highlight ? "text-primary-200" : "text-gray-400"}`}
+                        className={`mb-0.5 text-sm ${pkg.highlight ? "text-primary-200" : "text-black"}`}
                       >
                         {pkg.period}
                       </span>
                     )}
                   </div>
                   <p
-                    className={`mt-3 flex-1 text-sm ${pkg.highlight ? "text-primary-100" : "text-gray-600 dark:text-gray-400"}`}
+                    className={`mt-3 flex-1 text-sm ${pkg.highlight ? "text-primary-100" : "text-black dark:text-gray-400"}`}
                   >
                     {pkg.description}
                   </p>
@@ -189,7 +189,7 @@ export default function AdvertisePage() {
                           className={
                             pkg.highlight
                               ? "text-primary-100"
-                              : "text-gray-600 dark:text-gray-400"
+                              : "text-black dark:text-gray-400"
                           }
                         >
                           {f}
@@ -221,10 +221,10 @@ export default function AdvertisePage() {
                 <Mail className="h-7 w-7 text-primary-600 dark:text-primary-400" />
               </div>
             </div>
-            <h2 className="mt-4 text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="mt-4 text-xl font-bold text-black dark:text-white">
               Want a Custom Solution?
             </h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-sm text-black dark:text-gray-400">
               For destination takeovers, multi-property deals, or bespoke
               campaigns, email our advertising team and we&apos;ll put together
               a proposal tailored to your goals.

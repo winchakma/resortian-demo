@@ -179,11 +179,11 @@ export default function VendorCalendar() {
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center gap-2">
           <CalendarRange className="h-5 w-5 text-green-600 dark:text-green-400" />
-          <h2 className="text-base font-bold text-gray-900 dark:text-white">
+          <h2 className="text-base font-bold text-black dark:text-white">
             Schedule &amp; Calendar
           </h2>
         </div>
-        <p className="mb-5 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mb-5 text-sm text-black dark:text-gray-400">
           Select a hotel, optional room filter and date range, then click Search
           to load the occupancy matrix.
         </p>
@@ -275,7 +275,7 @@ export default function VendorCalendar() {
 
         <div className="mt-4 flex items-center justify-between gap-3">
           {/* Legend */}
-          <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-black dark:text-gray-400">
             <span className="flex items-center gap-1.5">
               <span className="inline-block h-3 w-3 rounded bg-emerald-500" />
               Confirmed
@@ -345,7 +345,7 @@ export default function VendorCalendar() {
       {calendarData && !loading && rows.length === 0 && (
         <div className="rounded-2xl border border-gray-200 bg-white px-6 py-12 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <BedDouble className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+          <p className="text-sm font-medium text-black dark:text-gray-400">
             No active rooms or units found for the selected filters.
           </p>
         </div>
@@ -373,10 +373,10 @@ function CalendarMatrix({ hotel, dates, rows }: MatrixProps) {
       {/* Card header */}
       <div className="flex items-center justify-between border-b border-gray-100 px-5 py-3.5 dark:border-gray-800">
         <div>
-          <h3 className="text-sm font-bold text-gray-900 dark:text-white">
+          <h3 className="text-sm font-bold text-black dark:text-white">
             {hotel.name}
           </h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-xs text-black dark:text-gray-400">
             {dates.length}-day room occupancy timeline.
           </p>
         </div>
@@ -392,7 +392,7 @@ function CalendarMatrix({ hotel, dates, rows }: MatrixProps) {
           <thead>
             <tr className="border-b border-gray-200 dark:border-gray-700">
               <th
-                className="sticky left-0 z-10 bg-gray-50 px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:bg-gray-800/80 dark:text-gray-400"
+                className="sticky left-0 z-10 bg-gray-50 px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-black dark:bg-gray-800/80 dark:text-gray-400"
                 style={{ width: ROW_LABEL_WIDTH, minWidth: ROW_LABEL_WIDTH }}
               >
                 ROOM
@@ -407,12 +407,12 @@ function CalendarMatrix({ hotel, dates, rows }: MatrixProps) {
                     style={{ width: COL_WIDTH, minWidth: COL_WIDTH }}
                   >
                     <span
-                      className={`block text-[10px] font-semibold ${today ? "text-green-500 dark:text-green-400" : "text-gray-400 dark:text-gray-500"}`}
+                      className={`block text-[10px] font-semibold ${today ? "text-green-500 dark:text-green-400" : "text-black dark:text-gray-500"}`}
                     >
                       {day}
                     </span>
                     <span
-                      className={`mt-0.5 block text-sm font-bold ${today ? "text-green-600 dark:text-green-400" : "text-gray-700 dark:text-gray-200"}`}
+                      className={`mt-0.5 block text-sm font-bold ${today ? "text-green-600 dark:text-green-400" : "text-black dark:text-gray-200"}`}
                     >
                       {num}
                     </span>
@@ -436,10 +436,10 @@ function CalendarMatrix({ hotel, dates, rows }: MatrixProps) {
                     className="sticky left-0 z-10 bg-white px-4 py-3 dark:bg-gray-900"
                     style={{ width: ROW_LABEL_WIDTH, minWidth: ROW_LABEL_WIDTH }}
                   >
-                    <span className="block font-semibold text-gray-800 dark:text-gray-100">
+                    <span className="block font-semibold text-black dark:text-gray-100">
                       {unit.unitName}
                     </span>
-                    <span className="block text-[10px] text-gray-400 dark:text-gray-500">
+                    <span className="block text-[10px] text-black dark:text-gray-500">
                       {roomName}
                       {unit.floorNumber != null
                         ? ` · Floor ${unit.floorNumber}`
@@ -476,18 +476,18 @@ function CalendarMatrix({ hotel, dates, rows }: MatrixProps) {
                           </span>
                           {/* Tooltip on hover */}
                           <div className="pointer-events-none absolute bottom-full left-0 z-20 mb-1.5 hidden min-w-[160px] rounded-xl border border-gray-200 bg-white p-2.5 shadow-lg group-hover:block dark:border-gray-700 dark:bg-gray-900">
-                            <p className="font-semibold text-gray-900 dark:text-white">
+                            <p className="font-semibold text-black dark:text-white">
                               {cell.booking.guestName}
                             </p>
                             {cell.booking.guestPhone && (
-                              <p className="mt-0.5 text-gray-500 dark:text-gray-400">
+                              <p className="mt-0.5 text-black dark:text-gray-400">
                                 {cell.booking.guestPhone}
                               </p>
                             )}
-                            <p className="mt-1 rounded bg-gray-50 px-1.5 py-0.5 font-mono text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                            <p className="mt-1 rounded bg-gray-50 px-1.5 py-0.5 font-mono text-black dark:bg-gray-800 dark:text-gray-300">
                               {cell.booking.reference}
                             </p>
-                            <p className="mt-1 text-gray-400 dark:text-gray-500">
+                            <p className="mt-1 text-black dark:text-gray-500">
                               {cell.booking.checkIn} → {cell.booking.checkOut}
                             </p>
                           </div>

@@ -194,7 +194,7 @@ function renderContent(html: string) {
           return (
             <h3
               key={i}
-              className="mt-6 text-lg font-bold text-gray-900 dark:text-white"
+              className="mt-6 text-lg font-bold text-black dark:text-white"
             >
               {para.slice(2, -2)}
             </h3>
@@ -204,7 +204,7 @@ function renderContent(html: string) {
           return (
             <h4
               key={i}
-              className="mt-4 text-base font-semibold italic text-gray-800 dark:text-gray-200"
+              className="mt-4 text-base font-semibold italic text-black dark:text-gray-200"
             >
               {para.slice(1, -1)}
             </h4>
@@ -214,13 +214,13 @@ function renderContent(html: string) {
         return (
           <p
             key={i}
-            className="text-gray-700 leading-relaxed dark:text-gray-300"
+            className="text-black leading-relaxed dark:text-gray-300"
           >
             {parts.map((part, j) =>
               part.startsWith("**") && part.endsWith("**") ? (
                 <strong
                   key={j}
-                  className="font-semibold text-gray-900 dark:text-white"
+                  className="font-semibold text-black dark:text-white"
                 >
                   {part.slice(2, -2)}
                 </strong>
@@ -349,7 +349,7 @@ export default async function BlogPostPage({ params }: Props) {
           {/* Category badge */}
           <div className="absolute bottom-6 left-4 sm:left-6 lg:left-8">
             <span
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${CATEGORY_COLORS[post.category] ?? "bg-gray-100 text-gray-700"}`}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${CATEGORY_COLORS[post.category] ?? "bg-gray-100 text-black"}`}
             >
               <Tag className="h-3 w-3" />
               {post.category}
@@ -360,7 +360,7 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Article */}
         <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
           {/* Title */}
-          <h1 className="text-2xl font-bold leading-tight text-gray-900 dark:text-white sm:text-3xl lg:text-4xl">
+          <h1 className="text-2xl font-bold leading-tight text-black dark:text-white sm:text-3xl lg:text-4xl">
             {post.title}
           </h1>
 
@@ -384,18 +384,18 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
               )}
               <div>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                <p className="text-sm font-semibold text-black dark:text-white">
                   {post.authorName}
                 </p>
                 {post.authorTitle && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-black dark:text-gray-400">
                     {post.authorTitle}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-black dark:text-gray-400">
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
                 {formatDate(post.publishedAt)}
@@ -408,7 +408,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
 
           {/* Excerpt */}
-          <p className="mt-6 text-lg leading-relaxed text-gray-600 dark:text-gray-400">
+          <p className="mt-6 text-lg leading-relaxed text-black dark:text-gray-400">
             {post.excerpt}
           </p>
 
@@ -418,7 +418,7 @@ export default async function BlogPostPage({ params }: Props) {
           {/* YouTube embed */}
           {post.youtubeUrl && youtubeEmbedUrl(post.youtubeUrl) && (
             <div className="mt-10">
-              <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <div className="flex items-center gap-2 text-sm font-semibold text-black dark:text-gray-300">
                 <span className="flex h-5 w-5 items-center justify-center rounded-sm bg-red-600 text-[10px] font-bold text-white">
                   ▶
                 </span>
@@ -456,18 +456,18 @@ export default async function BlogPostPage({ params }: Props) {
                   </div>
                 )}
                 <div className="flex-1">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-black dark:text-gray-500">
                     About the Author
                   </p>
-                  <p className="mt-1 text-base font-semibold text-gray-900 dark:text-white">
+                  <p className="mt-1 text-base font-semibold text-black dark:text-white">
                     {post.authorName}
                   </p>
                   {post.authorTitle && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-black dark:text-gray-400">
                       {post.authorTitle}
                     </p>
                   )}
-                  <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                  <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-black dark:text-gray-300">
                     {post.authorDetails}
                   </p>
                 </div>
@@ -482,7 +482,7 @@ export default async function BlogPostPage({ params }: Props) {
                 <Link
                   key={tag}
                   href={`/blog?tag=${encodeURIComponent(tag)}`}
-                  className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 transition-colors hover:bg-primary-100 hover:text-primary-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-primary-900/40 dark:hover:text-primary-300"
+                  className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-black transition-colors hover:bg-primary-100 hover:text-primary-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-primary-900/40 dark:hover:text-primary-300"
                 >
                   #{tag}
                 </Link>
@@ -494,7 +494,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="mt-10">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+              className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Blog

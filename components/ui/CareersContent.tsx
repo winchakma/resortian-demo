@@ -311,10 +311,10 @@ export function CareersContent() {
               },
             ].map((item) => (
               <div key={item.title}>
-                <h3 className="font-semibold text-gray-900 dark:text-white">
+                <h3 className="font-semibold text-black dark:text-white">
                   {item.title}
                 </h3>
-                <p className="mt-1.5 text-sm text-gray-600 dark:text-gray-400">
+                <p className="mt-1.5 text-sm text-black dark:text-gray-400">
                   {item.body}
                 </p>
               </div>
@@ -326,10 +326,10 @@ export function CareersContent() {
       {/* ── Job listings ────────────────────────────────────────────── */}
       <section className="py-12">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
+          <h2 className="text-xl font-bold text-black dark:text-white sm:text-2xl">
             Open Positions
           </h2>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-black dark:text-gray-400">
             {JOBS.length} roles currently open
           </p>
 
@@ -345,29 +345,29 @@ export function CareersContent() {
                     {job.icon}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                    <h3 className="font-semibold text-black dark:text-white">
                       {job.title}
                     </h3>
                     <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                       <span
-                        className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${DEPT_COLORS[job.department] ?? "bg-gray-100 text-gray-600"}`}
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${DEPT_COLORS[job.department] ?? "bg-gray-100 text-black"}`}
                       >
                         {job.department}
                       </span>
-                      <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                      <span className="flex items-center gap-1 text-xs text-black dark:text-gray-400">
                         <MapPin className="h-3 w-3" />
                         {job.location}
                       </span>
-                      <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                      <span className="flex items-center gap-1 text-xs text-black dark:text-gray-400">
                         <Briefcase className="h-3 w-3" />
                         {job.type}
                       </span>
-                      <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                      <span className="flex items-center gap-1 text-xs text-black dark:text-gray-400">
                         <Clock className="h-3 w-3" />
                         {job.experience}
                       </span>
                     </div>
-                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    <p className="mt-2 text-sm text-black dark:text-gray-400">
                       {job.summary}
                     </p>
                   </div>
@@ -387,10 +387,10 @@ export function CareersContent() {
 
           {/* General application nudge */}
           <div className="mt-10 rounded-2xl border border-dashed border-gray-300 bg-white p-6 text-center dark:border-gray-700 dark:bg-gray-900">
-            <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+            <p className="text-sm font-medium text-black dark:text-gray-200">
               Don&apos;t see a role that fits?
             </p>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-black dark:text-gray-400">
               Send a speculative application to{" "}
               <a
                 href="mailto:info@resortian.com"
@@ -413,7 +413,7 @@ export function CareersContent() {
           className="fixed inset-0 z-[500] flex items-start justify-center overflow-y-auto bg-black/60 px-4 py-8 backdrop-blur-sm"
           onClick={(e) => e.target === e.currentTarget && close()}
         >
-          <div className="relative w-full max-w-2xl rounded-2xl bg-white text-gray-900 shadow-2xl dark:bg-gray-900 dark:text-white">
+          <div className="relative w-full max-w-2xl rounded-2xl bg-white text-black shadow-2xl dark:bg-gray-900 dark:text-white">
             {/* Header */}
             <div className="flex items-start justify-between gap-4 border-b border-gray-100 p-6 dark:border-gray-800">
               <div className="flex items-start gap-4">
@@ -421,24 +421,24 @@ export function CareersContent() {
                   {selected.icon}
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  <h2 className="text-xl font-bold text-black dark:text-white">
                     {selected.title}
                   </h2>
                   <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                     <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${DEPT_COLORS[selected.department] ?? "bg-gray-100 text-gray-600"}`}
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${DEPT_COLORS[selected.department] ?? "bg-gray-100 text-black"}`}
                     >
                       {selected.department}
                     </span>
-                    <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                    <span className="flex items-center gap-1 text-xs text-black dark:text-gray-400">
                       <MapPin className="h-3 w-3" />
                       {selected.location}
                     </span>
-                    <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                    <span className="flex items-center gap-1 text-xs text-black dark:text-gray-400">
                       <Briefcase className="h-3 w-3" />
                       {selected.type}
                     </span>
-                    <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                    <span className="flex items-center gap-1 text-xs text-black dark:text-gray-400">
                       <Clock className="h-3 w-3" />
                       {selected.experience}
                     </span>
@@ -447,7 +447,7 @@ export function CareersContent() {
               </div>
               <button
                 onClick={close}
-                className="shrink-0 rounded-full p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                className="shrink-0 rounded-full p-1.5 text-black transition hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                 aria-label="Close"
               >
                 <X className="h-5 w-5" />
@@ -457,22 +457,22 @@ export function CareersContent() {
             {/* Scrollable body */}
             <div className="max-h-[60vh] overflow-y-auto p-6 sm:p-8">
               {/* About the role */}
-              <h3 className="font-semibold text-gray-900 dark:text-white">
+              <h3 className="font-semibold text-black dark:text-white">
                 About the Role
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+              <p className="mt-2 text-sm leading-relaxed text-black dark:text-gray-400">
                 {selected.about}
               </p>
 
               {/* Responsibilities */}
-              <h3 className="mt-6 font-semibold text-gray-900 dark:text-white">
+              <h3 className="mt-6 font-semibold text-black dark:text-white">
                 What You Will Do
               </h3>
               <ul className="mt-2 space-y-2">
                 {selected.responsibilities.map((r, i) => (
                   <li
                     key={i}
-                    className="flex gap-2.5 text-sm text-gray-600 dark:text-gray-400"
+                    className="flex gap-2.5 text-sm text-black dark:text-gray-400"
                   >
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500" />
                     {r}
@@ -481,14 +481,14 @@ export function CareersContent() {
               </ul>
 
               {/* Requirements */}
-              <h3 className="mt-6 font-semibold text-gray-900 dark:text-white">
+              <h3 className="mt-6 font-semibold text-black dark:text-white">
                 What We Are Looking For
               </h3>
               <ul className="mt-2 space-y-2">
                 {selected.requirements.map((r, i) => (
                   <li
                     key={i}
-                    className="flex gap-2.5 text-sm text-gray-600 dark:text-gray-400"
+                    className="flex gap-2.5 text-sm text-black dark:text-gray-400"
                   >
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500" />
                     {r}
@@ -499,14 +499,14 @@ export function CareersContent() {
               {/* Nice to have */}
               {selected.niceToHave.length > 0 && (
                 <>
-                  <h3 className="mt-6 font-semibold text-gray-900 dark:text-white">
+                  <h3 className="mt-6 font-semibold text-black dark:text-white">
                     Nice to Have
                   </h3>
                   <ul className="mt-2 space-y-2">
                     {selected.niceToHave.map((r, i) => (
                       <li
                         key={i}
-                        className="flex gap-2.5 text-sm text-gray-600 dark:text-gray-400"
+                        className="flex gap-2.5 text-sm text-black dark:text-gray-400"
                       >
                         <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300 dark:bg-gray-600" />
                         {r}
@@ -524,10 +524,10 @@ export function CareersContent() {
                   <Mail className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-black dark:text-white">
                     Interested? Send us your CV
                   </p>
-                  <p className="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
+                  <p className="mt-0.5 text-sm text-black dark:text-gray-400">
                     Email{" "}
                     <a
                       href={`mailto:info@resortian.com?subject=${encodeURIComponent(`Application: ${selected.title}`)}`}

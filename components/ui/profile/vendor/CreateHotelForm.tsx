@@ -193,14 +193,14 @@ export default function CreateHotelForm({
                 className={[
                   inputCls(!!errors.destinationId),
                   "flex items-center justify-between cursor-pointer text-left",
-                  destLabel ? "" : "text-gray-400 dark:text-gray-500",
+                  destLabel ? "" : "text-black dark:text-gray-500",
                 ].join(" ")}
               >
-                <span className={destLabel ? "text-gray-900 dark:text-white" : ""}>
+                <span className={destLabel ? "text-black dark:text-white" : ""}>
                   {destLabel || "Select a destination…"}
                 </span>
                 <ChevronDown
-                  className={`h-4 w-4 shrink-0 text-gray-400 transition-transform duration-150 ${destOpen ? "rotate-180" : ""}`}
+                  className={`h-4 w-4 shrink-0 text-black transition-transform duration-150 ${destOpen ? "rotate-180" : ""}`}
                 />
               </button>
 
@@ -208,18 +208,18 @@ export default function CreateHotelForm({
                 <div className="absolute z-50 mt-1.5 w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
                   {/* Search input */}
                   <div className="flex items-center gap-2 border-b border-gray-100 px-3 py-2.5 dark:border-gray-800">
-                    <Search className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+                    <Search className="h-3.5 w-3.5 shrink-0 text-black" />
                     <input
                       autoFocus
                       type="text"
                       value={destQuery}
                       onChange={(e) => setDestQuery(e.target.value)}
                       placeholder="Search destinations…"
-                      className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-500"
+                      className="w-full bg-transparent text-sm text-black placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-500"
                     />
                     {destQuery && (
                       <button type="button" onClick={() => setDestQuery("")}>
-                        <X className="h-3.5 w-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200" />
+                        <X className="h-3.5 w-3.5 text-black hover:text-gray-600 dark:hover:text-gray-200" />
                       </button>
                     )}
                   </div>
@@ -247,10 +247,10 @@ export default function CreateHotelForm({
                               className={`flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm transition-colors ${
                                 selected
                                   ? "bg-primary-50 text-primary-700 dark:bg-primary-950/40 dark:text-primary-300"
-                                  : "text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                                  : "text-black hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
                               }`}
                             >
-                              <MapPin className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+                              <MapPin className="h-3.5 w-3.5 shrink-0 text-black" />
                               <span className="flex-1">{d.name}</span>
                               {selected && (
                                 <Check className="h-3.5 w-3.5 text-primary-600 dark:text-primary-400" />
@@ -262,7 +262,7 @@ export default function CreateHotelForm({
                     {destinations.filter((d) =>
                       d.name.toLowerCase().includes(destQuery.toLowerCase()),
                     ).length === 0 && (
-                      <li className="px-4 py-3 text-center text-sm text-gray-400 dark:text-gray-500">
+                      <li className="px-4 py-3 text-center text-sm text-black dark:text-gray-500">
                         No destinations found
                       </li>
                     )}
@@ -290,7 +290,7 @@ export default function CreateHotelForm({
         <div>
           <label className={labelCls()}>
             URL Slug{" "}
-            <span className="font-normal text-gray-400">(auto-generated)</span>
+            <span className="font-normal text-black">(auto-generated)</span>
           </label>
           <input
             type="text"
@@ -361,7 +361,7 @@ export default function CreateHotelForm({
           <label className={labelCls()}>
             <span className="flex items-center gap-1.5">
               <Tag className="h-3.5 w-3.5" /> Tags{" "}
-              <span className="font-normal text-gray-400">
+              <span className="font-normal text-black">
                 (comma-separated)
               </span>
             </span>
@@ -377,7 +377,7 @@ export default function CreateHotelForm({
           <label className={labelCls()}>
             <span className="flex items-center gap-1.5">
               <Sparkles className="h-3.5 w-3.5" /> Amenities{" "}
-              <span className="font-normal text-gray-400">
+              <span className="font-normal text-black">
                 (comma-separated)
               </span>
             </span>
@@ -426,7 +426,7 @@ export default function CreateHotelForm({
         <label className={labelCls()}>
           <span className="flex items-center gap-1.5">
             <FileText className="h-3.5 w-3.5" /> Booking Conditions{" "}
-            <span className="font-normal text-gray-400">(optional)</span>
+            <span className="font-normal text-black">(optional)</span>
           </span>
         </label>
         <Controller
@@ -481,10 +481,10 @@ export default function CreateHotelForm({
           ) : (
             <>
               <Upload className="mb-2 h-8 w-8 text-gray-300" />
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-black dark:text-gray-400">
                 Click or drag to upload
               </p>
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-black">
                 JPEG, PNG or WebP — max 10 MB
               </p>
             </>

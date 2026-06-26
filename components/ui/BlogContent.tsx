@@ -175,7 +175,7 @@ export function BlogContent({
                   className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                     activeCategory === cat
                       ? "bg-primary-600 text-white"
-                      : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                      : "text-black hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
                   }`}
                 >
                   {cat}
@@ -191,7 +191,7 @@ export function BlogContent({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {posts.length === 0 ? (
             <div className="py-16 text-center">
-              <p className="text-gray-500 dark:text-gray-400">
+              <p className="text-black dark:text-gray-400">
                 No articles found{query ? ` for "${query}"` : ""}.
               </p>
               {hasFilters && (
@@ -227,22 +227,22 @@ export function BlogContent({
                   <div className="flex flex-1 flex-col p-6">
                     <div className="mb-3 flex flex-wrap items-center gap-2">
                       <span
-                        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[post.category] ?? "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"}`}
+                        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${CATEGORY_COLORS[post.category] ?? "bg-gray-100 text-black dark:bg-gray-800 dark:text-gray-400"}`}
                       >
                         <Tag className="h-3 w-3" />
                         {post.category}
                       </span>
-                      <span className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+                      <span className="flex items-center gap-1 text-xs text-black dark:text-gray-500">
                         <Clock className="h-3 w-3" />
                         {post.readTime} min read
                       </span>
                     </div>
 
-                    <h2 className="text-base font-bold leading-snug text-gray-900 dark:text-white">
+                    <h2 className="text-base font-bold leading-snug text-black dark:text-white">
                       {post.title}
                     </h2>
 
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-black dark:text-gray-400">
                       {post.excerpt}
                     </p>
 
@@ -252,17 +252,17 @@ export function BlogContent({
                           <User className="h-4 w-4 text-primary-600 dark:text-primary-400" />
                         </div>
                         <div>
-                          <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">
+                          <p className="text-xs font-semibold text-black dark:text-gray-200">
                             {post.authorName}
                           </p>
                           {post.authorTitle && (
-                            <p className="text-xs text-gray-400 dark:text-gray-500">
+                            <p className="text-xs text-black dark:text-gray-500">
                               {post.authorTitle}
                             </p>
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+                      <div className="flex items-center gap-1 text-xs text-black dark:text-gray-500">
                         <Calendar className="h-3 w-3" />
                         {formatDate(post.publishedAt)}
                       </div>
@@ -287,14 +287,14 @@ export function BlogContent({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
               <div className="flex items-center gap-3">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-black dark:text-gray-400">
                   Page {currentPage} of {totalPages} &mdash; {total} article{total !== 1 ? "s" : ""}
                 </p>
                 <select
                   value={currentLimit}
                   onChange={(e) => handleLimitChange(Number(e.target.value))}
                   disabled={isPending}
-                  className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm text-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
+                  className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm text-black transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
                 >
                   {LIMITS.map((l) => (
                     <option key={l} value={l}>{l} per page</option>
@@ -307,7 +307,7 @@ export function BlogContent({
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1 || isPending}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-black transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
                   aria-label="Previous page"
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -316,7 +316,7 @@ export function BlogContent({
                 {/* Page numbers */}
                 {pageNumbers().map((p, i) =>
                   p === "…" ? (
-                    <span key={`ellipsis-${i}`} className="flex h-9 w-9 items-center justify-center text-sm text-gray-400">
+                    <span key={`ellipsis-${i}`} className="flex h-9 w-9 items-center justify-center text-sm text-black">
                       …
                     </span>
                   ) : (
@@ -327,7 +327,7 @@ export function BlogContent({
                       className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors disabled:cursor-not-allowed ${
                         p === currentPage
                           ? "bg-primary-600 text-white"
-                          : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
+                          : "border border-gray-200 bg-white text-black hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
                       }`}
                     >
                       {p}
@@ -339,7 +339,7 @@ export function BlogContent({
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages || isPending}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-black transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
                   aria-label="Next page"
                 >
                   <ChevronRight className="h-4 w-4" />

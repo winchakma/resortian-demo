@@ -38,7 +38,7 @@ export function HotelCard({ hotel }: HotelCardProps) {
             {hotel.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-white/95 px-2.5 py-0.5 text-[11px] font-bold text-gray-900 backdrop-blur-sm dark:bg-gray-900/90 dark:text-gray-100"
+                className="rounded-full bg-white/95 px-2.5 py-0.5 text-[11px] font-bold text-black backdrop-blur-sm dark:bg-gray-900/90 dark:text-gray-100"
               >
                 {tag}
               </span>
@@ -50,14 +50,14 @@ export function HotelCard({ hotel }: HotelCardProps) {
         <div className="p-4 flex-1 flex flex-col justify-between">
           <div>
             {/* Hotel name */}
-            <h3 className="mb-1.5 text-base font-extrabold text-gray-900 dark:text-white line-clamp-1 group-hover:text-primary-600 transition-colors leading-tight">
+            <h3 className="mb-1.5 text-base font-extrabold text-black dark:text-white line-clamp-1 group-hover:text-primary-600 transition-colors leading-tight">
               {hotel.name}
             </h3>
 
             {/* Location */}
             <div className="mb-3 flex items-center gap-1">
-              <MapPin className="h-3.5 w-3.5 shrink-0 text-gray-600 dark:text-gray-400" />
-              <span className="truncate text-sm font-medium text-gray-700 dark:text-gray-300">
+              <MapPin className="h-3.5 w-3.5 shrink-0 text-black dark:text-gray-400" />
+              <span className="truncate text-sm font-medium text-black dark:text-gray-300">
                 {hotel.location}
               </span>
             </div>
@@ -67,10 +67,10 @@ export function HotelCard({ hotel }: HotelCardProps) {
               <span className="inline-flex items-center justify-center rounded bg-primary-600 px-1.5 py-0.5 text-sm font-bold text-white">
                 {hotel.rating}
               </span>
-              <span className="text-sm font-bold text-gray-900 dark:text-white">
+              <span className="text-sm font-bold text-black dark:text-white">
                 {ratingText}
               </span>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <span className="text-sm font-medium text-black dark:text-gray-300">
                 ({hotel.reviewCount} reviews)
               </span>
             </div>
@@ -87,13 +87,13 @@ export function HotelCard({ hotel }: HotelCardProps) {
 
             <div className="flex items-end justify-between">
               <div>
-                <div className="text-[10px] font-bold tracking-widest uppercase text-gray-500 dark:text-gray-400 mb-0.5">
+                <div className="text-[10px] font-bold tracking-widest uppercase text-black dark:text-gray-400 mb-0.5">
                   Resortian Book &amp; Go
                 </div>
-                <div className="text-xl font-extrabold text-gray-900 dark:text-white leading-none">
+                <div className="text-xl font-extrabold text-black dark:text-white leading-none">
                   ৳{hotel.price.toLocaleString()}
                 </div>
-                <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-0.5">
+                <div className="text-sm font-medium text-black dark:text-gray-300 mt-0.5">
                   per night
                 </div>
               </div>

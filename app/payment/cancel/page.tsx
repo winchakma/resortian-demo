@@ -23,20 +23,20 @@ export default async function PaymentCancelPage({
               </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-black dark:text-white">
               Payment Cancelled
             </h1>
-            <p className="mt-3 text-gray-500 dark:text-gray-400">
+            <p className="mt-3 text-black dark:text-gray-400">
               You cancelled the payment. Your booking has not been confirmed.
               You can go back and try again whenever you&apos;re ready.
             </p>
 
             {reference && (
               <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p className="text-xs text-black dark:text-gray-500">
                   Booking Reference
                 </p>
-                <p className="mt-0.5 font-mono text-lg font-semibold text-gray-900 dark:text-white">
+                <p className="mt-0.5 font-mono text-lg font-semibold text-black dark:text-white">
                   {reference}
                 </p>
               </div>
@@ -52,7 +52,7 @@ export default async function PaymentCancelPage({
               </Link>
               <Link
                 href="/"
-                className="flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white py-3.5 font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+                className="flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white py-3.5 font-semibold text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Back to Home
               </Link>

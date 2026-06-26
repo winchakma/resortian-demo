@@ -93,15 +93,15 @@ function AccordionItem({ faq }: { faq: FAQ }) {
         onClick={() => setOpen((o) => !o)}
         className="flex w-full items-start justify-between gap-4 py-4 text-left"
       >
-        <span className="text-sm font-medium text-gray-900 dark:text-white">
+        <span className="text-sm font-medium text-black dark:text-white">
           {faq.q}
         </span>
         <ChevronDown
-          className={`mt-0.5 h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`mt-0.5 h-4 w-4 shrink-0 text-black transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
       {open && (
-        <p className="pb-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+        <p className="pb-4 text-sm leading-relaxed text-black dark:text-gray-400">
           {faq.a}
         </p>
       )}
@@ -141,13 +141,13 @@ export function HelpContent() {
 
           {/* Search */}
           <div className="relative mx-auto mt-8 max-w-xl">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-black" />
             <input
               type="text"
               placeholder="Search questions…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-full border-0 bg-white py-3.5 pl-12 pr-5 text-sm text-gray-900 shadow-lg placeholder-gray-400 outline-none focus:ring-2 focus:ring-primary-300"
+              className="w-full rounded-full border-0 bg-white py-3.5 pl-12 pr-5 text-sm text-black shadow-lg placeholder-gray-400 outline-none focus:ring-2 focus:ring-primary-300"
             />
           </div>
         </div>
@@ -165,7 +165,7 @@ export function HelpContent() {
                   className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                     activeCategory === cat.id
                       ? "bg-primary-600 text-white"
-                      : "border border-gray-200 bg-white text-gray-600 hover:border-primary-300 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:text-primary-400"
+                      : "border border-gray-200 bg-white text-black hover:border-primary-300 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:text-primary-400"
                   }`}
                 >
                   {cat.icon}
@@ -177,7 +177,7 @@ export function HelpContent() {
 
           <div className="rounded-2xl border border-gray-200 bg-white px-6 dark:border-gray-700 dark:bg-gray-900">
             {filteredFaqs.length === 0 ? (
-              <p className="py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+              <p className="py-8 text-center text-sm text-black dark:text-gray-500">
                 No results for &ldquo;{query}&rdquo; — try different keywords.
               </p>
             ) : (
@@ -187,10 +187,10 @@ export function HelpContent() {
 
           {/* Contact strip */}
           <div className="mt-10 rounded-2xl border border-gray-200 bg-white p-6 text-center dark:border-gray-700 dark:bg-gray-900">
-            <p className="font-semibold text-gray-900 dark:text-white">
+            <p className="font-semibold text-black dark:text-white">
               Still have questions?
             </p>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-black dark:text-gray-400">
               Our support team is available daily from 8 am to 10 pm Bangladesh
               Standard Time.
             </p>

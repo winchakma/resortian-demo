@@ -50,7 +50,7 @@ export default function RichTextEditor({
   }, [onChange]);
 
   const btnCls =
-    "p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition-colors";
+    "p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-gray-400 transition-colors";
 
   return (
     <div
@@ -98,7 +98,7 @@ export default function RichTextEditor({
         onInput={handleInput}
         data-placeholder={placeholder}
         className={[
-          "px-4 py-3 text-sm text-gray-900 outline-none dark:text-white",
+          "px-4 py-3 text-sm text-black outline-none dark:text-white",
           "[&_ul]:ml-5 [&_ul]:list-disc [&_ol]:ml-5 [&_ol]:list-decimal",
           "[&_b]:font-semibold [&_strong]:font-semibold [&_i]:italic [&_em]:italic",
           "before:pointer-events-none before:text-gray-400 dark:before:text-gray-500",

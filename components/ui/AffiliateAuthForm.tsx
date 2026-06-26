@@ -45,7 +45,7 @@ type RegisterData = yup.InferType<typeof registerSchema>;
 // ─── Shared styles ─────────────────────────────────────────────────────────────
 
 const inputCls =
-  "w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-primary-400 dark:focus:bg-gray-900";
+  "w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm text-black outline-none transition-colors placeholder:text-gray-400 focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-primary-400 dark:focus:bg-gray-900";
 
 function Field({
   label,
@@ -58,7 +58,7 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+      <label className="text-sm font-medium text-black dark:text-gray-300">
         {label}
       </label>
       {children}
@@ -98,7 +98,7 @@ function AffiliateLoginForm({ onSuccess }: { onSuccess: () => void }) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Field label="Phone number" error={errors.identifier?.message}>
         <div className="relative">
-          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("identifier")}
             type="tel"
@@ -110,7 +110,7 @@ function AffiliateLoginForm({ onSuccess }: { onSuccess: () => void }) {
 
       <Field label="Password" error={errors.password?.message}>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("password")}
             type={showPw ? "text" : "password"}
@@ -120,7 +120,7 @@ function AffiliateLoginForm({ onSuccess }: { onSuccess: () => void }) {
           <button
             type="button"
             onClick={() => setShowPw((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-black hover:text-gray-600 dark:hover:text-gray-300"
           >
             {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -182,7 +182,7 @@ function AffiliateRegisterForm({ onSuccess }: { onSuccess: () => void }) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Field label="Full name" error={errors.name?.message}>
         <div className="relative">
-          <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("name")}
             type="text"
@@ -194,7 +194,7 @@ function AffiliateRegisterForm({ onSuccess }: { onSuccess: () => void }) {
 
       <Field label="Phone number" error={errors.phone?.message}>
         <div className="relative">
-          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("phone")}
             type="tel"
@@ -206,7 +206,7 @@ function AffiliateRegisterForm({ onSuccess }: { onSuccess: () => void }) {
 
       <Field label="Email address (optional)" error={errors.email?.message}>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("email")}
             type="email"
@@ -218,7 +218,7 @@ function AffiliateRegisterForm({ onSuccess }: { onSuccess: () => void }) {
 
       <Field label="Password" error={errors.password?.message}>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("password")}
             type={showPw ? "text" : "password"}
@@ -228,7 +228,7 @@ function AffiliateRegisterForm({ onSuccess }: { onSuccess: () => void }) {
           <button
             type="button"
             onClick={() => setShowPw((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-black hover:text-gray-600 dark:hover:text-gray-300"
           >
             {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -237,7 +237,7 @@ function AffiliateRegisterForm({ onSuccess }: { onSuccess: () => void }) {
 
       <Field label="Confirm password" error={errors.confirmPassword?.message}>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
           <input
             {...register("confirmPassword")}
             type={showConfirm ? "text" : "password"}
@@ -247,7 +247,7 @@ function AffiliateRegisterForm({ onSuccess }: { onSuccess: () => void }) {
           <button
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-black hover:text-gray-600 dark:hover:text-gray-300"
           >
             {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -277,10 +277,10 @@ export function AffiliateAuthForm() {
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-600">
           <Sparkles className="h-7 w-7 text-white" />
         </div>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+        <h3 className="text-lg font-bold text-black dark:text-white">
           You&apos;re in!
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-black dark:text-gray-400">
           Your affiliate account is active. Your personal promo code will appear
           in your profile dashboard shortly.
         </p>
@@ -298,8 +298,8 @@ export function AffiliateAuthForm() {
             onClick={() => setTab(t)}
             className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
               tab === t
-                ? "bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white"
-                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                ? "bg-white text-black shadow-sm dark:bg-gray-700 dark:text-white"
+                : "text-black hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             }`}
           >
             {t === "register" ? "Join Now" : "Sign In"}

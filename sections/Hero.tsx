@@ -38,11 +38,11 @@ export function BangladeshStaysWithYou() {
     <section className="bg-white py-4 dark:bg-gray-950 sm:py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl flex items-center gap-2">
+          <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl flex items-center gap-2">
             <span className="h-6 w-1.5 rounded-full bg-primary-600"></span>
             Bangladesh Stays With You
           </h2>
-          <p className="text-base font-medium text-gray-700 dark:text-gray-300 mt-1">
+          <p className="text-base font-medium text-black dark:text-gray-300 mt-1">
             Discover how Bangladesh leaves its mark on you through adventure, food, culture, and leisure.
           </p>
         </div>

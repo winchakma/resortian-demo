@@ -100,10 +100,10 @@ export default function VendorBookingsList() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-black dark:text-white">
             Guest Bookings
           </h3>
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-black dark:text-gray-500">
             {loading
               ? "Loading…"
               : `${total} booking${total !== 1 ? "s" : ""} across your hotels`}
@@ -113,7 +113,7 @@ export default function VendorBookingsList() {
           type="button"
           onClick={() => loadBookings(page, statusFilter, query)}
           disabled={loading}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-black transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
           title="Refresh"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -124,13 +124,13 @@ export default function VendorBookingsList() {
         {/* Search */}
         <div className="border-b border-gray-100 px-5 py-4 dark:border-gray-800">
           <form onSubmit={handleSearch} className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by booking reference…"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2 pl-9 pr-8 text-sm text-gray-900 outline-none transition-colors focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2 pl-9 pr-8 text-sm text-black outline-none transition-colors focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
             />
             {query && (
               <button
@@ -140,7 +140,7 @@ export default function VendorBookingsList() {
                   setPage(1);
                   loadBookings(1, statusFilter, "");
                 }}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-black hover:text-gray-600"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -160,7 +160,7 @@ export default function VendorBookingsList() {
                 className={`flex shrink-0 items-center gap-1.5 border-b-2 px-5 py-3 text-sm font-medium transition-colors ${
                   active
                     ? "border-green-600 text-green-700 dark:border-green-400 dark:text-green-400"
-                    : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                    : "border-transparent text-black hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                 }`}
               >
                 {tab.label}
@@ -177,12 +177,12 @@ export default function VendorBookingsList() {
         ) : bookings.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-              <CalendarDays className="h-7 w-7 text-gray-400" />
+              <CalendarDays className="h-7 w-7 text-black" />
             </div>
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <p className="text-sm font-semibold text-black dark:text-gray-300">
               No bookings found
             </p>
-            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+            <p className="mt-1 text-xs text-black dark:text-gray-500">
               {query
                 ? "Try a different reference."
                 : "No bookings in this category yet."}
@@ -205,7 +205,7 @@ export default function VendorBookingsList() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 dark:border-gray-800">
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-black">
               Page {page} of {totalPages}
             </p>
             <div className="flex gap-2">
@@ -213,7 +213,7 @@ export default function VendorBookingsList() {
                 type="button"
                 onClick={() => goToPage(page - 1)}
                 disabled={page <= 1 || loading}
-                className="rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-40 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                className="rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-black transition-colors hover:bg-gray-50 disabled:opacity-40 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
               >
                 Previous
               </button>
@@ -221,7 +221,7 @@ export default function VendorBookingsList() {
                 type="button"
                 onClick={() => goToPage(page + 1)}
                 disabled={page >= totalPages || loading}
-                className="rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-40 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                className="rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-black transition-colors hover:bg-gray-50 disabled:opacity-40 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
               >
                 Next
               </button>

@@ -46,7 +46,7 @@ const CATEGORY_CONFIG: Record<
   OTHER: {
     label: "Other",
     icon: <Files className="h-3 w-3" />,
-    pill: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
+    pill: "bg-gray-100 text-black dark:bg-gray-800 dark:text-gray-300",
   },
 };
 
@@ -83,10 +83,10 @@ export default function VendorDocumentsSection() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-black dark:text-white">
             Documents
           </h3>
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-black dark:text-gray-500">
             Notices, announcements & files shared by Resortian admins
           </p>
         </div>
@@ -94,7 +94,7 @@ export default function VendorDocumentsSection() {
           type="button"
           onClick={load}
           disabled={loading}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-black transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
           title="Refresh"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -110,12 +110,12 @@ export default function VendorDocumentsSection() {
       {docs && docs.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 py-20 text-center dark:border-gray-700">
           <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-            <Files className="h-7 w-7 text-gray-400" />
+            <Files className="h-7 w-7 text-black" />
           </div>
-          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <p className="text-sm font-semibold text-black dark:text-gray-300">
             No documents yet
           </p>
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-black">
             When Resortian admins share files with you, they will show up here.
           </p>
         </div>
@@ -175,15 +175,15 @@ export default function VendorDocumentsSection() {
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col gap-1 p-3">
-                  <p className="line-clamp-2 text-sm font-semibold text-gray-900 dark:text-white">
+                  <p className="line-clamp-2 text-sm font-semibold text-black dark:text-white">
                     {doc.title}
                   </p>
                   {doc.description && (
-                    <p className="line-clamp-2 text-xs text-gray-500 dark:text-gray-400">
+                    <p className="line-clamp-2 text-xs text-black dark:text-gray-400">
                       {doc.description}
                     </p>
                   )}
-                  <p className="mt-auto pt-1 text-[11px] text-gray-400 dark:text-gray-500">
+                  <p className="mt-auto pt-1 text-[11px] text-black dark:text-gray-500">
                     {fmtDate(doc.createdAt)}
                     {doc.uploadedBy ? ` · by ${doc.uploadedBy.name}` : ""}
                   </p>

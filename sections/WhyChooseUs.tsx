@@ -46,10 +46,10 @@ export function WhyChooseUs() {
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-600 transition-colors group-hover:bg-primary-600 group-hover:text-white dark:bg-primary-900/50 dark:text-primary-400 dark:group-hover:bg-primary-600 dark:group-hover:text-white">
                 <feature.icon className="h-6 w-6" />
               </div>
-              <h3 className="mb-2 text-base font-extrabold text-gray-900 dark:text-white">
+              <h3 className="mb-2 text-base font-extrabold text-black dark:text-white">
                 {feature.title}
               </h3>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <p className="text-sm font-medium text-black dark:text-gray-300">
                 {feature.description}
               </p>
             </div>

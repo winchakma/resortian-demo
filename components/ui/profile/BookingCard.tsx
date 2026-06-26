@@ -141,11 +141,11 @@ export default function BookingCard({ booking }: { booking: Booking }) {
             <div className="min-w-0">
               <Link
                 href={`/hotels/${booking.hotelSlug}`}
-                className="text-sm font-semibold text-gray-900 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400"
+                className="text-sm font-semibold text-black transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400"
               >
                 {booking.hotelName}
               </Link>
-              <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+              <div className="mt-0.5 flex items-center gap-1 text-xs text-black dark:text-gray-500">
                 <MapPin className="h-3 w-3" />
                 {booking.hotelLocation}
               </div>
@@ -157,7 +157,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
               {cfg.label}
             </span>
           </div>
-          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-black dark:text-gray-400">
             <span className="flex items-center gap-1">
               <Building2 className="h-3.5 w-3.5" />
               {booking.roomName}
@@ -173,10 +173,10 @@ export default function BookingCard({ booking }: { booking: Booking }) {
           </div>
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap gap-2">
-              <span className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 font-mono text-[11px] font-semibold text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+              <span className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 font-mono text-[11px] font-semibold text-black dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                 {booking.reference}
               </span>
-              <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+              <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-black dark:bg-gray-800 dark:text-gray-400">
                 {booking.paymentMethod === "stripe" ? (
                   <CreditCard className="h-3 w-3" />
                 ) : (
@@ -219,7 +219,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
               )}
               {showEarlyConfirm && (
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                  <span className="text-[11px] text-black dark:text-gray-400">
                     Save {earlyDaysPreview} day{earlyDaysPreview !== 1 ? "s" : ""}?
                   </span>
                   <button
@@ -234,7 +234,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                   <button
                     type="button"
                     onClick={() => setShowEarlyConfirm(false)}
-                    className="rounded-lg border border-gray-200 px-2.5 py-1 text-[11px] font-medium text-gray-500 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                    className="rounded-lg border border-gray-200 px-2.5 py-1 text-[11px] font-medium text-black transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
                   >
                     Cancel
                   </button>
@@ -301,15 +301,15 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                     key={col.label}
                     className={`px-4 py-3 ${col.highlight ? "bg-primary-50/60 dark:bg-primary-950/20" : "bg-gray-50/60 dark:bg-gray-800/30"}`}
                   >
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                    <p className="text-[10px] text-black dark:text-gray-500">
                       {col.label}
                     </p>
                     <p
-                      className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-primary-700 dark:text-primary-400" : "text-gray-800 dark:text-gray-200"}`}
+                      className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-primary-700 dark:text-primary-400" : "text-black dark:text-gray-200"}`}
                     >
                       {col.value}
                     </p>
-                    <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                    <p className="mt-0.5 text-[10px] text-black dark:text-gray-500">
                       {col.sub}
                     </p>
                   </div>
@@ -329,7 +329,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                 </div>
               )}
               <div className="flex items-center justify-between border-t border-gray-100 px-4 py-2 dark:border-gray-800">
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p className="text-xs text-black dark:text-gray-500">
                   Booked on {fmtDate(booking.bookedOn)}
                 </p>
                 {localStatus === "upcoming" && (
@@ -346,7 +346,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
                 <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
                   {showReview ? (
                     <div className="space-y-3">
-                      <p className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                      <p className="text-xs font-semibold text-black dark:text-gray-300">
                         Review {booking.hotelName}
                       </p>
                       <ReviewForm

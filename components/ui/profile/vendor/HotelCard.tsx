@@ -69,12 +69,12 @@ export default function HotelCard({
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div className="min-w-0">
                 <h4
-                  className="cursor-pointer font-semibold text-gray-900 underline-offset-2 hover:underline dark:text-white"
+                  className="cursor-pointer font-semibold text-black underline-offset-2 hover:underline dark:text-white"
                   onClick={() => setShowHotelDetail(true)}
                 >
                   {hotel.name}
                 </h4>
-                <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+                <div className="mt-0.5 flex items-center gap-1 text-xs text-black dark:text-gray-500">
                   <MapPin className="h-3 w-3 shrink-0" />
                   {hotel.location}
                   {hotel.destination && (
@@ -86,7 +86,7 @@ export default function HotelCard({
               <ApprovalBadge status={hotel.approvalStatus} />
             </div>
 
-            <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+            <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-black dark:text-gray-400">
               <span className="flex items-center gap-1">
                 ৳{hotel.price.toLocaleString()}/night
               </span>
@@ -118,13 +118,13 @@ export default function HotelCard({
           <button
             type="button"
             onClick={onToggle}
-            className="flex items-center gap-1.5 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            className="flex items-center gap-1.5 text-sm font-medium text-black transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >
             <ChevronDown
               className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`}
             />
             {expanded ? "Hide" : "Show"} Rooms
-            <span className="ml-0.5 rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+            <span className="ml-0.5 rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-black dark:bg-gray-800 dark:text-gray-400">
               {hotel._count.rooms}
             </span>
           </button>
@@ -132,7 +132,7 @@ export default function HotelCard({
             <button
               type="button"
               onClick={onEdit}
-              className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-black transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               <Pencil className="h-3.5 w-3.5" />
               Edit
@@ -162,7 +162,7 @@ export default function HotelCard({
             {hotel.rooms.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-center">
                 <BedDouble className="mb-2 h-8 w-8 text-gray-200 dark:text-gray-700" />
-                <p className="text-sm text-gray-400 dark:text-gray-500">
+                <p className="text-sm text-black dark:text-gray-500">
                   No rooms added yet
                 </p>
                 <button

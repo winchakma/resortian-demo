@@ -18,10 +18,10 @@ export function BestTimeToBook() {
     <section className="py-16 bg-gray-50 dark:bg-gray-900/50 border-t border-b border-gray-100 dark:border-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+          <h2 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
             Discover the best time to book
           </h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-sm text-black dark:text-gray-400">
             Compare monthly price trends and lock in the best deals for your trip
           </p>
         </div>
@@ -58,7 +58,7 @@ export function BestTimeToBook() {
             <div className="p-5 flex items-center justify-between border-t border-gray-150 dark:border-gray-800">
               <div>
                 <span className="text-xs text-gray-450 dark:text-gray-400 block">Avg. Price / Night</span>
-                <span className="text-lg font-bold text-gray-900 dark:text-white">৳2,400</span>
+                <span className="text-lg font-bold text-black dark:text-white">৳2,400</span>
               </div>
               <Link
                 href="/hotels?location=Cox%27s%20Bazar"
@@ -82,8 +82,8 @@ export function BestTimeToBook() {
                 {monthsData.map((m) => (
                   <div key={m.name} className="flex items-center justify-between gap-4 py-1">
                     <div className="flex items-center gap-3 w-1/4">
-                      <Calendar className="h-4 w-4 text-gray-400 shrink-0" />
-                      <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{m.name}</span>
+                      <Calendar className="h-4 w-4 text-black shrink-0" />
+                      <span className="text-sm font-semibold text-black dark:text-gray-200">{m.name}</span>
                     </div>
 
                     {/* Progress Bar visual indicator */}
@@ -97,7 +97,7 @@ export function BestTimeToBook() {
                     </div>
 
                     <div className="flex items-center gap-3 w-[120px] justify-end">
-                      <span className="text-sm font-bold text-gray-900 dark:text-white">{m.price}</span>
+                      <span className="text-sm font-bold text-black dark:text-white">{m.price}</span>
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                           m.status === "Cheap"

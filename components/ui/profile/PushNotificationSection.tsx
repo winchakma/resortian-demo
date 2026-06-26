@@ -86,10 +86,10 @@ export default function PushNotificationSection() {
           <Bell className="h-4 w-4 text-primary-600 dark:text-primary-400" />
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-black dark:text-white">
             Push Notifications
           </h3>
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-black dark:text-gray-500">
             Get real-time updates on your bookings
           </p>
         </div>
@@ -112,10 +112,10 @@ export default function PushNotificationSection() {
         ) : (
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
+              <p className="text-sm font-medium text-black dark:text-white">
                 Stay in the loop
               </p>
-              <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-0.5 text-xs text-black dark:text-gray-400">
                 Receive instant alerts for booking confirmations, reminders, and
                 special offers.
               </p>

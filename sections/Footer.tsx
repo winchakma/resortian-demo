@@ -47,12 +47,12 @@ export async function Footer() {
               height={100}
               className="hidden rounded-lg dark:block"
             /> */}
-            <p className="mt-4 max-w-xs text-sm font-medium text-gray-800 dark:text-gray-200">
+            <p className="mt-4 max-w-xs text-sm font-medium text-black dark:text-gray-200">
               Resortian.com is trademark of{" "}
               <strong>Resortian Tourism Services</strong>, officially registered
               under Dhaka North City Corporation.
             </p>
-            <p className="mt-2 max-w-xs text-sm font-medium text-gray-800 dark:text-gray-200">
+            <p className="mt-2 max-w-xs text-sm font-medium text-black dark:text-gray-200">
               Our Office: Army Building, Dorji Bari, Uttarpara, Khilkhet,
               Dhaka 1229
             </p>
@@ -62,7 +62,7 @@ export async function Footer() {
                   key={social.label}
                   href={social.href}
                   target="_blank"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-black transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
                   aria-label={social.label}
                 >
                   <svg
@@ -83,7 +83,7 @@ export async function Footer() {
 
           {columns.map((column) => (
             <div key={column.title}>
-              <h3 className="text-base font-extrabold text-gray-900 dark:text-white">
+              <h3 className="text-base font-extrabold text-black dark:text-white">
                 {column.title}
               </h3>
               <ul className="mt-4 space-y-2.5">
@@ -91,7 +91,7 @@ export async function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm font-medium text-gray-800 transition-colors hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
+                      className="text-sm font-medium text-black transition-colors hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
                     >
                       {link.label}
                     </a>
@@ -103,25 +103,25 @@ export async function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-gray-200 pt-8 dark:border-gray-800 sm:flex-row">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <p className="text-sm font-medium text-black dark:text-gray-300">
             &copy; {new Date().getFullYear()} Resortian. All rights reserved.
           </p>
           <div className="flex gap-6">
             <a
               href="/privacy"
-              className="text-sm font-medium text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="text-sm font-medium text-black transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
             >
               Privacy Policy
             </a>
             <a
               href="/terms"
-              className="text-sm font-medium text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="text-sm font-medium text-black transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
             >
               Terms of Service
             </a>
             <a
               href="/sitemap.xml"
-              className="text-sm font-medium text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              className="text-sm font-medium text-black transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
             >
               Sitemap
             </a>

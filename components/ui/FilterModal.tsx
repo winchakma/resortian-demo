@@ -127,12 +127,12 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
       <div className="relative max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white shadow-2xl dark:bg-gray-800 sm:max-w-xl">
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 dark:border-gray-700 dark:bg-gray-800">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h2 className="text-lg font-semibold text-black dark:text-white">
             Filters
           </h2>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-black transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             aria-label="Close filters"
           >
             <X className="h-5 w-5" />
@@ -142,14 +142,14 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
         <div className="space-y-6 p-6">
           {/* Sort By */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+            <label className="mb-2 block text-sm font-medium text-black dark:text-white">
               Sort By
             </label>
             <div className="relative">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full appearance-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 pr-10 text-sm text-gray-900 outline-none transition-colors focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                className="w-full appearance-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 pr-10 text-sm text-black outline-none transition-colors focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               >
                 <option value="">Recommended</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -157,13 +157,13 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
                 <option value="rating">Highest Rating</option>
                 <option value="newest">Newest First</option>
               </select>
-              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
             </div>
           </div>
 
           {/* Price Range */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+            <label className="mb-2 block text-sm font-medium text-black dark:text-white">
               Price Range (BDT)
             </label>
             <div className="flex items-center gap-3">
@@ -173,16 +173,16 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
                 min="0"
                 value={priceMin}
                 onChange={(e) => setPriceMin(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none transition-colors focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               />
-              <span className="shrink-0 text-sm text-gray-400">to</span>
+              <span className="shrink-0 text-sm text-black">to</span>
               <input
                 type="number"
                 placeholder="Max"
                 min="0"
                 value={priceMax}
                 onChange={(e) => setPriceMax(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none transition-colors focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               />
             </div>
 
@@ -253,7 +253,7 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
                   </div>
 
                   {/* Min / max labels */}
-                  <div className="mt-2 flex justify-between text-xs text-gray-400 dark:text-gray-500">
+                  <div className="mt-2 flex justify-between text-xs text-black dark:text-gray-500">
                     <span>৳0</span>
                     <span>৳50,000</span>
                   </div>
@@ -264,7 +264,7 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
 
           {/* Star Rating */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+            <label className="mb-2 block text-sm font-medium text-black dark:text-white">
               Star Rating
             </label>
             <div className="flex flex-wrap gap-2">
@@ -276,7 +276,7 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
                   className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                     selectedStars.includes(star)
                       ? "border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400"
-                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500"
+                      : "border-gray-200 bg-white text-black hover:border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500"
                   }`}
                 >
                   {star}
@@ -294,7 +294,7 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
 
           {/* Amenities */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+            <label className="mb-2 block text-sm font-medium text-black dark:text-white">
               Amenities
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -309,7 +309,7 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
                     onChange={() => toggleAmenity(amenity)}
                     className="h-4 w-4 rounded border-gray-300 text-primary-600 accent-primary-600"
                   />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                  <span className="text-sm text-black dark:text-gray-300">
                     {amenity}
                   </span>
                 </label>
@@ -323,7 +323,7 @@ export function FilterModal({ isOpen, onClose, initialValues, onApply }: FilterM
           <button
             type="button"
             onClick={handleReset}
-            className="text-sm font-medium text-gray-600 underline-offset-2 transition-colors hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
+            className="text-sm font-medium text-black underline-offset-2 transition-colors hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
           >
             Reset all{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
           </button>

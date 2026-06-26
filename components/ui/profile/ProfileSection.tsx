@@ -174,10 +174,10 @@ export default function ProfileSection({
                 {stat.icon}
               </div>
               <div>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">
+                <p className="text-xl font-bold text-black dark:text-white">
                   {stat.value}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-black dark:text-gray-400">
                   {stat.label}
                 </p>
               </div>
@@ -189,10 +189,10 @@ export default function ProfileSection({
       <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 dark:border-gray-800">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-black dark:text-white">
               Personal Information
             </h3>
-            <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+            <p className="mt-0.5 text-xs text-black dark:text-gray-500">
               Your account details
             </p>
           </div>
@@ -201,7 +201,7 @@ export default function ProfileSection({
               <button
                 type="button"
                 onClick={handleEditClick}
-                className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 dark:border-gray-700 dark:text-gray-400 dark:hover:border-primary-700 dark:hover:bg-primary-950/30 dark:hover:text-primary-400"
+                className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-semibold text-black transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 dark:border-gray-700 dark:text-gray-400 dark:hover:border-primary-700 dark:hover:bg-primary-950/30 dark:hover:text-primary-400"
               >
                 <Edit2 className="h-3 w-3" />
                 Edit
@@ -211,7 +211,7 @@ export default function ProfileSection({
               <button
                 type="button"
                 onClick={handleCancel}
-                className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-semibold text-black transition-colors hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
               >
                 <X className="h-3 w-3" />
                 Cancel
@@ -232,7 +232,7 @@ export default function ProfileSection({
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className={labelCls()}>
-                  <User className="mr-1.5 inline h-3.5 w-3.5 text-gray-400" />
+                  <User className="mr-1.5 inline h-3.5 w-3.5 text-black" />
                   Full Name
                 </label>
                 <input
@@ -245,23 +245,23 @@ export default function ProfileSection({
               </div>
               <div>
                 <label className={labelCls()}>
-                  <Phone className="mr-1.5 inline h-3.5 w-3.5 text-gray-400" />
+                  <Phone className="mr-1.5 inline h-3.5 w-3.5 text-black" />
                   Phone Number
                 </label>
                 <input
                   type="tel"
                   value={user.phone}
                   disabled
-                  className="w-full cursor-not-allowed rounded-xl border border-gray-200 bg-gray-100 px-4 py-3 text-sm text-gray-400 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-500"
+                  className="w-full cursor-not-allowed rounded-xl border border-gray-200 bg-gray-100 px-4 py-3 text-sm text-black dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-500"
                 />
-                <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">
+                <p className="mt-1.5 text-xs text-black dark:text-gray-500">
                   Phone number cannot be changed as it is used for login.
                 </p>
               </div>
             </div>
             <div>
               <label className={labelCls()}>
-                <Mail className="mr-1.5 inline h-3.5 w-3.5 text-gray-400" />
+                <Mail className="mr-1.5 inline h-3.5 w-3.5 text-black" />
                 Email Address
               </label>
               <input
@@ -274,7 +274,7 @@ export default function ProfileSection({
             </div>
             <div>
               <label className={labelCls()}>
-                <MapPin className="mr-1.5 inline h-3.5 w-3.5 text-gray-400" />
+                <MapPin className="mr-1.5 inline h-3.5 w-3.5 text-black" />
                 Address
               </label>
               <input
@@ -288,7 +288,7 @@ export default function ProfileSection({
             {isVendor && (
               <div>
                 <label className={labelCls()}>
-                  <Briefcase className="mr-1.5 inline h-3.5 w-3.5 text-gray-400" />
+                  <Briefcase className="mr-1.5 inline h-3.5 w-3.5 text-black" />
                   Designation
                 </label>
                 <input
@@ -313,7 +313,7 @@ export default function ProfileSection({
                 type="button"
                 onClick={handleCancel}
                 disabled={isSubmitting}
-                className="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                className="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-gray-100 disabled:cursor-not-allowed dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
               >
                 Cancel
               </button>
@@ -323,36 +323,36 @@ export default function ProfileSection({
           <div className="divide-y divide-gray-100 dark:divide-gray-800">
             {[
               {
-                icon: <User className="h-4 w-4 text-gray-400" />,
+                icon: <User className="h-4 w-4 text-black" />,
                 label: "Full Name",
                 value: user.name,
               },
               {
-                icon: <Mail className="h-4 w-4 text-gray-400" />,
+                icon: <Mail className="h-4 w-4 text-black" />,
                 label: "Email Address",
                 value: user.email || "—",
               },
               {
-                icon: <Phone className="h-4 w-4 text-gray-400" />,
+                icon: <Phone className="h-4 w-4 text-black" />,
                 label: "Phone Number",
                 value: user.phone,
               },
               {
-                icon: <MapPin className="h-4 w-4 text-gray-400" />,
+                icon: <MapPin className="h-4 w-4 text-black" />,
                 label: "Address",
                 value: user.address || "—",
               },
               ...(isVendor
                 ? [
                     {
-                      icon: <Briefcase className="h-4 w-4 text-gray-400" />,
+                      icon: <Briefcase className="h-4 w-4 text-black" />,
                       label: "Designation",
                       value: user.designation || "—",
                     },
                   ]
                 : []),
               {
-                icon: <Star className="h-4 w-4 text-gray-400" />,
+                icon: <Star className="h-4 w-4 text-black" />,
                 label: "Member Since",
                 value: fmtDate(user.memberSince),
               },
@@ -362,10 +362,10 @@ export default function ProfileSection({
                   {row.icon}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
+                  <p className="text-xs text-black dark:text-gray-500">
                     {row.label}
                   </p>
-                  <p className="mt-0.5 truncate text-sm font-medium text-gray-900 dark:text-white">
+                  <p className="mt-0.5 truncate text-sm font-medium text-black dark:text-white">
                     {row.value}
                   </p>
                 </div>

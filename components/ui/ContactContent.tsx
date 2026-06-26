@@ -109,17 +109,17 @@ function FaqItem({ q, a }: { q: string; a: string }) {
         onClick={() => setOpen(!open)}
         className="flex w-full items-start justify-between gap-4 py-5 text-left"
       >
-        <span className="text-sm font-medium text-gray-900 dark:text-white">
+        <span className="text-sm font-medium text-black dark:text-white">
           {q}
         </span>
         <ChevronDown
-          className={`mt-0.5 h-4 w-4 shrink-0 text-gray-500 transition-transform duration-200 ${
+          className={`mt-0.5 h-4 w-4 shrink-0 text-black transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />
       </button>
       {open && (
-        <p className="pb-5 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+        <p className="pb-5 text-sm leading-relaxed text-black dark:text-gray-400">
           {a}
         </p>
       )}
@@ -181,18 +181,18 @@ export function ContactContent() {
               >
                 <Icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="mt-4 text-sm font-semibold text-black dark:text-white">
                 {title}
               </h3>
               {lines.map((line) => (
                 <p
                   key={line}
-                  className="mt-1 text-sm text-gray-700 dark:text-gray-300"
+                  className="mt-1 text-sm text-black dark:text-gray-300"
                 >
                   {line}
                 </p>
               ))}
-              <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+              <p className="mt-2 text-xs text-black dark:text-gray-500">
                 {sub}
               </p>
             </div>
@@ -205,10 +205,10 @@ export function ContactContent() {
         <div className="grid gap-10 lg:grid-cols-[1fr_420px]">
           {/* Contact form */}
           <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-gray-700 dark:bg-gray-900">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-black dark:text-white">
               Send us a message
             </h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-black dark:text-gray-400">
               Fill in the form and we&apos;ll reach out as soon as possible.
             </p>
 
@@ -220,7 +220,7 @@ export function ContactContent() {
               <div className="grid gap-5 sm:grid-cols-2">
                 {/* Name */}
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                     Full Name
                   </label>
                   <input
@@ -242,7 +242,7 @@ export function ContactContent() {
 
                 {/* Email */}
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                     Email Address
                   </label>
                   <input
@@ -266,7 +266,7 @@ export function ContactContent() {
               <div className="grid gap-5 sm:grid-cols-2">
                 {/* Phone */}
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                     Phone Number
                   </label>
                   <input
@@ -288,7 +288,7 @@ export function ContactContent() {
 
                 {/* Subject */}
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                     Subject
                   </label>
                   <select
@@ -319,7 +319,7 @@ export function ContactContent() {
 
               {/* Message */}
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                   Message
                 </label>
                 <textarea
@@ -361,10 +361,10 @@ export function ContactContent() {
 
           {/* FAQ */}
           <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-black dark:text-white">
               Frequently asked questions
             </h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-black dark:text-gray-400">
               Quick answers to common questions.
             </p>
             <div className="mt-6">
@@ -380,10 +380,10 @@ export function ContactContent() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-950/40">
                     <MapPin className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   </div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className="text-sm font-medium text-black dark:text-gray-400">
                     Army Building, Dorji Bari, Uttarpara
                   </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
+                  <p className="text-xs text-black dark:text-gray-500">
                     Khilkhet, Dhaka 1229
                   </p>
                 </div>
@@ -411,7 +411,7 @@ export function ContactContent() {
                 </svg>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 dark:border-gray-700 dark:bg-gray-900">
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-black dark:text-gray-400">
                   Dhaka Office
                 </p>
                 <a

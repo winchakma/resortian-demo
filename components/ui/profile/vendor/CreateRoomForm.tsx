@@ -186,10 +186,10 @@ export default function CreateRoomForm({
     >
       {/* Hotel ID (read-only info) */}
       <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
-        <Hash className="h-4 w-4 shrink-0 text-gray-400" />
+        <Hash className="h-4 w-4 shrink-0 text-black" />
         <div className="min-w-0">
-          <p className="text-xs text-gray-400">Adding room to hotel</p>
-          <p className="mt-0.5 truncate text-xs font-medium text-gray-700 dark:text-gray-300">
+          <p className="text-xs text-black">Adding room to hotel</p>
+          <p className="mt-0.5 truncate text-xs font-medium text-black dark:text-gray-300">
             {hotelName}
           </p>
         </div>
@@ -209,7 +209,7 @@ export default function CreateRoomForm({
         </div>
         <div>
           <label className={labelCls()}>
-            Badge <span className="font-normal text-gray-400">(optional)</span>
+            Badge <span className="font-normal text-black">(optional)</span>
           </label>
           <input
             type="text"
@@ -300,7 +300,7 @@ export default function CreateRoomForm({
         <label className={labelCls()}>
           <span className="flex items-center gap-1.5">
             <Sparkles className="h-3.5 w-3.5" /> Amenities{" "}
-            <span className="font-normal text-gray-400">(comma-separated)</span>
+            <span className="font-normal text-black">(comma-separated)</span>
           </span>
         </label>
         <input
@@ -317,12 +317,12 @@ export default function CreateRoomForm({
         <label className={labelCls()}>
           <span className="flex items-center gap-1.5">
             <Layers className="h-3.5 w-3.5" /> Room Units{" "}
-            <span className="font-normal text-gray-400">
+            <span className="font-normal text-black">
               (at least 1 required)
             </span>
           </span>
         </label>
-        <p className="mb-3 text-xs text-gray-400 dark:text-gray-500">
+        <p className="mb-3 text-xs text-black dark:text-gray-500">
           Each unit represents a physical room of this type. Add multiple units
           if you have more than one identical room.
         </p>
@@ -364,7 +364,7 @@ export default function CreateRoomForm({
                 type="button"
                 onClick={() => removeUnit(index)}
                 disabled={units.length <= 1}
-                className="mt-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-30 dark:hover:bg-red-950/30"
+                className="mt-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-black transition-colors hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-30 dark:hover:bg-red-950/30"
                 title="Remove unit"
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -388,7 +388,7 @@ export default function CreateRoomForm({
         <label className={labelCls()}>
           <span className="flex items-center gap-1.5">
             <Upload className="h-3.5 w-3.5" /> Room Photos{" "}
-            <span className="font-normal text-gray-400">(up to 10)</span>
+            <span className="font-normal text-black">(up to 10)</span>
           </span>
         </label>
         <div
@@ -425,10 +425,10 @@ export default function CreateRoomForm({
           ) : (
             <div className="flex flex-col items-center py-8 text-center">
               <ImageIcon className="mb-2 h-8 w-8 text-gray-300" />
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-black dark:text-gray-400">
                 Click to upload room photos
               </p>
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-black">
                 JPEG, PNG or WebP — max 10 MB each
               </p>
             </div>

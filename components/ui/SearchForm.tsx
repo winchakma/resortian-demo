@@ -49,11 +49,11 @@ function Stepper({
   return (
     <div className="flex items-center justify-between py-3">
       <div>
-        <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+        <p className="text-sm font-medium text-black dark:text-gray-200">
           {label}
         </p>
         {sublabel && (
-          <p className="text-xs text-gray-500 dark:text-gray-400">{sublabel}</p>
+          <p className="text-xs text-black dark:text-gray-400">{sublabel}</p>
         )}
       </div>
       <div className="flex items-center gap-3">
@@ -62,11 +62,11 @@ function Stepper({
           aria-label={`Decrease ${label}`}
           disabled={value <= min}
           onClick={() => onChange(Math.max(min, value - 1))}
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-600 transition hover:border-primary-500 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-30 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-primary-400 dark:hover:text-primary-400"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white text-black transition hover:border-primary-500 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-30 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-primary-400 dark:hover:text-primary-400"
         >
           <Minus className="h-3.5 w-3.5" />
         </button>
-        <span className="w-4 text-center text-sm font-semibold tabular-nums text-gray-900 dark:text-white">
+        <span className="w-4 text-center text-sm font-semibold tabular-nums text-black dark:text-white">
           {value}
         </span>
         <button
@@ -74,7 +74,7 @@ function Stepper({
           aria-label={`Increase ${label}`}
           disabled={value >= max}
           onClick={() => onChange(Math.min(max, value + 1))}
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-600 transition hover:border-primary-500 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-30 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-primary-400 dark:hover:text-primary-400"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white text-black transition hover:border-primary-500 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-30 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-primary-400 dark:hover:text-primary-400"
         >
           <Plus className="h-3.5 w-3.5" />
         </button>
@@ -239,7 +239,7 @@ export function SearchForm({
               className={`flex items-center gap-2 pb-3 text-sm font-semibold transition-colors whitespace-nowrap relative ${
                 isActive
                   ? "text-primary-600 dark:text-primary-500"
-                  : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                  : "text-black hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -265,9 +265,9 @@ export function SearchForm({
           {/* Location */}
           <div ref={locationRef} className="relative flex-[1.5] hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors rounded-t-lg lg:rounded-l-lg lg:rounded-tr-none">
             <div className="flex items-center gap-3 px-4 py-2 h-[58px]">
-              <MapPin className="h-5 w-5 shrink-0 text-gray-500 dark:text-gray-400" />
+              <MapPin className="h-5 w-5 shrink-0 text-black dark:text-gray-400" />
               <div className="flex-1 min-w-0">
-                <label className="block text-[11px] font-semibold text-gray-900 dark:text-white">
+                <label className="block text-[11px] font-semibold text-black dark:text-white">
                   Going to
                 </label>
                 <input
@@ -279,11 +279,11 @@ export function SearchForm({
                     updateField("location", e.target.value);
                   }}
                   onFocus={() => setIsLocationOpen(true)}
-                  className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-500 outline-none dark:text-white dark:placeholder-gray-400 truncate font-medium"
+                  className="w-full bg-transparent text-sm text-black placeholder-gray-500 outline-none dark:text-white dark:placeholder-gray-400 truncate font-medium"
                 />
               </div>
               {locationLoading && (
-                <Loader2 className="h-4 w-4 shrink-0 animate-spin text-gray-400" />
+                <Loader2 className="h-4 w-4 shrink-0 animate-spin text-black" />
               )}
             </div>
 
@@ -291,7 +291,7 @@ export function SearchForm({
               <div
                 role="listbox"
                 aria-label="Location suggestions"
-                className="absolute left-0 top-[calc(100%+8px)] z-[200] w-full lg:w-[400px] rounded-2xl border border-gray-200 bg-white text-gray-900 shadow-2xl dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                className="absolute left-0 top-[calc(100%+8px)] z-[200] w-full lg:w-[400px] rounded-2xl border border-gray-200 bg-white text-black shadow-2xl dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               >
                 <ul
                   ref={locationListRef}
@@ -299,7 +299,7 @@ export function SearchForm({
                   className="max-h-64 overflow-y-auto py-2"
                 >
                   {!locationLoading && locationResults.length === 0 && (
-                    <li className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+                    <li className="px-4 py-3 text-sm text-black dark:text-gray-400 text-center">
                       No locations found
                     </li>
                   )}
@@ -311,14 +311,14 @@ export function SearchForm({
                         onClick={() => selectLocation(item.name)}
                         className="flex w-full items-center gap-4 px-5 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700"
                       >
-                        <MapPin className="h-5 w-5 shrink-0 text-gray-400" />
+                        <MapPin className="h-5 w-5 shrink-0 text-black" />
                         <span className="flex-1 text-sm font-medium">{item.name}</span>
                       </button>
                     </li>
                   ))}
                   {locationLoadingMore && (
                     <li className="flex justify-center py-3">
-                      <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                      <Loader2 className="h-5 w-5 animate-spin text-black" />
                     </li>
                   )}
                 </ul>
@@ -347,12 +347,12 @@ export function SearchForm({
               onClick={() => setIsGuestOpen((p) => !p)}
               className="flex w-full items-center gap-3 bg-transparent px-4 py-2 h-[58px] text-left"
             >
-              <Users className="h-5 w-5 shrink-0 text-gray-500 dark:text-gray-400" />
+              <Users className="h-5 w-5 shrink-0 text-black dark:text-gray-400" />
               <div className="min-w-0 flex-1 overflow-hidden">
-                <p className="whitespace-nowrap text-[11px] font-semibold text-gray-900 dark:text-white">
+                <p className="whitespace-nowrap text-[11px] font-semibold text-black dark:text-white">
                   Travelers
                 </p>
-                <p className="truncate whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                <p className="truncate whitespace-nowrap text-sm font-medium text-black dark:text-white">
                   {guestSummary()}
                 </p>
               </div>
@@ -366,7 +366,7 @@ export function SearchForm({
                 className="absolute right-0 top-[calc(100%+8px)] z-[200] w-full lg:w-[320px] rounded-2xl border border-gray-200 bg-white p-5 shadow-2xl dark:border-gray-700 dark:bg-gray-800"
               >
                 <div className="mb-2 border-b border-gray-100 pb-4 dark:border-gray-700">
-                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                  <p className="text-base font-bold text-black dark:text-white">
                     Travelers
                   </p>
                 </div>
@@ -406,7 +406,7 @@ export function SearchForm({
 
         {/* Checkbox & Search Button Row */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm font-medium text-black dark:text-gray-300 cursor-pointer">
             <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
             Add a flight to Bundle &amp; Save*
           </label>

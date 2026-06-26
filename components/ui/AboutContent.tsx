@@ -141,10 +141,10 @@ export function AboutContent() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/40">
                   <Icon className="h-6 w-6 text-primary-600 dark:text-primary-400" />
                 </div>
-                <p className="mt-3 text-3xl font-bold text-gray-900 dark:text-white">
+                <p className="mt-3 text-3xl font-bold text-black dark:text-white">
                   {value}
                 </p>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-sm text-black dark:text-gray-400">
                   {label}
                 </p>
               </div>
@@ -161,10 +161,10 @@ export function AboutContent() {
               <span className="text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
                 The Problem
               </span>
-              <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+              <h2 className="mt-2 text-3xl font-bold tracking-tight text-black dark:text-white sm:text-4xl">
                 Travel Planning Shouldn&apos;t Be a Chore
               </h2>
-              <p className="mt-4 text-lg leading-relaxed text-gray-600 dark:text-gray-400">
+              <p className="mt-4 text-lg leading-relaxed text-black dark:text-gray-400">
                 We founded Resortian because we realized that booking a resort or
                 hotel in Bangladesh was unnecessarily complicated. For too long,
                 travelers had to navigate scattered listings, hidden fees, and a
@@ -199,10 +199,10 @@ export function AboutContent() {
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary-900/30 to-transparent" />
               </div>
               <div className="absolute -bottom-4 -left-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl dark:border-gray-700 dark:bg-gray-900">
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-2xl font-bold text-black dark:text-white">
                   #1
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-black dark:text-gray-400">
                   Hotel & resort booking
                   <br />
                   platform in Bangladesh
@@ -220,10 +220,10 @@ export function AboutContent() {
             <span className="text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
               The Solution
             </span>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-black dark:text-white sm:text-4xl">
               Bangladesh&apos;s Fastest-Growing Booking Platform
             </h2>
-            <p className="mt-4 text-lg leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="mt-4 text-lg leading-relaxed text-black dark:text-gray-400">
               We didn&apos;t just want to create another website; we wanted to
               build a bridge of trust. Today, Resortian is the leading travel
               partner for thousands of explorers, offering:
@@ -238,10 +238,10 @@ export function AboutContent() {
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/40">
                   <CheckCircle className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                 </div>
-                <h3 className="mt-4 text-base font-semibold text-gray-900 dark:text-white">
+                <h3 className="mt-4 text-base font-semibold text-black dark:text-white">
                   {title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                <p className="mt-2 text-sm leading-relaxed text-black dark:text-gray-400">
                   {description}
                 </p>
               </div>
@@ -257,7 +257,7 @@ export function AboutContent() {
             <span className="text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
               What We Stand For
             </span>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-black dark:text-white sm:text-4xl">
               Our core values
             </h2>
           </div>
@@ -270,10 +270,10 @@ export function AboutContent() {
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/40">
                   <Icon className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                 </div>
-                <h3 className="mt-4 text-base font-semibold text-gray-900 dark:text-white">
+                <h3 className="mt-4 text-base font-semibold text-black dark:text-white">
                   {title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                <p className="mt-2 text-sm leading-relaxed text-black dark:text-gray-400">
                   {description}
                 </p>
               </div>
@@ -289,7 +289,7 @@ export function AboutContent() {
             <span className="text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
               The People
             </span>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-black dark:text-white sm:text-4xl">
               Meet Our Team
             </h2>
           </div>
@@ -304,7 +304,7 @@ export function AboutContent() {
                 >
                   {initials}
                 </div>
-                <h3 className="mt-4 text-base font-semibold text-gray-900 dark:text-white">
+                <h3 className="mt-4 text-base font-semibold text-black dark:text-white">
                   {name}
                 </h3>
                 <p className="text-sm font-medium text-primary-600 dark:text-primary-400">

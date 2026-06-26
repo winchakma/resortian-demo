@@ -58,10 +58,10 @@ export function FeaturedPlaces() {
         
         <div className="mb-10 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
+            <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
               Places you may like
             </h2>
-            <p className="mt-1 text-base font-medium text-gray-700 dark:text-gray-300">
+            <p className="mt-1 text-base font-medium text-black dark:text-gray-300">
               Highly-rated stays and hot spots recommended for you
             </p>
           </div>
@@ -109,12 +109,12 @@ export function FeaturedPlaces() {
                           type="button"
                           onClick={(e) => toggleFavorite(place.id, e)}
                           aria-label="Add to favorites"
-                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
+                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-black shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
                         >
                           <Heart
                             fill={isFav ? "currentColor" : "none"}
                             className={`h-4 w-4 transition-colors pointer-events-none ${
-                              isFav ? "text-red-500" : "text-gray-500 dark:text-gray-400"
+                              isFav ? "text-red-500" : "text-black dark:text-gray-400"
                             }`}
                           />
                         </button>
@@ -123,10 +123,10 @@ export function FeaturedPlaces() {
                       {/* Content Panel */}
                       <div className="p-4 flex flex-col gap-3">
                         <div>
-                          <h3 className="text-[15px] font-extrabold text-gray-900 dark:text-white group-hover/card:text-primary-600 transition-colors leading-tight">
+                          <h3 className="text-[15px] font-extrabold text-black dark:text-white group-hover/card:text-primary-600 transition-colors leading-tight">
                             {place.name}
                           </h3>
-                          <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-1 line-clamp-1">
+                          <p className="text-xs font-medium text-black dark:text-gray-400 mt-1 line-clamp-1">
                             {place.region}
                           </p>
                         </div>
@@ -137,7 +137,7 @@ export function FeaturedPlaces() {
                             <Star className="h-3 w-3 fill-current text-amber-500" />
                             {reviews.rating}
                           </span>
-                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                          <span className="text-xs font-semibold text-black dark:text-gray-300">
                             {reviews.count} reviews
                           </span>
                         </div>
@@ -152,7 +152,7 @@ export function FeaturedPlaces() {
           {/* Navigation Buttons */}
           <button
             onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll left"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -160,7 +160,7 @@ export function FeaturedPlaces() {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll right"
           >
             <ChevronRight className="h-5 w-5" />

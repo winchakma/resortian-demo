@@ -83,14 +83,14 @@ function HeroStat({
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div className={`inline-flex rounded-xl p-2.5 ${map[accent]}`}>{icon}</div>
-      <p className="mt-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <p className="mt-4 text-2xl font-bold tracking-tight text-black dark:text-white">
         {value}
       </p>
-      <p className="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
+      <p className="mt-0.5 text-sm font-medium text-black dark:text-gray-400">
         {label}
       </p>
       {sub && (
-        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{sub}</p>
+        <p className="mt-1 text-xs text-black dark:text-gray-500">{sub}</p>
       )}
     </div>
   );
@@ -216,30 +216,30 @@ export default function FinanceReports() {
         className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:flex-row sm:items-end"
       >
         <div className="flex flex-1 flex-col gap-1">
-          <label className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          <label className="text-[11px] font-semibold uppercase tracking-wide text-black dark:text-gray-400">
             From
           </label>
           <div className="relative">
-            <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
             <input
               type="date"
               value={from}
               onChange={(e) => setFrom(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-9 pr-3 text-sm text-gray-900 outline-none transition-colors focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-9 pr-3 text-sm text-black outline-none transition-colors focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-1">
-          <label className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          <label className="text-[11px] font-semibold uppercase tracking-wide text-black dark:text-gray-400">
             To
           </label>
           <div className="relative">
-            <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
             <input
               type="date"
               value={to}
               onChange={(e) => setTo(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-9 pr-3 text-sm text-gray-900 outline-none transition-colors focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-9 pr-3 text-sm text-black outline-none transition-colors focus:border-primary-500 focus:bg-white focus:ring-2 focus:ring-primary-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
           </div>
         </div>
@@ -256,7 +256,7 @@ export default function FinanceReports() {
             type="button"
             onClick={() => load(from, to)}
             disabled={loading}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-black transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
             title="Refresh"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -265,7 +265,7 @@ export default function FinanceReports() {
             type="button"
             onClick={exportCsv}
             disabled={!data || data.bookings.length === 0}
-            className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
+            className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
           >
             <Download className="h-4 w-4" />
             CSV
@@ -285,7 +285,7 @@ export default function FinanceReports() {
             key={p.label}
             type="button"
             onClick={() => applyPreset(p.days)}
-            className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-600 transition-colors hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-green-700 dark:hover:bg-green-950/30 dark:hover:text-green-400"
+            className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-black transition-colors hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-green-700 dark:hover:bg-green-950/30 dark:hover:text-green-400"
           >
             {p.label}
           </button>
@@ -336,13 +336,13 @@ export default function FinanceReports() {
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <div className="border-b border-gray-100 px-5 py-4 dark:border-gray-800">
-                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                <h4 className="text-sm font-semibold text-black dark:text-white">
                   Bookings by Status
                 </h4>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
-                  <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+                  <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-black dark:bg-gray-800/50 dark:text-gray-400">
                     <tr>
                       <th className="px-5 py-3">Status</th>
                       <th className="px-3 py-3 text-right">Count</th>
@@ -353,7 +353,7 @@ export default function FinanceReports() {
                   <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                     {data.statusSummary.length === 0 && (
                       <tr>
-                        <td colSpan={4} className="px-5 py-6 text-center text-xs text-gray-400">
+                        <td colSpan={4} className="px-5 py-6 text-center text-xs text-black">
                           No bookings in range.
                         </td>
                       </tr>
@@ -361,7 +361,7 @@ export default function FinanceReports() {
                     {data.statusSummary.map((s) => {
                       const sc = VENDOR_BOOKING_STATUS_CONFIG[s.status];
                       return (
-                        <tr key={s.status} className="text-gray-700 dark:text-gray-300">
+                        <tr key={s.status} className="text-black dark:text-gray-300">
                           <td className="px-5 py-3">
                             <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${sc.pill}`}>
                               {sc.label}
@@ -380,16 +380,16 @@ export default function FinanceReports() {
 
             <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <div className="border-b border-gray-100 px-5 py-4 dark:border-gray-800">
-                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                <h4 className="text-sm font-semibold text-black dark:text-white">
                   Cashouts in Range
                 </h4>
-                <p className="mt-0.5 text-[11px] text-gray-400">
+                <p className="mt-0.5 text-[11px] text-black">
                   Requested between {fmtDate(data.range.from)} and {fmtDate(data.range.to)}
                 </p>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
-                  <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+                  <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-black dark:bg-gray-800/50 dark:text-gray-400">
                     <tr>
                       <th className="px-5 py-3">Status</th>
                       <th className="px-3 py-3 text-right">Count</th>
@@ -400,7 +400,7 @@ export default function FinanceReports() {
                   <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                     {Object.keys(data.cashouts.byStatus).length === 0 && (
                       <tr>
-                        <td colSpan={4} className="px-5 py-6 text-center text-xs text-gray-400">
+                        <td colSpan={4} className="px-5 py-6 text-center text-xs text-black">
                           No cashout requests in range.
                         </td>
                       </tr>
@@ -408,7 +408,7 @@ export default function FinanceReports() {
                     {Object.entries(data.cashouts.byStatus).map(([status, v]) => {
                       const cfg = CASHOUT_STATUS_CONFIG[status as CashoutStatusKey];
                       return (
-                        <tr key={status} className="text-gray-700 dark:text-gray-300">
+                        <tr key={status} className="text-black dark:text-gray-300">
                           <td className="px-5 py-3">
                             <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${cfg?.cls ?? ""}`}>
                               {cfg?.label ?? status}
@@ -420,7 +420,7 @@ export default function FinanceReports() {
                         </tr>
                       );
                     })}
-                    <tr className="bg-gray-50 font-semibold text-gray-900 dark:bg-gray-800/50 dark:text-white">
+                    <tr className="bg-gray-50 font-semibold text-black dark:bg-gray-800/50 dark:text-white">
                       <td className="px-5 py-3">Total</td>
                       <td className="px-3 py-3 text-right">{data.cashouts.total}</td>
                       <td className="px-3 py-3 text-right">{fmtBDT(data.cashouts.totalPayout)}</td>
@@ -437,13 +437,13 @@ export default function FinanceReports() {
             <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <div className="flex items-center gap-2 border-b border-gray-100 px-5 py-4 dark:border-gray-800">
                 <Building2 className="h-4 w-4 text-green-600 dark:text-green-400" />
-                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                <h4 className="text-sm font-semibold text-black dark:text-white">
                   Per Property
                 </h4>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
-                  <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+                  <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-black dark:bg-gray-800/50 dark:text-gray-400">
                     <tr>
                       <th className="px-5 py-3">Property</th>
                       <th className="px-3 py-3 text-right">Bookings</th>
@@ -456,8 +456,8 @@ export default function FinanceReports() {
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                     {data.perHotel.map((h) => (
-                      <tr key={h.hotelId} className="text-gray-700 dark:text-gray-300">
-                        <td className="px-5 py-3 font-medium text-gray-900 dark:text-white">
+                      <tr key={h.hotelId} className="text-black dark:text-gray-300">
+                        <td className="px-5 py-3 font-medium text-black dark:text-white">
                           {h.hotelName}
                         </td>
                         <td className="px-3 py-3 text-right">{h.bookings}</td>
@@ -481,29 +481,29 @@ export default function FinanceReports() {
             <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
               <div className="flex items-center gap-2">
                 <Percent className="h-4 w-4 text-green-600 dark:text-green-400" />
-                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                <h4 className="text-sm font-semibold text-black dark:text-white">
                   Bookings in Range
                 </h4>
               </div>
-              <p className="text-[11px] text-gray-400">{data.bookings.length} rows</p>
+              <p className="text-[11px] text-black">{data.bookings.length} rows</p>
             </div>
 
             {data.bookings.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-                  <XCircle className="h-7 w-7 text-gray-400" />
+                  <XCircle className="h-7 w-7 text-black" />
                 </div>
-                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <p className="text-sm font-semibold text-black dark:text-gray-300">
                   No bookings in this range
                 </p>
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-black">
                   Adjust the date range and try again.
                 </p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
-                  <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+                  <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-black dark:bg-gray-800/50 dark:text-gray-400">
                     <tr>
                       <th className="px-5 py-3">Ref</th>
                       <th className="px-3 py-3">Property / Room</th>
@@ -523,10 +523,10 @@ export default function FinanceReports() {
                       const cr = b.cashoutRequest;
                       const crCfg = cr ? CASHOUT_STATUS_CONFIG[cr.status] : null;
                       return (
-                        <tr key={b.id} className="text-gray-700 dark:text-gray-300">
+                        <tr key={b.id} className="text-black dark:text-gray-300">
                           <td className="px-5 py-3">
                             <div className="flex flex-col gap-1">
-                              <span className="font-mono text-xs font-semibold text-gray-900 dark:text-white">
+                              <span className="font-mono text-xs font-semibold text-black dark:text-white">
                                 {b.reference}
                               </span>
                               <span className={`inline-flex w-fit items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${sc.pill}`}>
@@ -535,27 +535,27 @@ export default function FinanceReports() {
                             </div>
                           </td>
                           <td className="px-3 py-3">
-                            <p className="text-xs font-medium text-gray-900 dark:text-white">
+                            <p className="text-xs font-medium text-black dark:text-white">
                               {b.room.hotel.name}
                             </p>
-                            <p className="text-[11px] text-gray-400">
+                            <p className="text-[11px] text-black">
                               {b.room.name}
                               {unitLabel(b.unit) && (
-                                <span className="ml-1 text-[10px] font-semibold text-gray-500 dark:text-gray-400">
+                                <span className="ml-1 text-[10px] font-semibold text-black dark:text-gray-400">
                                   · {unitLabel(b.unit)}
                                 </span>
                               )}
                             </p>
                           </td>
                           <td className="px-3 py-3">
-                            <p className="text-xs text-gray-900 dark:text-white">
+                            <p className="text-xs text-black dark:text-white">
                               {b.guest.name ?? "—"}
                             </p>
-                            <p className="text-[11px] text-gray-400">{b.guest.phone ?? ""}</p>
+                            <p className="text-[11px] text-black">{b.guest.phone ?? ""}</p>
                           </td>
                           <td className="px-3 py-3 text-xs">
                             <p>{fmtDate(b.checkIn)}</p>
-                            <p className="text-[11px] text-gray-400">
+                            <p className="text-[11px] text-black">
                               → {fmtDate(b.checkOut)} · {b.nights}n
                             </p>
                           </td>
@@ -566,7 +566,7 @@ export default function FinanceReports() {
                           <td className="px-3 py-3 text-right">{fmtBDT(b.advancePaid)}</td>
                           <td className="px-3 py-3 text-right text-rose-600 dark:text-rose-400">
                             -{fmtBDT(b.commissionAmount)}
-                            <span className="ml-1 text-[10px] text-gray-400">({b.commissionRate}%)</span>
+                            <span className="ml-1 text-[10px] text-black">({b.commissionRate}%)</span>
                           </td>
                           <td className="px-3 py-3 text-right font-semibold text-emerald-600 dark:text-emerald-400">
                             {fmtBDT(b.earning)}
@@ -577,7 +577,7 @@ export default function FinanceReports() {
                                 {crCfg.label}
                               </span>
                             ) : (
-                              <span className="text-[11px] text-gray-400">—</span>
+                              <span className="text-[11px] text-black">—</span>
                             )}
                           </td>
                         </tr>
@@ -585,7 +585,7 @@ export default function FinanceReports() {
                     })}
                   </tbody>
                   <tfoot className="bg-gray-50 dark:bg-gray-800/50">
-                    <tr className="text-xs font-semibold text-gray-900 dark:text-white">
+                    <tr className="text-xs font-semibold text-black dark:text-white">
                       <td className="px-5 py-3" colSpan={4}>
                         Totals (range)
                       </td>

@@ -87,10 +87,10 @@ export default function VendorBankInfoSection() {
           <CreditCard className="h-4 w-4 text-green-600 dark:text-green-400" />
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-black dark:text-white">
             Bank & Payment Info
           </h3>
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-black dark:text-gray-500">
             Required for cashout requests
           </p>
         </div>
@@ -108,7 +108,7 @@ export default function VendorBankInfoSection() {
         >
           {/* Bank account */}
           <div>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-black dark:text-gray-500">
               Bank Account
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -153,7 +153,7 @@ export default function VendorBankInfoSection() {
 
           {/* Mobile banking */}
           <div>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-black dark:text-gray-500">
               Mobile Banking
             </p>
             <div className="grid gap-4 sm:grid-cols-3">

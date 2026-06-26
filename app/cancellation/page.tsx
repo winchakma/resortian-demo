@@ -103,11 +103,11 @@ export default function CancellationPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
                 1
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-bold text-black dark:text-white">
                 Refund Breakdown
               </h2>
             </div>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm text-black dark:text-gray-400">
               The amount refunded depends on when you notify us of your
               cancellation relative to the standard check-in time.
             </p>
@@ -123,7 +123,7 @@ export default function CancellationPage() {
                     ].map((h) => (
                       <th
                         key={h}
-                        className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400"
+                        className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-black dark:text-gray-400"
                       >
                         {h}
                       </th>
@@ -133,13 +133,13 @@ export default function CancellationPage() {
                 <tbody className="divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-gray-900">
                   {REFUND_TABLE.map(({ window: w, refund, fee, color }) => (
                     <tr key={w}>
-                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                      <td className="px-6 py-4 font-medium text-black dark:text-white">
                         {w}
                       </td>
                       <td className={`px-6 py-4 font-semibold ${color}`}>
                         {refund}
                       </td>
-                      <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
+                      <td className="px-6 py-4 text-black dark:text-gray-400">
                         {fee}
                       </td>
                     </tr>
@@ -157,18 +157,18 @@ export default function CancellationPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
                 2
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-bold text-black dark:text-white">
                 Calculation Examples
               </h2>
             </div>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm text-black dark:text-gray-400">
               To keep things transparent, here is how the math works if your
               Total Booking is{" "}
-              <span className="font-semibold text-gray-700 dark:text-gray-300">
+              <span className="font-semibold text-black dark:text-gray-300">
                 10,000 BDT
               </span>{" "}
               (Advance Paid:{" "}
-              <span className="font-semibold text-gray-700 dark:text-gray-300">
+              <span className="font-semibold text-black dark:text-gray-300">
                 2,000 BDT
               </span>
               ):
@@ -182,14 +182,14 @@ export default function CancellationPage() {
                 >
                   <div className="flex items-center gap-3">
                     <Calculator className="h-5 w-5 text-primary-600 dark:text-primary-400" />
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                    <h3 className="font-semibold text-black dark:text-white">
                       {label}
                     </h3>
                     <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-semibold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
                       {timing}
                     </span>
                   </div>
-                  <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                  <p className="mt-3 text-sm text-black dark:text-gray-400">
                     {detail}
                   </p>
                   <div className="mt-3 flex items-center gap-2">
@@ -211,7 +211,7 @@ export default function CancellationPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
                 3
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-bold text-black dark:text-white">
                 Refund Method &amp; Timeline
               </h2>
             </div>
@@ -225,10 +225,10 @@ export default function CancellationPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/40">
                     <CreditCard className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   </div>
-                  <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">
+                  <h3 className="mt-4 font-semibold text-black dark:text-white">
                     {title}
                   </h3>
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  <p className="mt-2 text-sm text-black dark:text-gray-400">
                     {description}
                   </p>
                 </div>
@@ -244,7 +244,7 @@ export default function CancellationPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
                 4
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-bold text-black dark:text-white">
                 How to Cancel
               </h2>
             </div>
@@ -252,7 +252,7 @@ export default function CancellationPage() {
             <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
               <div className="flex items-start gap-4">
                 <BookOpen className="mt-0.5 h-6 w-6 shrink-0 text-primary-600 dark:text-primary-400" />
-                <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                <p className="text-sm leading-relaxed text-black dark:text-gray-300">
                   To initiate a cancellation, please visit the{" "}
                   <span className="font-semibold">&quot;My Bookings&quot;</span>{" "}
                   section on the Resortian website or mobile app. For emergency
@@ -270,7 +270,7 @@ export default function CancellationPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-sm font-bold text-white">
                 5
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-bold text-black dark:text-white">
                 Special Circumstances
               </h2>
             </div>

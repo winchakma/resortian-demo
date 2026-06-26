@@ -38,7 +38,7 @@ const CartIndicator = memo(function CartIndicator() {
     <Link
       href="/cart"
       aria-label={`Cart (${totalItems} items)`}
-      className="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+      className="relative flex h-9 w-9 items-center justify-center rounded-lg text-black transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
     >
       <ShoppingCart className="h-5 w-5" />
       {mounted && totalItems > 0 && (
@@ -55,7 +55,7 @@ CartIndicator.displayName = "CartIndicator";
 // ─── Nav links ────────────────────────────────────────────────────────────────
 
 const navLinkCls =
-  "flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:bg-transparent dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
+  "flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-black transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:bg-transparent dark:hover:bg-primary-950/30 dark:hover:text-primary-400";
 
 const NavLinks = memo(function NavLinks({
   accountHref,
@@ -81,7 +81,7 @@ const NavLinks = memo(function NavLinks({
       <Link
         href={accountHref}
         prefetch={true}
-        className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+        className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
       >
         <User className="h-4 w-4" />
         My Account
@@ -98,7 +98,7 @@ function SignUpButton() {
   return (
     <Link
       href="/auth/customer?tab=register"
-      className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-1.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+      className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-1.5 text-sm font-semibold text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
     >
       Sign Up
     </Link>
@@ -135,7 +135,7 @@ function UserMenu() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label="My account"
-        className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+        className="flex h-9 w-9 items-center justify-center rounded-lg text-black transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
       >
         {user?.avatar ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -153,10 +153,10 @@ function UserMenu() {
         <div className="absolute right-0 top-full mt-2 w-56 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
           {/* User info */}
           <div className="border-b border-gray-100 px-4 py-3 dark:border-gray-800">
-            <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+            <p className="truncate text-sm font-semibold text-black dark:text-white">
               {user?.name}
             </p>
-            <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+            <p className="truncate text-xs text-black dark:text-gray-400">
               {user?.phone}
             </p>
             {user?.role === "HOTEL_OWNER" && (
@@ -169,7 +169,7 @@ function UserMenu() {
           <Link
             href="/profile"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-black transition-colors hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
           >
             <User className="h-4 w-4" />
             My Profile
@@ -235,7 +235,7 @@ export function Header() {
 
           <button
             onClick={handleMobileMenuOpen}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-700 transition-colors hover:bg-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-black transition-colors hover:bg-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800"
             aria-label="Open menu"
           >
             <Menu className="h-5 w-5" />

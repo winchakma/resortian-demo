@@ -35,14 +35,14 @@ export function CartContent() {
       <div className="mb-8 flex items-center gap-4">
         <button
           onClick={() => router.back()}
-          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-500 transition-colors hover:bg-white hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-white hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" />
           Back
         </button>
         <div className="flex items-center gap-2">
           <ShoppingCart className="h-6 w-6 text-primary-600" />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-black dark:text-white">
             Your Cart
           </h1>
           {items.length > 0 && (
@@ -57,12 +57,12 @@ export function CartContent() {
         /* ── Empty state ── */
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-white py-24 text-center dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-            <ShoppingCart className="h-10 w-10 text-gray-400" />
+            <ShoppingCart className="h-10 w-10 text-black" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <h2 className="text-xl font-semibold text-black dark:text-white">
             Your cart is empty
           </h2>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-sm text-black dark:text-gray-400">
             Looks like you haven&apos;t added any rooms yet.
           </p>
           <Link
@@ -107,25 +107,25 @@ export function CartContent() {
                           >
                             {item.hotelName}
                           </Link>
-                          <h3 className="mt-0.5 text-base font-semibold text-gray-900 dark:text-white">
+                          <h3 className="mt-0.5 text-base font-semibold text-black dark:text-white">
                             {item.roomName}
                           </h3>
                         </div>
                         <button
                           onClick={() => removeItem(item.cartId)}
                           aria-label="Remove item"
-                          className="shrink-0 rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30 dark:hover:text-red-400"
+                          className="shrink-0 rounded-lg p-2 text-black transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30 dark:hover:text-red-400"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
 
-                      <div className="mt-2 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                      <div className="mt-2 flex items-center gap-1 text-xs text-black dark:text-gray-400">
                         <MapPin className="h-3.5 w-3.5 text-primary-500" />
                         {item.hotelLocation}
                       </div>
 
-                      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-black dark:text-gray-400">
                         <span className="flex items-center gap-1">
                           <Users className="h-3.5 w-3.5 text-primary-500" />
                           {item.capacity} Guest{item.capacity !== 1 ? "s" : ""}
@@ -148,7 +148,7 @@ export function CartContent() {
                             {item.checkIn} → {item.checkOut}
                           </span>
                           {item.nights && (
-                            <span className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                            <span className="flex items-center gap-1 text-black dark:text-gray-400">
                               <Moon className="h-3.5 w-3.5 text-primary-500" />
                               {item.nights} night{item.nights !== 1 ? "s" : ""}
                             </span>
@@ -163,11 +163,11 @@ export function CartContent() {
                         <>
                           {/* Full price row */}
                           <div className="flex items-baseline justify-between">
-                            <span className="text-xs text-gray-400 dark:text-gray-500">
+                            <span className="text-xs text-black dark:text-gray-500">
                               ৳{item.price.toLocaleString()} × {item.nights}{" "}
                               night{(item.nights ?? 0) !== 1 ? "s" : ""}
                             </span>
-                            <span className="text-base font-semibold text-gray-700 dark:text-gray-300">
+                            <span className="text-base font-semibold text-black dark:text-gray-300">
                               ৳{item.totalPrice.toLocaleString()}
                             </span>
                           </div>
@@ -186,11 +186,11 @@ export function CartContent() {
                               </p>
                             </div>
                             <div className="rounded-lg bg-gray-50 px-3 py-2 dark:bg-gray-800/60">
-                              <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                              <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-black dark:text-gray-400">
                                 <Banknote className="h-3 w-3" />
                                 At Property (80%)
                               </div>
-                              <p className="mt-0.5 text-sm font-bold text-gray-700 dark:text-gray-300">
+                              <p className="mt-0.5 text-sm font-bold text-black dark:text-gray-300">
                                 ৳
                                 {(
                                   item.totalPrice -
@@ -202,7 +202,7 @@ export function CartContent() {
                         </>
                       ) : (
                         <div className="flex items-end justify-between">
-                          <span className="text-xs text-gray-400 dark:text-gray-500">
+                          <span className="text-xs text-black dark:text-gray-500">
                             per night
                           </span>
                           <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
@@ -232,7 +232,7 @@ export function CartContent() {
 
           {/* Right — order summary */}
           <div className="h-fit rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 lg:sticky lg:top-24">
-            <h2 className="mb-5 text-lg font-bold text-gray-900 dark:text-white">
+            <h2 className="mb-5 text-lg font-bold text-black dark:text-white">
               Order Summary
             </h2>
 
@@ -243,11 +243,11 @@ export function CartContent() {
                   key={item.cartId}
                   className="flex items-start justify-between gap-3 text-sm"
                 >
-                  <span className="text-gray-600 dark:text-gray-400">
-                    <span className="line-clamp-1 font-medium text-gray-800 dark:text-gray-200">
+                  <span className="text-black dark:text-gray-400">
+                    <span className="line-clamp-1 font-medium text-black dark:text-gray-200">
                       {item.roomName}
                     </span>
-                    <span className="block text-xs text-gray-400 dark:text-gray-500">
+                    <span className="block text-xs text-black dark:text-gray-500">
                       {item.hotelName}
                     </span>
                     {item.checkIn && item.checkOut && (
@@ -257,7 +257,7 @@ export function CartContent() {
                       </span>
                     )}
                   </span>
-                  <span className="shrink-0 font-semibold text-gray-900 dark:text-white">
+                  <span className="shrink-0 font-semibold text-black dark:text-white">
                     ৳{(item.totalPrice ?? item.price).toLocaleString()}
                   </span>
                 </div>
@@ -268,13 +268,13 @@ export function CartContent() {
 
             {/* Totals */}
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between text-gray-500 dark:text-gray-400">
+              <div className="flex justify-between text-black dark:text-gray-400">
                 <span>Total booking value</span>
-                <span className="font-medium text-gray-700 dark:text-gray-300">
+                <span className="font-medium text-black dark:text-gray-300">
                   ৳{totalAmount.toLocaleString()}
                 </span>
               </div>
-              <div className="flex justify-between text-gray-500 dark:text-gray-400">
+              <div className="flex justify-between text-black dark:text-gray-400">
                 <span>Service fee</span>
                 <span className="text-primary-600 dark:text-primary-400">
                   Free
@@ -305,15 +305,15 @@ export function CartContent() {
               {/* Balance */}
               <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
                 <div>
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-black dark:text-gray-300">
                     <Banknote className="h-3.5 w-3.5" />
                     Pay at Property (80%)
                   </div>
-                  <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                  <p className="mt-0.5 text-[10px] text-black dark:text-gray-500">
                     Due at check-in — cash or card
                   </p>
                 </div>
-                <span className="text-xl font-bold text-gray-600 dark:text-gray-300">
+                <span className="text-xl font-bold text-black dark:text-gray-300">
                   ৳{balanceAmount.toLocaleString()}
                 </span>
               </div>
@@ -329,7 +329,7 @@ export function CartContent() {
 
             <Link
               href="/"
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-sm font-medium text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               Continue Browsing
             </Link>
@@ -340,7 +340,7 @@ export function CartContent() {
         <div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/95 lg:hidden">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-black dark:text-gray-500">
                 Pay now (20%)
               </p>
               <p className="text-lg font-bold text-primary-700 dark:text-primary-300">

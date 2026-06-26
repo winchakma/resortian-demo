@@ -73,14 +73,14 @@ function StatCard({
       <div className="flex items-start justify-between">
         <div className={`rounded-xl p-2.5 ${iconBg[accent]}`}>{icon}</div>
       </div>
-      <p className="mt-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <p className="mt-4 text-2xl font-bold tracking-tight text-black dark:text-white">
         {value}
       </p>
-      <p className="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
+      <p className="mt-0.5 text-sm font-medium text-black dark:text-gray-400">
         {label}
       </p>
       {sub && (
-        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{sub}</p>
+        <p className="mt-1 text-xs text-black dark:text-gray-500">{sub}</p>
       )}
     </div>
   );
@@ -101,10 +101,10 @@ function BookingBar({
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between text-xs">
-        <span className="font-medium text-gray-700 dark:text-gray-300">
+        <span className="font-medium text-black dark:text-gray-300">
           {label}
         </span>
-        <span className="text-gray-500 dark:text-gray-400">
+        <span className="text-black dark:text-gray-400">
           {count} ({pct}%)
         </span>
       </div>
@@ -168,10 +168,10 @@ export default function VendorOverview() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-black dark:text-white">
             Dashboard Overview
           </h3>
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-black dark:text-gray-500">
             Your property performance at a glance
           </p>
         </div>
@@ -179,7 +179,7 @@ export default function VendorOverview() {
           type="button"
           onClick={load}
           disabled={loading}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-black transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
           title="Refresh"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -224,7 +224,7 @@ export default function VendorOverview() {
         <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+            <h4 className="text-sm font-semibold text-black dark:text-white">
               Booking Breakdown
             </h4>
           </div>
@@ -260,7 +260,7 @@ export default function VendorOverview() {
         <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 flex items-center gap-2">
             <Banknote className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+            <h4 className="text-sm font-semibold text-black dark:text-white">
               Cashout &amp; Revenue
             </h4>
           </div>
@@ -306,11 +306,11 @@ export default function VendorOverview() {
                     {item.label}
                   </span>
                 </div>
-                <p className="text-base font-bold text-gray-900 dark:text-white">
+                <p className="text-base font-bold text-black dark:text-white">
                   {item.value}
                 </p>
                 {item.unit && (
-                  <p className="text-[10px] text-gray-400">{item.unit}</p>
+                  <p className="text-[10px] text-black">{item.unit}</p>
                 )}
               </div>
             ))}
@@ -334,7 +334,7 @@ export default function VendorOverview() {
           <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
             <div className="flex items-center gap-2">
               <Hotel className="h-4 w-4 text-green-600 dark:text-green-400" />
-              <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h4 className="text-sm font-semibold text-black dark:text-white">
                 Recent Bookings
               </h4>
             </div>
@@ -352,7 +352,7 @@ export default function VendorOverview() {
                 >
                   <div className="flex min-w-0 flex-col gap-0.5">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm font-semibold text-gray-900 dark:text-white">
+                      <span className="font-mono text-sm font-semibold text-black dark:text-white">
                         {b.reference}
                       </span>
                       <span
@@ -368,20 +368,20 @@ export default function VendorOverview() {
                         </span>
                       )}
                     </div>
-                    <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                    <p className="truncate text-xs text-black dark:text-gray-400">
                       {room?.hotel?.name} · {room?.name}
                     </p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                    <p className="text-xs text-black dark:text-gray-500">
                       {fmtDate(b.checkIn)} → {fmtDate(b.checkOut)} · {b.nights}{" "}
                       night{b.nights !== 1 ? "s" : ""}
                       {b.user ? ` · ${b.user.name}` : ""}
                     </p>
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-0.5 text-right">
-                    <p className="text-sm font-bold text-gray-900 dark:text-white">
+                    <p className="text-sm font-bold text-black dark:text-white">
                       {fmtBDT(b.advancePaid)}
                     </p>
-                    <p className="text-[10px] text-gray-400">advance paid</p>
+                    <p className="text-[10px] text-black">advance paid</p>
                   </div>
                 </div>
               );
@@ -393,12 +393,12 @@ export default function VendorOverview() {
       {recentBookings.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 py-16 text-center dark:border-gray-700">
           <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-            <XCircle className="h-7 w-7 text-gray-400" />
+            <XCircle className="h-7 w-7 text-black" />
           </div>
-          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <p className="text-sm font-semibold text-black dark:text-gray-300">
             No recent bookings
           </p>
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-black">
             Bookings will appear here once guests start reserving your rooms.
           </p>
         </div>

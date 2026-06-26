@@ -65,7 +65,7 @@ export default function HotelDetailModal({
 
         <div className="space-y-5 p-6">
           {/* Basic info row */}
-          <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex flex-wrap gap-4 text-sm text-black dark:text-gray-400">
             <span className="flex items-center gap-1.5">
               <MapPin className="h-4 w-4 text-primary-600" />
               {hotel.location}
@@ -79,7 +79,7 @@ export default function HotelDetailModal({
               <BedDouble className="h-4 w-4" />
               {hotel._count.rooms} room{hotel._count.rooms !== 1 ? "s" : ""}
             </span>
-            <span className="font-semibold text-gray-900 dark:text-white">
+            <span className="font-semibold text-black dark:text-white">
               ৳{hotel.price.toLocaleString()}/night
             </span>
           </div>
@@ -87,10 +87,10 @@ export default function HotelDetailModal({
           {/* Description */}
           {hotel.description && (
             <div>
-              <h3 className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <h3 className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-black">
                 <FileText className="h-3.5 w-3.5" /> Description
               </h3>
-              <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+              <p className="text-sm leading-relaxed text-black dark:text-gray-300">
                 {hotel.description}
               </p>
             </div>
@@ -101,8 +101,8 @@ export default function HotelDetailModal({
             <div className="flex flex-wrap gap-6">
               {hotel.checkinTime && (
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">Check-in</p>
-                  <p className="mt-0.5 flex items-center gap-1.5 text-sm font-medium text-gray-900 dark:text-white">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-black">Check-in</p>
+                  <p className="mt-0.5 flex items-center gap-1.5 text-sm font-medium text-black dark:text-white">
                     <Clock className="h-4 w-4 text-primary-600" />
                     {hotel.checkinTime}
                   </p>
@@ -110,8 +110,8 @@ export default function HotelDetailModal({
               )}
               {hotel.checkoutTime && (
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">Check-out</p>
-                  <p className="mt-0.5 flex items-center gap-1.5 text-sm font-medium text-gray-900 dark:text-white">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-black">Check-out</p>
+                  <p className="mt-0.5 flex items-center gap-1.5 text-sm font-medium text-black dark:text-white">
                     <Clock className="h-4 w-4 text-primary-600" />
                     {hotel.checkoutTime}
                   </p>
@@ -123,14 +123,14 @@ export default function HotelDetailModal({
           {/* Tags */}
           {hotel.tags.length > 0 && (
             <div>
-              <h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-black">
                 <Tag className="h-3.5 w-3.5" /> Tags
               </h3>
               <div className="flex flex-wrap gap-1.5">
                 {hotel.tags.map((t) => (
                   <span
                     key={t}
-                    className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                    className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-black dark:bg-gray-800 dark:text-gray-400"
                   >
                     {t}
                   </span>
@@ -142,14 +142,14 @@ export default function HotelDetailModal({
           {/* Amenities */}
           {hotel.amenities.length > 0 && (
             <div>
-              <h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <h3 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-black">
                 <Wifi className="h-3.5 w-3.5" /> Amenities
               </h3>
               <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 sm:grid-cols-3">
                 {hotel.amenities.map((a) => (
                   <span
                     key={a}
-                    className="flex items-center gap-1.5 text-xs text-gray-700 dark:text-gray-300"
+                    className="flex items-center gap-1.5 text-xs text-black dark:text-gray-300"
                   >
                     <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-green-500" />
                     {a}
@@ -162,17 +162,17 @@ export default function HotelDetailModal({
           {/* Booking conditions */}
           {hotel.bookingConditions && (
             <div>
-              <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-black">
                 Booking Conditions
               </h3>
-              <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+              <p className="text-sm leading-relaxed text-black dark:text-gray-300">
                 {hotel.bookingConditions}
               </p>
             </div>
           )}
 
           {/* Status */}
-          <div className="flex flex-wrap gap-4 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-gray-500 dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
+          <div className="flex flex-wrap gap-4 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-black dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
             <span>
               Status: <span className="font-semibold capitalize">{hotel.approvalStatus.toLowerCase()}</span>
             </span>

@@ -132,10 +132,10 @@ export default function AffiliatesPage() {
         {/* ── How it works ── */}
         <section className="py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-black dark:text-white">
               How It Works
             </h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-black dark:text-gray-400">
               From sign-up to your first payout in four simple steps.
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -152,10 +152,10 @@ export default function AffiliatesPage() {
                       {s.step}
                     </span>
                   </div>
-                  <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">
+                  <h3 className="mt-4 font-semibold text-black dark:text-white">
                     {s.title}
                   </h3>
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  <p className="mt-2 text-sm text-black dark:text-gray-400">
                     {s.body}
                   </p>
                 </div>
@@ -170,10 +170,10 @@ export default function AffiliatesPage() {
             <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
               {/* Left: benefits */}
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-2xl font-bold text-black dark:text-white">
                   Why Join the Programme?
                 </h2>
-                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-2 text-sm text-black dark:text-gray-400">
                   Monetise your travel content with zero upfront cost and no
                   minimum audience.
                 </p>
@@ -185,10 +185,10 @@ export default function AffiliatesPage() {
                         {b.icon}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                        <h3 className="font-semibold text-black dark:text-white">
                           {b.title}
                         </h3>
-                        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        <p className="mt-1 text-sm text-black dark:text-gray-400">
                           {b.body}
                         </p>
                       </div>
@@ -202,12 +202,12 @@ export default function AffiliatesPage() {
                     Your promo code will look like this
                   </p>
                   <div className="mt-3 flex items-center gap-3">
-                    <span className="rounded-xl bg-white px-5 py-2.5 font-mono text-xl font-bold tracking-widest text-gray-900 shadow-sm dark:bg-gray-800 dark:text-white">
+                    <span className="rounded-xl bg-white px-5 py-2.5 font-mono text-xl font-bold tracking-widest text-black shadow-sm dark:bg-gray-800 dark:text-white">
                       RST-XXXXX
                     </span>
                     <Tag className="h-5 w-5 text-primary-500" />
                   </div>
-                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="mt-2 text-xs text-black dark:text-gray-400">
                     Generated automatically after you join. Share it anywhere.
                   </p>
                 </div>
@@ -216,10 +216,10 @@ export default function AffiliatesPage() {
               {/* Right: auth form */}
               <div className="lg:sticky lg:top-8">
                 <div className="mb-5">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <h2 className="text-2xl font-bold text-black dark:text-white">
                     Join as an Affiliate
                   </h2>
-                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 text-sm text-black dark:text-gray-400">
                     Already a member? Sign in to access your dashboard.
                   </p>
                 </div>
@@ -232,16 +232,16 @@ export default function AffiliatesPage() {
         {/* ── FAQ ── */}
         <section className="py-14">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-black dark:text-white">
               Common Questions
             </h2>
             <div className="mt-6 divide-y divide-gray-100 dark:divide-gray-800">
               {FAQS.map((faq) => (
                 <div key={faq.q} className="py-5">
-                  <h3 className="font-medium text-gray-900 dark:text-white">
+                  <h3 className="font-medium text-black dark:text-white">
                     {faq.q}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                  <p className="mt-2 text-sm leading-relaxed text-black dark:text-gray-400">
                     {faq.a}
                   </p>
                 </div>

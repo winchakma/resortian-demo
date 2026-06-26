@@ -28,10 +28,10 @@ export default async function PaymentSuccessPage({
               </div>
             </div>
 
-            <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-center text-3xl font-bold text-black dark:text-white">
               Booking Confirmed!
             </h1>
-            <p className="mt-3 text-center text-gray-500 dark:text-gray-400">
+            <p className="mt-3 text-center text-black dark:text-gray-400">
               Payment successful. Your reservation is secured and a confirmation
               will be sent to your contact details.
             </p>
@@ -42,15 +42,15 @@ export default async function PaymentSuccessPage({
                 <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">
                   Booking Reference
                 </p>
-                <p className="mt-1 font-mono text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="mt-1 font-mono text-2xl font-bold text-black dark:text-white">
                   {primaryRef}
                 </p>
                 {references.length > 1 && (
-                  <p className="mt-1 font-mono text-sm text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 font-mono text-sm text-black dark:text-gray-400">
                     {references.slice(1).join(" · ")}
                   </p>
                 )}
-                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-2 text-xs text-black dark:text-gray-400">
                   Keep this reference for your records.
                 </p>
               </div>
@@ -60,7 +60,7 @@ export default async function PaymentSuccessPage({
             {(advanceAmount > 0 || balanceAmount > 0) && (
               <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
                 <div className="border-b border-gray-100 px-5 py-3 dark:border-gray-800">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-black dark:text-white">
                     Payment Summary
                   </p>
                 </div>
@@ -85,18 +85,18 @@ export default async function PaymentSuccessPage({
                 <div className="flex items-center justify-between px-5 py-4">
                   <div className="flex items-center gap-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-                      <Banknote className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                      <Banknote className="h-4 w-4 text-black dark:text-gray-400" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      <p className="text-sm font-semibold text-black dark:text-gray-300">
                         Due at Property
                       </p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500">
+                      <p className="text-xs text-black dark:text-gray-500">
                         80% — pay at check-in
                       </p>
                     </div>
                   </div>
-                  <span className="text-lg font-bold text-gray-600 dark:text-gray-300">
+                  <span className="text-lg font-bold text-black dark:text-gray-300">
                     ৳{balanceAmount.toLocaleString()}
                   </span>
                 </div>

@@ -87,7 +87,7 @@ function HotelListCard({ hotel }: { hotel: Hotel }) {
             {hotel.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold text-gray-800 shadow-sm backdrop-blur-sm dark:bg-gray-900/90 dark:text-gray-200"
+                className="rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold text-black shadow-sm backdrop-blur-sm dark:bg-gray-900/90 dark:text-gray-200"
               >
                 {tag}
               </span>
@@ -102,11 +102,11 @@ function HotelListCard({ hotel }: { hotel: Hotel }) {
             <div className="mb-2.5 flex flex-wrap items-center gap-2">
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                <span className="text-sm font-bold text-gray-900 dark:text-white">
+                <span className="text-sm font-bold text-black dark:text-white">
                   {hotel.rating}
                 </span>
               </div>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span className="text-sm text-black dark:text-gray-400">
                 ({hotel.reviewCount} reviews)
               </span>
               {hotel.rating >= 4.8 && (
@@ -117,18 +117,18 @@ function HotelListCard({ hotel }: { hotel: Hotel }) {
             </div>
 
             {/* Name */}
-            <h3 className="mb-1 text-lg font-bold text-gray-900 transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
+            <h3 className="mb-1 text-lg font-bold text-black transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
               {hotel.name}
             </h3>
 
             {/* Location */}
-            <div className="mb-3 flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+            <div className="mb-3 flex items-center gap-1.5 text-sm text-black dark:text-gray-400">
               <MapPin className="h-4 w-4 shrink-0" />
               <span>{hotel.location}</span>
             </div>
 
             {/* Description */}
-            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-black dark:text-gray-400">
               {hotel.description}
             </p>
 
@@ -137,13 +137,13 @@ function HotelListCard({ hotel }: { hotel: Hotel }) {
               {hotel.amenities.slice(0, 5).map((amenity) => (
                 <span
                   key={amenity}
-                  className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                  className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-medium text-black dark:bg-gray-800 dark:text-gray-300"
                 >
                   {amenity}
                 </span>
               ))}
               {hotel.amenities.length > 5 && (
-                <span className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                <span className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-medium text-black dark:bg-gray-800 dark:text-gray-400">
                   +{hotel.amenities.length - 5} more
                 </span>
               )}
@@ -153,14 +153,14 @@ function HotelListCard({ hotel }: { hotel: Hotel }) {
           {/* Price + CTA */}
           <div className="mt-5 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-gray-800">
             <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-black dark:text-gray-400">
                 Starting from
               </p>
               <div className="flex items-baseline gap-1">
                 <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
                   ৳{hotel.price.toLocaleString()}
                 </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-black dark:text-gray-400">
                   /night
                 </span>
               </div>
@@ -205,14 +205,14 @@ function Pagination({
 
   return (
     <div className="mt-8 flex items-center justify-between">
-      <p className="text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-sm text-black dark:text-gray-400">
         Showing{" "}
-        <span className="font-semibold text-gray-900 dark:text-white">
+        <span className="font-semibold text-black dark:text-white">
           {(currentPage - 1) * meta.limit + 1}–
           {Math.min(currentPage * meta.limit, meta.total)}
         </span>{" "}
         of{" "}
-        <span className="font-semibold text-gray-900 dark:text-white">
+        <span className="font-semibold text-black dark:text-white">
           {meta.total}
         </span>{" "}
         properties
@@ -223,7 +223,7 @@ function Pagination({
         {currentPage > 1 ? (
           <Link
             href={`/hotels?${buildParams(searchParams, { page: String(currentPage - 1) })}`}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-primary-500 dark:hover:text-primary-400"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-black transition-colors hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-primary-500 dark:hover:text-primary-400"
             aria-label="Previous page"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -239,7 +239,7 @@ function Pagination({
           p === "…" ? (
             <span
               key={`ellipsis-${i}`}
-              className="flex h-9 w-9 items-center justify-center text-sm text-gray-400"
+              className="flex h-9 w-9 items-center justify-center text-sm text-black"
             >
               …
             </span>
@@ -250,7 +250,7 @@ function Pagination({
               className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
                 p === currentPage
                   ? "bg-primary-600 text-white"
-                  : "border border-gray-200 bg-white text-gray-700 hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-500 dark:hover:text-primary-400"
+                  : "border border-gray-200 bg-white text-black hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-500 dark:hover:text-primary-400"
               }`}
               aria-current={p === currentPage ? "page" : undefined}
             >
@@ -263,7 +263,7 @@ function Pagination({
         {currentPage < totalPages ? (
           <Link
             href={`/hotels?${buildParams(searchParams, { page: String(currentPage + 1) })}`}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition-colors hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-primary-500 dark:hover:text-primary-400"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-black transition-colors hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-primary-500 dark:hover:text-primary-400"
             aria-label="Next page"
           >
             <ChevronRight className="h-4 w-4" />
@@ -371,12 +371,12 @@ export function HotelsContent({ hotels, meta, searchParams }: HotelsContentProps
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
         {/* Results bar */}
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <p className="text-sm font-semibold text-black dark:text-gray-300">
             {meta.total === 0
               ? "No hotels found"
               : `${meta.total} ${meta.total === 1 ? "hotel" : "hotels"} found`}
             {searchParams.location ? (
-              <span className="font-normal text-gray-500 dark:text-gray-400">
+              <span className="font-normal text-black dark:text-gray-400">
                 {" "}
                 in &ldquo;{searchParams.location}&rdquo;
               </span>
@@ -389,7 +389,7 @@ export function HotelsContent({ hotels, meta, searchParams }: HotelsContentProps
               <select
                 value={currentSort}
                 onChange={(e) => handleSortChange(e.target.value)}
-                className="appearance-none rounded-xl border border-gray-200 bg-white py-2 pl-4 pr-9 text-sm text-gray-700 outline-none transition-colors focus:border-primary-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+                className="appearance-none rounded-xl border border-gray-200 bg-white py-2 pl-4 pr-9 text-sm text-black outline-none transition-colors focus:border-primary-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
               >
                 <option value="">Recommended</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -397,7 +397,7 @@ export function HotelsContent({ hotels, meta, searchParams }: HotelsContentProps
                 <option value="rating">Highest Rating</option>
                 <option value="newest">Newest First</option>
               </select>
-              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
             </div>
 
             {/* View toggle */}
@@ -409,7 +409,7 @@ export function HotelsContent({ hotels, meta, searchParams }: HotelsContentProps
                 className={`rounded-lg p-2 transition-colors ${
                   viewMode === "list"
                     ? "bg-primary-600 text-white"
-                    : "text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                    : "text-black hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
                 }`}
               >
                 <ListIcon className="h-4 w-4" />
@@ -421,7 +421,7 @@ export function HotelsContent({ hotels, meta, searchParams }: HotelsContentProps
                 className={`rounded-lg p-2 transition-colors ${
                   viewMode === "grid"
                     ? "bg-primary-600 text-white"
-                    : "text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                    : "text-black hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
                 }`}
               >
                 <LayoutGrid className="h-4 w-4" />
@@ -434,12 +434,12 @@ export function HotelsContent({ hotels, meta, searchParams }: HotelsContentProps
         {hotels.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white py-20 text-center dark:border-gray-700 dark:bg-gray-900">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-              <Search className="h-7 w-7 text-gray-400" />
+              <Search className="h-7 w-7 text-black" />
             </div>
-            <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="mb-2 text-lg font-semibold text-black dark:text-white">
               No hotels found
             </h3>
-            <p className="mb-6 max-w-sm text-sm text-gray-500 dark:text-gray-400">
+            <p className="mb-6 max-w-sm text-sm text-black dark:text-gray-400">
               Try searching for a different location or adjusting your dates.
             </p>
             <Link

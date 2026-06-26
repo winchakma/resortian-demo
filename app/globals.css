@@ -36,7 +36,7 @@
 
 :root {
   --background: #f8fafc; /* Slate-50 */
-  --foreground: #0f172a;
+  --foreground: #000000; /* Full Black */
 }
 
 .dark {
@@ -59,6 +59,7 @@
 }
 
 html {
+  font-size: 17px; /* Scaled up from default 16px to make font slightly bigger */
   scroll-padding-top: 4rem; /* offset for sticky header (h-16 = 4rem) */
 }
 

@@ -40,7 +40,7 @@ export default function RoomRow({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <p
-              className="cursor-pointer text-sm font-semibold text-gray-900 underline-offset-2 hover:underline dark:text-white"
+              className="cursor-pointer text-sm font-semibold text-black underline-offset-2 hover:underline dark:text-white"
               onClick={onViewDetail}
             >
               {room.name}
@@ -54,7 +54,7 @@ export default function RoomRow({
           <ApprovalBadge status={room.approvalStatus} sm />
         </div>
 
-        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-400 dark:text-gray-500">
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-black dark:text-gray-500">
           <span>৳{room.price.toLocaleString()}/night</span>
           <span>
             {room.capacity} guest{room.capacity !== 1 ? "s" : ""}
@@ -82,7 +82,7 @@ export default function RoomRow({
           <button
             type="button"
             onClick={onEdit}
-            className="flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-[11px] font-semibold text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-[11px] font-semibold text-black transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             <Pencil className="h-3 w-3" />
             Edit

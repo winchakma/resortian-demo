@@ -31,10 +31,10 @@ export default function ListPropertyPage() {
               <p className="text-xs font-semibold uppercase tracking-widest text-primary-600 dark:text-primary-400">
                 For Property Owners
               </p>
-              <h1 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+              <h1 className="mt-2 text-3xl font-bold text-black dark:text-white sm:text-4xl">
                 List Your Property on Resortian
               </h1>
-              <p className="mt-4 text-gray-600 dark:text-gray-400">
+              <p className="mt-4 text-black dark:text-gray-400">
                 Join Bangladesh&apos;s fastest-growing hotel &amp; resort
                 booking platform and connect your property with thousands of
                 verified travellers every month — from Cox&apos;s Bazar beach
@@ -45,7 +45,7 @@ export default function ListPropertyPage() {
                 {PERKS.map((perk) => (
                   <li key={perk} className="flex items-start gap-3">
                     <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <span className="text-sm text-black dark:text-gray-300">
                       {perk}
                     </span>
                   </li>
@@ -65,7 +65,7 @@ export default function ListPropertyPage() {
                     <p className="text-2xl font-bold text-primary-600 dark:text-primary-400">
                       {stat.value}
                     </p>
-                    <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    <p className="mt-0.5 text-xs text-black dark:text-gray-400">
                       {stat.label}
                     </p>
                   </div>

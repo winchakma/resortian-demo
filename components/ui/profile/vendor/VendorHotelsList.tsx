@@ -163,10 +163,10 @@ export default function VendorHotelsList() {
                 {s.icon}
               </div>
               <div>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">
+                <p className="text-xl font-bold text-black dark:text-white">
                   {s.value}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-black dark:text-gray-400">
                   {s.label}
                 </p>
               </div>
@@ -177,10 +177,10 @@ export default function VendorHotelsList() {
         {/* Header row */}
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-black dark:text-white">
               My Properties
             </h3>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
+            <p className="text-xs text-black dark:text-gray-500">
               {loading
                 ? "Loading…"
                 : `${hotels.length} propert${hotels.length !== 1 ? "ies" : "y"} in your portfolio`}
@@ -191,7 +191,7 @@ export default function VendorHotelsList() {
               type="button"
               onClick={loadHotels}
               disabled={loading}
-              className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-black transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
               title="Refresh"
             >
               <RefreshCw
@@ -233,10 +233,10 @@ export default function VendorHotelsList() {
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-green-50 dark:bg-green-950/30">
               <Building2 className="h-8 w-8 text-green-400" />
             </div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
+            <p className="font-semibold text-black dark:text-gray-300">
               No properties yet
             </p>
-            <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
+            <p className="mt-1 text-sm text-black dark:text-gray-500">
               Create your first property to get started
             </p>
             <button

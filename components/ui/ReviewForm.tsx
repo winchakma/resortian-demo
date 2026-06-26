@@ -27,8 +27,8 @@ export function ReviewForm({ hotelId, bookingId, onReviewPosted }: ReviewFormPro
   if (!token) {
     return (
       <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-        <LogIn className="h-4 w-4 shrink-0 text-gray-400" />
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <LogIn className="h-4 w-4 shrink-0 text-black" />
+        <p className="text-sm text-black dark:text-gray-400">
           <Link
             href="/auth/login"
             className="font-medium text-primary-600 hover:underline dark:text-primary-400"
@@ -47,7 +47,7 @@ export function ReviewForm({ hotelId, bookingId, onReviewPosted }: ReviewFormPro
         <p className="font-semibold text-primary-700 dark:text-primary-400">
           Thank you for your review!
         </p>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-sm text-black dark:text-gray-400">
           Your feedback helps other travelers make informed decisions.
         </p>
       </div>
@@ -90,7 +90,7 @@ export function ReviewForm({ hotelId, bookingId, onReviewPosted }: ReviewFormPro
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="mb-2 block text-sm font-medium text-black dark:text-gray-300">
           Your Rating
         </label>
         <div className="flex gap-1">
@@ -118,7 +118,7 @@ export function ReviewForm({ hotelId, bookingId, onReviewPosted }: ReviewFormPro
       <div>
         <label
           htmlFor="review-comment"
-          className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+          className="mb-2 block text-sm font-medium text-black dark:text-gray-300"
         >
           Your Review
         </label>
@@ -128,7 +128,7 @@ export function ReviewForm({ hotelId, bookingId, onReviewPosted }: ReviewFormPro
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Share your experience with other travelers..."
-          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
+          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500"
         />
       </div>
       <div className="flex justify-end">

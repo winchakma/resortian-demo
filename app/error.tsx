@@ -40,7 +40,7 @@ export default function Error({
                 Something went wrong
               </span>
 
-              <h1 className="mt-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+              <h1 className="mt-4 text-4xl font-bold tracking-tight text-black dark:text-white sm:text-5xl">
                 Our servers need
                 <br />
                 <span className="text-primary-600 dark:text-primary-400">
@@ -48,7 +48,7 @@ export default function Error({
                 </span>
               </h1>
 
-              <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-gray-500 dark:text-gray-400">
+              <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-black dark:text-gray-400">
                 Even the best resorts have off days. An unexpected error occurred
                 on our end. Try again in a moment — your booking details are
                 safe.
@@ -56,7 +56,7 @@ export default function Error({
 
               {/* Digest for debugging */}
               {error.digest && (
-                <p className="mt-4 font-mono text-xs text-gray-400 dark:text-gray-600">
+                <p className="mt-4 font-mono text-xs text-black dark:text-gray-600">
                   Error ID: {error.digest}
                 </p>
               )}
@@ -72,7 +72,7 @@ export default function Error({
                 </button>
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-primary-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-700"
+                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-black transition-all hover:border-primary-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-primary-700"
                 >
                   <Home className="h-4 w-4" />
                   Back to Home
@@ -86,10 +86,10 @@ export default function Error({
                     <Headphones className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                   </div>
                   <div className="text-left">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                    <p className="text-sm font-semibold text-black dark:text-white">
                       Still having trouble?
                     </p>
-                    <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+                    <p className="mt-0.5 text-sm text-black dark:text-gray-400">
                       Our support team is available 7 days a week.
                     </p>
                     <Link

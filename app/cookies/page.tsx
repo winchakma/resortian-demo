@@ -19,10 +19,10 @@ function Section({
 }) {
   return (
     <section className="mt-10">
-      <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+      <h2 className="text-lg font-bold text-black dark:text-white">
         {title}
       </h2>
-      <div className="mt-3 space-y-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+      <div className="mt-3 space-y-3 text-sm leading-relaxed text-black dark:text-gray-400">
         {children}
       </div>
     </section>
@@ -87,13 +87,13 @@ export default function CookiesPage() {
             <p className="text-xs font-semibold uppercase tracking-widest text-primary-600 dark:text-primary-400">
               Legal
             </p>
-            <h1 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-bold text-black dark:text-white sm:text-4xl">
               Cookie Policy
             </h1>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm text-black dark:text-gray-400">
               Last updated: {LAST_UPDATED}
             </p>
-            <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="mt-4 text-sm leading-relaxed text-black dark:text-gray-400">
               This Cookie Policy explains how Resortian uses cookies and similar
               technologies when you visit our platform. It should be read
               alongside our{" "}
@@ -139,7 +139,7 @@ export default function CookiesPage() {
                   className="rounded-xl border border-gray-200 p-4 dark:border-gray-700"
                 >
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                    <h3 className="text-sm font-semibold text-black dark:text-white">
                       {type.name}
                     </h3>
                     <span
@@ -152,14 +152,14 @@ export default function CookiesPage() {
                       {type.canDisable ? "Optional" : "Required"}
                     </span>
                   </div>
-                  <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+                  <p className="mt-1.5 text-xs text-black dark:text-gray-400">
                     {type.description}
                   </p>
                   <ul className="mt-3 space-y-1">
                     {type.examples.map((ex, i) => (
                       <li
                         key={i}
-                        className="flex gap-2 text-xs text-gray-600 dark:text-gray-400"
+                        className="flex gap-2 text-xs text-black dark:text-gray-400"
                       >
                         <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary-400" />
                         {ex}

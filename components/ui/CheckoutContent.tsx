@@ -93,7 +93,7 @@ function FieldError({ message }: { message?: string }) {
 // ── Input class helper ────────────────────────────────────────────────────────
 function inputCls(hasError?: boolean) {
   return [
-    "w-full rounded-xl border bg-gray-50 py-3 text-sm text-gray-900 placeholder-gray-400",
+    "w-full rounded-xl border bg-gray-50 py-3 text-sm text-black placeholder-gray-400",
     "focus:outline-none focus:ring-2",
     "dark:bg-gray-800 dark:text-white dark:placeholder-gray-500",
     hasError
@@ -333,7 +333,7 @@ export function CheckoutContent() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/cart"
-          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-500 transition-colors hover:bg-white hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+          className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-white hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Cart
@@ -358,7 +358,7 @@ export function CheckoutContent() {
                       ? "bg-primary-600 text-white"
                       : active
                         ? "bg-primary-600 text-white"
-                        : "bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400"
+                        : "bg-gray-200 text-black dark:bg-gray-700 dark:text-gray-400"
                   }`}
                 >
                   {done ? <CheckCircle2 className="h-4 w-4" /> : idx + 1}
@@ -366,8 +366,8 @@ export function CheckoutContent() {
                 <span
                   className={`text-sm font-medium ${
                     active
-                      ? "text-gray-900 dark:text-white"
-                      : "text-gray-400 dark:text-gray-500"
+                      ? "text-black dark:text-white"
+                      : "text-black dark:text-gray-500"
                   }`}
                 >
                   {labels[idx]}
@@ -406,7 +406,7 @@ export function CheckoutContent() {
                       className={`flex flex-1 items-center justify-center gap-2 py-4 text-sm font-semibold transition-colors ${
                         authMode === "guest"
                           ? "bg-primary-50 text-primary-700 dark:bg-primary-950/30 dark:text-primary-400"
-                          : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
+                          : "text-black hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
                       }`}
                     >
                       <User className="h-4 w-4" />
@@ -418,7 +418,7 @@ export function CheckoutContent() {
                       className={`flex flex-1 items-center justify-center gap-2 py-4 text-sm font-semibold transition-colors ${
                         authMode === "login"
                           ? "bg-primary-50 text-primary-700 dark:bg-primary-950/30 dark:text-primary-400"
-                          : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
+                          : "text-black hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
                       }`}
                     >
                       <LogIn className="h-4 w-4" />
@@ -433,17 +433,17 @@ export function CheckoutContent() {
                       className="space-y-4 p-6"
                       noValidate
                     >
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-black dark:text-gray-400">
                         Sign in to auto-fill your details and track bookings.
                       </p>
 
                       {/* Login Phone */}
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                           Phone Number
                         </label>
                         <div className="relative">
-                          <Phone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                          <Phone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
                           <input
                             type="tel"
                             {...loginForm.register("loginPhone")}
@@ -460,11 +460,11 @@ export function CheckoutContent() {
 
                       {/* Login Password */}
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                           Password
                         </label>
                         <div className="relative">
-                          <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                          <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
                           <input
                             type={showPassword ? "text" : "password"}
                             {...loginForm.register("loginPassword")}
@@ -474,7 +474,7 @@ export function CheckoutContent() {
                           <button
                             type="button"
                             onClick={() => setShowPassword((p) => !p)}
-                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-black hover:text-gray-600"
                           >
                             {showPassword ? (
                               <EyeOff className="h-4 w-4" />
@@ -491,7 +491,7 @@ export function CheckoutContent() {
                       </div>
 
                       <div className="flex items-center justify-between text-sm">
-                        <label className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                        <label className="flex items-center gap-2 text-black dark:text-gray-400">
                           <input
                             type="checkbox"
                             className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
@@ -514,7 +514,7 @@ export function CheckoutContent() {
                         {loginSubmitting ? "Signing in…" : "Sign In"}
                       </button>
 
-                      <p className="text-center text-xs text-gray-400 dark:text-gray-500">
+                      <p className="text-center text-xs text-black dark:text-gray-500">
                         Don&apos;t have an account?{" "}
                         <Link
                           href="/auth/customer"
@@ -526,7 +526,7 @@ export function CheckoutContent() {
 
                       <div className="flex items-center gap-3">
                         <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
-                        <span className="text-xs text-gray-400 dark:text-gray-500">
+                        <span className="text-xs text-black dark:text-gray-500">
                           or
                         </span>
                         <div className="h-px flex-1 bg-gray-200 dark:bg-gray-700" />
@@ -539,7 +539,7 @@ export function CheckoutContent() {
                     </form>
                   ) : (
                     <div className="px-6 pt-5 pb-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-black dark:text-gray-400">
                         No account needed — fill in your details below.
                       </p>
                     </div>
@@ -556,10 +556,10 @@ export function CheckoutContent() {
               >
                 <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
                   <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-                    <h2 className="font-semibold text-gray-900 dark:text-white">
+                    <h2 className="font-semibold text-black dark:text-white">
                       Guest Information
                     </h2>
-                    <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    <p className="mt-0.5 text-xs text-black dark:text-gray-400">
                       This information will be used for your reservation.
                     </p>
                   </div>
@@ -567,11 +567,11 @@ export function CheckoutContent() {
                   <div className="grid gap-5 p-6 sm:grid-cols-2">
                     {/* Full Name */}
                     <div className="sm:col-span-2">
-                      <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                         Full Name <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <User className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                        <User className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
                         <input
                           type="text"
                           {...guestForm.register("guestName")}
@@ -586,11 +586,11 @@ export function CheckoutContent() {
 
                     {/* Email */}
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                         Email Address <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                        <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
                         <input
                           type="email"
                           {...guestForm.register("guestEmail")}
@@ -605,11 +605,11 @@ export function CheckoutContent() {
 
                     {/* Phone */}
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                         Phone Number <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <Phone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                        <Phone className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-black" />
                         <input
                           type="tel"
                           {...guestForm.register("guestPhone")}
@@ -624,14 +624,14 @@ export function CheckoutContent() {
 
                     {/* Special requests */}
                     {/* <div className="sm:col-span-2">
-                      <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label className="mb-1.5 block text-sm font-medium text-black dark:text-gray-300">
                         Special Requests
-                        <span className="ml-1.5 text-xs font-normal text-gray-400">
+                        <span className="ml-1.5 text-xs font-normal text-black">
                           (optional)
                         </span>
                       </label>
                       <div className="relative">
-                        <MessageSquare className="absolute left-3.5 top-3.5 h-4 w-4 text-gray-400" />
+                        <MessageSquare className="absolute left-3.5 top-3.5 h-4 w-4 text-black" />
                         <textarea
                           rows={3}
                           {...guestForm.register("guestRequests")}
@@ -660,10 +660,10 @@ export function CheckoutContent() {
               {/* UddoktaPay payment card */}
               <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
                 <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-                  <h2 className="font-semibold text-gray-900 dark:text-white">
+                  <h2 className="font-semibold text-black dark:text-white">
                     Secure Payment
                   </h2>
-                  <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                  <p className="mt-0.5 text-xs text-black dark:text-gray-500">
                     You will be redirected to UddoktaPay&apos;s secure checkout
                     to complete your payment.
                   </p>
@@ -676,10 +676,10 @@ export function CheckoutContent() {
                       <CreditCard className="h-6 w-6" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-gray-900 dark:text-white">
+                      <p className="font-semibold text-black dark:text-white">
                         UddoktaPay Checkout
                       </p>
-                      <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                      <p className="mt-0.5 text-xs text-black dark:text-gray-400">
                         bKash · Nagad · Rocket · and more
                       </p>
                     </div>
@@ -691,7 +691,7 @@ export function CheckoutContent() {
                     {["bKash", "Nagad", "Rocket"].map((m) => (
                       <span
                         key={m}
-                        className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                        className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-black dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
                       >
                         {m}
                       </span>
@@ -701,8 +701,8 @@ export function CheckoutContent() {
 
                 {/* What happens next */}
                 <div className="mx-5 mb-5 flex gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/60">
-                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500" />
-                  <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-black dark:text-gray-500" />
+                  <p className="text-xs leading-relaxed text-black dark:text-gray-400">
                     Clicking the button below will create your booking and
                     redirect you to UddoktaPay&apos;s secure payment page. Your
                     booking will be confirmed automatically after successful
@@ -714,8 +714,8 @@ export function CheckoutContent() {
               {/* Moneybag payment card — disabled */}
               {/* <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
                 <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-                  <h2 className="font-semibold text-gray-900 dark:text-white">Secure Payment</h2>
-                  <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                  <h2 className="font-semibold text-black dark:text-white">Secure Payment</h2>
+                  <p className="mt-0.5 text-xs text-black dark:text-gray-500">
                     You will be redirected to Moneybag&apos;s secure checkout to complete your payment.
                   </p>
                 </div>
@@ -725,20 +725,20 @@ export function CheckoutContent() {
                       <CreditCard className="h-6 w-6" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-gray-900 dark:text-white">Moneybag Checkout</p>
-                      <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">Cards · bKash · Nagad · Rocket · and more</p>
+                      <p className="font-semibold text-black dark:text-white">Moneybag Checkout</p>
+                      <p className="mt-0.5 text-xs text-black dark:text-gray-400">Cards · bKash · Nagad · Rocket · and more</p>
                     </div>
                     <ExternalLink className="h-4 w-4 shrink-0 text-primary-500 dark:text-primary-400" />
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {["Visa", "Mastercard", "bKash", "Nagad", "Rocket"].map((m) => (
-                      <span key={m} className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{m}</span>
+                      <span key={m} className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-black dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">{m}</span>
                     ))}
                   </div>
                 </div>
                 <div className="mx-5 mb-5 flex gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/60">
-                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500" />
-                  <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-black dark:text-gray-500" />
+                  <p className="text-xs leading-relaxed text-black dark:text-gray-400">
                     Clicking the button below will create your booking and redirect you to Moneybag&apos;s secure payment page. Your booking will be confirmed automatically after successful payment.
                   </p>
                 </div>
@@ -747,7 +747,7 @@ export function CheckoutContent() {
               {/* Promo code */}
               <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
                 <div className="border-b border-gray-100 px-6 py-4 dark:border-gray-800">
-                  <h2 className="flex items-center gap-2 font-semibold text-gray-900 dark:text-white">
+                  <h2 className="flex items-center gap-2 font-semibold text-black dark:text-white">
                     <Tag className="h-4 w-4 text-primary-600 dark:text-primary-400" />
                     Promo Code
                   </h2>
@@ -819,7 +819,7 @@ export function CheckoutContent() {
               {/* Security notice */}
               <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white px-4 py-3 dark:border-gray-800 dark:bg-gray-900">
                 <Lock className="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" />
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-black dark:text-gray-400">
                   All transactions are protected with 256-bit SSL encryption.
                   Resortian never stores your payment details.
                 </p>
@@ -870,7 +870,7 @@ export function CheckoutContent() {
         <div className="h-fit rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900 lg:sticky lg:top-24">
           <div className="mb-4 flex items-center gap-2">
             <ShoppingBag className="h-5 w-5 text-primary-600 dark:text-primary-400" />
-            <h2 className="font-bold text-gray-900 dark:text-white">
+            <h2 className="font-bold text-black dark:text-white">
               Order Summary
             </h2>
           </div>
@@ -887,10 +887,10 @@ export function CheckoutContent() {
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                  <p className="truncate text-sm font-medium text-black dark:text-white">
                     {item.roomName}
                   </p>
-                  <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                  <p className="truncate text-xs text-black dark:text-gray-400">
                     {item.hotelName}
                   </p>
                   {item.checkIn && item.checkOut && (
@@ -902,7 +902,7 @@ export function CheckoutContent() {
                     </p>
                   )}
                 </div>
-                <p className="shrink-0 text-sm font-semibold text-gray-900 dark:text-white">
+                <p className="shrink-0 text-sm font-semibold text-black dark:text-white">
                   ৳{(item.totalPrice ?? item.price).toLocaleString()}
                 </p>
               </div>
@@ -913,9 +913,9 @@ export function CheckoutContent() {
 
           {/* Totals */}
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between text-gray-500 dark:text-gray-400">
+            <div className="flex justify-between text-black dark:text-gray-400">
               <span>Total booking value</span>
-              <span className="font-medium text-gray-700 dark:text-gray-300">
+              <span className="font-medium text-black dark:text-gray-300">
                 ৳{totalAmount.toLocaleString()}
               </span>
             </div>
@@ -930,7 +930,7 @@ export function CheckoutContent() {
                 </span>
               </div>
             )}
-            <div className="flex justify-between text-gray-500 dark:text-gray-400">
+            <div className="flex justify-between text-black dark:text-gray-400">
               <span>Service fee</span>
               <span className="text-primary-600 dark:text-primary-400">
                 Free
@@ -958,14 +958,14 @@ export function CheckoutContent() {
 
             <div className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
               <div>
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                <p className="text-xs font-semibold text-black dark:text-gray-300">
                   Pay at property — 80%
                 </p>
-                <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                <p className="mt-0.5 text-[10px] text-black dark:text-gray-500">
                   Due at check-in
                 </p>
               </div>
-              <span className="text-xl font-bold text-gray-500 dark:text-gray-400">
+              <span className="text-xl font-bold text-black dark:text-gray-400">
                 ৳{balancePay.toLocaleString()}
               </span>
             </div>
@@ -978,7 +978,7 @@ export function CheckoutContent() {
         <div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/95 lg:hidden">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-black dark:text-gray-500">
                 Pay now (20%)
               </p>
               <p className="text-lg font-bold text-primary-700 dark:text-primary-300">

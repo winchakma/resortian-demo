@@ -145,21 +145,21 @@ export function DateRangePicker({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-800">
         <div>
-          <p className="text-sm font-semibold text-gray-900 dark:text-white">
+          <p className="text-sm font-semibold text-black dark:text-white">
             {!checkInDate
               ? "Pick check-in"
               : !checkOutDate
                 ? "Pick check-out"
                 : "Date range"}
           </p>
-          <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-0.5 text-xs text-black dark:text-gray-400">
             {hint}
           </p>
         </div>
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+          className="flex h-7 w-7 items-center justify-center rounded-full text-black transition-colors hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
           aria-label="Close calendar"
         >
           <X className="h-4 w-4" />
@@ -172,7 +172,7 @@ export function DateRangePicker({
           className={`flex-1 rounded-xl px-3 py-2 text-center text-xs ${
             checkInDate
               ? "bg-primary-50 font-medium text-primary-800 ring-1 ring-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:ring-primary-800"
-              : "bg-gray-50 text-gray-400 ring-1 ring-dashed ring-gray-300 dark:bg-gray-800 dark:ring-gray-700"
+              : "bg-gray-50 text-black ring-1 ring-dashed ring-gray-300 dark:bg-gray-800 dark:ring-gray-700"
           }`}
         >
           <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider opacity-70">
@@ -182,12 +182,12 @@ export function DateRangePicker({
             {checkInDate ? fmtShort(checkInDate) : "—"}
           </p>
         </div>
-        <ChevronRight className="h-4 w-4 shrink-0 text-gray-400" />
+        <ChevronRight className="h-4 w-4 shrink-0 text-black" />
         <div
           className={`flex-1 rounded-xl px-3 py-2 text-center text-xs ${
             checkOutDate
               ? "bg-primary-50 font-medium text-primary-800 ring-1 ring-primary-200 dark:bg-primary-900/30 dark:text-primary-300 dark:ring-primary-800"
-              : "bg-gray-50 text-gray-400 ring-1 ring-dashed ring-gray-300 dark:bg-gray-800 dark:ring-gray-700"
+              : "bg-gray-50 text-black ring-1 ring-dashed ring-gray-300 dark:bg-gray-800 dark:ring-gray-700"
           }`}
         >
           <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider opacity-70">
@@ -219,7 +219,7 @@ export function DateRangePicker({
       {/* Footer */}
       <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3 dark:border-gray-800">
         <p
-          className="text-xs text-gray-400 dark:text-gray-500"
+          className="text-xs text-black dark:text-gray-500"
           suppressHydrationWarning
         >
           Available up to{" "}
@@ -235,7 +235,7 @@ export function DateRangePicker({
             <button
               type="button"
               onClick={() => onChange("", "")}
-              className="rounded-lg px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+              className="rounded-lg px-3 py-1.5 text-xs font-medium text-black transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               Clear
             </button>
@@ -263,13 +263,13 @@ export function DateRangePicker({
         onClick={() => setIsOpen((p) => !p)}
         className="flex w-full items-center gap-3 bg-transparent px-4 py-2 h-[58px] text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
       >
-        <CalendarIcon className="h-5 w-5 shrink-0 text-gray-500 dark:text-gray-400" />
+        <CalendarIcon className="h-5 w-5 shrink-0 text-black dark:text-gray-400" />
         <div className="min-w-0 flex-1">
-          <p className="whitespace-nowrap text-[11px] font-semibold text-gray-900 dark:text-white">
+          <p className="whitespace-nowrap text-[11px] font-semibold text-black dark:text-white">
             Dates
           </p>
           <p
-            className={`truncate text-sm ${checkInDate ? "font-medium text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400"}`}
+            className={`truncate text-sm ${checkInDate ? "font-medium text-black dark:text-white" : "text-black dark:text-gray-400"}`}
           >
             {triggerLabel}
           </p>
@@ -279,7 +279,7 @@ export function DateRangePicker({
             role="button"
             aria-label="Clear dates"
             onClick={handleClear}
-            className="shrink-0 rounded-full p-0.5 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-gray-200"
+            className="shrink-0 rounded-full p-0.5 text-black transition-colors hover:bg-gray-200 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-gray-200"
           >
             <X className="h-3.5 w-3.5" />
           </span>

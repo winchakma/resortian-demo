@@ -64,7 +64,7 @@ export default async function HotelDetailsPage({
             <div className="flex items-center py-4">
               <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to Search
@@ -99,10 +99,10 @@ export default async function HotelDetailsPage({
 
               {/* Right: hotel info */}
               <div className="flex flex-col justify-center">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+                <h1 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
                   {hotel.name}
                 </h1>
-                <div className="mt-2 flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                <div className="mt-2 flex items-center gap-1.5 text-sm text-black dark:text-gray-400">
                   <MapPin className="h-4 w-4 text-primary-600" />
                   <span>{hotel.location}</span>
                 </div>
@@ -115,27 +115,27 @@ export default async function HotelDetailsPage({
                       {hotel.rating}
                     </span>
                   </div>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                  <span className="text-sm text-black dark:text-gray-400">
                     ({hotel.reviewCount} reviews)
                   </span>
                 </div>
 
                 {/* Description */}
                 <div
-                  className="prose prose-sm mt-5 max-w-none text-gray-600 dark:text-gray-400 [&_b]:font-semibold [&_strong]:font-semibold [&_ul]:ml-5 [&_ul]:list-disc [&_ol]:ml-5 [&_ol]:list-decimal"
+                  className="prose prose-sm mt-5 max-w-none text-black dark:text-gray-400 [&_b]:font-semibold [&_strong]:font-semibold [&_ul]:ml-5 [&_ul]:list-disc [&_ol]:ml-5 [&_ol]:list-decimal"
                   dangerouslySetInnerHTML={{ __html: hotel.description }}
                 />
 
                 {/* Amenities */}
                 <div className="mt-6">
-                  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-black dark:text-gray-400">
                     Popular Amenities
                   </h2>
                   <div className="flex flex-wrap gap-2">
                     {hotel.amenities.map((amenity) => (
                       <span
                         key={amenity}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-medium text-black dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
                       >
                         {AMENITY_ICONS[amenity] ?? null}
                         {amenity}
@@ -168,8 +168,8 @@ export default async function HotelDetailsPage({
                           <LogIn className="h-4 w-4 text-primary-600 dark:text-primary-400" />
                         </div>
                         <div>
-                          <p className="text-xs text-gray-400 dark:text-gray-500">Check-in</p>
-                          <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                          <p className="text-xs text-black dark:text-gray-500">Check-in</p>
+                          <p className="text-sm font-semibold text-black dark:text-white">
                             {hotel.checkinTime}
                           </p>
                         </div>
@@ -181,8 +181,8 @@ export default async function HotelDetailsPage({
                           <LogOut className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                         </div>
                         <div>
-                          <p className="text-xs text-gray-400 dark:text-gray-500">Check-out</p>
-                          <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                          <p className="text-xs text-black dark:text-gray-500">Check-out</p>
+                          <p className="text-sm font-semibold text-black dark:text-white">
                             {hotel.checkoutTime}
                           </p>
                         </div>
@@ -198,7 +198,7 @@ export default async function HotelDetailsPage({
         {/* ── Select Your Room ── */}
         <section className="py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="mb-8 text-2xl font-bold text-black dark:text-white">
               Select Your Room
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -218,12 +218,12 @@ export default async function HotelDetailsPage({
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-950/40">
                     <FileText className="h-4 w-4 text-violet-600 dark:text-violet-400" />
                   </div>
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                  <h2 className="text-lg font-bold text-black dark:text-white">
                     Booking Conditions
                   </h2>
                 </div>
                 <div
-                  className="prose prose-sm max-w-none text-gray-600 dark:text-gray-400 [&_b]:font-semibold [&_strong]:font-semibold [&_ul]:ml-5 [&_ul]:list-disc [&_ol]:ml-5 [&_ol]:list-decimal"
+                  className="prose prose-sm max-w-none text-black dark:text-gray-400 [&_b]:font-semibold [&_strong]:font-semibold [&_ul]:ml-5 [&_ul]:list-disc [&_ol]:ml-5 [&_ol]:list-decimal"
                   dangerouslySetInnerHTML={{ __html: hotel.bookingConditions }}
                 />
               </div>

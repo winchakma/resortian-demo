@@ -53,16 +53,16 @@ function NotificationItem({
       }`}
     >
       <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-        {TYPE_ICON[notification.type] ?? <Bell className="h-4 w-4 text-gray-400" />}
+        {TYPE_ICON[notification.type] ?? <Bell className="h-4 w-4 text-black" />}
       </div>
       <div className="min-w-0 flex-1">
-        <p className={`text-xs font-semibold ${notification.isRead ? "text-gray-600 dark:text-gray-400" : "text-gray-900 dark:text-white"}`}>
+        <p className={`text-xs font-semibold ${notification.isRead ? "text-black dark:text-gray-400" : "text-black dark:text-white"}`}>
           {notification.title}
         </p>
-        <p className="mt-0.5 text-[11px] leading-relaxed text-gray-500 dark:text-gray-400">
+        <p className="mt-0.5 text-[11px] leading-relaxed text-black dark:text-gray-400">
           {notification.body}
         </p>
-        <p className="mt-1 text-[10px] text-gray-400 dark:text-gray-500">
+        <p className="mt-1 text-[10px] text-black dark:text-gray-500">
           {relativeTime(notification.createdAt)}
         </p>
       </div>
@@ -128,7 +128,7 @@ export function NotificationBell() {
         <div className="fixed inset-x-2 top-16 z-50 w-auto overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80 dark:border-gray-700 dark:bg-gray-900">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-800">
-            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+            <span className="text-sm font-semibold text-black dark:text-white">
               Notifications
               {unreadCount > 0 && (
                 <span className="ml-2 rounded-full bg-primary-100 px-1.5 py-0.5 text-[10px] font-bold text-primary-700 dark:bg-primary-950/40 dark:text-primary-400">
@@ -160,7 +160,7 @@ export function NotificationBell() {
             ) : items.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-2 py-12">
                 <Bell className="h-8 w-8 text-gray-200 dark:text-gray-700" />
-                <p className="text-xs text-gray-400 dark:text-gray-500">No notifications yet</p>
+                <p className="text-xs text-black dark:text-gray-500">No notifications yet</p>
               </div>
             ) : (
               <>
@@ -177,7 +177,7 @@ export function NotificationBell() {
                   </div>
                 )}
                 {!hasMore && items.length > 0 && (
-                  <p className="py-3 text-center text-[10px] text-gray-400 dark:text-gray-600">
+                  <p className="py-3 text-center text-[10px] text-black dark:text-gray-600">
                     All caught up
                   </p>
                 )}

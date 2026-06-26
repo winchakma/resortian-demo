@@ -84,14 +84,14 @@ function HeroStat({
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div className={`inline-flex rounded-xl p-2.5 ${map[accent]}`}>{icon}</div>
-      <p className="mt-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <p className="mt-4 text-2xl font-bold tracking-tight text-black dark:text-white">
         {value}
       </p>
-      <p className="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
+      <p className="mt-0.5 text-sm font-medium text-black dark:text-gray-400">
         {label}
       </p>
       {sub && (
-        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{sub}</p>
+        <p className="mt-1 text-xs text-black dark:text-gray-500">{sub}</p>
       )}
     </div>
   );
@@ -118,8 +118,8 @@ function MiniStat({
           {label}
         </span>
       </div>
-      <p className="text-base font-bold text-gray-900 dark:text-white">{value}</p>
-      {unit && <p className="text-[10px] text-gray-400">{unit}</p>}
+      <p className="text-base font-bold text-black dark:text-white">{value}</p>
+      {unit && <p className="text-[10px] text-black">{unit}</p>}
     </div>
   );
 }
@@ -173,10 +173,10 @@ export default function FinanceOverview() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-black dark:text-white">
             Finance Overview
           </h3>
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-black dark:text-gray-500">
             Complete picture of your earnings, commissions & cashouts
           </p>
         </div>
@@ -184,7 +184,7 @@ export default function FinanceOverview() {
           type="button"
           onClick={load}
           disabled={loading}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white text-black transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800"
           title="Refresh"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -261,7 +261,7 @@ export default function FinanceOverview() {
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
-              <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h4 className="text-sm font-semibold text-black dark:text-white">
                 This Month vs Last Month
               </h4>
             </div>
@@ -289,7 +289,7 @@ export default function FinanceOverview() {
               label="Bookings (last month)"
               value={prevMonth.bookings}
               icon={<CalendarDays className="h-3.5 w-3.5" />}
-              cls="text-gray-500 dark:text-gray-400"
+              cls="text-black dark:text-gray-400"
             />
             <MiniStat
               label="Gross (this month)"
@@ -301,7 +301,7 @@ export default function FinanceOverview() {
               label="Gross (last month)"
               value={fmtBDT(prevMonth.gross)}
               icon={<TrendingUp className="h-3.5 w-3.5" />}
-              cls="text-gray-500 dark:text-gray-400"
+              cls="text-black dark:text-gray-400"
             />
             <MiniStat
               label="Advance (this month)"
@@ -322,7 +322,7 @@ export default function FinanceOverview() {
         <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-4 flex items-center gap-2">
             <Banknote className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+            <h4 className="text-sm font-semibold text-black dark:text-white">
               Cashout &amp; Revenue
             </h4>
           </div>
@@ -375,7 +375,7 @@ export default function FinanceOverview() {
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
         <div className="mb-4 flex items-center gap-2">
           <BarChart3 className="h-4 w-4 text-green-600 dark:text-green-400" />
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+          <h4 className="text-sm font-semibold text-black dark:text-white">
             Last 6 Months
           </h4>
         </div>
@@ -391,10 +391,10 @@ export default function FinanceOverview() {
                     title={`${fmtBDT(m.gross)} · ${m.bookings} bookings`}
                   />
                 </div>
-                <p className="text-[10px] font-semibold text-gray-700 dark:text-gray-300">
+                <p className="text-[10px] font-semibold text-black dark:text-gray-300">
                   {fmtBDT(m.gross)}
                 </p>
-                <p className="text-[10px] text-gray-400">{m.month}</p>
+                <p className="text-[10px] text-black">{m.month}</p>
               </div>
             );
           })}
@@ -406,13 +406,13 @@ export default function FinanceOverview() {
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
           <div className="flex items-center gap-2 border-b border-gray-100 px-5 py-4 dark:border-gray-800">
             <Building2 className="h-4 w-4 text-green-600 dark:text-green-400" />
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+            <h4 className="text-sm font-semibold text-black dark:text-white">
               Earnings by Property
             </h4>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
-              <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">
+              <thead className="bg-gray-50 text-left text-[11px] uppercase tracking-wide text-black dark:bg-gray-800/50 dark:text-gray-400">
                 <tr>
                   <th className="px-5 py-3">Property</th>
                   <th className="px-3 py-3 text-right">Bookings</th>
@@ -425,8 +425,8 @@ export default function FinanceOverview() {
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {perHotel.map((h) => (
-                  <tr key={h.hotelId} className="text-gray-700 dark:text-gray-300">
-                    <td className="px-5 py-3 font-medium text-gray-900 dark:text-white">
+                  <tr key={h.hotelId} className="text-black dark:text-gray-300">
+                    <td className="px-5 py-3 font-medium text-black dark:text-white">
                       {h.hotelName}
                     </td>
                     <td className="px-3 py-3 text-right">{h.bookings}</td>
@@ -451,11 +451,11 @@ export default function FinanceOverview() {
           <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
             <div className="flex items-center gap-2">
               <Hotel className="h-4 w-4 text-green-600 dark:text-green-400" />
-              <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h4 className="text-sm font-semibold text-black dark:text-white">
                 Recent Earnings (per booking)
               </h4>
             </div>
-            <p className="text-[11px] text-gray-400">Last 10 non-cancelled</p>
+            <p className="text-[11px] text-black">Last 10 non-cancelled</p>
           </div>
           <div className="divide-y divide-gray-100 dark:divide-gray-800">
             {recentEarnings.map((b) => {
@@ -469,7 +469,7 @@ export default function FinanceOverview() {
                 >
                   <div className="flex min-w-0 flex-col gap-0.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-mono text-sm font-semibold text-gray-900 dark:text-white">
+                      <span className="font-mono text-sm font-semibold text-black dark:text-white">
                         {b.reference}
                       </span>
                       <span
@@ -485,35 +485,35 @@ export default function FinanceOverview() {
                         </span>
                       )}
                     </div>
-                    <p className="flex flex-wrap items-center gap-x-1.5 truncate text-xs text-gray-500 dark:text-gray-400">
+                    <p className="flex flex-wrap items-center gap-x-1.5 truncate text-xs text-black dark:text-gray-400">
                       <span>
                         {b.room.hotel.name} · {b.room.name}
                       </span>
                       {unitLabel(b.unit) && (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                        <span className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-black dark:bg-gray-800 dark:text-gray-300">
                           <DoorOpen className="h-3 w-3" />
                           {unitLabel(b.unit)}
                         </span>
                       )}
                       {b.guest.name && <span>· {b.guest.name}</span>}
                     </p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                    <p className="text-xs text-black dark:text-gray-500">
                       {fmtDate(b.checkIn)} → {fmtDate(b.checkOut)} · {b.nights} night
                       {b.nights !== 1 ? "s" : ""}
                     </p>
                   </div>
                   <div className="grid grid-cols-3 gap-x-4 gap-y-0 text-right sm:grid-cols-3">
                     <div>
-                      <p className="text-xs font-semibold text-gray-900 dark:text-white">
+                      <p className="text-xs font-semibold text-black dark:text-white">
                         {fmtBDT(b.advancePaid)}
                       </p>
-                      <p className="text-[10px] text-gray-400">advance</p>
+                      <p className="text-[10px] text-black">advance</p>
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-rose-600 dark:text-rose-400">
                         -{fmtBDT(b.commissionAmount)}
                       </p>
-                      <p className="text-[10px] text-gray-400">
+                      <p className="text-[10px] text-black">
                         {b.commissionRate}% comm.
                       </p>
                     </div>
@@ -521,7 +521,7 @@ export default function FinanceOverview() {
                       <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
                         {fmtBDT(b.earning)}
                       </p>
-                      <p className="text-[10px] text-gray-400">your earning</p>
+                      <p className="text-[10px] text-black">your earning</p>
                     </div>
                   </div>
                 </div>

@@ -238,7 +238,7 @@ export default function MessageThread({
           <button
             type="button"
             onClick={onBack}
-            className="rounded-lg p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="rounded-lg p-1 text-black hover:bg-gray-100 dark:hover:bg-gray-800"
             aria-label="Back"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -258,10 +258,10 @@ export default function MessageThread({
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+          <p className="truncate text-sm font-semibold text-black dark:text-white">
             {counterpartName}
           </p>
-          <p className="truncate text-[11px] text-gray-500 dark:text-gray-400">
+          <p className="truncate text-[11px] text-black dark:text-gray-400">
             {subtitle}
           </p>
         </div>
@@ -279,7 +279,7 @@ export default function MessageThread({
             type="button"
             onClick={loadOlder}
             disabled={loadingMore}
-            className="mx-auto flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="mx-auto flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1 text-xs text-black hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
           >
             {loadingMore ? (
               <Loader2 className="h-3 w-3 animate-spin" />
@@ -292,14 +292,14 @@ export default function MessageThread({
 
         {loadingInitial && (
           <div className="flex justify-center py-6">
-            <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+            <Loader2 className="h-5 w-5 animate-spin text-black" />
           </div>
         )}
 
         {groups.map((group) => (
           <div key={group.day} className="space-y-2">
             <div className="my-2 flex justify-center">
-              <span className="rounded-full bg-gray-100 px-3 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+              <span className="rounded-full bg-gray-100 px-3 py-0.5 text-[10px] font-medium text-black dark:bg-gray-800 dark:text-gray-400">
                 {group.label}
               </span>
             </div>
@@ -314,7 +314,7 @@ export default function MessageThread({
         ))}
 
         {peerTyping && (
-          <div className="flex items-center gap-1.5 px-1 text-xs text-gray-400">
+          <div className="flex items-center gap-1.5 px-1 text-xs text-black">
             <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-gray-400" />
             <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-gray-400 [animation-delay:120ms]" />
             <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-gray-400 [animation-delay:240ms]" />
@@ -342,7 +342,7 @@ function MessageBubble({
   if (msg.type === "SYSTEM" || msg.senderRole === "SYSTEM") {
     return (
       <div className="flex justify-center">
-        <span className="max-w-md rounded-xl bg-gray-100 px-3 py-1.5 text-center text-[11px] text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+        <span className="max-w-md rounded-xl bg-gray-100 px-3 py-1.5 text-center text-[11px] text-black dark:bg-gray-800 dark:text-gray-400">
           {msg.body}
         </span>
       </div>
@@ -355,7 +355,7 @@ function MessageBubble({
         className={`max-w-[78%] rounded-2xl px-3.5 py-2 text-sm shadow-sm ${
           mine
             ? "bg-primary-600 text-white"
-            : "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
+            : "bg-gray-100 text-black dark:bg-gray-800 dark:text-white"
         }`}
       >
         {msg.attachments.length > 0 && (
@@ -380,7 +380,7 @@ function MessageBubble({
         {msg.body && <p className="whitespace-pre-wrap break-words">{msg.body}</p>}
         <p
           className={`mt-1 text-right text-[10px] ${
-            mine ? "text-white/70" : "text-gray-500"
+            mine ? "text-white/70" : "text-black"
           }`}
         >
           {new Date(msg.createdAt).toLocaleTimeString([], {

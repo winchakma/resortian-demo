@@ -39,7 +39,7 @@ export function Destinations() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="mb-8">
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
+          <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
             Get inspired for your next trip
           </h2>
         </div>
@@ -101,7 +101,7 @@ export function Destinations() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
 
                   {/* Category Badge */}
-                  <div className="absolute left-3 top-3 rounded bg-white/90 px-2 py-0.5 text-[9px] font-extrabold text-gray-700 shadow-sm dark:bg-slate-900/90 dark:text-gray-200 uppercase tracking-wide">
+                  <div className="absolute left-3 top-3 rounded bg-white/90 px-2 py-0.5 text-[9px] font-extrabold text-black shadow-sm dark:bg-slate-900/90 dark:text-gray-200 uppercase tracking-wide">
                     {categories[index % categories.length]}
                   </div>
 
@@ -119,7 +119,7 @@ export function Destinations() {
           {/* Navigation Buttons - placed inside container to prevent edge clipping */}
           <button
             onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll left"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -127,7 +127,7 @@ export function Destinations() {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll right"
           >
             <ChevronRight className="h-5 w-5" />

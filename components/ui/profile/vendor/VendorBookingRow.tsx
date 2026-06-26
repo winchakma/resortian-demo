@@ -203,13 +203,13 @@ export default function VendorBookingRow({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-gray-900 dark:text-white">
+              <p className="text-sm font-semibold text-black dark:text-white">
                 {hotelName}
               </p>
-              <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-black dark:text-gray-400">
                 <span>{roomName}</span>
                 {localUnit && (
-                  <span className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-black dark:bg-gray-800 dark:text-gray-300">
                     <DoorOpen className="h-3 w-3" />
                     {unitLabel(localUnit)}
                   </span>
@@ -266,7 +266,7 @@ export default function VendorBookingRow({
             </div>
           </div>
 
-          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-black dark:text-gray-400">
             <span className="flex items-center gap-1">
               <CalendarDays className="h-3.5 w-3.5" />
               {fmtDate(booking.checkIn)} → {fmtDate(booking.checkOut)}
@@ -282,14 +282,14 @@ export default function VendorBookingRow({
           </div>
 
           <div className="mt-2.5 flex flex-wrap items-center gap-2">
-            <span className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 font-mono text-[11px] font-semibold text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+            <span className="rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 font-mono text-[11px] font-semibold text-black dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
               {booking.reference}
             </span>
-            <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+            <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-black dark:bg-gray-800 dark:text-gray-400">
               <User className="h-3 w-3" />
               {guestName}
             </span>
-            <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+            <span className="flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-black dark:bg-gray-800 dark:text-gray-400">
               <Phone className="h-3 w-3" />
               {guestPhone}
             </span>
@@ -340,15 +340,15 @@ export default function VendorBookingRow({
                     key={col.label}
                     className={`px-4 py-3 ${col.highlight ? "bg-green-50/60 dark:bg-green-950/20" : "bg-gray-50/60 dark:bg-gray-800/30"}`}
                   >
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                    <p className="text-[10px] text-black dark:text-gray-500">
                       {col.label}
                     </p>
                     <p
-                      className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-green-700 dark:text-green-400" : "text-gray-800 dark:text-gray-200"}`}
+                      className={`mt-0.5 text-sm font-bold ${col.highlight ? "text-green-700 dark:text-green-400" : "text-black dark:text-gray-200"}`}
                     >
                       {col.value}
                     </p>
-                    <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                    <p className="mt-0.5 text-[10px] text-black dark:text-gray-500">
                       {col.sub}
                     </p>
                   </div>
@@ -358,35 +358,35 @@ export default function VendorBookingRow({
               {/* Commission breakdown */}
               <div className="grid grid-cols-3 divide-x divide-gray-100 border-t border-gray-100 dark:divide-gray-800 dark:border-gray-800">
                 <div className="bg-gray-50/40 px-4 py-3 dark:bg-gray-800/20">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                  <p className="text-[10px] text-black dark:text-gray-500">
                     Commission Rate
                   </p>
-                  <p className="mt-0.5 text-sm font-bold text-gray-700 dark:text-gray-300">
+                  <p className="mt-0.5 text-sm font-bold text-black dark:text-gray-300">
                     {booking.commissionRate}%
                   </p>
-                  <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                  <p className="mt-0.5 text-[10px] text-black dark:text-gray-500">
                     Platform fee
                   </p>
                 </div>
                 <div className="bg-red-50/40 px-4 py-3 dark:bg-red-950/10">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                  <p className="text-[10px] text-black dark:text-gray-500">
                     Platform Fee
                   </p>
                   <p className="mt-0.5 text-sm font-bold text-red-600 dark:text-red-400">
                     ৳{booking.commissionAmount.toLocaleString()}
                   </p>
-                  <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                  <p className="mt-0.5 text-[10px] text-black dark:text-gray-500">
                     Deducted
                   </p>
                 </div>
                 <div className="bg-emerald-50/60 px-4 py-3 dark:bg-emerald-950/20">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                  <p className="text-[10px] text-black dark:text-gray-500">
                     Your Payout
                   </p>
                   <p className="mt-0.5 text-sm font-bold text-emerald-700 dark:text-emerald-400">
                     ৳{booking.payoutAmount.toLocaleString()}
                   </p>
-                  <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                  <p className="mt-0.5 text-[10px] text-black dark:text-gray-500">
                     {booking.cashoutRequest
                       ? booking.cashoutRequest.status === "PAID"
                         ? "Paid out"
@@ -401,10 +401,10 @@ export default function VendorBookingRow({
               </div>
 
               <div className="flex items-center justify-between border-t border-gray-100 px-4 py-2 dark:border-gray-800">
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p className="text-xs text-black dark:text-gray-500">
                   Booked on {fmtDate(booking.bookedOn)}
                 </p>
-                <span className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
+                <span className="flex items-center gap-1 text-xs text-black dark:text-gray-500">
                   {booking.paymentMethod === "STRIPE" ? (
                     <CreditCard className="h-3 w-3" />
                   ) : (
@@ -421,10 +421,10 @@ export default function VendorBookingRow({
                 <div className="border-t border-gray-100 px-4 py-3 dark:border-gray-800">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <DoorOpen className="h-4 w-4 text-gray-400" />
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <DoorOpen className="h-4 w-4 text-black" />
+                      <p className="text-xs text-black dark:text-gray-400">
                         Current unit:{" "}
-                        <span className="font-semibold text-gray-700 dark:text-gray-200">
+                        <span className="font-semibold text-black dark:text-gray-200">
                           {unitLabel(localUnit)}
                         </span>
                       </p>
@@ -432,7 +432,7 @@ export default function VendorBookingRow({
                     <button
                       type="button"
                       onClick={openUnitPicker}
-                      className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-gray-700 dark:text-gray-400 dark:hover:border-green-700 dark:hover:bg-green-950/30 dark:hover:text-green-400"
+                      className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-semibold text-black transition-colors hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-gray-700 dark:text-gray-400 dark:hover:border-green-700 dark:hover:bg-green-950/30 dark:hover:text-green-400"
                     >
                       <Repeat className="h-3.5 w-3.5" />
                       Change Unit
@@ -442,14 +442,14 @@ export default function VendorBookingRow({
                   {showUnitPicker && (
                     <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
                       <div className="mb-2 flex items-center justify-between">
-                        <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                        <p className="text-[11px] font-semibold uppercase tracking-wide text-black dark:text-gray-400">
                           Select a unit for {fmtDate(booking.checkIn)} →{" "}
                           {fmtDate(booking.checkOut)}
                         </p>
                         <button
                           type="button"
                           onClick={() => setShowUnitPicker(false)}
-                          className="rounded p-0.5 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-gray-700"
+                          className="rounded p-0.5 text-black hover:bg-gray-200 hover:text-gray-600 dark:hover:bg-gray-700"
                         >
                           <X className="h-3.5 w-3.5" />
                         </button>
@@ -457,14 +457,14 @@ export default function VendorBookingRow({
 
                       {unitsLoading && (
                         <div className="flex items-center justify-center py-4">
-                          <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                          <Loader2 className="h-4 w-4 animate-spin text-black" />
                         </div>
                       )}
 
                       {!unitsLoading && availableUnits && (
                         <div className="flex flex-col gap-1.5">
                           {availableUnits.length === 0 && (
-                            <p className="py-2 text-center text-xs text-gray-400">
+                            <p className="py-2 text-center text-xs text-black">
                               No other units exist for this room.
                             </p>
                           )}
@@ -490,14 +490,14 @@ export default function VendorBookingRow({
                                     className={`h-3.5 w-3.5 ${
                                       u.isAvailable
                                         ? "text-green-600 dark:text-green-400"
-                                        : "text-gray-400"
+                                        : "text-black"
                                     }`}
                                   />
-                                  <span className="font-semibold text-gray-700 dark:text-gray-200">
+                                  <span className="font-semibold text-black dark:text-gray-200">
                                     {unitLabel(u)}
                                   </span>
                                   {!u.isActive && (
-                                    <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[9px] font-semibold uppercase text-gray-500 dark:bg-gray-700">
+                                    <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[9px] font-semibold uppercase text-black dark:bg-gray-700">
                                       Inactive
                                     </span>
                                   )}

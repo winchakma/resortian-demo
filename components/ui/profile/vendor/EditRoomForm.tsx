@@ -370,10 +370,10 @@ export default function EditRoomForm({
     >
       {/* Hotel info (read-only) */}
       <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
-        <Hash className="h-4 w-4 shrink-0 text-gray-400" />
+        <Hash className="h-4 w-4 shrink-0 text-black" />
         <div className="min-w-0">
-          <p className="text-xs text-gray-400">Editing room in hotel</p>
-          <p className="mt-0.5 truncate text-xs font-medium text-gray-700 dark:text-gray-300">
+          <p className="text-xs text-black">Editing room in hotel</p>
+          <p className="mt-0.5 truncate text-xs font-medium text-black dark:text-gray-300">
             {hotelName}
           </p>
         </div>
@@ -392,7 +392,7 @@ export default function EditRoomForm({
         </div>
         <div>
           <label className={labelCls()}>
-            Badge <span className="font-normal text-gray-400">(optional)</span>
+            Badge <span className="font-normal text-black">(optional)</span>
           </label>
           <input
             type="text"
@@ -479,7 +479,7 @@ export default function EditRoomForm({
         <label className={labelCls()}>
           <span className="flex items-center gap-1.5">
             <Sparkles className="h-3.5 w-3.5" /> Amenities{" "}
-            <span className="font-normal text-gray-400">(comma-separated)</span>
+            <span className="font-normal text-black">(comma-separated)</span>
           </span>
         </label>
         <input
@@ -496,12 +496,12 @@ export default function EditRoomForm({
         <label className={labelCls()}>
           <span className="flex items-center gap-1.5">
             <Layers className="h-3.5 w-3.5" /> Room Units{" "}
-            <span className="font-normal text-gray-400">
+            <span className="font-normal text-black">
               (at least 1 required)
             </span>
           </span>
         </label>
-        <p className="mb-3 text-xs text-gray-400 dark:text-gray-500">
+        <p className="mb-3 text-xs text-black dark:text-gray-500">
           Each unit is a physical room of this type. Edit, remove or add units
           below.
         </p>
@@ -557,8 +557,8 @@ export default function EditRoomForm({
                 onClick={() => toggleDeleteExistingUnit(index)}
                 className={`mt-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors ${
                   unit.deleted
-                    ? "text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800"
-                    : "text-gray-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
+                    ? "text-black hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800"
+                    : "text-black hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
                 }`}
                 title={unit.deleted ? "Undo remove" : "Remove unit"}
               >
@@ -607,7 +607,7 @@ export default function EditRoomForm({
               <button
                 type="button"
                 onClick={() => removeNewUnitRow(index)}
-                className="mt-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
+                className="mt-1.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-black transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
                 title="Discard new unit"
               >
                 <X className="h-3.5 w-3.5" />
@@ -630,10 +630,10 @@ export default function EditRoomForm({
       {/* Active toggle */}
       <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
         <div>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+          <p className="text-sm font-medium text-black dark:text-gray-200">
             Active
           </p>
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-black dark:text-gray-500">
             Only active rooms are shown to guests
           </p>
         </div>
@@ -656,7 +656,7 @@ export default function EditRoomForm({
                 <Upload className="h-3.5 w-3.5" /> Room Photos
               </span>
             </label>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
+            <p className="text-xs text-black dark:text-gray-500">
               You can add or remove images individually. Upload 1–
               {MAX_ROOM_IMAGES} photos.
             </p>
@@ -664,7 +664,7 @@ export default function EditRoomForm({
           {imagePreviews.length > 0 &&
             imagePreviews.length < MAX_ROOM_IMAGES && (
               <label
-                className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 ${fetchingImages ? "pointer-events-none opacity-60" : ""}`}
+                className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-black transition-colors hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 ${fetchingImages ? "pointer-events-none opacity-60" : ""}`}
               >
                 {fetchingImages ? (
                   <>
@@ -714,11 +714,11 @@ export default function EditRoomForm({
                 className={`flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800/50 ${fetchingImages ? "cursor-wait opacity-60" : "hover:border-green-400 hover:bg-green-50/30 dark:hover:border-green-600"}`}
               >
                 {fetchingImages ? (
-                  <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                  <Loader2 className="h-5 w-5 animate-spin text-black" />
                 ) : (
                   <ImageIcon className="h-5 w-5 text-gray-300" />
                 )}
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-black">
                   {fetchingImages ? "Loading…" : "Add"}
                 </span>
                 <input
@@ -737,13 +737,13 @@ export default function EditRoomForm({
             className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors hover:border-green-400 hover:bg-green-50/30 dark:hover:border-green-600 ${imageError ? "border-red-400 bg-red-50/20 dark:border-red-700" : "border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50"}`}
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-              <Upload className="h-5 w-5 text-gray-400" />
+              <Upload className="h-5 w-5 text-black" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-black dark:text-gray-400">
                 Click to upload photos
               </p>
-              <p className="mt-0.5 text-xs text-gray-400">
+              <p className="mt-0.5 text-xs text-black">
                 Select up to {MAX_ROOM_IMAGES} images — JPEG, PNG or WebP
               </p>
             </div>

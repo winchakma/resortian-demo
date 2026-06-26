@@ -40,15 +40,15 @@ export function RoomCard({ room, hotel }: RoomCardProps) {
 
       {/* Room details */}
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+        <h3 className="font-semibold text-black dark:text-white">
           {room.name}
         </h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-sm text-black dark:text-gray-400">
           {room.description}
         </p>
 
         {/* Stats row */}
-        <div className="mt-4 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+        <div className="mt-4 flex items-center gap-4 text-sm text-black dark:text-gray-400">
           <span className="flex items-center gap-1.5">
             <Users className="h-4 w-4 text-primary-500" />
             {room.capacity} {room.capacity === 1 ? "Guest" : "Guests"}
@@ -68,7 +68,7 @@ export function RoomCard({ room, hotel }: RoomCardProps) {
           {room.amenities.map((a: string) => (
             <span
               key={a}
-              className="rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+              className="rounded-md bg-gray-100 px-2 py-0.5 text-xs text-black dark:bg-gray-800 dark:text-gray-400"
             >
               {a}
             </span>
@@ -82,18 +82,18 @@ export function RoomCard({ room, hotel }: RoomCardProps) {
               <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
                 ৳{room.price.toLocaleString()}
               </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-xs text-black dark:text-gray-400">
                 /night
               </span>
             </div>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
+            <p className="text-xs text-black dark:text-gray-500">
               Taxes & fees included
             </p>
           </div>
           {isInCart ? (
             <button
               disabled
-              className="rounded-lg bg-gray-300 px-4 py-2 text-sm font-medium text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400"
+              className="rounded-lg bg-gray-300 px-4 py-2 text-sm font-medium text-black cursor-not-allowed dark:bg-gray-700 dark:text-gray-400"
             >
               Already in Cart
             </button>

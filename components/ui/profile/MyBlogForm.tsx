@@ -207,9 +207,9 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
   }
 
   const labelClass =
-    "mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300";
+    "mb-1.5 block text-sm font-medium text-black dark:text-gray-300";
   const inputClass =
-    "w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:bg-gray-800 dark:text-white";
+    "w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-black placeholder-gray-400 transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:bg-gray-800 dark:text-white";
   const cardClass =
     "rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900";
 
@@ -220,15 +220,15 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+          className="rounded-lg p-2 text-black transition-colors hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
         >
           <ArrowLeft className="h-4 w-4" />
         </button>
         <div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-xl font-bold text-black dark:text-white">
             {isEdit ? "Edit Draft" : "New Blog Post"}
           </h2>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-black dark:text-gray-400">
             {isEdit
               ? "Update your draft. It will be reviewed again before publishing."
               : "Share your story. An admin will review and publish it."}
@@ -251,7 +251,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
           <div className="space-y-6 lg:col-span-2">
             {/* Basic Info */}
             <div className={`${cardClass} space-y-4`}>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-black dark:text-white">
                 Basic Information
               </h3>
 
@@ -292,7 +292,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
                     {errors.slug.message}
                   </p>
                 ) : (
-                  <p className="mt-1 text-xs text-gray-400">
+                  <p className="mt-1 text-xs text-black">
                     Auto-generated from title. Used in the URL.
                   </p>
                 )}
@@ -320,7 +320,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
 
             {/* Content */}
             <div className={`${cardClass} space-y-4`}>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-black dark:text-white">
                 Content
               </h3>
               <div>
@@ -350,7 +350,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
                     {errors.content.message}
                   </p>
                 )}
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-black">
                   Use the image button in the toolbar to insert pictures anywhere
                   in the post.
                 </p>
@@ -359,7 +359,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
 
             {/* Cover Image */}
             <div className={`${cardClass} space-y-3`}>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-black dark:text-white">
                 Cover Image{" "}
                 {!isEdit && <span className="text-red-500">*</span>}
               </h3>
@@ -389,13 +389,13 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
                   }`}
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-                    <Upload className="h-4 w-4 text-gray-500" />
+                    <Upload className="h-4 w-4 text-black" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                    <p className="text-sm font-medium text-black dark:text-gray-200">
                       Click to upload cover image
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-black">
                       JPEG, PNG or WebP — max 10 MB
                     </p>
                   </div>
@@ -414,8 +414,8 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
 
             {/* Author Details */}
             <div className={`${cardClass} space-y-4`}>
-              <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
-                <User className="h-3.5 w-3.5 text-gray-400" /> Author Details
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-black dark:text-white">
+                <User className="h-3.5 w-3.5 text-black" /> Author Details
               </h3>
 
               <div>
@@ -425,7 +425,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
                   placeholder="e.g. Travel Writer"
                   {...register("authorTitle")}
                 />
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-black">
                   Shown below your name. Your name comes from your profile.
                 </p>
               </div>
@@ -437,7 +437,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
                   placeholder="A short bio — background, expertise, where you're based, etc."
                   {...register("authorDetails")}
                 />
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-black">
                   Free-form text displayed in an &ldquo;About the Author&rdquo;
                   box at the end of the post.
                 </p>
@@ -449,10 +449,10 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
           <div className="space-y-6">
             {/* Actions */}
             <div className={`${cardClass} space-y-4`}>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-black dark:text-white">
                 Submission
               </h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-black dark:text-gray-400">
                 Posts go to admin review. They will appear on the public blog
                 once an admin publishes them.
               </p>
@@ -460,7 +460,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                  className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-black hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
                 >
                   Cancel
                 </button>
@@ -477,7 +477,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
 
             {/* Post Details */}
             <div className={`${cardClass} space-y-4`}>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-sm font-semibold text-black dark:text-white">
                 Post Details
               </h3>
 
@@ -500,7 +500,7 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
                 <label
                   className={`${labelClass} flex items-center gap-1.5`}
                 >
-                  <Clock className="h-3 w-3 text-gray-400" />
+                  <Clock className="h-3 w-3 text-black" />
                   Read Time (minutes){" "}
                   <span className="text-red-500">*</span>
                 </label>
@@ -524,14 +524,14 @@ export default function MyBlogForm({ id, onCancel, onSaved }: Props) {
 
             {/* Tags & YouTube */}
             <div className={`${cardClass} space-y-4`}>
-              <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
-                <Tag className="h-3.5 w-3.5 text-gray-400" /> Tags &amp; Media
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-black dark:text-white">
+                <Tag className="h-3.5 w-3.5 text-black" /> Tags &amp; Media
               </h3>
 
               <div>
                 <label className={labelClass}>
                   Tags{" "}
-                  <span className="text-xs font-normal text-gray-400">
+                  <span className="text-xs font-normal text-black">
                     (comma-separated)
                   </span>
                 </label>

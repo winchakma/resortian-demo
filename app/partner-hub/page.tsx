@@ -112,7 +112,7 @@ export default function PartnerHubPage() {
         {/* Dashboard features */}
         <section className="py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-black dark:text-white">
               What Your Dashboard Includes
             </h2>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -124,10 +124,10 @@ export default function PartnerHubPage() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-900/30">
                     {f.icon}
                   </div>
-                  <h3 className="mt-4 font-semibold text-gray-900 dark:text-white">
+                  <h3 className="mt-4 font-semibold text-black dark:text-white">
                     {f.title}
                   </h3>
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  <p className="mt-2 text-sm text-black dark:text-gray-400">
                     {f.body}
                   </p>
                 </div>
@@ -139,7 +139,7 @@ export default function PartnerHubPage() {
         {/* Commission breakdown */}
         {/* <section className="bg-white py-12 dark:bg-gray-900">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-black dark:text-white">
               How the Commission Works
             </h2>
             <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700">
@@ -150,7 +150,7 @@ export default function PartnerHubPage() {
                       (h) => (
                         <th
                           key={h}
-                          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400"
+                          className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-black dark:text-gray-400"
                         >
                           {h}
                         </th>
@@ -165,10 +165,10 @@ export default function PartnerHubPage() {
                     ["BDT 5,000 advance", "12% (default)", "BDT 4,400"],
                   ].map(([booking, rate, payout], i) => (
                     <tr key={i}>
-                      <td className="px-6 py-4 text-gray-900 dark:text-white">
+                      <td className="px-6 py-4 text-black dark:text-white">
                         {booking}
                       </td>
-                      <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
+                      <td className="px-6 py-4 text-black dark:text-gray-400">
                         {rate}
                       </td>
                       <td className="px-6 py-4 font-semibold text-primary-600 dark:text-primary-400">
@@ -179,7 +179,7 @@ export default function PartnerHubPage() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+            <p className="mt-3 text-xs text-black dark:text-gray-400">
               Commission is deducted from the advance payment only. The balance
               paid at check-in goes directly to you.
             </p>
@@ -189,7 +189,7 @@ export default function PartnerHubPage() {
         {/* Resources */}
         <section className="py-12">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-black dark:text-white">
               Partner Resources
             </h2>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -200,14 +200,14 @@ export default function PartnerHubPage() {
                   className="group flex items-start justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900"
                 >
                   <div>
-                    <h3 className="font-semibold text-gray-900 group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
+                    <h3 className="font-semibold text-black group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
                       {r.title}
                     </h3>
-                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    <p className="mt-1 text-sm text-black dark:text-gray-400">
                       {r.description}
                     </p>
                   </div>
-                  <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-gray-400 transition-transform group-hover:translate-x-1 group-hover:text-primary-600 dark:group-hover:text-primary-400" />
+                  <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-black transition-transform group-hover:translate-x-1 group-hover:text-primary-600 dark:group-hover:text-primary-400" />
                 </a>
               ))}
             </div>
@@ -220,10 +220,10 @@ export default function PartnerHubPage() {
             <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed border-gray-300 p-8 text-center dark:border-gray-700 sm:flex-row sm:text-left">
               <HelpCircle className="h-8 w-8 shrink-0 text-primary-500" />
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white">
+                <p className="font-semibold text-black dark:text-white">
                   Need help with your account?
                 </p>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-sm text-black dark:text-gray-400">
                   Our partner support team is available daily 9 am – 6 pm BST.
                   Email{" "}
                   <a

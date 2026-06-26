@@ -84,12 +84,12 @@ export function UserStories() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         <div className="mb-6 flex items-center justify-between gap-4">
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
+          <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
             Magical trip moments that last
           </h2>
           <Link
             href="/stories"
-            className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white"
+            className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-black hover:text-black dark:text-gray-300 dark:hover:text-white"
           >
             More
             <ChevronRight className="h-4 w-4" />
@@ -130,12 +130,12 @@ export function UserStories() {
                           type="button"
                           onClick={(e) => toggleFavorite(story.id, e)}
                           aria-label="Like story"
-                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-500 shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
+                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-black shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
                         >
                           <Heart
                             fill={isFav ? "currentColor" : "none"}
                             className={`h-4 w-4 transition-colors pointer-events-none ${
-                              isFav ? "text-red-500" : "text-gray-500 dark:text-gray-400"
+                              isFav ? "text-red-500" : "text-black dark:text-gray-400"
                             }`}
                           />
                         </button>
@@ -143,7 +143,7 @@ export function UserStories() {
 
                       {/* Content Panel — below image, same as FeaturedPlaces */}
                       <div className="p-4 flex flex-col gap-3">
-                        <p className="text-[14px] font-extrabold leading-snug text-gray-900 dark:text-white line-clamp-2 group-hover/card:text-primary-600 transition-colors">
+                        <p className="text-[14px] font-extrabold leading-snug text-black dark:text-white line-clamp-2 group-hover/card:text-primary-600 transition-colors">
                           {story.quote}
                         </p>
                         {/* Author */}
@@ -158,7 +158,7 @@ export function UserStories() {
                               sizes="24px"
                             />
                           </div>
-                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 truncate">
+                          <span className="text-xs font-semibold text-black dark:text-gray-300 truncate">
                             {story.author}
                           </span>
                         </div>
@@ -174,7 +174,7 @@ export function UserStories() {
           {/* Navigation Buttons — exact same style as FeaturedPlaces */}
           <button
             onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll left"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -182,7 +182,7 @@ export function UserStories() {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll right"
           >
             <ChevronRight className="h-5 w-5" />

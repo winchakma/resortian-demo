@@ -167,7 +167,7 @@ export default function EditHotelForm({
         <div>
           <label className={labelCls()}>
             URL Slug{" "}
-            <span className="font-normal text-gray-400">(auto-generated)</span>
+            <span className="font-normal text-black">(auto-generated)</span>
           </label>
           <input
             type="text"
@@ -234,7 +234,7 @@ export default function EditHotelForm({
           <label className={labelCls()}>
             <span className="flex items-center gap-1.5">
               <Tag className="h-3.5 w-3.5" /> Tags{" "}
-              <span className="font-normal text-gray-400">(comma-separated)</span>
+              <span className="font-normal text-black">(comma-separated)</span>
             </span>
           </label>
           <input
@@ -248,7 +248,7 @@ export default function EditHotelForm({
           <label className={labelCls()}>
             <span className="flex items-center gap-1.5">
               <Sparkles className="h-3.5 w-3.5" /> Amenities{" "}
-              <span className="font-normal text-gray-400">(comma-separated)</span>
+              <span className="font-normal text-black">(comma-separated)</span>
             </span>
           </label>
           <input
@@ -295,7 +295,7 @@ export default function EditHotelForm({
         <label className={labelCls()}>
           <span className="flex items-center gap-1.5">
             <FileText className="h-3.5 w-3.5" /> Booking Conditions{" "}
-            <span className="font-normal text-gray-400">(optional)</span>
+            <span className="font-normal text-black">(optional)</span>
           </span>
         </label>
         <Controller
@@ -317,10 +317,10 @@ export default function EditHotelForm({
       {/* Active toggle */}
       <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
         <div>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
+          <p className="text-sm font-medium text-black dark:text-gray-200">
             Active
           </p>
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+          <p className="text-xs text-black dark:text-gray-500">
             Only active hotels are visible to guests
           </p>
         </div>
@@ -339,7 +339,7 @@ export default function EditHotelForm({
         <label className={labelCls()}>
           <span className="flex items-center gap-1.5">
             <Upload className="h-3.5 w-3.5" /> Cover Image{" "}
-            <span className="font-normal text-gray-400">
+            <span className="font-normal text-black">
               (leave empty to keep current)
             </span>
           </span>
@@ -380,13 +380,13 @@ export default function EditHotelForm({
                   />
                 )}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Upload className="h-5 w-5 text-gray-400" />
+                  <Upload className="h-5 w-5 text-black" />
                 </div>
               </div>
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-medium text-black dark:text-gray-400">
                 Click to replace image
               </p>
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-black">
                 JPEG, PNG or WebP — max 10 MB
               </p>
             </div>
