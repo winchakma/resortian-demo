@@ -93,14 +93,13 @@ export function Destinations() {
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}
-                  className={`group/card relative block aspect-[1.5] overflow-hidden rounded-xl border-2 border-transparent bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-md hover:shadow-lg data-[mobile-active=true]:shadow-lg transition-all duration-300 hover:-translate-y-1 ${theme.borderClass}`}
+                  className={`group/card relative block aspect-[1.5] overflow-hidden rounded-xl border-2 border-transparent bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-md hover:shadow-lg data-[mobile-active=true]:shadow-lg will-change-transform transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 ${theme.borderClass}`}
                 >
                   <Image
                     src={d.image}
                     alt={d.name}
                     fill
-                    unoptimized
-                    className="object-cover transition-transform duration-500 group-hover/card:scale-105"
+                    className="object-cover will-change-transform transition-transform duration-500 group-hover/card:scale-105"
                     sizes="(max-width: 640px) 200px, (max-width: 1024px) 33vw, 20vw"
                   />
                   

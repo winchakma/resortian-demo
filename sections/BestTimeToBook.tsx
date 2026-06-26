@@ -31,11 +31,10 @@ export function BestTimeToBook() {
           <div className="lg:col-span-5 relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-md group">
             <div className="relative h-[250px] sm:h-[350px] w-full overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop"
+                src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop&q=80"
                 alt="Cox's Bazar"
                 fill
-                unoptimized
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover will-change-transform transition-transform duration-500 group-hover:scale-105"
                 sizes="(max-width: 1024px) 100vw, 40vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />

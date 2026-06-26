@@ -121,15 +121,14 @@ export function UserStories() {
                   className="w-[85vw] sm:w-[280px] md:w-[calc(33.333%-24px)] lg:w-[calc(25%-24px)] shrink-0 snap-start snap-always"
                 >
                   <Link href="/stories" className="block h-full cursor-pointer">
-                    <div className={`group/card relative flex flex-col justify-end overflow-hidden rounded-3xl border-2 bg-gray-900 shadow-xl transition-all duration-500 hover:-translate-y-2 data-[mobile-active=true]:-translate-y-2 h-[420px] ${theme.borderClass}`}>
+                    <div className={`group/card relative flex flex-col justify-end overflow-hidden rounded-3xl border-2 bg-gray-900 shadow-xl will-change-transform transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-2 data-[mobile-active=true]:-translate-y-2 h-[420px] ${theme.borderClass}`}>
 
                       {/* Background Image - Comes to life on hover */}
                       <Image
                         src={story.image}
                         alt={story.quote}
                         fill
-                        unoptimized
-                        className="object-cover grayscale opacity-50 group-hover/card:grayscale-0 group-data-[mobile-active=true]/card:grayscale-0 group-hover/card:opacity-100 group-data-[mobile-active=true]/card:opacity-100 transition-all duration-700 group-hover/card:scale-105 group-data-[mobile-active=true]/card:scale-105"
+                        className="object-cover grayscale opacity-50 group-hover/card:grayscale-0 group-data-[mobile-active=true]/card:grayscale-0 group-hover/card:opacity-100 group-data-[mobile-active=true]/card:opacity-100 will-change-[transform,filter,opacity] transition-[transform,filter,opacity] duration-700 group-hover/card:scale-105 group-data-[mobile-active=true]/card:scale-105"
                         sizes="(max-width: 640px) 280px, 25vw"
                       />
 
@@ -141,8 +140,7 @@ export function UserStories() {
                               src={story.avatar}
                               alt={story.author}
                               fill
-                              unoptimized
-                              className="object-cover grayscale group-hover/card:grayscale-0 group-data-[mobile-active=true]/card:grayscale-0 transition-all duration-700"
+                              className="object-cover grayscale group-hover/card:grayscale-0 group-data-[mobile-active=true]/card:grayscale-0 transition-[filter] duration-700"
                               sizes="28px"
                             />
                           </div>

@@ -8,23 +8,21 @@ export function Hero() {
       <div className="relative flex w-full min-h-[460px] sm:min-h-[360px] flex-col items-center justify-center rounded-[1.5rem] sm:rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden py-10 sm:py-14 lg:py-20 mx-auto shadow-2xl">
         {/* Light Mode Background Image */}
         <Image
-          src="https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=1600&h=900&fit=crop"
+          src="https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=1200&h=675&fit=crop&q=80"
           alt="Sunny tropical beach resort"
           fill
           priority
-          unoptimized
           className="object-cover object-[center_65%] dark:hidden"
-          sizes="(max-width: 1600px) 100vw, 1600px"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
         />
         {/* Dark Mode Background Image */}
         <Image
-          src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1600&h=900&fit=crop"
+          src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200&h=675&fit=crop&q=80"
           alt="Luxury resort illuminated at night"
           fill
           priority
-          unoptimized
           className="object-cover object-center hidden dark:block"
-          sizes="(max-width: 1600px) 100vw, 1600px"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
         />
         {/* Lighter Overlay for Text Readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/50 dark:from-black/60 dark:via-black/30 dark:to-black/60" />
@@ -74,14 +72,13 @@ export function BangladeshStaysWithYou() {
           {/* Left: Large Hero Image Card */}
           <Link
             href="/hotels?location=Cox's%20Bazar"
-            className={`relative overflow-hidden rounded-3xl shadow-lg lg:col-span-7 group aspect-[16/10] lg:aspect-auto min-h-[240px] sm:min-h-[320px] block cursor-pointer border-2 border-transparent transition-all duration-300 hover:-translate-y-1 ${HOVER_THEMES[0].borderClass}`}
+            className={`relative overflow-hidden rounded-3xl shadow-lg lg:col-span-7 group aspect-[16/10] lg:aspect-auto min-h-[240px] sm:min-h-[320px] block cursor-pointer border-2 border-transparent will-change-transform transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 ${HOVER_THEMES[0].borderClass}`}
           >
             <Image
-              src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=800&fit=crop"
+              src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=530&fit=crop&q=80"
               alt="Cox's Bazar beach"
               fill
-              unoptimized
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-cover will-change-transform transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 1024px) 100vw, 60vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
@@ -101,14 +98,13 @@ export function BangladeshStaysWithYou() {
             {/* Card 1 */}
             <Link
               href="/hotels?location=Sylhet"
-              className={`relative overflow-hidden rounded-3xl shadow-md group aspect-[16/10] lg:aspect-auto min-h-[160px] block cursor-pointer border-2 border-transparent transition-all duration-300 hover:-translate-y-1 ${HOVER_THEMES[1].borderClass}`}
+              className={`relative overflow-hidden rounded-3xl shadow-md group aspect-[16/10] lg:aspect-auto min-h-[160px] block cursor-pointer border-2 border-transparent will-change-transform transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 ${HOVER_THEMES[1].borderClass}`}
             >
               <Image
-                src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=400&fit=crop"
+                src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=400&fit=crop&q=80"
                 alt="Tea gardens in Sylhet"
                 fill
-                unoptimized
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover will-change-transform transition-transform duration-500 group-hover:scale-105"
                 sizes="(max-width: 1024px) 50vw, 40vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
@@ -121,14 +117,13 @@ export function BangladeshStaysWithYou() {
             {/* Card 2 */}
             <Link
               href="/hotels?location=Bandarban"
-              className={`relative overflow-hidden rounded-3xl shadow-md group aspect-[16/10] lg:aspect-auto min-h-[160px] block cursor-pointer border-2 border-transparent transition-all duration-300 hover:-translate-y-1 ${HOVER_THEMES[2].borderClass}`}
+              className={`relative overflow-hidden rounded-3xl shadow-md group aspect-[16/10] lg:aspect-auto min-h-[160px] block cursor-pointer border-2 border-transparent will-change-transform transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 ${HOVER_THEMES[2].borderClass}`}
             >
               <Image
-                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop"
+                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop&q=80"
                 alt="Bandarban hills"
                 fill
-                unoptimized
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover will-change-transform transition-transform duration-500 group-hover:scale-105"
                 sizes="(max-width: 1024px) 50vw, 40vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
