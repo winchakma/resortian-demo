@@ -109,7 +109,7 @@ export function UserStories() {
               return (
                 <div
                   key={story.id}
-                  className="w-[280px] sm:w-[300px] shrink-0 snap-start snap-always"
+                  className="w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
                 >
                   <Link href="/stories" className="block h-full cursor-pointer">
                     <div className="group/card relative flex flex-col overflow-hidden rounded-3xl border border-white/20 bg-white/70 backdrop-blur-md dark:border-white/5 dark:bg-slate-900/60 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full">
@@ -122,7 +122,7 @@ export function UserStories() {
                           fill
                           unoptimized
                           className="object-cover transition-transform duration-500 group-hover/card:scale-105"
-                          sizes="(max-width: 640px) 280px, 300px"
+                          sizes="(max-width: 640px) 260px, 25vw"
                         />
 
                         {/* Favorite Heart Button */}
@@ -174,7 +174,7 @@ export function UserStories() {
           {/* Navigation Buttons — exact same style as FeaturedPlaces */}
           <button
             onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll left"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -182,7 +182,7 @@ export function UserStories() {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
             aria-label="Scroll right"
           >
             <ChevronRight className="h-5 w-5" />
