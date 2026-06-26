@@ -98,16 +98,16 @@ export function FeaturedPlaces() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
                     {/* Trip Best Badge */}
-                    <div className="absolute left-3 top-3 flex items-center rounded bg-[#fdf4e3] px-1.5 py-[3px] text-[11px] font-extrabold text-[#5c3a21] shadow-sm">
-                      <svg width="8" height="12" viewBox="0 0 10 16" fill="currentColor" className="mr-0.5 opacity-90">
+                    <div className="absolute left-3 top-3 flex items-center rounded-md bg-[#fdf4e3] px-2 py-1 text-[13px] font-extrabold text-[#5c3a21] shadow-sm">
+                      <svg width="10" height="14" viewBox="0 0 10 16" fill="currentColor" className="mr-0.5 opacity-90">
                         <path d="M8 16c-4-4-4-9-2-16 0 0-2 6-2 11 0 2 2 5 2 5z"/>
                         <path d="M7 11c-2-1-3-4-2-6 0 0-1 2-1 4 0 1 1 2 1 2z"/>
                         <path d="M6 7c-2-1-2-3-1-5 0 0-1 1-1 3 0 1 1 2 1 2z"/>
                       </svg>
-                      <span className="flex items-end leading-none">
-                        Trip<div className="w-[3px] h-[3px] bg-[#f5a623] mx-[2px] mb-[1px]"></div>Best
+                      <span className="flex items-end leading-none tracking-tight">
+                        Trip<div className="w-[3.5px] h-[3.5px] bg-[#f5a623] mx-[2px] mb-[1.5px]"></div>Best
                       </span>
-                      <svg width="8" height="12" viewBox="0 0 10 16" fill="currentColor" className="ml-0.5 opacity-90">
+                      <svg width="10" height="14" viewBox="0 0 10 16" fill="currentColor" className="ml-0.5 opacity-90">
                         <path d="M2 16c4-4 4-9 2-16 0 0 2 6 2 11 0 2-2 5-2 5z"/>
                         <path d="M3 11c2-1 3-4 2-6 0 0 1 2 1 4 0 1-1 2-1 2z"/>
                         <path d="M4 7c2-1 2-3 1-5 0 0 1 1 1 3 0 1-1 2-1 2z"/>
