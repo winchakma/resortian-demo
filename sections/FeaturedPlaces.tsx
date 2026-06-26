@@ -104,7 +104,7 @@ export function FeaturedPlaces() {
               return (
                 <div
                   key={place.id}
-                  className="w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
+                  className="relative w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
                 >
                   <Link
                     href={`/hotels?location=${encodeURIComponent(place.name)}`}
@@ -129,37 +129,6 @@ export function FeaturedPlaces() {
                       </span>
                     </div>
 
-                    {/* Favorite Heart Button & Tooltip Wrapper */}
-                    <div className="absolute right-3 top-3 z-20 flex flex-col items-end">
-                      {/* Tooltip */}
-                      {lastSavedId === place.id && (
-                        <div className="absolute bottom-full right-[-4px] mb-3 w-max animate-in fade-in zoom-in duration-200">
-                          <div className="relative flex items-center gap-8 rounded border border-gray-200 bg-white px-4 py-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-                            <span className="text-[13px] text-gray-800">Saved</span>
-                            <Link href="/favorites" className="flex items-center text-[13px] text-blue-600 hover:text-blue-700">
-                              View <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.5} />
-                            </Link>
-                            {/* Little downward pointing triangle */}
-                            <div className="absolute -bottom-[5px] right-5 h-[10px] w-[10px] rotate-45 border-b border-r border-gray-200 bg-white" />
-                          </div>
-                        </div>
-                      )}
-
-                      <button
-                        type="button"
-                        onClick={(e) => toggleFavorite(place.id, e)}
-                        aria-label="Add to favorites"
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-black shadow-md transition hover:scale-110 active:scale-95"
-                      >
-                        <Heart
-                          fill={isFav ? "currentColor" : "none"}
-                          className={`h-4 w-4 transition-colors pointer-events-none ${
-                            isFav ? "text-[#ff4d4f]" : "text-gray-700"
-                          }`}
-                        />
-                      </button>
-                    </div>
-
                     {/* Content Panel */}
                     <div className="absolute bottom-4 left-4 right-4 flex flex-col items-start text-white">
                       {/* Location and Fire Rating Badge */}
@@ -182,6 +151,37 @@ export function FeaturedPlaces() {
                       </p>
                     </div>
                   </Link>
+
+                  {/* Favorite Heart Button & Tooltip Wrapper - Placed outside the Link to prevent hydration/routing issues */}
+                  <div className="absolute right-3 top-3 z-20 flex flex-col items-end">
+                    {/* Tooltip */}
+                    {lastSavedId === place.id && (
+                      <div className="absolute bottom-full right-[-4px] mb-3 w-max animate-in fade-in zoom-in duration-200">
+                        <div className="relative flex items-center gap-8 rounded border border-gray-200 bg-white px-4 py-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+                          <span className="text-[13px] text-gray-800">Saved</span>
+                          <Link href="/favorites" className="flex items-center text-[13px] text-blue-600 hover:text-blue-700">
+                            View <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                          </Link>
+                          {/* Little downward pointing triangle */}
+                          <div className="absolute -bottom-[5px] right-5 h-[10px] w-[10px] rotate-45 border-b border-r border-gray-200 bg-white" />
+                        </div>
+                      </div>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={(e) => toggleFavorite(place.id, e)}
+                      aria-label="Add to favorites"
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-black shadow-md transition hover:scale-110 active:scale-95"
+                    >
+                      <Heart
+                        fill={isFav ? "currentColor" : "none"}
+                        className={`h-4 w-4 transition-colors pointer-events-none ${
+                          isFav ? "text-[#ff4d4f]" : "text-gray-700"
+                        }`}
+                      />
+                    </button>
+                  </div>
                 </div>
               );
             })}
