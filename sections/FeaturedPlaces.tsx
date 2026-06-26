@@ -108,7 +108,7 @@ export function FeaturedPlaces() {
     <section className="bg-white py-3 sm:py-5 dark:bg-gray-950 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
-        <div className="mb-8 flex items-center justify-between gap-4">
+        <div className="relative z-10 mb-8 flex items-center justify-between gap-4">
           <h2 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
             Highly-Rated Gems Handpicked for You
           </h2>

@@ -69,8 +69,9 @@ export function Destinations() {
     <section className="bg-gray-50 py-4 dark:bg-gray-900/40 sm:py-6 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
-        <div className="mb-8">
-          <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
+        {/* Section Header */}
+        <div className="relative z-10 mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
             Get inspired for your next trip
           </h2>
         </div>
