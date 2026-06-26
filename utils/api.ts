@@ -769,7 +769,7 @@ export async function getPopularDestinations(): Promise<Destination[]> {
     const data: ApiDestination[] = await res.json();
     return data.map(normalizeDestination);
   } catch {
-    return ALL_DESTINATIONS.slice(0, 6);
+    return ALL_DESTINATIONS.slice(0, 5);
   }
 }
 

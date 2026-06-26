@@ -48,45 +48,18 @@ export function Destinations() {
         <div className="relative group">
           <div
             ref={scrollRef}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {/* Anywhere Card */}
-            <div className="w-[180px] sm:w-[210px] shrink-0 snap-start snap-always">
-              <Link
-                href="/hotels"
-                className="group relative block aspect-[1.5] overflow-visible rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-primary-600 shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5"
-              >
-                <div className="relative w-full h-full overflow-hidden rounded-2xl">
-                  <Image
-                    src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=400&h=300&fit=crop"
-                    alt="Globe"
-                    fill
-                    unoptimized
-                    className="object-cover opacity-40 transition-transform duration-550 group-hover:scale-105"
-                    sizes="170px"
-                  />
-                  <div className="absolute inset-0 bg-blue-900/10" />
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="font-extrabold text-base leading-tight tracking-wide drop-shadow-sm">
-                      Anywhere
-                    </h3>
-                  </div>
-                </div>
-                {/* Speech bubble pointer */}
-                <div className="absolute bottom-[-6px] left-[25%] w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-indigo-600 z-10" />
-              </Link>
-            </div>
-
             {/* Destination Cards */}
             {destinations.map((d, index) => (
               <div
                 key={d.id}
-                className="w-[180px] sm:w-[210px] shrink-0 snap-start snap-always"
+                className="w-[200px] sm:w-[240px] md:w-[calc(33.333%-10.66px)] lg:w-[calc(20%-12.8px)] shrink-0 snap-start snap-always"
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}
-                  className="group relative block aspect-[1.5] overflow-hidden rounded-2xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-md border border-white/20 dark:border-white/5 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+                  className="group relative block aspect-[1.5] overflow-hidden rounded-xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   <Image
                     src={d.image}
@@ -94,35 +67,32 @@ export function Destinations() {
                     fill
                     unoptimized
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 180px, 210px"
+                    sizes="(max-width: 640px) 200px, (max-width: 1024px) 33vw, 20vw"
                   />
                   
                   {/* Dark Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                   {/* Category Badge */}
-                  <div className="absolute left-3 top-3 rounded bg-white/90 px-2 py-0.5 text-[9px] font-extrabold text-black shadow-sm dark:bg-slate-900/90 dark:text-gray-200 uppercase tracking-wide">
+                  <div className="absolute left-3 top-3 rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm dark:bg-slate-900/95 dark:text-gray-200">
                     {categories[index % categories.length]}
                   </div>
 
                   {/* Text Overlay */}
                   <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <h3 className="font-extrabold text-sm sm:text-base leading-tight truncate group-hover:text-primary-400 transition-colors drop-shadow-sm">
+                    <h3 className="font-extrabold text-lg sm:text-xl leading-tight truncate drop-shadow-md">
                       {d.name}
                     </h3>
                   </div>
                 </Link>
               </div>
             ))}
-
-            {/* Spacer so the last card isn't flush against the right edge when fully scrolled */}
-            <div className="w-2 sm:w-4 shrink-0" />
           </div>
 
-          {/* Navigation Buttons - placed slightly outside the container to prevent awkward overlapping of cut-off cards */}
+          {/* Navigation Buttons */}
           <button
             onClick={() => scroll("left")}
-            className="absolute -left-4 sm:-left-5 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
             aria-label="Scroll left"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -130,7 +100,7 @@ export function Destinations() {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute -right-4 sm:-right-5 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-150 bg-white/95 text-black shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-black hover:scale-105 dark:border-gray-800 dark:bg-gray-900/95 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white"
+            className="absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-all hover:bg-gray-50 hover:scale-105 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
             aria-label="Scroll right"
           >
             <ChevronRight className="h-5 w-5" />
