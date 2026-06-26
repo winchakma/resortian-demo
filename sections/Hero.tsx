@@ -4,7 +4,7 @@ import { SearchForm } from "@/components/ui/SearchForm";
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[460px] flex-col items-center justify-center pt-14 pb-12 lg:pt-20 lg:pb-16">
+    <section className="relative flex min-h-[360px] flex-col items-center justify-center pt-14 pb-8 lg:pt-20 lg:pb-10">
       {/* Background Image */}
       <Image
         src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1600&h=900&fit=crop"
