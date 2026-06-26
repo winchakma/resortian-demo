@@ -69,9 +69,8 @@ export function Destinations() {
     <section className="bg-gray-50 py-4 dark:bg-gray-900/40 sm:py-6 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
         <div className="relative z-10 mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-display font-bold text-black dark:text-white sm:text-3xl">
+          <h2 className="text-2xl font-display font-bold text-black dark:text-white sm:text-3xl lg:text-4xl">
             Get inspired for your next trip
           </h2>
         </div>
@@ -80,7 +79,7 @@ export function Destinations() {
         <div className="relative">
           <div
             ref={scrollRef}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 pt-4 -mt-4 px-4 -mx-4 md:mx-0 md:px-0 scroll-px-4 md:scroll-px-0"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 pt-4 -mt-4 scroll-px-0"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {/* Destination Cards */}
@@ -90,7 +89,7 @@ export function Destinations() {
               return (
               <div
                 key={d.id}
-                className="w-[200px] sm:w-[240px] md:w-[calc(33.333%-10.66px)] lg:w-[calc(20%-12.8px)] shrink-0 snap-center sm:snap-start snap-always"
+                className="w-[92vw] sm:w-[240px] md:w-[calc(33.333%-10.66px)] lg:w-[calc(20%-12.8px)] shrink-0 snap-center sm:snap-start snap-always"
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}

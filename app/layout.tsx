@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Sans, Outfit } from "next/font/google";
 import Script from "next/script";
 import { Providers } from "./providers";
@@ -22,6 +22,13 @@ export const metadata: Metadata = {
   title: "Resortian - Premium Resort & Hotel Booking in Bangladesh",
   description:
     "Find and book premium hotels, resorts, and homestays across the most beautiful destinations in Bangladesh.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

@@ -88,7 +88,7 @@ export function UserStories() {
 
         <div className="relative z-10 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-display font-extrabold text-white sm:text-4xl">
+            <h2 className="text-2xl font-display font-extrabold text-white sm:text-3xl lg:text-4xl">
               Real Stories. Unforgettable Moments.
             </h2>
             <p className="mt-3 text-lg text-primary-100">
@@ -109,7 +109,7 @@ export function UserStories() {
           {/* Scrollable Area */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-4 -mt-4 px-2 -mx-2 md:mx-0 md:px-0 scroll-px-2 md:scroll-px-0"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-4 -mt-4 scroll-px-0"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {STORIES.map((story, index) => {
@@ -118,7 +118,7 @@ export function UserStories() {
               return (
                 <div
                   key={story.id}
-                  className="w-[280px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-center sm:snap-start snap-always"
+                  className="w-[92vw] sm:w-[280px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-center sm:snap-start snap-always"
                 >
                   <Link href="/stories" className="block h-full cursor-pointer">
                     <div className={`group/card relative flex flex-col justify-end overflow-hidden rounded-3xl border-2 bg-gray-900 shadow-xl transition-all duration-500 hover:-translate-y-2 h-[420px] ${theme.borderClass}`}>

@@ -109,7 +109,7 @@ export function FeaturedPlaces() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="relative z-10 mb-8 flex items-center justify-between gap-4">
-          <h2 className="text-2xl font-display font-bold text-black dark:text-white sm:text-3xl">
+          <h2 className="text-2xl font-display font-bold text-black dark:text-white sm:text-3xl lg:text-4xl">
             Highly-Rated Gems Handpicked for You
           </h2>
           <Link
@@ -126,7 +126,7 @@ export function FeaturedPlaces() {
           {/* Scrollable Area */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-14 -mt-14 px-4 -mx-4 md:mx-0 md:px-0 scroll-px-4 md:scroll-px-0"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-14 -mt-14 scroll-px-0"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {places.map((place, index) => {
@@ -137,7 +137,7 @@ export function FeaturedPlaces() {
               return (
                 <div
                   key={place.id}
-                  className="relative w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-center sm:snap-start snap-always"
+                  className="relative w-[92vw] sm:w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-center sm:snap-start snap-always"
                 >
                   <Link
                     href={`/hotels?location=${encodeURIComponent(place.name)}`}
