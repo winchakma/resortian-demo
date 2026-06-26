@@ -12,7 +12,7 @@ export function Hero() {
         fill
         priority
         unoptimized
-        className="object-cover"
+        className="object-cover object-[60%_center]"
         sizes="100vw"
       />
       {/* Lighter Overlay for Text Readability */}
