@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Quote, ArrowRight } from "lucide-react";
 
 interface Story {
   id: string;
@@ -59,15 +59,14 @@ const STORIES: Story[] = [
 ];
 
 const HOVER_THEMES = [
-  { shadowClass: "hover:shadow-[0_12px_40px_rgba(255,56,92,0.35)]", textClass: "group-hover/card:text-[#FF385C]" }, // Coral
-  { shadowClass: "hover:shadow-[0_12px_40px_rgba(13,148,136,0.35)]", textClass: "group-hover/card:text-[#0D9488]" }, // Teal
-  { shadowClass: "hover:shadow-[0_12px_40px_rgba(52,168,83,0.35)]", textClass: "group-hover/card:text-[#34A853]" }, // Green
-  { shadowClass: "hover:shadow-[0_12px_40px_rgba(212,165,116,0.35)]", textClass: "group-hover/card:text-[#D4A574]" }, // Gold
+  { borderClass: "hover:border-[#FF385C] border-white/5", textClass: "group-hover/card:text-[#FF385C]", iconBorderClass: "group-hover/card:border-[#FF385C]" }, // Coral
+  { borderClass: "hover:border-[#0D9488] border-white/5", textClass: "group-hover/card:text-[#0D9488]", iconBorderClass: "group-hover/card:border-[#0D9488]" }, // Teal
+  { borderClass: "hover:border-[#34A853] border-white/5", textClass: "group-hover/card:text-[#34A853]", iconBorderClass: "group-hover/card:border-[#34A853]" }, // Green
+  { borderClass: "hover:border-[#D4A574] border-white/5", textClass: "group-hover/card:text-[#D4A574]", iconBorderClass: "group-hover/card:border-[#D4A574]" }, // Gold
 ];
 
 export function UserStories() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -80,10 +79,6 @@ export function UserStories() {
     }
   };
 
-  const toggleFavorite = (id: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
@@ -120,66 +115,64 @@ export function UserStories() {
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {STORIES.map((story, index) => {
-              const isFav = !!favorites[story.id];
               const theme = HOVER_THEMES[index % HOVER_THEMES.length];
               
               return (
                 <div
                   key={story.id}
-                  className="w-[260px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
+                  className="w-[280px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-start snap-always"
                 >
                   <Link href="/stories" className="block h-full cursor-pointer">
-                    <div className={`group/card relative flex flex-col overflow-hidden rounded-3xl premium-glass shadow-xl transition-all duration-500 hover:-translate-y-2 h-full ${theme.shadowClass}`}>
+                    <div className={`group/card relative flex flex-col justify-end overflow-hidden rounded-3xl border-2 bg-gray-900 shadow-xl transition-all duration-500 hover:-translate-y-2 h-[420px] ${theme.borderClass}`}>
 
-                      {/* Image */}
-                      <div className="relative aspect-[4/3] w-full overflow-hidden">
-                        <Image
-                          src={story.image}
-                          alt={story.quote}
-                          fill
-                          unoptimized
-                          className="object-cover grayscale group-hover/card:grayscale-0 transition-all duration-700 group-hover/card:scale-105"
-                          sizes="(max-width: 640px) 260px, 25vw"
-                        />
+                      {/* Permanent Dark B&W Background Image */}
+                      <Image
+                        src={story.image}
+                        alt={story.quote}
+                        fill
+                        unoptimized
+                        className="object-cover grayscale opacity-40 transition-transform duration-700 group-hover/card:scale-105"
+                        sizes="(max-width: 640px) 280px, 25vw"
+                      />
 
-                        {/* Favorite Heart Button */}
-                        <button
-                          type="button"
-                          onClick={(e) => toggleFavorite(story.id, e)}
-                          aria-label="Like story"
-                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-black shadow-md transition hover:bg-white hover:scale-110 active:scale-95 dark:bg-slate-900/95 dark:text-gray-300 dark:hover:bg-slate-900"
-                        >
-                          <Heart
-                            fill={isFav ? "currentColor" : "none"}
-                            className={`h-4 w-4 transition-colors pointer-events-none ${
-                              isFav ? "text-coral-500" : "text-gray-400 group-hover/card:text-coral-400"
-                            }`}
-                          />
-                        </button>
+                      {/* Top Icon */}
+                      <div className={`absolute top-5 right-5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur-md transition-colors duration-500 ${theme.iconBorderClass}`}>
+                        <Quote className={`h-4 w-4 text-white transition-colors duration-500 ${theme.textClass}`} />
                       </div>
 
                       {/* Content Panel */}
-                      <div className="p-4 flex flex-col gap-3">
-                        <p className={`text-[14px] font-extrabold leading-snug text-black dark:text-white line-clamp-2 transition-colors duration-500 ${theme.textClass}`}>
-                          {story.quote}
-                        </p>
+                      <div className="relative z-20 p-6 flex flex-col gap-4">
+                        
                         {/* Author */}
-                        <div className="flex items-center gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
-                          <div className="relative h-6 w-6 overflow-hidden rounded-full border border-gray-200 dark:border-gray-700 shrink-0">
+                        <div className="flex items-center gap-3">
+                          <div className="relative h-8 w-8 overflow-hidden rounded-full border border-white/20 shrink-0">
                             <Image
                               src={story.avatar}
                               alt={story.author}
                               fill
                               unoptimized
-                              className="object-cover grayscale group-hover/card:grayscale-0 transition-all duration-700"
-                              sizes="24px"
+                              className="object-cover grayscale"
+                              sizes="32px"
                             />
                           </div>
-                          <span className="text-xs font-semibold text-black dark:text-gray-300 truncate transition-colors duration-500">
-                            {story.author}
+                          <span className="text-sm font-semibold text-gray-300 truncate">
+                            @{story.author}
                           </span>
                         </div>
+
+                        {/* The Paragraph (Stays Crisp White) */}
+                        <p className="text-lg font-bold leading-tight text-white line-clamp-3">
+                          "{story.quote}"
+                        </p>
+
+                        {/* Action Link (Lights up on hover) */}
+                        <div className={`mt-2 flex items-center gap-2 text-xs font-bold tracking-widest text-white/50 uppercase transition-colors duration-500 ${theme.textClass}`}>
+                          READ STORY <ArrowRight className="h-4 w-4" />
+                        </div>
                       </div>
+
+                      {/* Gradient Overlay for Readability */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent pointer-events-none z-10" />
 
                     </div>
                   </Link>
