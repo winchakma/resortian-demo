@@ -231,10 +231,10 @@ export function SearchForm({
   }, [formData.adults, formData.rooms]);
 
   return (
-    <div className="w-full rounded-2xl sm:rounded-3xl premium-glass p-5 sm:p-6 shadow-2xl relative mt-4 lg:mt-6 z-20">
+    <div className="w-full rounded-2xl sm:rounded-3xl premium-glass p-4 sm:p-5 shadow-2xl relative mt-4 lg:mt-6 z-20">
       
       {/* Tabs */}
-      <div className="flex overflow-x-auto hide-scrollbar items-center gap-6 border-b border-gray-200 dark:border-gray-800 mb-5">
+      <div className="flex overflow-x-auto hide-scrollbar items-center gap-6 border-b border-gray-200 dark:border-gray-800 mb-3">
         {TABS.map((tab, index) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -244,7 +244,7 @@ export function SearchForm({
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 pb-3 text-sm font-bold transition-colors whitespace-nowrap relative ${
+              className={`flex items-center gap-2 pb-2 text-sm font-bold transition-colors whitespace-nowrap relative ${
                 isActive
                   ? theme.textActive
                   : `text-black dark:text-gray-400 ${theme.textHover}`
@@ -272,7 +272,7 @@ export function SearchForm({
           
           {/* Location */}
           <div ref={locationRef} className="relative flex-[1.5] hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors rounded-t-lg lg:rounded-l-lg lg:rounded-tr-none">
-            <div className="flex items-center gap-3 px-4 py-2 h-[52px]">
+            <div className="flex items-center gap-3 px-4 py-1.5 h-[44px]">
               <MapPin className="h-5 w-5 shrink-0 text-black dark:text-gray-400" />
               <div className="flex-1 min-w-0">
                 <label className="block text-[10px] sm:text-[11px] font-semibold text-black dark:text-white">
@@ -353,7 +353,7 @@ export function SearchForm({
               aria-haspopup="dialog"
               aria-expanded={isGuestOpen}
               onClick={() => setIsGuestOpen((p) => !p)}
-              className="flex w-full items-center gap-3 bg-transparent px-4 py-2 h-[52px] text-left"
+              className="flex w-full items-center gap-3 bg-transparent px-4 py-1.5 h-[44px] text-left"
             >
               <Users className="h-5 w-5 shrink-0 text-black dark:text-gray-400" />
               <div className="min-w-0 flex-1 overflow-hidden">
@@ -413,14 +413,14 @@ export function SearchForm({
         </div>
 
         {/* Checkbox & Search Button Row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-1">
           <label className="flex items-center gap-2 text-sm font-medium text-black dark:text-gray-300 cursor-pointer">
             <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
             Add a flight to Bundle &amp; Save*
           </label>
           <button
             type="submit"
-            className="w-full sm:w-auto rounded-full bg-primary-600 px-10 h-[50px] font-bold text-white premium-hover hover:scale-[1.05] hover:bg-primary-700 shadow-xl flex items-center justify-center text-[15px] sm:text-base"
+            className="w-full sm:w-auto rounded-full bg-primary-600 px-10 h-[40px] font-bold text-white premium-hover hover:scale-[1.05] hover:bg-primary-700 shadow-xl flex items-center justify-center text-[15px] sm:text-base"
             aria-label="Search"
           >
             Search
