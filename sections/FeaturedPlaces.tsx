@@ -122,7 +122,7 @@ export function FeaturedPlaces() {
         </div>
 
         {/* Slider Container */}
-        <div className="relative overflow-hidden">
+        <div className="relative">
           {/* Scrollable Area */}
           <div
             ref={scrollRef}

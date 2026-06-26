@@ -105,7 +105,7 @@ export function UserStories() {
         </div>
 
         {/* Slider Container */}
-        <div className="relative group overflow-hidden">
+        <div className="relative group">
           {/* Scrollable Area */}
           <div
             ref={scrollRef}
