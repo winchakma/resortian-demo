@@ -4,8 +4,8 @@ import { SearchForm } from "@/components/ui/SearchForm";
 
 export function Hero() {
   return (
-    <section className="bg-white dark:bg-gray-950 px-2 sm:px-3 lg:px-5 pt-3 pb-8 lg:pt-4 lg:pb-10">
-      <div className="relative flex w-full min-h-[360px] flex-col items-center justify-center rounded-[2rem] sm:rounded-[3rem] overflow-hidden py-14 lg:py-20 mx-auto shadow-2xl">
+    <section className="bg-white dark:bg-gray-950 px-3 sm:px-4 lg:px-5 pt-3 pb-8 lg:pt-4 lg:pb-10">
+      <div className="relative flex w-full min-h-[460px] sm:min-h-[360px] flex-col items-center justify-center rounded-[1.5rem] sm:rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden py-10 sm:py-14 lg:py-20 mx-auto shadow-2xl">
         {/* Light Mode Background Image */}
         <Image
           src="https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=1600&h=900&fit=crop"
