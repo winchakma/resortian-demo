@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Playfair_Display } from "next/font/google";
 import Script from "next/script";
 import { Providers } from "./providers";
 import { Analytics } from "@/components/ui/Analytics";
@@ -10,6 +10,12 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -26,7 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} h-full`}
+      className={`${dmSans.variable} ${playfair.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="min-h-full font-sans antialiased" suppressHydrationWarning>

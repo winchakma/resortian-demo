@@ -20,7 +20,7 @@ export function Hero() {
 
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="text-center mb-6">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-[64px] drop-shadow-2xl leading-tight">
+          <h1 className="text-4xl font-serif font-extrabold tracking-tight text-white sm:text-5xl lg:text-[64px] drop-shadow-2xl leading-tight">
             Discover Bangladesh Like <br className="hidden sm:block" />
             <span className="text-primary-400">Never Before</span>
           </h1>
@@ -49,7 +49,7 @@ export function BangladeshStaysWithYou() {
     <section className="bg-white py-3 sm:py-5 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl flex items-center gap-2">
+          <h2 className="text-3xl font-serif font-extrabold text-black dark:text-white sm:text-4xl flex items-center gap-2">
             <span className="h-6 w-1.5 rounded-full bg-primary-600"></span>
             Bangladesh Stays With You
           </h2>
@@ -74,7 +74,7 @@ export function BangladeshStaysWithYou() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6 text-white">
-              <span className={`rounded-full px-3 py-1 text-xs font-semibold text-white shadow transition-colors duration-300 ${HOVER_THEMES[0].badgeClass}`}>
+              <span className={`inline-block -rotate-12 transform origin-bottom-left mr-2 rounded-full px-3 py-1 text-xs font-semibold text-white shadow transition-colors duration-300 ${HOVER_THEMES[0].badgeClass}`}>
                 Featured Destination
               </span>
               <h3 className={`text-2xl font-bold mt-2.5 sm:text-3xl transition-colors duration-300 ${HOVER_THEMES[0].textHoverClass}`}>Cox&apos;s Bazar Coastline</h3>

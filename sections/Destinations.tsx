@@ -71,7 +71,7 @@ export function Destinations() {
         
         {/* Section Header */}
         <div className="relative z-10 mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
+          <h2 className="text-2xl font-serif font-bold text-black dark:text-white sm:text-3xl">
             Get inspired for your next trip
           </h2>
         </div>
@@ -109,7 +109,7 @@ export function Destinations() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover/card:opacity-90" />
 
                   {/* Category Badge */}
-                  <div className={`absolute left-3 top-3 rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm transition-colors duration-300 dark:bg-slate-900/95 dark:text-gray-200 ${theme.badgeClass}`}>
+                  <div className={`absolute left-3 top-3 -rotate-12 origin-bottom-left rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm transition-colors duration-300 dark:bg-slate-900/95 dark:text-gray-200 ${theme.badgeClass}`}>
                     {categories[index % categories.length]}
                   </div>
 
