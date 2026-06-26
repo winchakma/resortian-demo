@@ -8,10 +8,10 @@ import { getPopularDestinations } from "@/utils/api";
 import type { Destination } from "@/types";
 
 const HOVER_THEMES = [
-  { borderClass: "hover:border-[#FF385C]", textHoverClass: "group-hover:text-[#FF385C]", badgeClass: "group-hover:bg-[#FF385C] group-hover:text-white" }, // Coral
-  { borderClass: "hover:border-[#0D9488]", textHoverClass: "group-hover:text-[#0D9488]", badgeClass: "group-hover:bg-[#0D9488] group-hover:text-white" }, // Teal
-  { borderClass: "hover:border-[#34A853]", textHoverClass: "group-hover:text-[#34A853]", badgeClass: "group-hover:bg-[#34A853] group-hover:text-white" }, // Green
-  { borderClass: "hover:border-[#D4A574]", textHoverClass: "group-hover:text-[#D4A574]", badgeClass: "group-hover:bg-[#D4A574] group-hover:text-gray-900" }, // Gold
+  { borderClass: "hover:border-[#FF385C]", textHoverClass: "group-hover/card:text-[#FF385C]", badgeClass: "group-hover/card:bg-[#FF385C] group-hover/card:text-white" }, // Coral
+  { borderClass: "hover:border-[#0D9488]", textHoverClass: "group-hover/card:text-[#0D9488]", badgeClass: "group-hover/card:bg-[#0D9488] group-hover/card:text-white" }, // Teal
+  { borderClass: "hover:border-[#34A853]", textHoverClass: "group-hover/card:text-[#34A853]", badgeClass: "group-hover/card:bg-[#34A853] group-hover/card:text-white" }, // Green
+  { borderClass: "hover:border-[#D4A574]", textHoverClass: "group-hover/card:text-[#D4A574]", badgeClass: "group-hover/card:bg-[#D4A574] group-hover/card:text-gray-900" }, // Gold
 ];
 
 export function Destinations() {
@@ -52,7 +52,7 @@ export function Destinations() {
         </div>
 
         {/* Carousel Scroll Wrapper */}
-        <div className="relative group">
+        <div className="relative">
           <div
             ref={scrollRef}
             className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
@@ -69,19 +69,19 @@ export function Destinations() {
               >
                 <Link
                   href={`/hotels?location=${encodeURIComponent(d.name)}`}
-                  className={`group relative block aspect-[1.5] overflow-hidden rounded-xl border-2 border-transparent bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${theme.borderClass}`}
+                  className={`group/card relative block aspect-[1.5] overflow-hidden rounded-xl border-2 border-transparent bg-white/70 dark:bg-slate-900/60 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${theme.borderClass}`}
                 >
                   <Image
                     src={d.image}
                     alt={d.name}
                     fill
                     unoptimized
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 group-hover/card:scale-105"
                     sizes="(max-width: 640px) 200px, (max-width: 1024px) 33vw, 20vw"
                   />
                   
                   {/* Dark Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover/card:opacity-90" />
 
                   {/* Category Badge */}
                   <div className={`absolute left-3 top-3 rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold text-gray-800 shadow-sm transition-colors duration-300 dark:bg-slate-900/95 dark:text-gray-200 ${theme.badgeClass}`}>
