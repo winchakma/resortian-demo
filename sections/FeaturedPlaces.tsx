@@ -112,7 +112,7 @@ export function FeaturedPlaces() {
           <h2 className="text-2xl font-bold text-black dark:text-white sm:text-3xl">
             Highly-Rated Gems Handpicked for You
           </h2>
-          <Link href="/hotels" className="text-sm font-semibold text-gray-600 hover:text-black dark:text-gray-300 flex items-center transition-colors">
+          <Link href="/hotels" className="text-sm font-semibold text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 flex items-center transition-colors">
             More <ChevronRight className="h-4 w-4 ml-0.5" />
           </Link>
         </div>
