@@ -2,7 +2,7 @@
 
 import { memo, useState, useCallback, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Menu, User, ShoppingCart, Building2, LogOut, Hotel, Compass, BookOpen, Info, Phone } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -63,17 +63,23 @@ const NavLinks = memo(function NavLinks({
 }: {
   accountHref: string;
 }) {
+  const pathname = usePathname();
   return (
     <nav className="hidden lg:flex lg:items-center lg:gap-1">
       {NAV_LINKS.map((link, index) => {
         const Icon = link.icon;
         const theme = HOVER_THEMES[index % HOVER_THEMES.length];
+        const isActive = pathname.startsWith(link.href);
         return (
           <Link
             key={link.href}
             href={link.href}
             prefetch={true}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:bg-gray-100 dark:bg-transparent dark:hover:bg-gray-800/50 text-black dark:text-gray-300 ${theme.textHover}`}
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:bg-gray-100 dark:bg-transparent dark:hover:bg-gray-800/50 ${theme.textHover} ${
+              isActive
+                ? "text-[#34A853] dark:text-[#34A853]"
+                : "text-black dark:text-gray-300"
+            }`}
           >
             {Icon && <Icon className="h-4 w-4" />}
             {link.label}
