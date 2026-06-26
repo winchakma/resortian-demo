@@ -15,8 +15,8 @@ export function Hero() {
         className="object-cover"
         sizes="100vw"
       />
-      {/* Dark Overlay with Emerald Tint */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/70 to-[#0a2512]/60 mix-blend-multiply" />
+      {/* Dark Overlay with Primary Tint */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 to-primary-950/60 mix-blend-multiply" />
       <div className="absolute inset-0 bg-black/20" />
 
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-7xl">

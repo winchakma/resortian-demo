@@ -8,17 +8,17 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-dm-sans);
 
-  --color-primary-50: #f0fdf4;
-  --color-primary-100: #dcfce7;
-  --color-primary-200: #bbf7d0;
-  --color-primary-300: #86efac;
-  --color-primary-400: #4ade80;
-  --color-primary-500: #3fb95e;
-  --color-primary-600: #34a853; /* Emerald Green Brand Color */
-  --color-primary-700: #2d8a47; /* Hover color */
-  --color-primary-800: #1b5b2e;
-  --color-primary-900: #134221;
-  --color-primary-950: #0a2512;
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb; /* Blue Brand Color */
+  --color-primary-700: #1d4ed8; /* Hover color */
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
 
   --color-gold-500: #D4A574;
   --color-teal-500: #4A9B7F;

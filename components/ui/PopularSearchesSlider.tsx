@@ -91,7 +91,7 @@ export function PopularSearchesSlider({ destinations }: PopularSearchesSliderPro
                     sizes="(max-width: 640px) 150px, 200px"
                   />
                   {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/90 via-[#0a2512]/40 to-transparent transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-primary-950/40 to-transparent transition-opacity" />
                   
                   {/* Content overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-5">
