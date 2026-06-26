@@ -105,7 +105,7 @@ export function FeaturedPlaces() {
   }
 
   return (
-    <section className="bg-white py-3 sm:py-5 dark:bg-gray-950">
+    <section className="bg-white py-3 sm:py-5 dark:bg-gray-950 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="mb-8 flex items-center justify-between gap-4">
@@ -126,7 +126,7 @@ export function FeaturedPlaces() {
           {/* Scrollable Area */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 pt-14 -mt-14"
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-14 -mt-14 px-4 -mx-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {places.map((place, index) => {

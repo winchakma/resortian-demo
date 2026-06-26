@@ -65,10 +65,10 @@ export function PopularSearchesSlider({ destinations }: PopularSearchesSliderPro
       </div>
 
       {/* Slider container */}
-      <div className="relative">
+      <div className="relative overflow-hidden -mx-4 px-4 py-2 -my-2">
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-4 -mx-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {filtered.map((d) => {

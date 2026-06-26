@@ -66,7 +66,7 @@ export function Destinations() {
   }
 
   return (
-    <section className="bg-gray-50 py-4 dark:bg-gray-900/40 sm:py-6">
+    <section className="bg-gray-50 py-4 dark:bg-gray-900/40 sm:py-6 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="mb-8">
@@ -79,7 +79,7 @@ export function Destinations() {
         <div className="relative">
           <div
             ref={scrollRef}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 px-4 -mx-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {/* Destination Cards */}
